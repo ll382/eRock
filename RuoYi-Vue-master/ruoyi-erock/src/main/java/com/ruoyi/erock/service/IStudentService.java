@@ -1,19 +1,17 @@
-package com.ruoyi.student.mapper;
+package com.ruoyi.erock.service;
 
-import com.ruoyi.student.domain.vo.Student;
-import org.apache.ibatis.annotations.Mapper;
+
+import com.ruoyi.erock.domain.vo.Student;
 
 import java.util.List;
 
-
 /**
- * 学生Mapper接口
+ * 学生Service接口
  * 
  * @author ruoyi
  * @date 2024-03-11
  */
-@Mapper
-public interface StudentMapper 
+public interface IStudentService 
 {
     /**
      * 查询学生
@@ -48,18 +46,18 @@ public interface StudentMapper
     public int updateStudent(Student student);
 
     /**
-     * 删除学生
+     * 批量删除学生
+     * 
+     * @param stuIds 需要删除的学生主键集合
+     * @return 结果
+     */
+    public int deleteStudentByStuIds(String[] stuIds);
+
+    /**
+     * 删除学生信息
      * 
      * @param stuId 学生主键
      * @return 结果
      */
     public int deleteStudentByStuId(String stuId);
-
-    /**
-     * 批量删除学生
-     * 
-     * @param stuIds 需要删除的数据主键集合
-     * @return 结果
-     */
-    public int deleteStudentByStuIds(String[] stuIds);
 }
