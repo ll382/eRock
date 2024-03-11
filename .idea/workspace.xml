@@ -3,6 +3,32 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fb8b7558-29f8-4e66-90bd-0b25c4730dfc" name="Changes" comment="1">
+      <change afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-admin/src/main/java/com/ruoyi/web/controller/erock/StudentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-erock/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-erock/src/main/resources/mapper/student/StudentMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-erock/src/test/java/com/ruoyi/RuoYiApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RuoYi-Vue-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RuoYi-Vue-master/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-framework/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-framework/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-generator/src/main/resources/mapper/generator/GenTableColumnMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-generator/src/main/resources/mapper/generator/GenTableColumnMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-generator/src/main/resources/mapper/generator/GenTableMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-generator/src/main/resources/mapper/generator/GenTableMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-quartz/src/main/resources/mapper/quartz/SysJobMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-quartz/src/main/resources/mapper/quartz/SysJobMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-system/src/main/resources/mapper/system/SysConfigMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-system/src/main/resources/mapper/system/SysConfigMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-system/src/main/resources/mapper/system/SysDictTypeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-system/src/main/resources/mapper/system/SysDictTypeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-system/src/main/resources/mapper/system/SysMenuMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-system/src/main/resources/mapper/system/SysMenuMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-system/src/main/resources/mapper/system/SysPostMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-system/src/main/resources/mapper/system/SysPostMapper.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -11,7 +37,105 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProjectId" id="2dXMQ9gMd6Pwj2SrkkR3T9y0snb" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="jdk.selected.JAVA_MODULE" value="1.8" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/RuoYi-Vue-master/ruoyi-admin/src/main/java/com/ruoyi/web/controller/erock" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\erock\RuoYi-Vue-master\ruoyi-admin\src\main\java\com\ruoyi\web\controller\erock" />
+      <recent name="E:\erock\RuoYi-Vue-master\ruoyi-erock\src\main\resources\mapper\student" />
+      <recent name="E:\erock\RuoYi-Vue-master\ruoyi-erock\src\main\java\com\ruoyi\student\service" />
+      <recent name="E:\erock\RuoYi-Vue-master\ruoyi-erock\src\main\java\com\ruoyi\student\mapper" />
+      <recent name="E:\erock\RuoYi-Vue-master\ruoyi-erock\src\main\java\com\ruoyi\student\domain\vo" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ruoyi.student" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.RuoYiApplication">
+    <configuration name="SpringbootMvcApplicationTests.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ruoyi-erock" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ruoyi.student.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ruoyi.student" />
+      <option name="MAIN_CLASS_NAME" value="com.ruoyi.student.SpringbootMvcApplicationTests" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RuoYiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="ruoyi-admin" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ruoyi.RuoYiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.SpringbootMvcApplicationTests.test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fb8b7558-29f8-4e66-90bd-0b25c4730dfc" name="Changes" comment="" />
+      <created>1710149954171</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1710149954171</updated>
+      <workItem from="1710149959443" duration="8445000" />
+    </task>
+    <task id="LOCAL-00001" summary="1">
+      <created>1710150003977</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1710150003977</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="1" />
+    <option name="LAST_COMMIT_MESSAGE" value="1" />
   </component>
 </project>
