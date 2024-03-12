@@ -1,6 +1,6 @@
 package com.ruoyi.erock.mapper;
 
-import com.ruoyi.erock.domain.vo.Student;
+import com.ruoyi.erock.domain.Student;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

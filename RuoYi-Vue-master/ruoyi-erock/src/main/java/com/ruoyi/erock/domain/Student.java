@@ -1,4 +1,4 @@
-package com.ruoyi.erock.domain.vo;
+package com.ruoyi.erock.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

@@ -1,7 +1,7 @@
 package com.ruoyi.erock.service;
 
 
-import com.ruoyi.erock.domain.vo.Student;
+import com.ruoyi.erock.domain.Student;
 
 import java.util.List;
 

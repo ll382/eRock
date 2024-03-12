@@ -3,7 +3,7 @@ package com.ruoyi.erock.service.impl;
 import java.util.List;
 
 
-import com.ruoyi.erock.domain.vo.Student;
+import com.ruoyi.erock.domain.Student;
 import com.ruoyi.erock.mapper.StudentMapper;
 import com.ruoyi.erock.service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;

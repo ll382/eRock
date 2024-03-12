@@ -4,7 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.erock.domain.vo.Student;
+import com.ruoyi.erock.domain.Student;
 import com.ruoyi.erock.service.IStudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
