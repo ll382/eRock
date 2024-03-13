@@ -8,7 +8,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 小组对象 stu_group
- * 
+ *
  * @author ruoyi
  * @date 2024-03-13
  */
@@ -30,30 +30,30 @@ public class StuGroup extends BaseEntity
     /** 学生信息 */
     private List<Student> studentList;
 
-    public void setgId(Long gId) 
+    public void setGId(Long gId)
     {
         this.gId = gId;
     }
 
-    public Long getgId() 
+    public Long getGId()
     {
         return gId;
     }
-    public void setgName(String gName) 
+    public void setgName(String gName)
     {
         this.gName = gName;
     }
 
-    public String getgName() 
+    public String getgName()
     {
         return gName;
     }
-    public void setStuGroupLeader(Long stuGroupLeader) 
+    public void setStuGroupLeader(Long stuGroupLeader)
     {
         this.stuGroupLeader = stuGroupLeader;
     }
 
-    public Long getStuGroupLeader() 
+    public Long getStuGroupLeader()
     {
         return stuGroupLeader;
     }
@@ -71,7 +71,7 @@ public class StuGroup extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("gId", getgId())
+            .append("gId", getGId())
             .append("gName", getgName())
             .append("stuGroupLeader", getStuGroupLeader())
             .append("studentList", getStudentList())
