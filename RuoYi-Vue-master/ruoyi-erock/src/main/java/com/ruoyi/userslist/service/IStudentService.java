@@ -1,21 +1,19 @@
-package com.ruoyi.erock.service;
-
-
-import com.ruoyi.erock.domain.Student;
+package com.ruoyi.userslist.service;
 
 import java.util.List;
+import com.ruoyi.userslist.domain.Student;
 
 /**
  * 学生Service接口
- * 
+ *
  * @author ruoyi
- * @date 2024-03-11
+ * @date 2024-03-13
  */
-public interface IStudentService 
+public interface IStudentService
 {
     /**
      * 查询学生
-     * 
+     *
      * @param stuId 学生主键
      * @return 学生
      */
@@ -23,7 +21,7 @@ public interface IStudentService
 
     /**
      * 查询学生列表
-     * 
+     *
      * @param student 学生
      * @return 学生集合
      */
@@ -31,7 +29,7 @@ public interface IStudentService
 
     /**
      * 新增学生
-     * 
+     *
      * @param student 学生
      * @return 结果
      */
@@ -39,7 +37,7 @@ public interface IStudentService
 
     /**
      * 修改学生
-     * 
+     *
      * @param student 学生
      * @return 结果
      */
@@ -47,7 +45,7 @@ public interface IStudentService
 
     /**
      * 批量删除学生
-     * 
+     *
      * @param stuIds 需要删除的学生主键集合
      * @return 结果
      */
@@ -55,7 +53,7 @@ public interface IStudentService
 
     /**
      * 删除学生信息
-     * 
+     *
      * @param stuId 学生主键
      * @return 结果
      */

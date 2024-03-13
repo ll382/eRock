@@ -1,11 +1,7 @@
-package com.ruoyi.web.controller.erock;
+package com.ruoyi.web.controller.userslist;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.erock.domain.Student;
-import com.ruoyi.erock.service.IStudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,16 +16,19 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.userslist.domain.Student;
+import com.ruoyi.userslist.service.IStudentService;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 学生Controller
- * 
+ *
  * @author ruoyi
- * @date 2024-03-11
+ * @date 2024-03-13
  */
 @RestController
-@RequestMapping("/erock/student")
+@RequestMapping("/userslist/student")
 public class StudentController extends BaseController
 {
     @Autowired
@@ -38,7 +37,7 @@ public class StudentController extends BaseController
     /**
      * 查询学生列表
      */
-    @PreAuthorize("@ss.hasPermi('system:student:list')")
+    @PreAuthorize("@ss.hasPermi('userslist:student:list')")
     @GetMapping("/list")
     public TableDataInfo list(Student student)
     {
@@ -50,7 +49,7 @@ public class StudentController extends BaseController
     /**
      * 导出学生列表
      */
-    @PreAuthorize("@ss.hasPermi('system:student:export')")
+    @PreAuthorize("@ss.hasPermi('userslist:student:export')")
     @Log(title = "学生", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, Student student)
@@ -63,7 +62,7 @@ public class StudentController extends BaseController
     /**
      * 获取学生详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:student:query')")
+    @PreAuthorize("@ss.hasPermi('userslist:student:query')")
     @GetMapping(value = "/{stuId}")
     public AjaxResult getInfo(@PathVariable("stuId") String stuId)
     {
@@ -73,7 +72,7 @@ public class StudentController extends BaseController
     /**
      * 新增学生
      */
-    @PreAuthorize("@ss.hasPermi('system:student:add')")
+    @PreAuthorize("@ss.hasPermi('userslist:student:add')")
     @Log(title = "学生", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Student student)
@@ -84,7 +83,7 @@ public class StudentController extends BaseController
     /**
      * 修改学生
      */
-    @PreAuthorize("@ss.hasPermi('system:student:edit')")
+    @PreAuthorize("@ss.hasPermi('userslist:student:edit')")
     @Log(title = "学生", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Student student)
@@ -95,7 +94,7 @@ public class StudentController extends BaseController
     /**
      * 删除学生
      */
-    @PreAuthorize("@ss.hasPermi('system:student:remove')")
+    @PreAuthorize("@ss.hasPermi('userslist:student:remove')")
     @Log(title = "学生", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{stuIds}")
     public AjaxResult remove(@PathVariable String[] stuIds)
