@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 学生对象 student
- *
+ * 
  * @author ruoyi
  * @date 2024-03-13
  */
@@ -36,57 +36,57 @@ public class Student extends BaseEntity
     @Excel(name = "密码")
     private String password;
 
-    public void setStuId(String stuId)
+    public void setStuId(String stuId) 
     {
         this.stuId = stuId;
     }
 
-    public String getStuId()
+    public String getStuId() 
     {
         return stuId;
     }
-    public void setSeId(Long seId)
+    public void setSeId(Long seId) 
     {
         this.seId = seId;
     }
 
-    public Long getSeId()
+    public Long getSeId() 
     {
         return seId;
     }
-    public void setGId(Long gId)
+    public void setgId(Long gId) 
     {
         this.gId = gId;
     }
 
-    public Long getGId()
+    public Long getgId() 
     {
         return gId;
     }
-    public void setClassId(Long classId)
+    public void setClassId(Long classId) 
     {
         this.classId = classId;
     }
 
-    public Long getClassId()
+    public Long getClassId() 
     {
         return classId;
     }
-    public void setStuName(String stuName)
+    public void setStuName(String stuName) 
     {
         this.stuName = stuName;
     }
 
-    public String getStuName()
+    public String getStuName() 
     {
         return stuName;
     }
-    public void setPassword(String password)
+    public void setPassword(String password) 
     {
         this.password = password;
     }
 
-    public String getPassword()
+    public String getPassword() 
     {
         return password;
     }
@@ -96,7 +96,7 @@ public class Student extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("stuId", getStuId())
             .append("seId", getSeId())
-            .append("gId", getGId())
+            .append("gId", getgId())
             .append("classId", getClassId())
             .append("stuName", getStuName())
             .append("password", getPassword())

@@ -9,19 +9,19 @@ import com.ruoyi.userslist.service.IStudentService;
 
 /**
  * 学生Service业务层处理
- *
+ * 
  * @author ruoyi
  * @date 2024-03-13
  */
 @Service
-public class StudentServiceImpl implements IStudentService
+public class StudentServiceImpl implements IStudentService 
 {
     @Autowired
     private StudentMapper studentMapper;
 
     /**
      * 查询学生
-     *
+     * 
      * @param stuId 学生主键
      * @return 学生
      */
@@ -33,7 +33,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 查询学生列表
-     *
+     * 
      * @param student 学生
      * @return 学生
      */
@@ -45,7 +45,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 新增学生
-     *
+     * 
      * @param student 学生
      * @return 结果
      */
@@ -57,7 +57,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 修改学生
-     *
+     * 
      * @param student 学生
      * @return 结果
      */
@@ -69,7 +69,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 批量删除学生
-     *
+     * 
      * @param stuIds 需要删除的学生主键
      * @return 结果
      */
@@ -81,7 +81,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 删除学生信息
-     *
+     * 
      * @param stuId 学生主键
      * @return 结果
      */

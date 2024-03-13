@@ -7,55 +7,43 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 小组对象 stu_group
+ * 班级对象 grade
  * 
- * @author ruoyi
+ * @author eRock
  * @date 2024-03-13
  */
-public class StuGroup extends BaseEntity
+public class Grade extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 小组ID */
-    private Long gId;
+    /** 班级编号 */
+    @Excel(name = "班级编号")
+    private Long classId;
 
-    /** 小组名 */
-    @Excel(name = "小组名")
-    private String gName;
-
-    /** 小组组长 */
-    @Excel(name = "小组组长")
-    private Long stuGroupLeader;
+    /** 专业班级名 */
+    @Excel(name = "专业班级名")
+    private String className;
 
     /** 学生信息 */
     private List<Student> studentList;
 
-    public void setgId(Long gId) 
+    public void setClassId(Long classId) 
     {
-        this.gId = gId;
+        this.classId = classId;
     }
 
-    public Long getgId() 
+    public Long getClassId() 
     {
-        return gId;
+        return classId;
     }
-    public void setgName(String gName) 
+    public void setClassName(String className) 
     {
-        this.gName = gName;
-    }
-
-    public String getgName() 
-    {
-        return gName;
-    }
-    public void setStuGroupLeader(Long stuGroupLeader) 
-    {
-        this.stuGroupLeader = stuGroupLeader;
+        this.className = className;
     }
 
-    public Long getStuGroupLeader() 
+    public String getClassName() 
     {
-        return stuGroupLeader;
+        return className;
     }
 
     public List<Student> getStudentList()
@@ -71,9 +59,8 @@ public class StuGroup extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("gId", getgId())
-            .append("gName", getgName())
-            .append("stuGroupLeader", getStuGroupLeader())
+            .append("classId", getClassId())
+            .append("className", getClassName())
             .append("studentList", getStudentList())
             .toString();
     }

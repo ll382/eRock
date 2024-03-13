@@ -1,32 +1,31 @@
 package com.ruoyi.userslist.service.impl;
 
 import java.util.List;
-
-import com.ruoyi.userslist.mapper.StuGroupMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.userslist.domain.Student;
+import com.ruoyi.userslist.mapper.StuGroupMapper;
 import com.ruoyi.userslist.domain.StuGroup;
 import com.ruoyi.userslist.service.IStuGroupService;
 
 /**
  * 小组Service业务层处理
- *
+ * 
  * @author ruoyi
  * @date 2024-03-13
  */
 @Service
-public class StuGroupServiceImpl implements IStuGroupService
+public class StuGroupServiceImpl implements IStuGroupService 
 {
     @Autowired
     private StuGroupMapper stuGroupMapper;
 
     /**
      * 查询小组
-     *
+     * 
      * @param gId 小组主键
      * @return 小组
      */
@@ -38,7 +37,7 @@ public class StuGroupServiceImpl implements IStuGroupService
 
     /**
      * 查询小组列表
-     *
+     * 
      * @param stuGroup 小组
      * @return 小组
      */
@@ -50,7 +49,7 @@ public class StuGroupServiceImpl implements IStuGroupService
 
     /**
      * 新增小组
-     *
+     * 
      * @param stuGroup 小组
      * @return 结果
      */
@@ -65,7 +64,7 @@ public class StuGroupServiceImpl implements IStuGroupService
 
     /**
      * 修改小组
-     *
+     * 
      * @param stuGroup 小组
      * @return 结果
      */
@@ -80,7 +79,7 @@ public class StuGroupServiceImpl implements IStuGroupService
 
     /**
      * 批量删除小组
-     *
+     * 
      * @param gIds 需要删除的小组主键
      * @return 结果
      */
@@ -94,7 +93,7 @@ public class StuGroupServiceImpl implements IStuGroupService
 
     /**
      * 删除小组信息
-     *
+     * 
      * @param gId 小组主键
      * @return 结果
      */
@@ -108,7 +107,7 @@ public class StuGroupServiceImpl implements IStuGroupService
 
     /**
      * 新增学生信息
-     *
+     * 
      * @param stuGroup 小组对象
      */
     public void insertStudent(StuGroup stuGroup)
