@@ -5,15 +5,15 @@ import com.ruoyi.userslist.domain.Teacher;
 
 /**
  * 老师Mapper接口
- *
+ * 
  * @author ruoyi
- * @date 2024-03-12
+ * @date 2024-03-13
  */
-public interface TeacherMapper
+public interface TeacherMapper 
 {
     /**
      * 查询老师
-     *
+     * 
      * @param teaId 老师主键
      * @return 老师
      */
@@ -21,7 +21,7 @@ public interface TeacherMapper
 
     /**
      * 查询老师列表
-     *
+     * 
      * @param teacher 老师
      * @return 老师集合
      */
@@ -29,7 +29,7 @@ public interface TeacherMapper
 
     /**
      * 新增老师
-     *
+     * 
      * @param teacher 老师
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface TeacherMapper
 
     /**
      * 修改老师
-     *
+     * 
      * @param teacher 老师
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface TeacherMapper
 
     /**
      * 删除老师
-     *
+     * 
      * @param teaId 老师主键
      * @return 结果
      */
@@ -53,7 +53,7 @@ public interface TeacherMapper
 
     /**
      * 批量删除老师
-     *
+     * 
      * @param teaIds 需要删除的数据主键集合
      * @return 结果
      */

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.userslist.mapper.TeacherMapper">
+    
+    <resultMap type="Teacher" id="TeacherResult">
+        <result property="teaId"    column="tea_id"    />
+        <result property="teaName"    column="tea_name"    />
+        <result property="password"    column="password"    />
+    </resultMap>
+
+    <sql id="selectTeacherVo">
+        select tea_id, tea_name, password from teacher
+    </sql>
+
+    <select id="selectTeacherList" parameterType="Teacher" resultMap="TeacherResult">
+        <include refid="selectTeacherVo"/>
+        <where>  
+            <if test="teaName != null  and teaName != ''"> and tea_name like concat('%', #{teaName}, '%')</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+        </where>
+    </select>
+    
+    <select id="selectTeacherByTeaId" parameterType="String" resultMap="TeacherResult">
+        <include refid="selectTeacherVo"/>
+        where tea_id = #{teaId}
+    </select>
+        
+    <insert id="insertTeacher" parameterType="Teacher">
+        insert into teacher
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teaId != null">tea_id,</if>
+            <if test="teaName != null and teaName != ''">tea_name,</if>
+            <if test="password != null and password != ''">password,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teaId != null">#{teaId},</if>
+            <if test="teaName != null and teaName != ''">#{teaName},</if>
+            <if test="password != null and password != ''">#{password},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTeacher" parameterType="Teacher">
+        update teacher
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teaName != null and teaName != ''">tea_name = #{teaName},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+        </trim>
+        where tea_id = #{teaId}
+    </update>
+
+    <delete id="deleteTeacherByTeaId" parameterType="String">
+        delete from teacher where tea_id = #{teaId}
+    </delete>
+
+    <delete id="deleteTeacherByTeaIds" parameterType="String">
+        delete from teacher where tea_id in 
+        <foreach item="teaId" collection="array" open="(" separator="," close=")">
+            #{teaId}
+        </foreach>
+    </delete>
+</mapper>

@@ -93,7 +93,7 @@
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -123,9 +123,16 @@
         <el-table :data="studentList" :row-class-name="rowStudentIndex" @selection-change="handleStudentSelectionChange" ref="student">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="学生互评ID" prop="seId" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.seId" placeholder="请输入学生互评ID" />
+            </template>
+          </el-table-column>
           <el-table-column label="班级编号" prop="classId" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.classId" placeholder="请输入班级编号" />
+              <el-select v-model="scope.row.classId" placeholder="请选择班级编号">
+                <el-option label="请选择字典生成" value="" />
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column label="学生姓名" prop="stuName" width="150">
@@ -296,6 +303,7 @@ export default {
     /** 学生添加按钮操作 */
     handleAddStudent() {
       let obj = {};
+      obj.seId = "";
       obj.classId = "";
       obj.stuName = "";
       obj.password = "";

@@ -19,9 +19,11 @@ public class Student extends BaseEntity
     private String stuId;
 
     /** 学生互评ID */
+    @Excel(name = "学生互评ID")
     private Long seId;
 
     /** 小组ID */
+    @Excel(name = "小组ID")
     private Long gId;
 
     /** 班级编号 */

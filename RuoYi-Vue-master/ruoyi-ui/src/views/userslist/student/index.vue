@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="班级编号" prop="classId">
-        <el-input
-          v-model="queryParams.classId"
-          placeholder="请输入班级编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="学生姓名" prop="stuName">
         <el-input
           v-model="queryParams.stuName"
@@ -80,6 +72,8 @@
     <el-table v-loading="loading" :data="studentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="学生学号" align="center" prop="stuId" />
+      <el-table-column label="学生互评ID" align="center" prop="seId" />
+      <el-table-column label="小组ID" align="center" prop="gId" />
       <el-table-column label="班级编号" align="center" prop="classId" />
       <el-table-column label="学生姓名" align="center" prop="stuName" />
       <el-table-column label="密码" align="center" prop="password" />
@@ -102,7 +96,7 @@
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -119,9 +113,6 @@
         </el-form-item>
         <el-form-item label="小组ID" prop="gId">
           <el-input v-model="form.gId" placeholder="请输入小组ID" />
-        </el-form-item>
-        <el-form-item label="班级编号" prop="classId">
-          <el-input v-model="form.classId" placeholder="请输入班级编号" />
         </el-form-item>
         <el-form-item label="学生姓名" prop="stuName">
           <el-input v-model="form.stuName" placeholder="请输入学生姓名" />

@@ -5,15 +5,15 @@ import com.ruoyi.userslist.domain.Student;
 
 /**
  * 学生Mapper接口
- *
+ * 
  * @author ruoyi
  * @date 2024-03-13
  */
-public interface StudentMapper
+public interface StudentMapper 
 {
     /**
      * 查询学生
-     *
+     * 
      * @param stuId 学生主键
      * @return 学生
      */
@@ -21,7 +21,7 @@ public interface StudentMapper
 
     /**
      * 查询学生列表
-     *
+     * 
      * @param student 学生
      * @return 学生集合
      */
@@ -29,7 +29,7 @@ public interface StudentMapper
 
     /**
      * 新增学生
-     *
+     * 
      * @param student 学生
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface StudentMapper
 
     /**
      * 修改学生
-     *
+     * 
      * @param student 学生
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface StudentMapper
 
     /**
      * 删除学生
-     *
+     * 
      * @param stuId 学生主键
      * @return 结果
      */
@@ -53,7 +53,7 @@ public interface StudentMapper
 
     /**
      * 批量删除学生
-     *
+     * 
      * @param stuIds 需要删除的数据主键集合
      * @return 结果
      */

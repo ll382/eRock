@@ -7,9 +7,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 老师对象 teacher
- *
+ * 
  * @author ruoyi
- * @date 2024-03-12
+ * @date 2024-03-13
  */
 public class Teacher extends BaseEntity
 {
@@ -26,30 +26,30 @@ public class Teacher extends BaseEntity
     @Excel(name = "密码")
     private String password;
 
-    public void setTeaId(String teaId)
+    public void setTeaId(String teaId) 
     {
         this.teaId = teaId;
     }
 
-    public String getTeaId()
+    public String getTeaId() 
     {
         return teaId;
     }
-    public void setTeaName(String teaName)
+    public void setTeaName(String teaName) 
     {
         this.teaName = teaName;
     }
 
-    public String getTeaName()
+    public String getTeaName() 
     {
         return teaName;
     }
-    public void setPassword(String password)
+    public void setPassword(String password) 
     {
         this.password = password;
     }
 
-    public String getPassword()
+    public String getPassword() 
     {
         return password;
     }

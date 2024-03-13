@@ -17,6 +17,7 @@ public class StuGroup extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 小组ID */
+    @Excel(name = "小组ID")
     private Long gId;
 
     /** 小组名 */

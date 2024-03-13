@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.userslist.mapper.StuGroupMapper">
-
+    
     <resultMap type="StuGroup" id="StuGroupResult">
         <result property="gId"    column="g_id"    />
         <result property="gName"    column="g_name"    />
@@ -29,12 +29,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectStuGroupList" parameterType="StuGroup" resultMap="StuGroupResult">
         <include refid="selectStuGroupVo"/>
-        <where>
+        <where>  
             <if test="gName != null  and gName != ''"> and g_name like concat('%', #{gName}, '%')</if>
             <if test="stuGroupLeader != null "> and stu_group_leader = #{stuGroupLeader}</if>
         </where>
     </select>
-
+    
     <select id="selectStuGroupByGId" parameterType="Long" resultMap="StuGroupStudentResult">
         select a.g_id, a.g_name, a.stu_group_leader,
  b.stu_id as sub_stu_id, b.se_id as sub_se_id, b.g_id as sub_g_id, b.class_id as sub_class_id, b.stu_name as sub_stu_name, b.password as sub_password
@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join student b on b.g_id = a.g_id
         where a.g_id = #{gId}
     </select>
-
+        
     <insert id="insertStuGroup" parameterType="StuGroup">
         insert into stu_group
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -71,14 +71,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteStuGroupByGIds" parameterType="String">
-        delete from stu_group where g_id in
+        delete from stu_group where g_id in 
         <foreach item="gId" collection="array" open="(" separator="," close=")">
             #{gId}
         </foreach>
     </delete>
-
+    
     <delete id="deleteStudentByGIds" parameterType="String">
-        delete from student where g_id in
+        delete from student where g_id in 
         <foreach item="gId" collection="array" open="(" separator="," close=")">
             #{gId}
         </foreach>

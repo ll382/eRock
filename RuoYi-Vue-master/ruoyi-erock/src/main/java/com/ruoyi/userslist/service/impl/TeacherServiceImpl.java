@@ -9,19 +9,19 @@ import com.ruoyi.userslist.service.ITeacherService;
 
 /**
  * 老师Service业务层处理
- *
+ * 
  * @author ruoyi
- * @date 2024-03-12
+ * @date 2024-03-13
  */
 @Service
-public class TeacherServiceImpl implements ITeacherService
+public class TeacherServiceImpl implements ITeacherService 
 {
     @Autowired
     private TeacherMapper teacherMapper;
 
     /**
      * 查询老师
-     *
+     * 
      * @param teaId 老师主键
      * @return 老师
      */
@@ -33,7 +33,7 @@ public class TeacherServiceImpl implements ITeacherService
 
     /**
      * 查询老师列表
-     *
+     * 
      * @param teacher 老师
      * @return 老师
      */
@@ -45,7 +45,7 @@ public class TeacherServiceImpl implements ITeacherService
 
     /**
      * 新增老师
-     *
+     * 
      * @param teacher 老师
      * @return 结果
      */
@@ -57,7 +57,7 @@ public class TeacherServiceImpl implements ITeacherService
 
     /**
      * 修改老师
-     *
+     * 
      * @param teacher 老师
      * @return 结果
      */
@@ -69,7 +69,7 @@ public class TeacherServiceImpl implements ITeacherService
 
     /**
      * 批量删除老师
-     *
+     * 
      * @param teaIds 需要删除的老师主键
      * @return 结果
      */
@@ -81,7 +81,7 @@ public class TeacherServiceImpl implements ITeacherService
 
     /**
      * 删除老师信息
-     *
+     * 
      * @param teaId 老师主键
      * @return 结果
      */
