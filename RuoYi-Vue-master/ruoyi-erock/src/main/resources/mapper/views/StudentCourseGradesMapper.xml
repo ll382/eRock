@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.views.mapper.StudentCourseGradesMapper">
+    
+    <resultMap type="StudentCourseGrades" id="StudentCourseGradesResult">
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="className"    column="class_name"    />
+        <result property="msDribble"    column="ms_dribble"    />
+        <result property="msShooting"    column="ms_shooting"    />
+        <result property="crDate"    column="cr_date"    />
+        <result property="crMain"    column="cr_main"    />
+        <result property="teaName"    column="tea_name"    />
+    </resultMap>
+
+    <sql id="selectStudentCourseGradesVo">
+        select stu_id, stu_name, class_name, ms_dribble, ms_shooting, cr_date, cr_main, tea_name from student_course_grades
+    </sql>
+
+    <select id="selectStudentCourseGradesList" parameterType="StudentCourseGrades" resultMap="StudentCourseGradesResult">
+        <include refid="selectStudentCourseGradesVo"/>
+        <where>  
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="className != null  and className != ''"> and class_name = #{className}</if>
+            <if test="msDribble != null "> and ms_dribble = #{msDribble}</if>
+            <if test="msShooting != null "> and ms_shooting = #{msShooting}</if>
+            <if test="crDate != null "> and cr_date = #{crDate}</if>
+            <if test="crMain != null  and crMain != ''"> and cr_main = #{crMain}</if>
+            <if test="teaName != null  and teaName != ''"> and tea_name like concat('%', #{teaName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectStudentCourseGradesByStuId" parameterType="Long" resultMap="StudentCourseGradesResult">
+        <include refid="selectStudentCourseGradesVo"/>
+        where stu_id = #{stuId}
+    </select>
+        
+    <insert id="insertStudentCourseGrades" parameterType="StudentCourseGrades">
+        insert into student_course_grades
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">stu_id,</if>
+            <if test="stuName != null">stu_name,</if>
+            <if test="className != null">class_name,</if>
+            <if test="msDribble != null">ms_dribble,</if>
+            <if test="msShooting != null">ms_shooting,</if>
+            <if test="crDate != null">cr_date,</if>
+            <if test="crMain != null">cr_main,</if>
+            <if test="teaName != null">tea_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">#{stuId},</if>
+            <if test="stuName != null">#{stuName},</if>
+            <if test="className != null">#{className},</if>
+            <if test="msDribble != null">#{msDribble},</if>
+            <if test="msShooting != null">#{msShooting},</if>
+            <if test="crDate != null">#{crDate},</if>
+            <if test="crMain != null">#{crMain},</if>
+            <if test="teaName != null">#{teaName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStudentCourseGrades" parameterType="StudentCourseGrades">
+        update student_course_grades
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuName != null">stu_name = #{stuName},</if>
+            <if test="className != null">class_name = #{className},</if>
+            <if test="msDribble != null">ms_dribble = #{msDribble},</if>
+            <if test="msShooting != null">ms_shooting = #{msShooting},</if>
+            <if test="crDate != null">cr_date = #{crDate},</if>
+            <if test="crMain != null">cr_main = #{crMain},</if>
+            <if test="teaName != null">tea_name = #{teaName},</if>
+        </trim>
+        where stu_id = #{stuId}
+    </update>
+
+    <delete id="deleteStudentCourseGradesByStuId" parameterType="Long">
+        delete from student_course_grades where stu_id = #{stuId}
+    </delete>
+
+    <delete id="deleteStudentCourseGradesByStuIds" parameterType="String">
+        delete from student_course_grades where stu_id in 
+        <foreach item="stuId" collection="array" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </delete>
+</mapper>
