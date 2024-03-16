@@ -1,66 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="学生学号" prop="stuId">
-        <el-input
-          v-model="queryParams.stuId"
-          placeholder="请输入学生学号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="学生姓名" prop="stuName">
-        <el-input
-          v-model="queryParams.stuName"
-          placeholder="请输入学生姓名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="专业班级名" prop="className">
         <el-input
           v-model="queryParams.className"
           placeholder="请输入专业班级名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="运球分数" prop="msDribble">
-        <el-input
-          v-model="queryParams.msDribble"
-          placeholder="请输入运球分数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="投篮分数" prop="msShooting">
-        <el-input
-          v-model="queryParams.msShooting"
-          placeholder="请输入投篮分数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开课时间" prop="crDate">
-        <el-date-picker clearable
-          v-model="queryParams.crDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择开课时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="课题内容" prop="crMain">
-        <el-input
-          v-model="queryParams.crMain"
-          placeholder="请输入课题内容"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="老师姓名" prop="teaName">
-        <el-input
-          v-model="queryParams.teaName"
-          placeholder="请输入老师姓名"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -79,7 +23,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['view:grades:add']"
+          v-hasPermi="['core:grade:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -90,7 +34,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['view:grades:edit']"
+          v-hasPermi="['core:grade:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -101,7 +45,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['view:grades:remove']"
+          v-hasPermi="['core:grade:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -111,26 +55,16 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['view:grades:export']"
+          v-hasPermi="['core:grade:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="gradesList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="gradeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="学生学号" align="center" prop="stuId"/>
-      <el-table-column label="学生姓名" align="center" prop="stuName"/>
+      <el-table-column label="班级id" align="center" prop="classId" />
       <el-table-column label="专业班级名" align="center" prop="className"/>
-      <el-table-column label="运球分数" align="center" prop="msDribble"/>
-      <el-table-column label="投篮分数" align="center" prop="msShooting"/>
-      <el-table-column label="开课时间" align="center" prop="crDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.crDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="课题内容" align="center" prop="crMain"/>
-      <el-table-column label="老师姓名" align="center" prop="teaName"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -138,19 +72,19 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['view:grades:edit']"
+            v-hasPermi="['core:grade:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['view:grades:remove']"
+            v-hasPermi="['core:grade:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -159,9 +93,45 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改学生成绩查询对话框 -->
+    <!-- 添加或修改班级对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="专业班级名" prop="className">
+          <el-input v-model="form.className" placeholder="请输入专业班级名" />
+        </el-form-item>
+        <el-divider content-position="center">学生信息</el-divider>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddStudent">添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteStudent">删除</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="studentList" :row-class-name="rowStudentIndex" @selection-change="handleStudentSelectionChange" ref="student">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="小组ID" prop="ggId" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.ggId" placeholder="请输入小组ID" />
+            </template>
+          </el-table-column>
+          <el-table-column label="班级编号" prop="classId" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.classId" placeholder="请输入班级编号" />
+            </template>
+          </el-table-column>
+          <el-table-column label="学生姓名" prop="stuName" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.stuName" placeholder="请输入学生姓名" />
+            </template>
+          </el-table-column>
+          <el-table-column label="学生密码" prop="stuPassword" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.stuPassword" placeholder="请输入学生密码" />
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -172,16 +142,18 @@
 </template>
 
 <script>
-import { listGrades, getGrades, delGrades, addGrades, updateGrades } from "@/api/view/grades";
+import { listGrade, getGrade, delGrade, addGrade, updateGrade } from "@/api/core/grade";
 
 export default {
-  name: "Grades",
+  name: "Grade",
   data() {
     return {
       // 遮罩层
       loading: true,
       // 选中数组
       ids: [],
+      // 子表选中数据
+      checkedStudent: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -190,8 +162,10 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 学生成绩查询表格数据
-      gradesList: [],
+      // 班级表格数据
+      gradeList: [],
+      // 学生表格数据
+      studentList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -200,22 +174,12 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        stuId: null,
-        stuName: null,
-        className: null,
-        msDribble: null,
-        msShooting: null,
-        crDate: null,
-        crMain: null,
-        teaName: null
+        className: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        stuId: [
-          { required: true, message: "学生学号不能为空", trigger: "blur" }
-        ],
       }
     };
   },
@@ -223,11 +187,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询学生成绩查询列表 */
+    /** 查询班级列表 */
     getList() {
       this.loading = true;
-      listGrades(this.queryParams).then(response => {
-        this.gradesList = response.rows;
+      listGrade(this.queryParams).then(response => {
+        this.gradeList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -240,15 +204,10 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        stuId: null,
-        stuName: null,
-        className: null,
-        msDribble: null,
-        msShooting: null,
-        crDate: null,
-        crMain: null,
-        teaName: null
+        classId: null,
+        className: null
       };
+      this.studentList = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -263,7 +222,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.stuId)
+      this.ids = selection.map(item => item.classId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -271,30 +230,32 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加学生成绩查询";
+      this.title = "添加班级";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const stuId = row.stuId || this.ids
-      getGrades(stuId).then(response => {
+      const classId = row.classId || this.ids
+      getGrade(classId).then(response => {
         this.form = response.data;
+        this.studentList = response.data.studentList;
         this.open = true;
-        this.title = "修改学生成绩查询";
+        this.title = "修改班级";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.stuId != null) {
-            updateGrades(this.form).then(response => {
+          this.form.studentList = this.studentList;
+          if (this.form.classId != null) {
+            updateGrade(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addGrades(this.form).then(response => {
+            addGrade(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -305,19 +266,48 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const stuIds = row.stuId || this.ids;
-      this.$modal.confirm('是否确认删除学生成绩查询编号为"' + stuIds + '"的数据项？').then(function() {
-        return delGrades(stuIds);
+      const classIds = row.classId || this.ids;
+      this.$modal.confirm('是否确认删除班级编号为"' + classIds + '"的数据项？').then(function() {
+        return delGrade(classIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
+	/** 学生序号 */
+    rowStudentIndex({ row, rowIndex }) {
+      row.index = rowIndex + 1;
+    },
+    /** 学生添加按钮操作 */
+    handleAddStudent() {
+      let obj = {};
+      obj.ggId = "";
+      obj.classId = "";
+      obj.stuName = "";
+      obj.stuPassword = "";
+      this.studentList.push(obj);
+    },
+    /** 学生删除按钮操作 */
+    handleDeleteStudent() {
+      if (this.checkedStudent.length == 0) {
+        this.$modal.msgError("请先选择要删除的学生数据");
+      } else {
+        const studentList = this.studentList;
+        const checkedStudent = this.checkedStudent;
+        this.studentList = studentList.filter(function(item) {
+          return checkedStudent.indexOf(item.index) == -1
+        });
+      }
+    },
+    /** 复选框选中数据 */
+    handleStudentSelectionChange(selection) {
+      this.checkedStudent = selection.map(item => item.index)
+    },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('view/grades/export', {
+      this.download('core/grade/export', {
         ...this.queryParams
-      }, `grades_${new Date().getTime()}.xlsx`)
+      }, `grade_${new Date().getTime()}.xlsx`)
     }
   }
 };
