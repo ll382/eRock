@@ -1,5 +1,6 @@
 package com.ruoyi.core.domain;
 
+import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -7,9 +8,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 学生对象 student
- *
+ * 
  * @author heye
- * @date 2024-03-15
+ * @date 2024-03-17
  */
 public class Student extends BaseEntity
 {
@@ -34,60 +35,74 @@ public class Student extends BaseEntity
     @Excel(name = "学生密码")
     private String stuPassword;
 
-    public void setStuId(Long stuId)
+    /** 多个学生对多个老师信息 */
+    private List<StuToTea> stuToTeaList;
+
+    public void setStuId(Long stuId) 
     {
         this.stuId = stuId;
     }
 
-    public Long getStuId()
+    public Long getStuId() 
     {
         return stuId;
     }
-    public void setGgId(Long ggId)
+    public void setGgId(Long ggId) 
     {
         this.ggId = ggId;
     }
 
-    public Long getGgId()
+    public Long getGgId() 
     {
         return ggId;
     }
-    public void setClassId(Long classId)
+    public void setClassId(Long classId) 
     {
         this.classId = classId;
     }
 
-    public Long getClassId()
+    public Long getClassId() 
     {
         return classId;
     }
-    public void setStuName(String stuName)
+    public void setStuName(String stuName) 
     {
         this.stuName = stuName;
     }
 
-    public String getStuName()
+    public String getStuName() 
     {
         return stuName;
     }
-    public void setStuPassword(String stuPassword)
+    public void setStuPassword(String stuPassword) 
     {
         this.stuPassword = stuPassword;
     }
 
-    public String getStuPassword()
+    public String getStuPassword() 
     {
         return stuPassword;
+    }
+
+    public List<StuToTea> getStuToTeaList()
+    {
+        return stuToTeaList;
+    }
+
+    public void setStuToTeaList(List<StuToTea> stuToTeaList)
+    {
+        this.stuToTeaList = stuToTeaList;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-                .append("stuId", getStuId())
-                .append("ggId", getGgId())
-                .append("classId", getClassId())
-                .append("stuName", getStuName())
-                .append("stuPassword", getStuPassword())
-                .toString();
+            .append("stuId", getStuId())
+            .append("ggId", getGgId())
+            .append("classId", getClassId())
+            .append("stuName", getStuName())
+            .append("stuPassword", getStuPassword())
+            .append("stuToTeaList", getStuToTeaList())
+            .toString();
     }
 }
