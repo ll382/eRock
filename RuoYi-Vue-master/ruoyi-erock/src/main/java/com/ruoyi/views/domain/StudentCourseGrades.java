@@ -39,7 +39,7 @@ public class StudentCourseGrades extends BaseEntity
     private BigDecimal msShooting;
 
     /** 开课时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "开课时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date crDate;
 
