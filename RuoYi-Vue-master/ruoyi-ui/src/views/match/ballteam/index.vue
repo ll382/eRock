@@ -145,7 +145,7 @@
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteCPersonnelSheet">删除</el-button>
           </el-col>
         </el-row>
-        <el-table :data="cPersonnelSheetList" :row-class-name="rowCPersonnelSheetIndex" @selection-change="handleCPersonnelSheetSelectionChange" ref="cPersonnelSheet">
+        <el-table :data="cpersonnelSheetList" :row-class-name="rowCPersonnelSheetIndex" @selection-change="handleCPersonnelSheetSelectionChange" ref="cPersonnelSheet">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="职位ID" prop="jobId" width="150">
@@ -198,7 +198,7 @@ export default {
       // 球队参赛表格数据
       ballteamList: [],
       // C 球队内人员表格数据
-      cPersonnelSheetList: [],
+      cpersonnelSheetList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -244,7 +244,7 @@ export default {
         ggId: null,
         balNum: null
       };
-      this.cPersonnelSheetList = [];
+      this.cpersonnelSheetList = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -275,7 +275,7 @@ export default {
       const balId = row.balId || this.ids
       getBallteam(balId).then(response => {
         this.form = response.data;
-        this.cPersonnelSheetList = response.data.cPersonnelSheetList;
+        this.cpersonnelSheetList = response.data.cpersonnelSheetList;
         this.open = true;
         this.title = "修改球队参赛";
       });
@@ -284,7 +284,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.form.cPersonnelSheetList = this.cPersonnelSheetList;
+          this.form.cpersonnelSheetList = this.cpersonnelSheetList;
           if (this.form.balId != null) {
             updateBallteam(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -321,16 +321,16 @@ export default {
       obj.jobId = "";
       obj.stuId = "";
       obj.psNum = "";
-      this.cPersonnelSheetList.push(obj);
+      this.cpersonnelSheetList.push(obj);
     },
     /** C 球队内人员删除按钮操作 */
     handleDeleteCPersonnelSheet() {
       if (this.checkedCPersonnelSheet.length == 0) {
         this.$modal.msgError("请先选择要删除的C 球队内人员数据");
       } else {
-        const cPersonnelSheetList = this.cPersonnelSheetList;
+        const cpersonnelSheetList = this.cpersonnelSheetList;
         const checkedCPersonnelSheet = this.checkedCPersonnelSheet;
-        this.cPersonnelSheetList = cPersonnelSheetList.filter(function(item) {
+        this.cpersonnelSheetList = cpersonnelSheetList.filter(function(item) {
           return checkedCPersonnelSheet.indexOf(item.index) == -1
         });
       }
