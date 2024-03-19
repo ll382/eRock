@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.practice.mapper.AMarkSheetMapper">
+    
+    <resultMap type="AMarkSheet" id="AMarkSheetResult">
+        <result property="msId"    column="ms_id"    />
+        <result property="etId"    column="et_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="msScore"    column="ms_score"    />
+        <result property="msTime"    column="ms_time"    />
+        <result property="msDribble"    column="ms_dribble"    />
+        <result property="msShooting"    column="ms_shooting"    />
+    </resultMap>
+
+    <resultMap id="AMarkSheetABallExamResult" type="AMarkSheet" extends="AMarkSheetResult">
+        <collection property="aBallExamList" notNullColumn="sub_be_id" javaType="java.util.List" resultMap="ABallExamResult" />
+    </resultMap>
+
+    <resultMap type="ABallExam" id="ABallExamResult">
+        <result property="beId"    column="sub_be_id"    />
+        <result property="msId"    column="sub_ms_id"    />
+        <result property="driStability"    column="sub_dri_stability"    />
+        <result property="driPower"    column="sub_dri_power"    />
+        <result property="driSpeed"    column="sub_dri_speed"    />
+        <result property="driAnalysis"    column="sub_dri_analysis"    />
+        <result property="shoArc"    column="sub_sho_arc"    />
+        <result property="shoSpinner"    column="sub_sho_spinner"    />
+        <result property="shoAngle"    column="sub_sho_angle"    />
+        <result property="shoAnalysis"    column="sub_sho_analysis"    />
+    </resultMap>
+
+    <sql id="selectAMarkSheetVo">
+        select ms_id, et_id, stu_id, tea_id, ms_score, ms_time, ms_dribble, ms_shooting from a_mark_sheet
+    </sql>
+
+    <select id="selectAMarkSheetList" parameterType="AMarkSheet" resultMap="AMarkSheetResult">
+        <include refid="selectAMarkSheetVo"/>
+        <where>  
+            <if test="etId != null "> and et_id = #{etId}</if>
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="teaId != null  and teaId != ''"> and tea_id = #{teaId}</if>
+            <if test="msScore != null "> and ms_score = #{msScore}</if>
+            <if test="msTime != null "> and ms_time = #{msTime}</if>
+            <if test="msDribble != null "> and ms_dribble = #{msDribble}</if>
+            <if test="msShooting != null "> and ms_shooting = #{msShooting}</if>
+        </where>
+    </select>
+    
+    <select id="selectAMarkSheetByMsId" parameterType="Long" resultMap="AMarkSheetABallExamResult">
+        select a.ms_id, a.et_id, a.stu_id, a.tea_id, a.ms_score, a.ms_time, a.ms_dribble, a.ms_shooting,
+ b.be_id as sub_be_id, b.ms_id as sub_ms_id, b.dri_stability as sub_dri_stability, b.dri_power as sub_dri_power, b.dri_speed as sub_dri_speed, b.dri_analysis as sub_dri_analysis, b.sho_arc as sub_sho_arc, b.sho_spinner as sub_sho_spinner, b.sho_angle as sub_sho_angle, b.sho_analysis as sub_sho_analysis
+        from a_mark_sheet a
+        left join a_ball_exam b on b.ms_id = a.ms_id
+        where a.ms_id = #{msId}
+    </select>
+        
+    <insert id="insertAMarkSheet" parameterType="AMarkSheet" useGeneratedKeys="true" keyProperty="msId">
+        insert into a_mark_sheet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="etId != null">et_id,</if>
+            <if test="stuId != null">stu_id,</if>
+            <if test="teaId != null">tea_id,</if>
+            <if test="msScore != null">ms_score,</if>
+            <if test="msTime != null">ms_time,</if>
+            <if test="msDribble != null">ms_dribble,</if>
+            <if test="msShooting != null">ms_shooting,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="etId != null">#{etId},</if>
+            <if test="stuId != null">#{stuId},</if>
+            <if test="teaId != null">#{teaId},</if>
+            <if test="msScore != null">#{msScore},</if>
+            <if test="msTime != null">#{msTime},</if>
+            <if test="msDribble != null">#{msDribble},</if>
+            <if test="msShooting != null">#{msShooting},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAMarkSheet" parameterType="AMarkSheet">
+        update a_mark_sheet
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="etId != null">et_id = #{etId},</if>
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="teaId != null">tea_id = #{teaId},</if>
+            <if test="msScore != null">ms_score = #{msScore},</if>
+            <if test="msTime != null">ms_time = #{msTime},</if>
+            <if test="msDribble != null">ms_dribble = #{msDribble},</if>
+            <if test="msShooting != null">ms_shooting = #{msShooting},</if>
+        </trim>
+        where ms_id = #{msId}
+    </update>
+
+    <delete id="deleteAMarkSheetByMsId" parameterType="Long">
+        delete from a_mark_sheet where ms_id = #{msId}
+    </delete>
+
+    <delete id="deleteAMarkSheetByMsIds" parameterType="String">
+        delete from a_mark_sheet where ms_id in 
+        <foreach item="msId" collection="array" open="(" separator="," close=")">
+            #{msId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteABallExamByMsIds" parameterType="String">
+        delete from a_ball_exam where ms_id in 
+        <foreach item="msId" collection="array" open="(" separator="," close=")">
+            #{msId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteABallExamByMsId" parameterType="Long">
+        delete from a_ball_exam where ms_id = #{msId}
+    </delete>
+
+    <insert id="batchABallExam">
+        insert into a_ball_exam( be_id, ms_id, dri_stability, dri_power, dri_speed, dri_analysis, sho_arc, sho_spinner, sho_angle, sho_analysis) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.beId}, #{item.msId}, #{item.driStability}, #{item.driPower}, #{item.driSpeed}, #{item.driAnalysis}, #{item.shoArc}, #{item.shoSpinner}, #{item.shoAngle}, #{item.shoAnalysis})
+        </foreach>
+    </insert>
+</mapper>
