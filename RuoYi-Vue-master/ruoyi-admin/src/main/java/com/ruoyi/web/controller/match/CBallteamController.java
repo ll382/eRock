@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.match;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author heye
  * @date 2024-03-19
  */
+@Api("C模块球队参赛")
 @RestController
 @RequestMapping("/match/ballteam")
 public class CBallteamController extends BaseController
@@ -37,6 +41,7 @@ public class CBallteamController extends BaseController
     /**
      * 查询球队参赛列表
      */
+    @ApiOperation("查询球队参赛列表")
     @PreAuthorize("@ss.hasPermi('match:ballteam:list')")
     @GetMapping("/list")
     public TableDataInfo list(CBallteam cBallteam)
@@ -49,6 +54,7 @@ public class CBallteamController extends BaseController
     /**
      * 导出球队参赛列表
      */
+    @ApiOperation("导出球队参赛列表")
     @PreAuthorize("@ss.hasPermi('match:ballteam:export')")
     @Log(title = "球队参赛", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -62,6 +68,7 @@ public class CBallteamController extends BaseController
     /**
      * 获取球队参赛详细信息
      */
+    @ApiOperation("获取球队参赛详细信息")
     @PreAuthorize("@ss.hasPermi('match:ballteam:query')")
     @GetMapping(value = "/{balId}")
     public AjaxResult getInfo(@PathVariable("balId") Long balId)
@@ -72,6 +79,7 @@ public class CBallteamController extends BaseController
     /**
      * 新增球队参赛
      */
+    @ApiOperation("新增球队参赛")
     @PreAuthorize("@ss.hasPermi('match:ballteam:add')")
     @Log(title = "球队参赛", businessType = BusinessType.INSERT)
     @PostMapping
@@ -83,6 +91,7 @@ public class CBallteamController extends BaseController
     /**
      * 修改球队参赛
      */
+    @ApiOperation("修改球队参赛")
     @PreAuthorize("@ss.hasPermi('match:ballteam:edit')")
     @Log(title = "球队参赛", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -94,6 +103,7 @@ public class CBallteamController extends BaseController
     /**
      * 删除球队参赛
      */
+    @ApiOperation("删除球队参赛")
     @PreAuthorize("@ss.hasPermi('match:ballteam:remove')")
     @Log(title = "球队参赛", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{balIds}")

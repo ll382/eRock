@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.core;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author heye
  * @date 2024-03-15
  */
+@Api("核心模块班级")
+
 @RestController
 @RequestMapping("/core/grade")
 public class GradeController extends BaseController
@@ -37,6 +42,7 @@ public class GradeController extends BaseController
     /**
      * 查询班级列表
      */
+    @ApiOperation("查询班级列表")
     @PreAuthorize("@ss.hasPermi('core:grade:list')")
     @GetMapping("/list")
     public TableDataInfo list(Grade grade)
@@ -49,6 +55,7 @@ public class GradeController extends BaseController
     /**
      * 导出班级列表
      */
+    @ApiOperation("导出班级列表")
     @PreAuthorize("@ss.hasPermi('core:grade:export')")
     @Log(title = "班级", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -62,6 +69,7 @@ public class GradeController extends BaseController
     /**
      * 获取班级详细信息
      */
+    @ApiOperation("获取班级详细信息")
     @PreAuthorize("@ss.hasPermi('core:grade:query')")
     @GetMapping(value = "/{classId}")
     public AjaxResult getInfo(@PathVariable("classId") Long classId)
@@ -72,6 +80,7 @@ public class GradeController extends BaseController
     /**
      * 新增班级
      */
+    @ApiOperation("新增班级")
     @PreAuthorize("@ss.hasPermi('core:grade:add')")
     @Log(title = "班级", businessType = BusinessType.INSERT)
     @PostMapping
@@ -83,6 +92,7 @@ public class GradeController extends BaseController
     /**
      * 修改班级
      */
+    @ApiOperation("修改班级")
     @PreAuthorize("@ss.hasPermi('core:grade:edit')")
     @Log(title = "班级", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -94,6 +104,7 @@ public class GradeController extends BaseController
     /**
      * 删除班级
      */
+    @ApiOperation("删除班级")
     @PreAuthorize("@ss.hasPermi('core:grade:remove')")
     @Log(title = "班级", businessType = BusinessType.DELETE)
     @DeleteMapping("/{classIds}")

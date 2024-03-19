@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.match;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author heye
  * @date 2024-03-19
  */
+@Api("C模块比赛记录")
+
 @RestController
 @RequestMapping("/match/sheet")
 public class CPersonnelSheetController extends BaseController
@@ -37,6 +42,7 @@ public class CPersonnelSheetController extends BaseController
     /**
      * 查询C 球队内人员列表
      */
+    @ApiOperation("查询C 球队内人员列表")
     @PreAuthorize("@ss.hasPermi('match:sheet:list')")
     @GetMapping("/list")
     public TableDataInfo list(CPersonnelSheet cPersonnelSheet)
@@ -49,6 +55,7 @@ public class CPersonnelSheetController extends BaseController
     /**
      * 导出C 球队内人员列表
      */
+    @ApiOperation("导出C 球队内人员列表")
     @PreAuthorize("@ss.hasPermi('match:sheet:export')")
     @Log(title = "C 球队内人员", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -62,6 +69,8 @@ public class CPersonnelSheetController extends BaseController
     /**
      * 获取C 球队内人员详细信息
      */
+    @ApiOperation("获取C 球队内人员详细信息")
+
     @PreAuthorize("@ss.hasPermi('match:sheet:query')")
     @GetMapping(value = "/{psId}")
     public AjaxResult getInfo(@PathVariable("psId") Long psId)
@@ -72,6 +81,8 @@ public class CPersonnelSheetController extends BaseController
     /**
      * 新增C 球队内人员
      */
+    @ApiOperation("新增C 球队内人员")
+
     @PreAuthorize("@ss.hasPermi('match:sheet:add')")
     @Log(title = "C 球队内人员", businessType = BusinessType.INSERT)
     @PostMapping
@@ -83,6 +94,8 @@ public class CPersonnelSheetController extends BaseController
     /**
      * 修改C 球队内人员
      */
+    @ApiOperation("修改C 球队内人员")
+
     @PreAuthorize("@ss.hasPermi('match:sheet:edit')")
     @Log(title = "C 球队内人员", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -94,6 +107,8 @@ public class CPersonnelSheetController extends BaseController
     /**
      * 删除C 球队内人员
      */
+    @ApiOperation("删除C 球队内人员")
+
     @PreAuthorize("@ss.hasPermi('match:sheet:remove')")
     @Log(title = "C 球队内人员", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{psIds}")
