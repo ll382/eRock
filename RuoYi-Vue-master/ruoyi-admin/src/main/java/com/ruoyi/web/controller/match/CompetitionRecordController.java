@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.match;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author heye
  * @date 2024-03-18
  */
+@Api("C比赛记录")
 @RestController
 @RequestMapping("/match/record")
 public class CompetitionRecordController extends BaseController
@@ -37,6 +41,7 @@ public class CompetitionRecordController extends BaseController
     /**
      * 查询比赛记录列表
      */
+    @ApiOperation("查询比赛记录列表")
     @PreAuthorize("@ss.hasPermi('match:record:list')")
     @GetMapping("/list")
     public TableDataInfo list(CompetitionRecord competitionRecord)
@@ -49,6 +54,7 @@ public class CompetitionRecordController extends BaseController
     /**
      * 导出比赛记录列表
      */
+    @ApiOperation("导出比赛记录列表")
     @PreAuthorize("@ss.hasPermi('match:record:export')")
     @Log(title = "比赛记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -62,6 +68,7 @@ public class CompetitionRecordController extends BaseController
     /**
      * 获取比赛记录详细信息
      */
+    @ApiOperation("获取比赛记录详细信息")
     @PreAuthorize("@ss.hasPermi('match:record:query')")
     @GetMapping(value = "/{ccRId}")
     public AjaxResult getInfo(@PathVariable("ccRId") Long ccRId)
@@ -72,6 +79,7 @@ public class CompetitionRecordController extends BaseController
     /**
      * 新增比赛记录
      */
+    @ApiOperation("新增比赛记录")
     @PreAuthorize("@ss.hasPermi('match:record:add')")
     @Log(title = "比赛记录", businessType = BusinessType.INSERT)
     @PostMapping
@@ -83,6 +91,7 @@ public class CompetitionRecordController extends BaseController
     /**
      * 修改比赛记录
      */
+    @ApiOperation("修改比赛记录")
     @PreAuthorize("@ss.hasPermi('match:record:edit')")
     @Log(title = "比赛记录", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -94,6 +103,7 @@ public class CompetitionRecordController extends BaseController
     /**
      * 删除比赛记录
      */
+    @ApiOperation("删除比赛记录")
     @PreAuthorize("@ss.hasPermi('match:record:remove')")
     @Log(title = "比赛记录", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ccRIds}")

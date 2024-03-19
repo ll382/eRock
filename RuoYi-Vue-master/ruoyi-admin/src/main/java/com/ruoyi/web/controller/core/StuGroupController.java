@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.core;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author heye
  * @date 2024-03-15
  */
+@Api("核心模块小组")
 @RestController
 @RequestMapping("/core/group")
 public class StuGroupController extends BaseController
@@ -37,6 +41,7 @@ public class StuGroupController extends BaseController
     /**
      * 查询小组列表
      */
+    @ApiOperation("查询小组列表")
     @PreAuthorize("@ss.hasPermi('core:group:list')")
     @GetMapping("/list")
     public TableDataInfo list(StuGroup stuGroup)
@@ -49,6 +54,7 @@ public class StuGroupController extends BaseController
     /**
      * 导出小组列表
      */
+    @ApiOperation("导出小组列表")
     @PreAuthorize("@ss.hasPermi('core:group:export')")
     @Log(title = "小组", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -62,6 +68,7 @@ public class StuGroupController extends BaseController
     /**
      * 获取小组详细信息
      */
+    @ApiOperation("获取小组详细信息")
     @PreAuthorize("@ss.hasPermi('core:group:query')")
     @GetMapping(value = "/{ggId}")
     public AjaxResult getInfo(@PathVariable("ggId") Long ggId)
@@ -72,6 +79,7 @@ public class StuGroupController extends BaseController
     /**
      * 新增小组
      */
+    @ApiOperation("新增小组")
     @PreAuthorize("@ss.hasPermi('core:group:add')")
     @Log(title = "小组", businessType = BusinessType.INSERT)
     @PostMapping
@@ -83,6 +91,7 @@ public class StuGroupController extends BaseController
     /**
      * 修改小组
      */
+    @ApiOperation("修改小组")
     @PreAuthorize("@ss.hasPermi('core:group:edit')")
     @Log(title = "小组", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -94,6 +103,7 @@ public class StuGroupController extends BaseController
     /**
      * 删除小组
      */
+    @ApiOperation("删除小组")
     @PreAuthorize("@ss.hasPermi('core:group:remove')")
     @Log(title = "小组", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ggIds}")

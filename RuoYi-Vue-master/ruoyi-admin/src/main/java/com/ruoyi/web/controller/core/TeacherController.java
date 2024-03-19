@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.core;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author heye
  * @date 2024-03-17
  */
+@Api("核心模块老师")
 @RestController
 @RequestMapping("/core/teacher")
 public class TeacherController extends BaseController
@@ -37,6 +41,7 @@ public class TeacherController extends BaseController
     /**
      * 查询老师列表
      */
+    @ApiOperation("查询老师列表")
     @PreAuthorize("@ss.hasPermi('core:teacher:list')")
     @GetMapping("/list")
     public TableDataInfo list(Teacher teacher)
@@ -49,6 +54,7 @@ public class TeacherController extends BaseController
     /**
      * 导出老师列表
      */
+    @ApiOperation("导出老师列表")
     @PreAuthorize("@ss.hasPermi('core:teacher:export')")
     @Log(title = "老师", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -62,6 +68,7 @@ public class TeacherController extends BaseController
     /**
      * 获取老师详细信息
      */
+    @ApiOperation("获取老师详细信息")
     @PreAuthorize("@ss.hasPermi('core:teacher:query')")
     @GetMapping(value = "/{teaId}")
     public AjaxResult getInfo(@PathVariable("teaId") Long teaId)
@@ -72,6 +79,7 @@ public class TeacherController extends BaseController
     /**
      * 新增老师
      */
+    @ApiOperation("新增老师")
     @PreAuthorize("@ss.hasPermi('core:teacher:add')")
     @Log(title = "老师", businessType = BusinessType.INSERT)
     @PostMapping
@@ -83,6 +91,7 @@ public class TeacherController extends BaseController
     /**
      * 修改老师
      */
+    @ApiOperation("修改老师")
     @PreAuthorize("@ss.hasPermi('core:teacher:edit')")
     @Log(title = "老师", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -94,6 +103,7 @@ public class TeacherController extends BaseController
     /**
      * 删除老师
      */
+    @ApiOperation("删除老师")
     @PreAuthorize("@ss.hasPermi('core:teacher:remove')")
     @Log(title = "老师", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{teaIds}")
