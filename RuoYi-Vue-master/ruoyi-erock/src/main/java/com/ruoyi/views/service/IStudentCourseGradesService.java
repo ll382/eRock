@@ -3,6 +3,8 @@ package com.ruoyi.views.service;
 
 import com.ruoyi.views.domain.StudentCourseGrades;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ public interface IStudentCourseGradesService
      * @param stuId 学生成绩查询主键
      * @return 学生成绩查询
      */
-    public StudentCourseGrades selectStudentCourseGradesByStuId(Long stuId);
+    public ArrayList<HashMap<String,List>> selectStudentCourseGradesByStuId(Long stuId);
 
     /**
      * 查询学生成绩查询列表
