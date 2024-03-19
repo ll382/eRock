@@ -1,6 +1,7 @@
 package com.ruoyi.match.domain;
 
 import java.math.BigDecimal;
+import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -34,6 +35,9 @@ public class CPersonnelSheet extends BaseEntity
     /** 分数 */
     @Excel(name = "分数")
     private BigDecimal psNum;
+
+    /** C 佐证信息 */
+    private List<CProof> cProofList;
 
     public void setPsId(Long psId) 
     {
@@ -81,6 +85,16 @@ public class CPersonnelSheet extends BaseEntity
         return psNum;
     }
 
+    public List<CProof> getCProofList()
+    {
+        return cProofList;
+    }
+
+    public void setCProofList(List<CProof> cProofList)
+    {
+        this.cProofList = cProofList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -89,6 +103,7 @@ public class CPersonnelSheet extends BaseEntity
             .append("balId", getBalId())
             .append("stuId", getStuId())
             .append("psNum", getPsNum())
+            .append("cProofList", getCProofList())
             .toString();
     }
 }
