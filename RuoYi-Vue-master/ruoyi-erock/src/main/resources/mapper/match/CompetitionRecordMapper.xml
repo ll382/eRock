@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.match.mapper.CompetitionRecordMapper">
+    
+    <resultMap type="CompetitionRecord" id="CompetitionRecordResult">
+        <result property="ccRId"    column="cc_r_id"    />
+        <result property="enumId"    column="enum_id"    />
+        <result property="ccRTime"    column="cc_r_time"    />
+        <result property="ccRSpeci"    column="cc_r_speci"    />
+        <result property="ccRName"    column="cc_r_name"    />
+    </resultMap>
+
+    <resultMap id="CompetitionRecordCBallteamResult" type="CompetitionRecord" extends="CompetitionRecordResult">
+        <collection property="cBallteamList" notNullColumn="sub_bal_id" javaType="java.util.List" resultMap="CBallteamResult" />
+    </resultMap>
+
+    <resultMap type="CBallteam" id="CBallteamResult">
+        <result property="balId"    column="sub_bal_id"    />
+        <result property="ccRId"    column="sub_cc_r_id"    />
+        <result property="ggId"    column="sub_gg_id"    />
+        <result property="balNum"    column="sub_bal_num"    />
+    </resultMap>
+
+    <sql id="selectCompetitionRecordVo">
+        select cc_r_id, enum_id, cc_r_time, cc_r_speci, cc_r_name from c_competition_record
+    </sql>
+
+    <select id="selectCompetitionRecordList" parameterType="CompetitionRecord" resultMap="CompetitionRecordResult">
+        <include refid="selectCompetitionRecordVo"/>
+        <where>  
+            <if test="enumId != null "> and enum_id = #{enumId}</if>
+            <if test="ccRTime != null "> and cc_r_time = #{ccRTime}</if>
+            <if test="ccRSpeci != null  and ccRSpeci != ''"> and cc_r_speci = #{ccRSpeci}</if>
+            <if test="ccRName != null  and ccRName != ''"> and cc_r_name like concat('%', #{ccRName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectCompetitionRecordByCcRId" parameterType="Long" resultMap="CompetitionRecordCBallteamResult">
+        select a.cc_r_id, a.enum_id, a.cc_r_time, a.cc_r_speci, a.cc_r_name,
+ b.bal_id as sub_bal_id, b.cc_r_id as sub_cc_r_id, b.gg_id as sub_gg_id, b.bal_num as sub_bal_num
+        from c_competition_record a
+        left join c_ballteam b on b.cc_r_id = a.cc_r_id
+        where a.cc_r_id = #{ccRId}
+    </select>
+        
+    <insert id="insertCompetitionRecord" parameterType="CompetitionRecord" useGeneratedKeys="true" keyProperty="ccRId">
+        insert into c_competition_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="enumId != null">enum_id,</if>
+            <if test="ccRTime != null">cc_r_time,</if>
+            <if test="ccRSpeci != null">cc_r_speci,</if>
+            <if test="ccRName != null">cc_r_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="enumId != null">#{enumId},</if>
+            <if test="ccRTime != null">#{ccRTime},</if>
+            <if test="ccRSpeci != null">#{ccRSpeci},</if>
+            <if test="ccRName != null">#{ccRName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCompetitionRecord" parameterType="CompetitionRecord">
+        update c_competition_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="enumId != null">enum_id = #{enumId},</if>
+            <if test="ccRTime != null">cc_r_time = #{ccRTime},</if>
+            <if test="ccRSpeci != null">cc_r_speci = #{ccRSpeci},</if>
+            <if test="ccRName != null">cc_r_name = #{ccRName},</if>
+        </trim>
+        where cc_r_id = #{ccRId}
+    </update>
+
+    <delete id="deleteCompetitionRecordByCcRId" parameterType="Long">
+        delete from c_competition_record where cc_r_id = #{ccRId}
+    </delete>
+
+    <delete id="deleteCompetitionRecordByCcRIds" parameterType="String">
+        delete from c_competition_record where cc_r_id in 
+        <foreach item="ccRId" collection="array" open="(" separator="," close=")">
+            #{ccRId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteCBallteamByCcRIds" parameterType="String">
+        delete from c_ballteam where cc_r_id in 
+        <foreach item="ccRId" collection="array" open="(" separator="," close=")">
+            #{ccRId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteCBallteamByCcRId" parameterType="Long">
+        delete from c_ballteam where cc_r_id = #{ccRId}
+    </delete>
+
+    <insert id="batchCBallteam">
+        insert into c_ballteam( bal_id, cc_r_id, gg_id, bal_num) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.balId}, #{item.ccRId}, #{item.ggId}, #{item.balNum})
+        </foreach>
+    </insert>
+</mapper>
