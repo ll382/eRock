@@ -101,7 +101,7 @@ public class StudentCourseGrades extends BaseEntity
         this.crDate = crDate;
     }
 
-    public Date getCrDate() 
+    public Date getCrDate()
     {
         return crDate;
     }
