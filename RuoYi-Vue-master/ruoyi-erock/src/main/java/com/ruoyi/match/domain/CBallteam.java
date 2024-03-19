@@ -1,5 +1,6 @@
 package com.ruoyi.match.domain;
 
+import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -9,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 球队参赛对象 c_ballteam
  * 
  * @author heye
- * @date 2024-03-18
+ * @date 2024-03-19
  */
 public class CBallteam extends BaseEntity
 {
@@ -29,6 +30,9 @@ public class CBallteam extends BaseEntity
     /** 球队比分 */
     @Excel(name = "球队比分")
     private String balNum;
+
+    /** C 球队内人员信息 */
+    private List<CPersonnelSheet> cPersonnelSheetList;
 
     public void setBalId(Long balId) 
     {
@@ -67,6 +71,16 @@ public class CBallteam extends BaseEntity
         return balNum;
     }
 
+    public List<CPersonnelSheet> getCPersonnelSheetList()
+    {
+        return cPersonnelSheetList;
+    }
+
+    public void setCPersonnelSheetList(List<CPersonnelSheet> cPersonnelSheetList)
+    {
+        this.cPersonnelSheetList = cPersonnelSheetList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -74,6 +88,7 @@ public class CBallteam extends BaseEntity
             .append("ccRId", getCcRId())
             .append("ggId", getGgId())
             .append("balNum", getBalNum())
+            .append("cPersonnelSheetList", getCPersonnelSheetList())
             .toString();
     }
 }
