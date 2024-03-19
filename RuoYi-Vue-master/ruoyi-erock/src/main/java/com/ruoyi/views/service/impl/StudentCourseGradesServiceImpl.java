@@ -1,5 +1,9 @@
 package com.ruoyi.views.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import com.ruoyi.views.domain.StudentCourseGrades;
@@ -27,9 +31,33 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
      * @return 学生成绩查询
      */
     @Override
-    public StudentCourseGrades selectStudentCourseGradesByStuId(Long stuId)
+    public ArrayList<HashMap<String,List>> selectStudentCourseGradesByStuId(Long stuId)
     {
-        return studentCourseGradesMapper.selectStudentCourseGradesByStuId(stuId);
+        List<StudentCourseGrades> grades = studentCourseGradesMapper.selectStudentCourseGradesByStuId(stuId);
+        ArrayList<HashMap<String,List>>  list = new ArrayList<HashMap<String,List>>();
+
+        //自己定义的前后端交互格式
+        HashMap<String, List> xAxisHashMap = new HashMap<>();
+        //crDateList里面存放日期
+        ArrayList<String> crDateList = new ArrayList<>();
+        //msShootingList里面存放投篮分数等
+        ArrayList<String> msShootingList = new ArrayList<>();
+        //msDribbleList里面存放运球分数等
+        ArrayList<String> msDribbleList = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (StudentCourseGrades courseGrades : grades){
+            String format = sdf.format(courseGrades.getCrDate());
+            crDateList.add(format);
+            String msShootingData = "value:"+courseGrades.getMsShooting()+",xAxis:"+format+",yAxis:"+courseGrades.getMsShooting();
+            msShootingList.add(msShootingData);
+            String msDribbleData = "value:"+courseGrades.getMsDribble()+",xAxis:"+format+",yAxis:"+courseGrades.getMsDribble();
+            msDribbleList.add(msDribbleData);
+        }
+        xAxisHashMap.put("xAxis", crDateList);
+        xAxisHashMap.put("msShooting",msShootingList);
+        xAxisHashMap.put("msDribble",msDribbleList);
+        list.add(xAxisHashMap);
+        return list;
     }
 
     /**

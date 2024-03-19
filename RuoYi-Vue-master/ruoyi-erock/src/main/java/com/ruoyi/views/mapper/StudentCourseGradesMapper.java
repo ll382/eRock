@@ -3,7 +3,9 @@ package com.ruoyi.views.mapper;
 
 import com.ruoyi.views.domain.StudentCourseGrades;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,7 +23,7 @@ public interface StudentCourseGradesMapper
      * @param stuId 学生成绩查询主键
      * @return 学生成绩查询
      */
-    public StudentCourseGrades selectStudentCourseGradesByStuId(Long stuId);
+    public List<StudentCourseGrades> selectStudentCourseGradesByStuId(Long stuId);
 
     /**
      * 查询学生成绩查询列表
@@ -30,6 +32,7 @@ public interface StudentCourseGradesMapper
      * @return 学生成绩查询集合
      */
     public List<StudentCourseGrades> selectStudentCourseGradesList(StudentCourseGrades studentCourseGrades);
+
 
     /**
      * 新增学生成绩查询
