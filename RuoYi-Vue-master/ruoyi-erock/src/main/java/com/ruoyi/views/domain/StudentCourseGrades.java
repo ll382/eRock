@@ -114,12 +114,12 @@ public class StudentCourseGrades extends BaseEntity
     {
         return crMain;
     }
-    public void setTeaName(String teaName) 
+    public void setTeaName(String teaName)
     {
         this.teaName = teaName;
     }
 
-    public String getTeaName() 
+    public String getTeaName()
     {
         return teaName;
     }

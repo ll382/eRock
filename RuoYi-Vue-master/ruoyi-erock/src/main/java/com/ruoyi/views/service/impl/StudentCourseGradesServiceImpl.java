@@ -2,10 +2,10 @@ package com.ruoyi.views.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.views.domain.StudentCourseGrades;
 import com.ruoyi.views.mapper.StudentCourseGradesMapper;
 import com.ruoyi.views.service.IStudentCourseGradesService;
@@ -31,30 +31,37 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
      * @return 学生成绩查询
      */
     @Override
-    public ArrayList<HashMap<String,List>> selectStudentCourseGradesByStuId(Long stuId)
+    public ArrayList<HashMap<String, List>> selectStudentCourseGradesByStuId(Long stuId)
     {
         List<StudentCourseGrades> grades = studentCourseGradesMapper.selectStudentCourseGradesByStuId(stuId);
         ArrayList<HashMap<String,List>>  list = new ArrayList<HashMap<String,List>>();
-
         //自己定义的前后端交互格式
         HashMap<String, List> xAxisHashMap = new HashMap<>();
         //crDateList里面存放日期
         ArrayList<String> crDateList = new ArrayList<>();
         //msShootingList里面存放投篮分数等
-        ArrayList<String> msShootingList = new ArrayList<>();
+        ArrayList<JSONObject> msShootingList = new ArrayList<>();
         //msDribbleList里面存放运球分数等
-        ArrayList<String> msDribbleList = new ArrayList<>();
+        ArrayList<JSONObject> msDribbleList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (StudentCourseGrades courseGrades : grades){
             String format = sdf.format(courseGrades.getCrDate());
             crDateList.add(format);
-            String msShootingData = "value:"+courseGrades.getMsShooting()+",xAxis:"+format+",yAxis:"+courseGrades.getMsShooting();
-            msShootingList.add(msShootingData);
-            String msDribbleData = "value:"+courseGrades.getMsDribble()+",xAxis:"+format+",yAxis:"+courseGrades.getMsDribble();
-            msDribbleList.add(msDribbleData);
+
+            JSONObject msShootingJsonObject = new JSONObject();
+            msShootingJsonObject.put("value",courseGrades.getMsShooting());
+            msShootingJsonObject.put("xAxis",format);
+            msShootingJsonObject.put("yAxis",courseGrades.getMsShooting());
+            msShootingList.add(msShootingJsonObject);
+
+            JSONObject msDribbleJsonObject = new JSONObject();
+            msDribbleJsonObject.put("value",courseGrades.getMsDribble());
+            msDribbleJsonObject.put("xAxis",format);
+            msDribbleJsonObject.put("yAxis",courseGrades.getMsDribble());
+            msDribbleList.add(msDribbleJsonObject);
         }
         xAxisHashMap.put("xAxis", crDateList);
-        xAxisHashMap.put("msShooting",msShootingList);
+        xAxisHashMap.put("msShooting",msShootingList );
         xAxisHashMap.put("msDribble",msDribbleList);
         list.add(xAxisHashMap);
         return list;
