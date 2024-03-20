@@ -7,82 +7,72 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.ruoyi.views.domain.StudentCourseGrades;
-import com.ruoyi.views.mapper.StudentCourseGradesMapper;
-import com.ruoyi.views.service.IStudentCourseGradesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.ruoyi.views.mapper.StudentCourseGradesMapper;
+import com.ruoyi.views.domain.StudentCourseGrades;
+import com.ruoyi.views.service.IStudentCourseGradesService;
 
 /**
- * 学生成绩查询Service业务层处理
+ * 学生成绩视图Service业务层处理
  * 
  * @author ljy
- * @date 2024-03-14
+ * @date 2024-03-20
  */
 @Service
-public class StudentCourseGradesServiceImpl implements IStudentCourseGradesService
+public class StudentCourseGradesServiceImpl implements IStudentCourseGradesService 
 {
     @Autowired
     private StudentCourseGradesMapper studentCourseGradesMapper;
 
     /**
-     * 查询学生成绩查询
+     * 查询学生成绩视图
      * 
-     * @param stuId 学生成绩查询主键
-     * @return 学生成绩查询
+     * @param stuId 学生成绩视图主键
+     * @return 学生成绩视图
      */
     @Override
     public ArrayList<HashMap<String, List>> selectStudentCourseGradesByStuId(Long stuId)
     {
         List<StudentCourseGrades> grades = studentCourseGradesMapper.selectStudentCourseGradesByStuId(stuId);
-        ArrayList<HashMap<String,List>>  list = new ArrayList<HashMap<String,List>>();
+        ArrayList<HashMap<String,List>> list = new ArrayList<HashMap<String,List>>();
         //自己定义的前后端交互格式
         HashMap<String, List> xAxisHashMap = new HashMap<>();
         //crDateList里面存放日期
         ArrayList<String> crDateList = new ArrayList<>();
 
-        //crDateList里面存放投篮分数
-        ArrayList<BigDecimal> msShootingDate = new ArrayList<>();
-        //crDateList里面存放运球分数
-        ArrayList<BigDecimal> msDribbleDate = new ArrayList<>();
+        //EROCKDate里面存放EROCK分数
+        ArrayList<BigDecimal> EROCKDate = new ArrayList<>();
 
-        //msShootingList里面存放投篮分数等
-        ArrayList<JSONObject> msShootingList = new ArrayList<>();
-        //msDribbleList里面存放运球分数等
-        ArrayList<JSONObject> msDribbleList = new ArrayList<>();
+
+        //EROCKList里面存放EROCK分数等
+        ArrayList<JSONObject> EROCKList = new ArrayList<>();
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (StudentCourseGrades courseGrades : grades){
             String format = sdf.format(courseGrades.getCrDate());
             crDateList.add(format);
 
-            msShootingDate.add(courseGrades.getMsShooting());
-            JSONObject msShootingJsonObject = new JSONObject();
-            msShootingJsonObject.put("value",courseGrades.getMsShooting());
-            msShootingJsonObject.put("xAxis",format);
-            msShootingJsonObject.put("yAxis",courseGrades.getMsShooting());
-            msShootingList.add(msShootingJsonObject);
+            EROCKDate.add(courseGrades.getMsScore());
 
-            msDribbleDate.add(courseGrades.getMsDribble());
             JSONObject msDribbleJsonObject = new JSONObject();
-            msDribbleJsonObject.put("value",courseGrades.getMsDribble());
+            msDribbleJsonObject.put("value",courseGrades.getMsScore());
             msDribbleJsonObject.put("xAxis",format);
-            msDribbleJsonObject.put("yAxis",courseGrades.getMsDribble());
-            msDribbleList.add(msDribbleJsonObject);
+            msDribbleJsonObject.put("yAxis",courseGrades.getMsScore());
+            EROCKList.add(msDribbleJsonObject);
         }
         xAxisHashMap.put("xAxis", crDateList);
-        xAxisHashMap.put("msShootingScore",msShootingDate);
-        xAxisHashMap.put("msDribbleScore",msDribbleDate);
-        xAxisHashMap.put("msShooting",msShootingList );
-        xAxisHashMap.put("msDribble",msDribbleList);
+        xAxisHashMap.put("EROCKScore",EROCKDate);
+        xAxisHashMap.put("EROCKList",EROCKList);
         list.add(xAxisHashMap);
         return list;
     }
 
     /**
-     * 查询学生成绩查询列表
+     * 查询学生成绩视图列表
      * 
-     * @param studentCourseGrades 学生成绩查询
-     * @return 学生成绩查询
+     * @param studentCourseGrades 学生成绩视图
+     * @return 学生成绩视图
      */
     @Override
     public List<StudentCourseGrades> selectStudentCourseGradesList(StudentCourseGrades studentCourseGrades)
@@ -91,9 +81,9 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
     }
 
     /**
-     * 新增学生成绩查询
+     * 新增学生成绩视图
      * 
-     * @param studentCourseGrades 学生成绩查询
+     * @param studentCourseGrades 学生成绩视图
      * @return 结果
      */
     @Override
@@ -103,9 +93,9 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
     }
 
     /**
-     * 修改学生成绩查询
+     * 修改学生成绩视图
      * 
-     * @param studentCourseGrades 学生成绩查询
+     * @param studentCourseGrades 学生成绩视图
      * @return 结果
      */
     @Override
@@ -115,9 +105,9 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
     }
 
     /**
-     * 批量删除学生成绩查询
+     * 批量删除学生成绩视图
      * 
-     * @param stuIds 需要删除的学生成绩查询主键
+     * @param stuIds 需要删除的学生成绩视图主键
      * @return 结果
      */
     @Override
@@ -127,9 +117,9 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
     }
 
     /**
-     * 删除学生成绩查询信息
+     * 删除学生成绩视图信息
      * 
-     * @param stuId 学生成绩查询主键
+     * @param stuId 学生成绩视图主键
      * @return 结果
      */
     @Override

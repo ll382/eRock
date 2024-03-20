@@ -17,11 +17,12 @@ import java.util.List;
 class RuoYiApplicationTests {
 
     @Autowired
-    public IStudentCourseGradesService studentCourseGradesService;
+    public StudentCourseGradesMapper studentCourseGradesMapper;
 
     @Test
     public void test(){
-
+//        List<StudentCourseGrades> studentCourseGrades = studentCourseGradesMapper.selectStudentCourseGradesByStuId(4l);
+//        System.out.println(studentCourseGrades);
 
     }
 

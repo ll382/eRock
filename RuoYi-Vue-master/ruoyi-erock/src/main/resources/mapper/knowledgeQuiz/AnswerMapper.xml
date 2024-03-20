@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.knowledgeQuiz.mapper.AnswerMapper">
+    
+    <resultMap type="Answer" id="AnswerResult">
+        <result property="ansId"    column="ans_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="ansResponse"    column="ans_response"    />
+        <result property="ansApos"    column="ans_apos"    />
+        <result property="ansTime"    column="ans_time"    />
+    </resultMap>
+
+    <sql id="selectAnswerVo">
+        select ans_id, stu_id, ans_response, ans_apos, ans_time from a1_answer
+    </sql>
+
+    <select id="selectAnswerList" parameterType="Answer" resultMap="AnswerResult">
+        <include refid="selectAnswerVo"/>
+        <where>  
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="ansResponse != null "> and ans_response = #{ansResponse}</if>
+            <if test="ansApos != null "> and ans_apos = #{ansApos}</if>
+            <if test="ansTime != null "> and ans_time = #{ansTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAnswerByAnsId" parameterType="Long" resultMap="AnswerResult">
+        <include refid="selectAnswerVo"/>
+        where ans_id = #{ansId}
+    </select>
+        
+    <insert id="insertAnswer" parameterType="Answer" useGeneratedKeys="true" keyProperty="ansId">
+        insert into a1_answer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">stu_id,</if>
+            <if test="ansResponse != null">ans_response,</if>
+            <if test="ansApos != null">ans_apos,</if>
+            <if test="ansTime != null">ans_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">#{stuId},</if>
+            <if test="ansResponse != null">#{ansResponse},</if>
+            <if test="ansApos != null">#{ansApos},</if>
+            <if test="ansTime != null">#{ansTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAnswer" parameterType="Answer">
+        update a1_answer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="ansResponse != null">ans_response = #{ansResponse},</if>
+            <if test="ansApos != null">ans_apos = #{ansApos},</if>
+            <if test="ansTime != null">ans_time = #{ansTime},</if>
+        </trim>
+        where ans_id = #{ansId}
+    </update>
+
+    <delete id="deleteAnswerByAnsId" parameterType="Long">
+        delete from a1_answer where ans_id = #{ansId}
+    </delete>
+
+    <delete id="deleteAnswerByAnsIds" parameterType="String">
+        delete from a1_answer where ans_id in 
+        <foreach item="ansId" collection="array" open="(" separator="," close=")">
+            #{ansId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询学生成绩查询列表
+// 查询学生成绩视图列表
 export function listGrades(query) {
   return request({
     url: '/view/grades/list',
@@ -9,7 +9,7 @@ export function listGrades(query) {
   })
 }
 
-// 查询学生成绩查询详细
+// 查询学生成绩视图详细
 export function getGrades(stuId) {
   return request({
     url: '/view/grades/' + stuId,
@@ -17,7 +17,7 @@ export function getGrades(stuId) {
   })
 }
 
-// 新增学生成绩查询
+// 新增学生成绩视图
 export function addGrades(data) {
   return request({
     url: '/view/grades',
@@ -26,7 +26,7 @@ export function addGrades(data) {
   })
 }
 
-// 修改学生成绩查询
+// 修改学生成绩视图
 export function updateGrades(data) {
   return request({
     url: '/view/grades',
@@ -35,7 +35,7 @@ export function updateGrades(data) {
   })
 }
 
-// 删除学生成绩查询
+// 删除学生成绩视图
 export function delGrades(stuId) {
   return request({
     url: '/view/grades/' + stuId,

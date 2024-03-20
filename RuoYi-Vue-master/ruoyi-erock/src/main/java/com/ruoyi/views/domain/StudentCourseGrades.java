@@ -9,10 +9,10 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 学生成绩查询对象 student_course_grades
+ * 学生成绩视图对象 student_course_grades
  * 
  * @author ljy
- * @date 2024-03-14
+ * @date 2024-03-20
  */
 public class StudentCourseGrades extends BaseEntity
 {
@@ -34,12 +34,16 @@ public class StudentCourseGrades extends BaseEntity
     @Excel(name = "运球分数")
     private BigDecimal msDribble;
 
+    /** EROCK评分 */
+    @Excel(name = "EROCK评分")
+    private BigDecimal msScore;
+
     /** 投篮分数 */
     @Excel(name = "投篮分数")
     private BigDecimal msShooting;
 
     /** 开课时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "开课时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date crDate;
 
@@ -87,6 +91,15 @@ public class StudentCourseGrades extends BaseEntity
     {
         return msDribble;
     }
+    public void setMsScore(BigDecimal msScore) 
+    {
+        this.msScore = msScore;
+    }
+
+    public BigDecimal getMsScore() 
+    {
+        return msScore;
+    }
     public void setMsShooting(BigDecimal msShooting) 
     {
         this.msShooting = msShooting;
@@ -101,7 +114,7 @@ public class StudentCourseGrades extends BaseEntity
         this.crDate = crDate;
     }
 
-    public Date getCrDate()
+    public Date getCrDate() 
     {
         return crDate;
     }
@@ -114,12 +127,12 @@ public class StudentCourseGrades extends BaseEntity
     {
         return crMain;
     }
-    public void setTeaName(String teaName)
+    public void setTeaName(String teaName) 
     {
         this.teaName = teaName;
     }
 
-    public String getTeaName()
+    public String getTeaName() 
     {
         return teaName;
     }
@@ -131,6 +144,7 @@ public class StudentCourseGrades extends BaseEntity
             .append("stuName", getStuName())
             .append("className", getClassName())
             .append("msDribble", getMsDribble())
+            .append("msScore", getMsScore())
             .append("msShooting", getMsShooting())
             .append("crDate", getCrDate())
             .append("crMain", getCrMain())
