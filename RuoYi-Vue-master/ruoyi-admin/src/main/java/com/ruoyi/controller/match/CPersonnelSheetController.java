@@ -1,4 +1,4 @@
-package com.ruoyi.web.controller.match;
+package com.ruoyi.controller.match;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;

@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * C 球队内人员对象 c_personnel_sheet
- * 
+ *
  * @author heye
  * @date 2024-03-19
  */
@@ -36,53 +36,73 @@ public class CPersonnelSheet extends BaseEntity
     @Excel(name = "分数")
     private BigDecimal psNum;
 
+    @Excel(name = "学生名称")
+    private String stuName;
+
+
     /** C 佐证信息 */
     private List<CProof> cProofList;
 
-    public void setPsId(Long psId) 
+    public void setPsId(Long psId)
     {
         this.psId = psId;
     }
 
-    public Long getPsId() 
+    public Long getPsId()
     {
         return psId;
     }
-    public void setJobId(Long jobId) 
+    public void setJobId(Long jobId)
     {
         this.jobId = jobId;
     }
 
-    public Long getJobId() 
+    public Long getJobId()
     {
         return jobId;
     }
-    public void setBalId(Long balId) 
+    public void setBalId(Long balId)
     {
         this.balId = balId;
     }
 
-    public Long getBalId() 
+    public Long getBalId()
     {
         return balId;
     }
-    public void setStuId(Long stuId) 
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
     }
 
-    public Long getStuId() 
+    public Long getStuId()
     {
         return stuId;
     }
-    public void setPsNum(BigDecimal psNum) 
+    public void setPsNum(BigDecimal psNum)
     {
         this.psNum = psNum;
     }
 
-    public BigDecimal getPsNum() 
+    public BigDecimal getPsNum()
     {
         return psNum;
+    }
+
+    public String getStuName() {
+        return stuName;
+    }
+
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
+    }
+
+    public List<CProof> getcProofList() {
+        return cProofList;
+    }
+
+    public void setcProofList(List<CProof> cProofList) {
+        this.cProofList = cProofList;
     }
 
     public List<CProof> getCProofList()
@@ -103,6 +123,7 @@ public class CPersonnelSheet extends BaseEntity
             .append("balId", getBalId())
             .append("stuId", getStuId())
             .append("psNum", getPsNum())
+            .append("stuName", getStuName())
             .append("cProofList", getCProofList())
             .toString();
     }

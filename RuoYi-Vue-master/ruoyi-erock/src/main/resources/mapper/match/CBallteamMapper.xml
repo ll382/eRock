@@ -3,12 +3,13 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.match.mapper.CBallteamMapper">
-    
+
     <resultMap type="CBallteam" id="CBallteamResult">
         <result property="balId"    column="bal_id"    />
         <result property="ccRId"    column="cc_r_id"    />
         <result property="ggId"    column="gg_id"    />
         <result property="balNum"    column="bal_num"    />
+        <result property="ggName"    column="gg_name"    />
     </resultMap>
 
     <resultMap id="CBallteamCPersonnelSheetResult" type="CBallteam" extends="CBallteamResult">
@@ -21,29 +22,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="balId"    column="sub_bal_id"    />
         <result property="stuId"    column="sub_stu_id"    />
         <result property="psNum"    column="sub_ps_num"    />
+        <result property="stuName"    column="sub_stu_name"    />
     </resultMap>
 
     <sql id="selectCBallteamVo">
-        select bal_id, cc_r_id, gg_id, bal_num from c_ballteam
+        select a.bal_id, a.cc_r_id, a.gg_id, a.bal_num,c.gg_name from c_ballteam a
+            left join stu_group c on c.gg_id = a.gg_id
     </sql>
 
     <select id="selectCBallteamList" parameterType="CBallteam" resultMap="CBallteamResult">
         <include refid="selectCBallteamVo"/>
-        <where>  
+        <where>
             <if test="ccRId != null "> and cc_r_id = #{ccRId}</if>
             <if test="ggId != null "> and gg_id = #{ggId}</if>
             <if test="balNum != null  and balNum != ''"> and bal_num = #{balNum}</if>
         </where>
     </select>
-    
+
     <select id="selectCBallteamByBalId" parameterType="Long" resultMap="CBallteamCPersonnelSheetResult">
         select a.bal_id, a.cc_r_id, a.gg_id, a.bal_num,
- b.ps_id as sub_ps_id, b.job_id as sub_job_id, b.bal_id as sub_bal_id, b.stu_id as sub_stu_id, b.ps_num as sub_ps_num
+ b.ps_id as sub_ps_id, b.job_id as sub_job_id, b.bal_id as sub_bal_id, b.stu_id as sub_stu_id, b.ps_num as sub_ps_num , c.gg_name , d.stu_name as sub_stu_name
         from c_ballteam a
         left join c_personnel_sheet b on b.bal_id = a.bal_id
+        left join stu_group c on c.gg_id = a.gg_id
+        left join student d on d.stu_id = b.stu_id
         where a.bal_id = #{balId}
     </select>
-        
+
     <insert id="insertCBallteam" parameterType="CBallteam" useGeneratedKeys="true" keyProperty="balId">
         insert into c_ballteam
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -73,14 +78,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCBallteamByBalIds" parameterType="String">
-        delete from c_ballteam where bal_id in 
+        delete from c_ballteam where bal_id in
         <foreach item="balId" collection="array" open="(" separator="," close=")">
             #{balId}
         </foreach>
     </delete>
-    
+
     <delete id="deleteCPersonnelSheetByBalIds" parameterType="String">
-        delete from c_personnel_sheet where bal_id in 
+        delete from c_personnel_sheet where bal_id in
         <foreach item="balId" collection="array" open="(" separator="," close=")">
             #{balId}
         </foreach>
