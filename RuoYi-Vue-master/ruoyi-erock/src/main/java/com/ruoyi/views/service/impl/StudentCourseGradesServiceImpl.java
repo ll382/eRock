@@ -1,5 +1,6 @@
 package com.ruoyi.views.service.impl;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,12 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
         HashMap<String, List> xAxisHashMap = new HashMap<>();
         //crDateList里面存放日期
         ArrayList<String> crDateList = new ArrayList<>();
+
+        //crDateList里面存放投篮分数
+        ArrayList<BigDecimal> msShootingDate = new ArrayList<>();
+        //crDateList里面存放运球分数
+        ArrayList<BigDecimal> msDribbleDate = new ArrayList<>();
+
         //msShootingList里面存放投篮分数等
         ArrayList<JSONObject> msShootingList = new ArrayList<>();
         //msDribbleList里面存放运球分数等
@@ -48,12 +55,14 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
             String format = sdf.format(courseGrades.getCrDate());
             crDateList.add(format);
 
+            msShootingDate.add(courseGrades.getMsShooting());
             JSONObject msShootingJsonObject = new JSONObject();
             msShootingJsonObject.put("value",courseGrades.getMsShooting());
             msShootingJsonObject.put("xAxis",format);
             msShootingJsonObject.put("yAxis",courseGrades.getMsShooting());
             msShootingList.add(msShootingJsonObject);
 
+            msDribbleDate.add(courseGrades.getMsDribble());
             JSONObject msDribbleJsonObject = new JSONObject();
             msDribbleJsonObject.put("value",courseGrades.getMsDribble());
             msDribbleJsonObject.put("xAxis",format);
@@ -61,6 +70,8 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
             msDribbleList.add(msDribbleJsonObject);
         }
         xAxisHashMap.put("xAxis", crDateList);
+        xAxisHashMap.put("msShootingScore",msShootingDate);
+        xAxisHashMap.put("msDribbleScore",msDribbleDate);
         xAxisHashMap.put("msShooting",msShootingList );
         xAxisHashMap.put("msDribble",msDribbleList);
         list.add(xAxisHashMap);
