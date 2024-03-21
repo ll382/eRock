@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ccRId"    column="cc_r_id"    />
         <result property="ggId"    column="gg_id"    />
         <result property="balNum"    column="bal_num"    />
-        <result property="ggName"    column="gg_name"    />
+        <result property="ggName"    column="gg_name"    /> 
     </resultMap>
 
     <resultMap id="CBallteamCPersonnelSheetResult" type="CBallteam" extends="CBallteamResult">

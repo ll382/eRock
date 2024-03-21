@@ -2,6 +2,8 @@ package com.ruoyi.controller.teachingExchange;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.teachingExchange.domain.A1Communication;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,6 +50,19 @@ public class TeachingTableController extends BaseController
         startPage();
         List<TeachingTable> list = teachingTableService.selectTeachingTableList(teachingTable);
         return getDataTable(list);
+    }
+
+    /**
+     * 查询A1 线上学习学生线上观看记录表  评论列表
+     */
+    @ApiOperation("查询A1 线上学习学生线上观看记录表   评论列表")
+    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:list')")
+    @GetMapping("/comm/{commId}")
+    public AjaxResult A1Communicationlist(@PathVariable("commId")Long commId)
+    {
+        startPage();
+        TeachingTable list = teachingTableService.selectCommunicationList(commId);
+        return success(list);
     }
 
     /**
