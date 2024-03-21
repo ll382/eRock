@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectStudentCourseGradesByStuId" parameterType="Long" resultMap="StudentCourseGradesResult">
         <include refid="selectStudentCourseGradesVo"/>
-        where stu_id = #{stuId} ORDER BY cr_date ASC
+        where stu_id = #{stuId}
     </select>
         
     <insert id="insertStudentCourseGrades" parameterType="StudentCourseGrades">
