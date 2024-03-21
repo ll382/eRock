@@ -19,7 +19,7 @@ public interface StudentCourseGradesMapper
      * @param stuId 学生成绩视图主键
      * @return 学生成绩视图
      */
-    public List<StudentCourseGrades> selectStudentCourseGradesByStuId(Long stuId);
+    public StudentCourseGrades selectStudentCourseGradesByStuId(Long stuId);
 
     /**
      * 查询学生成绩视图列表

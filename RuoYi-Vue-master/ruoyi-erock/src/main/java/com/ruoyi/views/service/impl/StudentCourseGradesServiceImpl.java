@@ -32,40 +32,9 @@ public class StudentCourseGradesServiceImpl implements IStudentCourseGradesServi
      * @return 学生成绩视图
      */
     @Override
-    public ArrayList<HashMap<String, List>> selectStudentCourseGradesByStuId(Long stuId)
+    public StudentCourseGrades selectStudentCourseGradesByStuId(Long stuId)
     {
-        List<StudentCourseGrades> grades = studentCourseGradesMapper.selectStudentCourseGradesByStuId(stuId);
-        ArrayList<HashMap<String,List>> list = new ArrayList<HashMap<String,List>>();
-        //自己定义的前后端交互格式
-        HashMap<String, List> xAxisHashMap = new HashMap<>();
-        //crDateList里面存放日期
-        ArrayList<String> crDateList = new ArrayList<>();
-
-        //EROCKDate里面存放EROCK分数
-        ArrayList<BigDecimal> EROCKDate = new ArrayList<>();
-
-
-        //EROCKList里面存放EROCK分数等
-        ArrayList<JSONObject> EROCKList = new ArrayList<>();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        for (StudentCourseGrades courseGrades : grades){
-            String format = sdf.format(courseGrades.getCrDate());
-            crDateList.add(format);
-
-            EROCKDate.add(courseGrades.getMsScore());
-
-            JSONObject msDribbleJsonObject = new JSONObject();
-            msDribbleJsonObject.put("value",courseGrades.getMsScore());
-            msDribbleJsonObject.put("xAxis",format);
-            msDribbleJsonObject.put("yAxis",courseGrades.getMsScore());
-            EROCKList.add(msDribbleJsonObject);
-        }
-        xAxisHashMap.put("xAxis", crDateList);
-        xAxisHashMap.put("EROCKScore",EROCKDate);
-        xAxisHashMap.put("EROCKList",EROCKList);
-        list.add(xAxisHashMap);
-        return list;
+       return studentCourseGradesMapper.selectStudentCourseGradesByStuId(stuId);
     }
 
     /**
