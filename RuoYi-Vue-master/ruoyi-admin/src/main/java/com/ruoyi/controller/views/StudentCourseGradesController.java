@@ -1,14 +1,10 @@
 package com.ruoyi.controller.views;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.views.domain.StudentCourseGrades;
-import com.ruoyi.views.mapper.StudentCourseGradesMapper;
-import com.ruoyi.views.service.IStudentCourseGradesService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +19,18 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.views.domain.StudentCourseGrades;
+import com.ruoyi.views.service.IStudentCourseGradesService;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 学生成绩查询Controller
- * 
+ * 学生成绩视图Controller
+ *
  * @author ljy
- * @date 2024-03-14
+ * @date 2024-03-20
  */
+@Api(tags = {"学生成绩视图"})
 @RestController
 @RequestMapping("/view/grades")
 public class StudentCourseGradesController extends BaseController
@@ -39,8 +39,9 @@ public class StudentCourseGradesController extends BaseController
     private IStudentCourseGradesService studentCourseGradesService;
 
     /**
-     * 查询学生成绩查询列表
+     * 查询学生成绩视图列表
      */
+    @ApiOperation("查询学生成绩视图列表")
     @PreAuthorize("@ss.hasPermi('view:grades:list')")
     @GetMapping("/list")
     public TableDataInfo list(StudentCourseGrades studentCourseGrades)
@@ -51,34 +52,36 @@ public class StudentCourseGradesController extends BaseController
     }
 
     /**
-     * 导出学生成绩查询列表
+     * 导出学生成绩视图列表
      */
+    @ApiOperation("导出学生成绩视图列表")
     @PreAuthorize("@ss.hasPermi('view:grades:export')")
-    @Log(title = "学生成绩查询", businessType = BusinessType.EXPORT)
+    @Log(title = "学生成绩视图", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, StudentCourseGrades studentCourseGrades)
     {
         List<StudentCourseGrades> list = studentCourseGradesService.selectStudentCourseGradesList(studentCourseGrades);
         ExcelUtil<StudentCourseGrades> util = new ExcelUtil<StudentCourseGrades>(StudentCourseGrades.class);
-        util.exportExcel(response, list, "学生成绩查询数据");
+        util.exportExcel(response, list, "学生成绩视图数据");
     }
 
     /**
-     * 获取折线图学生成绩查询详细信息
+     * 获取学生成绩视图详细信息
      */
+    @ApiOperation("获取学生成绩视图详细信息")
     @PreAuthorize("@ss.hasPermi('view:grades:query')")
     @GetMapping(value = "/{stuId}")
-    public TableDataInfo getInfo(@PathVariable("stuId") Long stuId)
+    public AjaxResult getInfo(@PathVariable("stuId") Long stuId)
     {
-        return getDataTable(studentCourseGradesService.selectStudentCourseGradesByStuId(stuId));
+        return success(studentCourseGradesService.selectStudentCourseGradesByStuId(stuId));
     }
 
-
     /**
-     * 新增学生成绩查询
+     * 新增学生成绩视图
      */
+    @ApiOperation("新增学生成绩视图")
     @PreAuthorize("@ss.hasPermi('view:grades:add')")
-    @Log(title = "学生成绩查询", businessType = BusinessType.INSERT)
+    @Log(title = "学生成绩视图", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody StudentCourseGrades studentCourseGrades)
     {
@@ -86,10 +89,11 @@ public class StudentCourseGradesController extends BaseController
     }
 
     /**
-     * 修改学生成绩查询
+     * 修改学生成绩视图
      */
+    @ApiOperation("修改学生成绩视图")
     @PreAuthorize("@ss.hasPermi('view:grades:edit')")
-    @Log(title = "学生成绩查询", businessType = BusinessType.UPDATE)
+    @Log(title = "学生成绩视图", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody StudentCourseGrades studentCourseGrades)
     {
@@ -97,10 +101,11 @@ public class StudentCourseGradesController extends BaseController
     }
 
     /**
-     * 删除学生成绩查询
+     * 删除学生成绩视图
      */
+    @ApiOperation("删除学生成绩视图")
     @PreAuthorize("@ss.hasPermi('view:grades:remove')")
-    @Log(title = "学生成绩查询", businessType = BusinessType.DELETE)
+    @Log(title = "学生成绩视图", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{stuIds}")
     public AjaxResult remove(@PathVariable Long[] stuIds)
     {

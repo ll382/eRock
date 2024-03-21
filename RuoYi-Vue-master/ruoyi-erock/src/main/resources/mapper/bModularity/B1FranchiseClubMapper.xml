@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.bModularity.mapper.B1FranchiseClubMapper">
+
+    <resultMap type="B1FranchiseClub" id="B1FranchiseClubResult">
+        <result property="tcId"    column="tc_id"    />
+        <result property="enumId"    column="enum_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="tcUrl"    column="tc_url"    />
+        <result property="tcTime"    column="tc_time"    />
+    </resultMap>
+
+    <resultMap id="B1FranchiseClubB1MassSourceResult" type="B1FranchiseClub" extends="B1FranchiseClubResult">
+        <collection property="b1MassSourceList" notNullColumn="sub_mas_id" javaType="java.util.List" resultMap="B1MassSourceResult" />
+    </resultMap>
+
+    <resultMap type="B1MassSource" id="B1MassSourceResult">
+        <result property="masId"    column="sub_mas_id"    />
+        <result property="tcId"    column="sub_tc_id"    />
+        <result property="teasUrl"    column="sub_teas_url"    />
+    </resultMap>
+
+    <sql id="selectB1FranchiseClubVo">
+        select tc_id, enum_id, stu_id, tc_url, tc_time from b1_franchise_club
+    </sql>
+
+    <select id="selectB1FranchiseClubList" parameterType="B1FranchiseClub" resultMap="B1FranchiseClubResult">
+        <include refid="selectB1FranchiseClubVo"/>
+        <where>
+            <if test="enumId != null "> and enum_id = #{enumId}</if>
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="tcUrl != null  and tcUrl != ''"> and tc_url = #{tcUrl}</if>
+            <if test="tcTime != null "> and tc_time = #{tcTime}</if>
+        </where>
+    </select>
+
+    <select id="selectB1FranchiseClubByTcId" parameterType="Long" resultMap="B1FranchiseClubB1MassSourceResult">
+        select a.tc_id, a.enum_id, a.stu_id, a.tc_url, a.tc_time,
+               b.mas_id as sub_mas_id, b.tc_id as sub_tc_id, b.teas_url as sub_teas_url
+        from b1_franchise_club a
+                 left join b1_mass_source b on b.tc_id = a.tc_id
+        where a.tc_id = #{tcId}
+    </select>
+
+    <insert id="insertB1FranchiseClub" parameterType="B1FranchiseClub" useGeneratedKeys="true" keyProperty="tcId">
+        insert into b1_franchise_club
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="enumId != null">enum_id,</if>
+            <if test="stuId != null">stu_id,</if>
+            <if test="tcUrl != null">tc_url,</if>
+            <if test="tcTime != null">tc_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="enumId != null">#{enumId},</if>
+            <if test="stuId != null">#{stuId},</if>
+            <if test="tcUrl != null">#{tcUrl},</if>
+            <if test="tcTime != null">#{tcTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateB1FranchiseClub" parameterType="B1FranchiseClub">
+        update b1_franchise_club
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="enumId != null">enum_id = #{enumId},</if>
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="tcUrl != null">tc_url = #{tcUrl},</if>
+            <if test="tcTime != null">tc_time = #{tcTime},</if>
+        </trim>
+        where tc_id = #{tcId}
+    </update>
+
+    <delete id="deleteB1FranchiseClubByTcId" parameterType="Long">
+        delete from b1_franchise_club where tc_id = #{tcId}
+    </delete>
+
+    <delete id="deleteB1FranchiseClubByTcIds" parameterType="String">
+        delete from b1_franchise_club where tc_id in
+        <foreach item="tcId" collection="array" open="(" separator="," close=")">
+            #{tcId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteB1MassSourceByTcIds" parameterType="String">
+        delete from b1_mass_source where tc_id in
+        <foreach item="tcId" collection="array" open="(" separator="," close=")">
+            #{tcId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteB1MassSourceByTcId" parameterType="Long">
+        delete from b1_mass_source where tc_id = #{tcId}
+    </delete>
+
+    <insert id="batchB1MassSource">
+        insert into b1_mass_source( mas_id, tc_id, teas_url) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.masId}, #{item.tcId}, #{item.teasUrl})
+        </foreach>
+    </insert>
+</mapper>

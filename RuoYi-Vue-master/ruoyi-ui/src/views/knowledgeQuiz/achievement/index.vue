@@ -9,69 +9,29 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="学生姓名" prop="stuName">
+      <el-form-item label="回答次数" prop="ansResponse">
         <el-input
-          v-model="queryParams.stuName"
-          placeholder="请输入学生姓名"
+          v-model="queryParams.ansResponse"
+          placeholder="请输入回答次数"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="专业班级名" prop="className">
+      <el-form-item label="正确次数" prop="ansApos">
         <el-input
-          v-model="queryParams.className"
-          placeholder="请输入专业班级名"
+          v-model="queryParams.ansApos"
+          placeholder="请输入正确次数"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="运球分数" prop="msDribble">
-        <el-input
-          v-model="queryParams.msDribble"
-          placeholder="请输入运球分数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="EROCK评分" prop="msScore">
-        <el-input
-          v-model="queryParams.msScore"
-          placeholder="请输入EROCK评分"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="投篮分数" prop="msShooting">
-        <el-input
-          v-model="queryParams.msShooting"
-          placeholder="请输入投篮分数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开课时间" prop="crDate">
+      <el-form-item label="时间" prop="ansTime">
         <el-date-picker clearable
-          v-model="queryParams.crDate"
+          v-model="queryParams.ansTime"
           type="date"
           value-format="yyyy-MM-dd"
-          placeholder="请选择开课时间">
+          placeholder="请选择时间">
         </el-date-picker>
-      </el-form-item>
-      <el-form-item label="课题内容" prop="crMain">
-        <el-input
-          v-model="queryParams.crMain"
-          placeholder="请输入课题内容"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="老师姓名" prop="teaName">
-        <el-input
-          v-model="queryParams.teaName"
-          placeholder="请输入老师姓名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -87,7 +47,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['view:grades:add']"
+          v-hasPermi="['knowledgeQuiz:achievement:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -98,7 +58,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['view:grades:edit']"
+          v-hasPermi="['knowledgeQuiz:achievement:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -109,7 +69,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['view:grades:remove']"
+          v-hasPermi="['knowledgeQuiz:achievement:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -119,27 +79,23 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['view:grades:export']"
+          v-hasPermi="['knowledgeQuiz:achievement:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="gradesList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="achievementList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="答题ID" align="center" prop="ansId" />
       <el-table-column label="学生学号" align="center" prop="stuId"/>
-      <el-table-column label="学生姓名" align="center" prop="stuName"/>
-      <el-table-column label="专业班级名" align="center" prop="className"/>
-      <el-table-column label="运球分数" align="center" prop="msDribble"/>
-      <el-table-column label="EROCK评分" align="center" prop="msScore"/>
-      <el-table-column label="投篮分数" align="center" prop="msShooting"/>
-      <el-table-column label="开课时间" align="center" prop="crDate" width="180">
+      <el-table-column label="回答次数" align="center" prop="ansResponse"/>
+      <el-table-column label="正确次数" align="center" prop="ansApos"/>
+      <el-table-column label="时间" align="center" prop="ansTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.crDate, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.ansTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="课题内容" align="center" prop="crMain"/>
-      <el-table-column label="老师姓名" align="center" prop="teaName"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -147,14 +103,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['view:grades:edit']"
+            v-hasPermi="['knowledgeQuiz:achievement:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['view:grades:remove']"
+            v-hasPermi="['knowledgeQuiz:achievement:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -168,9 +124,26 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改学生成绩视图对话框 -->
+    <!-- 添加或修改A1 知识测试 学生成绩对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="学生学号" prop="stuId">
+          <el-input v-model="form.stuId" placeholder="请输入学生学号" />
+        </el-form-item>
+        <el-form-item label="回答次数" prop="ansResponse">
+          <el-input v-model="form.ansResponse" placeholder="请输入回答次数" />
+        </el-form-item>
+        <el-form-item label="正确次数" prop="ansApos">
+          <el-input v-model="form.ansApos" placeholder="请输入正确次数" />
+        </el-form-item>
+        <el-form-item label="时间" prop="ansTime">
+          <el-date-picker clearable
+            v-model="form.ansTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择时间">
+          </el-date-picker>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -181,10 +154,10 @@
 </template>
 
 <script>
-import { listGrades, getGrades, delGrades, addGrades, updateGrades } from "@/api/view/grades";
+import { listAchievement, getAchievement, delAchievement, addAchievement, updateAchievement } from "@/api/knowledgeQuiz/achievement";
 
 export default {
-  name: "Grades",
+  name: "Achievement",
   data() {
     return {
       // 遮罩层
@@ -199,8 +172,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 学生成绩视图表格数据
-      gradesList: [],
+      // A1 知识测试 学生成绩表格数据
+      achievementList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -210,22 +183,14 @@ export default {
         pageNum: 1,
         pageSize: 10,
         stuId: null,
-        stuName: null,
-        className: null,
-        msDribble: null,
-        msScore: null,
-        msShooting: null,
-        crDate: null,
-        crMain: null,
-        teaName: null
+        ansResponse: null,
+        ansApos: null,
+        ansTime: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        stuId: [
-          { required: true, message: "学生学号不能为空", trigger: "blur" }
-        ],
       }
     };
   },
@@ -233,11 +198,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询学生成绩视图列表 */
+    /** 查询A1 知识测试 学生成绩列表 */
     getList() {
       this.loading = true;
-      listGrades(this.queryParams).then(response => {
-        this.gradesList = response.rows;
+      listAchievement(this.queryParams).then(response => {
+        this.achievementList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -250,15 +215,11 @@ export default {
     // 表单重置
     reset() {
       this.form = {
+        ansId: null,
         stuId: null,
-        stuName: null,
-        className: null,
-        msDribble: null,
-        msScore: null,
-        msShooting: null,
-        crDate: null,
-        crMain: null,
-        teaName: null
+        ansResponse: null,
+        ansApos: null,
+        ansTime: null
       };
       this.resetForm("form");
     },
@@ -274,7 +235,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.stuId)
+      this.ids = selection.map(item => item.ansId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -282,30 +243,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加学生成绩视图";
+      this.title = "添加A1 知识测试 学生成绩";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const stuId = row.stuId || this.ids
-      getGrades(stuId).then(response => {
+      const ansId = row.ansId || this.ids
+      getAchievement(ansId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改学生成绩视图";
+        this.title = "修改A1 知识测试 学生成绩";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.stuId != null) {
-            updateGrades(this.form).then(response => {
+          if (this.form.ansId != null) {
+            updateAchievement(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addGrades(this.form).then(response => {
+            addAchievement(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -316,9 +277,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const stuIds = row.stuId || this.ids;
-      this.$modal.confirm('是否确认删除学生成绩视图编号为"' + stuIds + '"的数据项？').then(function() {
-        return delGrades(stuIds);
+      const ansIds = row.ansId || this.ids;
+      this.$modal.confirm('是否确认删除A1 知识测试 学生成绩编号为"' + ansIds + '"的数据项？').then(function() {
+        return delAchievement(ansIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -326,9 +287,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('view/grades/export', {
+      this.download('knowledgeQuiz/achievement/export', {
         ...this.queryParams
-      }, `grades_${new Date().getTime()}.xlsx`)
+      }, `achievement_${new Date().getTime()}.xlsx`)
     }
   }
 };

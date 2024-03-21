@@ -1,4 +1,4 @@
-package com.ruoyi.web.controller.practice;
+package com.ruoyi.controller.practice;
 
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;

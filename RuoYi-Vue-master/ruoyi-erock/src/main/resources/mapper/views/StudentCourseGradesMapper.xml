@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="stuName"    column="stu_name"    />
         <result property="className"    column="class_name"    />
         <result property="msDribble"    column="ms_dribble"    />
+        <result property="msScore"    column="ms_score"    />
         <result property="msShooting"    column="ms_shooting"    />
         <result property="crDate"    column="cr_date"    />
         <result property="crMain"    column="cr_main"    />
@@ -16,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectStudentCourseGradesVo">
-        select stu_id, stu_name, class_name, ms_dribble, ms_shooting, cr_date, cr_main, tea_name from student_course_grades
+        select stu_id, stu_name, class_name, ms_dribble, ms_score, ms_shooting, cr_date, cr_main, tea_name from student_course_grades
     </sql>
 
     <select id="selectStudentCourseGradesList" parameterType="StudentCourseGrades" resultMap="StudentCourseGradesResult">
@@ -26,16 +27,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
             <if test="className != null  and className != ''"> and class_name = #{className}</if>
             <if test="msDribble != null "> and ms_dribble = #{msDribble}</if>
+            <if test="msScore != null "> and ms_score = #{msScore}</if>
             <if test="msShooting != null "> and ms_shooting = #{msShooting}</if>
             <if test="crDate != null "> and cr_date = #{crDate}</if>
             <if test="crMain != null  and crMain != ''"> and cr_main = #{crMain}</if>
             <if test="teaName != null  and teaName != ''"> and tea_name like concat('%', #{teaName}, '%')</if>
         </where>
     </select>
-    
+
     <select id="selectStudentCourseGradesByStuId" parameterType="Long" resultMap="StudentCourseGradesResult">
         <include refid="selectStudentCourseGradesVo"/>
-        where stu_id = #{stuId} ORDER BY cr_date ASC
+        where stu_id = #{stuId}
     </select>
         
     <insert id="insertStudentCourseGrades" parameterType="StudentCourseGrades">
@@ -45,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stuName != null">stu_name,</if>
             <if test="className != null">class_name,</if>
             <if test="msDribble != null">ms_dribble,</if>
+            <if test="msScore != null">ms_score,</if>
             <if test="msShooting != null">ms_shooting,</if>
             <if test="crDate != null">cr_date,</if>
             <if test="crMain != null">cr_main,</if>
@@ -55,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stuName != null">#{stuName},</if>
             <if test="className != null">#{className},</if>
             <if test="msDribble != null">#{msDribble},</if>
+            <if test="msScore != null">#{msScore},</if>
             <if test="msShooting != null">#{msShooting},</if>
             <if test="crDate != null">#{crDate},</if>
             <if test="crMain != null">#{crMain},</if>
@@ -68,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stuName != null">stu_name = #{stuName},</if>
             <if test="className != null">class_name = #{className},</if>
             <if test="msDribble != null">ms_dribble = #{msDribble},</if>
+            <if test="msScore != null">ms_score = #{msScore},</if>
             <if test="msShooting != null">ms_shooting = #{msShooting},</if>
             <if test="crDate != null">cr_date = #{crDate},</if>
             <if test="crMain != null">cr_main = #{crMain},</if>
