@@ -1,5 +1,6 @@
 package com.ruoyi.teachingExchange.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,10 @@ public class TeachingTableServiceImpl implements ITeachingTableService
                 }
                 List<A1Communication> InComm = teachingTableMapper.selectCommunicationId(com.getComId());
                 com.setReplys(InComm);
+                for (A1Communication inCom:InComm) {
+                    List<A1Communication> InCom = teachingTableMapper.selectCommunicationId(inCom.getComId());
+                    com.setReplys(InCom);
+                }
             }
             return comm;
         }

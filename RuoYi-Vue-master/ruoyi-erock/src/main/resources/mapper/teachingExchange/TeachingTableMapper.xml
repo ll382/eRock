@@ -78,7 +78,7 @@
         <include refid="selectRemarkPerson"/>
         <where>
             <if test="commId != null and commId != ''">
-                b.teaching_id = ${commId}
+                b.teaching_id = ${commId} AND c.com_pid IS null
             </if>
         </where>
     </select>

@@ -58,10 +58,11 @@ public class TeachingTableController extends BaseController
     @ApiOperation("查询A1 线上学习学生线上观看记录表   评论列表")
     @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:list')")
     @GetMapping("/comm/{commId}")
-    public AjaxResult A1Communicationlist(@PathVariable("commId")Long commId)
+    public AjaxResult A1Communicationlist(@PathVariable("commId")String commId)
     {
         startPage();
-        TeachingTable list = teachingTableService.selectCommunicationList(commId);
+        Long com = Long.parseLong(commId);
+        TeachingTable list = teachingTableService.selectCommunicationList(com);
         return success(list);
     }
 
