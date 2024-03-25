@@ -3,6 +3,8 @@ package com.ruoyi.core.mapper;
 import java.util.List;
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.domain.StuToTea;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 学生Mapper接口
@@ -10,6 +12,7 @@ import com.ruoyi.core.domain.StuToTea;
  * @author heye
  * @date 2024-03-17
  */
+@Mapper
 public interface StudentMapper 
 {
     /**
@@ -20,6 +23,7 @@ public interface StudentMapper
      */
     public Student selectStudentByStuId(Long stuId);
 
+
     /**
      * 查询学生列表
      * 
@@ -27,6 +31,14 @@ public interface StudentMapper
      * @return 学生集合
      */
     public List<Student> selectStudentList(Student student);
+
+    /**
+     * 根据班级查询学生
+     *
+     * @param className 班级名
+     * @return 学生集合
+     */
+    public List<String> selectClassIdList(@Param("className") String className);
 
     /**
      * 新增学生

@@ -36,12 +36,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="selectStudentByStuId" parameterType="Long" resultMap="StudentStuToTeaResult">
-        select a.stu_id, a.gg_id, a.class_id, a.stu_name, a.stu_password,
- b.stu_id as sub_stu_id, b.tea_id as sub_tea_id
+        select a.stu_id, a.gg_id, a.class_id, a.stu_name, a.stu_password,b.stu_id as sub_stu_id, b.tea_id as sub_tea_id
         from student a
         left join stu_to_tea b on b.stu_id = a.stu_id
         where a.stu_id = #{stuId}
     </select>
+
+    <select id="selectClassIdList" parameterType="String">
+        select stu_name from student where class_id = (select class_id from grade where class_name = #{className})
+    </select>
+
         
     <insert id="insertStudent" parameterType="Student" useGeneratedKeys="true" keyProperty="stuId">
         insert into student

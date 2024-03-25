@@ -1,7 +1,9 @@
-package com.ruoyi.views.domain;
+package com.ruoyi.visualization.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -9,18 +11,14 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 学生成绩视图对象 student_course_grades
+ * PC段首页对象 student_course_grades
  * 
  * @author ljy
- * @date 2024-03-20
+ * @date 2024-03-22
  */
 public class StudentCourseGrades extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
-
-    /** 学生学号 */
-    @Excel(name = "学生学号")
-    private Long stuId;
 
     /** 学生姓名 */
     @Excel(name = "学生姓名")
@@ -30,40 +28,40 @@ public class StudentCourseGrades extends BaseEntity
     @Excel(name = "专业班级名")
     private String className;
 
+    /** 老师姓名 */
+    @Excel(name = "老师姓名")
+    private String teaName;
+
     /** 运球分数 */
     @Excel(name = "运球分数")
     private BigDecimal msDribble;
-
-    /** EROCK评分 */
-    @Excel(name = "EROCK评分")
-    private BigDecimal msScore;
 
     /** 投篮分数 */
     @Excel(name = "投篮分数")
     private BigDecimal msShooting;
 
     /** 开课时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "开课时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date crDate;
+
 
     /** 课题内容 */
     @Excel(name = "课题内容")
     private String crMain;
 
-    /** 老师姓名 */
-    @Excel(name = "老师姓名")
-    private String teaName;
+    /** 第几节课 */
+    @Excel(name = "第几节课")
+    private String whichClass;
 
-    public void setStuId(Long stuId) 
-    {
-        this.stuId = stuId;
-    }
+    /** 时辰 */
+    @Excel(name = "时辰")
+    private String time;
 
-    public Long getStuId() 
-    {
-        return stuId;
-    }
+    private List<BigDecimal> Score;
+
+
+
     public void setStuName(String stuName) 
     {
         this.stuName = stuName;
@@ -73,7 +71,7 @@ public class StudentCourseGrades extends BaseEntity
     {
         return stuName;
     }
-    public void setClassName(String className) 
+    public void setClassName(String className)
     {
         this.className = className;
     }
@@ -81,6 +79,15 @@ public class StudentCourseGrades extends BaseEntity
     public String getClassName() 
     {
         return className;
+    }
+    public void setTeaName(String teaName) 
+    {
+        this.teaName = teaName;
+    }
+
+    public String getTeaName() 
+    {
+        return teaName;
     }
     public void setMsDribble(BigDecimal msDribble) 
     {
@@ -90,15 +97,6 @@ public class StudentCourseGrades extends BaseEntity
     public BigDecimal getMsDribble() 
     {
         return msDribble;
-    }
-    public void setMsScore(BigDecimal msScore) 
-    {
-        this.msScore = msScore;
-    }
-
-    public BigDecimal getMsScore() 
-    {
-        return msScore;
     }
     public void setMsShooting(BigDecimal msShooting) 
     {
@@ -127,28 +125,44 @@ public class StudentCourseGrades extends BaseEntity
     {
         return crMain;
     }
-    public void setTeaName(String teaName) 
-    {
-        this.teaName = teaName;
+
+    public String getWhichClass() {
+        return whichClass;
     }
 
-    public String getTeaName() 
-    {
-        return teaName;
+    public void setWhichClass(String whichClass) {
+        this.whichClass = whichClass;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public List<BigDecimal> getScore() {
+        return Score;
+    }
+
+    public void setScore(List<BigDecimal> score) {
+        Score = score;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("stuId", getStuId())
             .append("stuName", getStuName())
             .append("className", getClassName())
+            .append("teaName", getTeaName())
             .append("msDribble", getMsDribble())
-            .append("msScore", getMsScore())
             .append("msShooting", getMsShooting())
             .append("crDate", getCrDate())
             .append("crMain", getCrMain())
-            .append("teaName", getTeaName())
+            .append("whichClass", getWhichClass())
+            .append("Time", getTime())
+            .append("Score", getScore())
             .toString();
     }
 }

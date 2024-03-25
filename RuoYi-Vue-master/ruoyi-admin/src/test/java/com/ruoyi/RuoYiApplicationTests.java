@@ -1,15 +1,12 @@
 package com.ruoyi;
 
-import com.ruoyi.views.domain.StudentCourseGrades;
-import com.ruoyi.views.mapper.StudentCourseGradesMapper;
-import com.ruoyi.views.service.IStudentCourseGradesService;
+
+import com.ruoyi.visualization.domain.HistogramLineChart;
+import com.ruoyi.visualization.mapper.HistogramLineChartMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -17,15 +14,12 @@ import java.util.List;
 class RuoYiApplicationTests {
 
     @Autowired
-    public StudentCourseGradesMapper studentCourseGradesMapper;
+    private HistogramLineChartMapper histogramLineChartMapper;
 
     @Test
-    public void test(){
-//        List<StudentCourseGrades> studentCourseGrades = studentCourseGradesMapper.selectStudentCourseGradesByStuId(4l);
-//        System.out.println(studentCourseGrades);
-
+    public void s() {
+        List<HistogramLineChart> s = histogramLineChartMapper.selectHistogramLineChartByStuNameAndEnumId("赵桂兰", 1l);
+        System.out.println(s);
     }
-
-
 
 }
