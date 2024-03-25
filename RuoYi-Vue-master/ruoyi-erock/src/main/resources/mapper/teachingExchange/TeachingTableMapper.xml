@@ -53,6 +53,23 @@
     </resultMap>
 
 
+<!--    <sql id="selectRemarkPerson">-->
+<!--        select u.user_id as self_user_id, u.nick_name as self_nick_name, u.avatar as self_avatar, r.role_name as self_role_name,-->
+<!--               c.com_id, c.com_content, c.com_by, c.com_time, c.com_pid,-->
+<!--               e.user_id as to_user_id, e.nick_name as to_nick_name, e.avatar as to_avatar, l.role_name as to_role_name,-->
+<!--               b.teaching_id,b.tea_id, b.resource_url, b.created_at-->
+<!--        from teaching_table b-->
+<!--                 left join a1_communication c on c.teaching_id = b.teaching_id-->
+<!--                 left join sys_user u on  u.user_id = c.com_by-->
+<!--                 left join sys_user_role ur on u.user_id = ur.user_id-->
+<!--                 left join sys_role r on r.role_id = ur.role_id-->
+<!--                 left join a1_communication cc on cc.com_id = c.com_pid-->
+<!--                 left join sys_user e on e.user_id = cc.com_by-->
+<!--                 left join sys_user_role er on e.user_id = er.user_id-->
+<!--                 left join sys_role l on l.role_id = er.role_id-->
+
+<!--    </sql>-->
+
     <sql id="selectRemarkPerson">
         select u.user_id as self_user_id, u.nick_name as self_nick_name, u.avatar as self_avatar, r.role_name as self_role_name,
                c.com_id, c.com_content, c.com_by, c.com_time, c.com_pid,
@@ -86,7 +103,7 @@
     <select id="selectCommunicationId" parameterType="A1Communication" resultMap="CommunicationResult">
         <include refid="selectRemarkPerson"/>
             <where>
-                c.com_pid = ${subId}
+                c.com_pid = ${subId} order by c.com_time DESC
             </where>
     </select>
 

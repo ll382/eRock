@@ -16,7 +16,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author heye
  * @date 2024-03-20
  */
-public class A1Communication extends BaseEntity
+public class A1Communication extends BaseEntity implements Comparable<A1Communication>
 {
     private static final long serialVersionUID = 1L;
 
@@ -148,5 +148,10 @@ public class A1Communication extends BaseEntity
                 .append("RemarkSelf", getRemarkSelf())
                 .append("replys", getReplys())
                 .toString();
+    }
+
+    @Override
+    public int compareTo(A1Communication o) {
+        return (int) (this.getComId() - o.getComId());
     }
 }

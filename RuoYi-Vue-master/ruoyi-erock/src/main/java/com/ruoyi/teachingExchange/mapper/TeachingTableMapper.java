@@ -4,6 +4,7 @@ import java.util.List;
 import com.ruoyi.teachingExchange.domain.TeachingTable;
 import com.ruoyi.teachingExchange.domain.A1Communication;
 import io.lettuce.core.dynamic.annotation.Value;
+import org.apache.ibatis.annotations.CacheNamespace;
 import org.springframework.data.annotation.Version;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
