@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.teachingExchange.mapper.A1CommunicationMapper">
+    
+    <resultMap type="A1Communication" id="A1CommunicationResult">
+        <result property="comId"    column="com_id"    />
+        <result property="teachingId"    column="teaching_id"    />
+        <result property="comContent"    column="com_content"    />
+        <result property="comBy"    column="com_by"    />
+        <result property="comTime"    column="com_time"    />
+        <result property="comPid"    column="com_pid"    />
+    </resultMap>
+
+    <sql id="selectA1CommunicationVo">
+        select com_id, teaching_id, com_content, com_by, com_time, com_pid from a1_communication
+    </sql>
+
+    <select id="selectA1CommunicationList" parameterType="A1Communication" resultMap="A1CommunicationResult">
+        <include refid="selectA1CommunicationVo"/>
+        <where>  
+            <if test="teachingId != null "> and teaching_id = #{teachingId}</if>
+            <if test="comContent != null  and comContent != ''"> and com_content = #{comContent}</if>
+            <if test="comBy != null "> and com_by = #{comBy}</if>
+            <if test="comTime != null "> and com_time = #{comTime}</if>
+            <if test="comPid != null "> and com_pid = #{comPid}</if>
+        </where>
+    </select>
+    
+    <select id="selectA1CommunicationByComId" parameterType="Long" resultMap="A1CommunicationResult">
+        <include refid="selectA1CommunicationVo"/>
+        where com_id = #{comId}
+    </select>
+        
+    <insert id="insertA1Communication" parameterType="A1Communication" useGeneratedKeys="true" keyProperty="comId">
+        insert into a1_communication
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teachingId != null">teaching_id,</if>
+            <if test="comContent != null">com_content,</if>
+            <if test="comBy != null">com_by,</if>
+            <if test="comTime != null">com_time,</if>
+            <if test="comPid != null">com_pid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teachingId != null">#{teachingId},</if>
+            <if test="comContent != null">#{comContent},</if>
+            <if test="comBy != null">#{comBy},</if>
+            <if test="comTime != null">#{comTime},</if>
+            <if test="comPid != null">#{comPid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateA1Communication" parameterType="A1Communication">
+        update a1_communication
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teachingId != null">teaching_id = #{teachingId},</if>
+            <if test="comContent != null">com_content = #{comContent},</if>
+            <if test="comBy != null">com_by = #{comBy},</if>
+            <if test="comTime != null">com_time = #{comTime},</if>
+            <if test="comPid != null">com_pid = #{comPid},</if>
+        </trim>
+        where com_id = #{comId}
+    </update>
+
+    <delete id="deleteA1CommunicationByComId" parameterType="Long">
+        delete from a1_communication where com_id = #{comId}
+    </delete>
+
+    <delete id="deleteA1CommunicationByComIds" parameterType="String">
+        delete from a1_communication where com_id in 
+        <foreach item="comId" collection="array" open="(" separator="," close=")">
+            #{comId}
+        </foreach>
+    </delete>
+</mapper>

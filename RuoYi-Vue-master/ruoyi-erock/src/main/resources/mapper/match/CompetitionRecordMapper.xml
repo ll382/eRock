@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.match.mapper.CompetitionRecordMapper">
-    
+
     <resultMap type="CompetitionRecord" id="CompetitionRecordResult">
         <result property="ccRId"    column="cc_r_id"    />
         <result property="enumId"    column="enum_id"    />
@@ -21,6 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ccRId"    column="sub_cc_r_id"    />
         <result property="ggId"    column="sub_gg_id"    />
         <result property="balNum"    column="sub_bal_num"    />
+        <result property="ggName"    column="sub_gg_name"    />
     </resultMap>
 
     <sql id="selectCompetitionRecordVo">
@@ -29,22 +30,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCompetitionRecordList" parameterType="CompetitionRecord" resultMap="CompetitionRecordResult">
         <include refid="selectCompetitionRecordVo"/>
-        <where>  
+        <where>
             <if test="enumId != null "> and enum_id = #{enumId}</if>
             <if test="ccRTime != null "> and cc_r_time = #{ccRTime}</if>
             <if test="ccRSpeci != null  and ccRSpeci != ''"> and cc_r_speci = #{ccRSpeci}</if>
             <if test="ccRName != null  and ccRName != ''"> and cc_r_name like concat('%', #{ccRName}, '%')</if>
         </where>
     </select>
-    
+
     <select id="selectCompetitionRecordByCcRId" parameterType="Long" resultMap="CompetitionRecordCBallteamResult">
-        select a.cc_r_id, a.enum_id, a.cc_r_time, a.cc_r_speci, a.cc_r_name,
- b.bal_id as sub_bal_id, b.cc_r_id as sub_cc_r_id, b.gg_id as sub_gg_id, b.bal_num as sub_bal_num
+        select a.cc_r_id, a.enum_id, a.cc_r_time, a.cc_r_speci, a.cc_r_name ,
+ b.bal_id as sub_bal_id, b.cc_r_id as sub_cc_r_id, b.gg_id as sub_gg_id, b.bal_num as sub_bal_num, c.gg_name as sub_gg_name
         from c_competition_record a
         left join c_ballteam b on b.cc_r_id = a.cc_r_id
+        left join stu_group c on c.gg_id = b.gg_id
         where a.cc_r_id = #{ccRId}
     </select>
-        
+
     <insert id="insertCompetitionRecord" parameterType="CompetitionRecord" useGeneratedKeys="true" keyProperty="ccRId">
         insert into c_competition_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -77,14 +79,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCompetitionRecordByCcRIds" parameterType="String">
-        delete from c_competition_record where cc_r_id in 
+        delete from c_competition_record where cc_r_id in
         <foreach item="ccRId" collection="array" open="(" separator="," close=")">
             #{ccRId}
         </foreach>
     </delete>
-    
+
     <delete id="deleteCBallteamByCcRIds" parameterType="String">
-        delete from c_ballteam where cc_r_id in 
+        delete from c_ballteam where cc_r_id in
         <foreach item="ccRId" collection="array" open="(" separator="," close=")">
             #{ccRId}
         </foreach>

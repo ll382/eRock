@@ -8,7 +8,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 球队参赛对象 c_ballteam
- * 
+ *
  * @author heye
  * @date 2024-03-19
  */
@@ -31,44 +31,55 @@ public class CBallteam extends BaseEntity
     @Excel(name = "球队比分")
     private String balNum;
 
+    @Excel(name = "球队名称")
+    private String ggName;
+
     /** C 球队内人员信息 */
     private List<CPersonnelSheet> cPersonnelSheetList;
 
-    public void setBalId(Long balId) 
+    public void setBalId(Long balId)
     {
         this.balId = balId;
     }
 
-    public Long getBalId() 
+    public Long getBalId()
     {
         return balId;
     }
-    public void setCcRId(Long ccRId) 
+    public void setCcRId(Long ccRId)
     {
         this.ccRId = ccRId;
     }
 
-    public Long getCcRId() 
+    public Long getCcRId()
     {
         return ccRId;
     }
-    public void setGgId(Long ggId) 
+    public void setGgId(Long ggId)
     {
         this.ggId = ggId;
     }
 
-    public Long getGgId() 
+    public Long getGgId()
     {
         return ggId;
     }
-    public void setBalNum(String balNum) 
+    public void setBalNum(String balNum)
     {
         this.balNum = balNum;
     }
 
-    public String getBalNum() 
+    public String getBalNum()
     {
         return balNum;
+    }
+
+    public List<CPersonnelSheet> getcPersonnelSheetList() {
+        return cPersonnelSheetList;
+    }
+
+    public void setcPersonnelSheetList(List<CPersonnelSheet> cPersonnelSheetList) {
+        this.cPersonnelSheetList = cPersonnelSheetList;
     }
 
     public List<CPersonnelSheet> getCPersonnelSheetList()
@@ -81,6 +92,14 @@ public class CBallteam extends BaseEntity
         this.cPersonnelSheetList = cPersonnelSheetList;
     }
 
+    public String getGgName() {
+        return ggName;
+    }
+
+    public void setGgName(String ggName) {
+        this.ggName = ggName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -88,7 +107,8 @@ public class CBallteam extends BaseEntity
             .append("ccRId", getCcRId())
             .append("ggId", getGgId())
             .append("balNum", getBalNum())
-            .append("cPersonnelSheetList", getCPersonnelSheetList())
+                .append("cPersonnelSheetList", getCPersonnelSheetList())
+                .append("ggName", getGgName())
             .toString();
     }
 }
