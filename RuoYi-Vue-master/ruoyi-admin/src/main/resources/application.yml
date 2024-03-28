@@ -16,7 +16,7 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
-  port: 8080
+  port: 8088
   servlet:
     # 应用的访问路径
     context-path: /
@@ -59,7 +59,7 @@ spring:
       # 单个文件大小
       max-file-size: 10MB
       # 设置总上传的文件大小
-      max-request-size: 20MB
+      max-request-size: 50MB
   # 服务模块
   devtools:
     restart:

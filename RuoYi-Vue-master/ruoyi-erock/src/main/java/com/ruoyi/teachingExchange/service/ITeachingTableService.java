@@ -3,6 +3,7 @@ package com.ruoyi.teachingExchange.service;
 import java.util.List;
 
 import com.ruoyi.teachingExchange.domain.A1Communication;
+import com.ruoyi.teachingExchange.domain.A1Viewed;
 import com.ruoyi.teachingExchange.domain.TeachingTable;
 
 /**
@@ -13,6 +14,8 @@ import com.ruoyi.teachingExchange.domain.TeachingTable;
  */
 public interface ITeachingTableService
 {
+
+    int updateStudent();
     /**
      * 查询A1 线上学习学生线上观看记录表
      *
@@ -20,6 +23,22 @@ public interface ITeachingTableService
      * @return A1 线上学习学生线上观看记录表
      */
     public TeachingTable selectTeachingTableByTeachingId(Long teachingId);
+
+    /**
+     * 查询A1 线上学习学生线上观看记录表
+     *
+     * @param teachingId A1 线上学习学生线上观看记录表主键
+     * @return A1 线上学习学生线上观看记录表
+     */
+    public TeachingTable selectTeachingViewedTableByTeachingId(Long teachingId);
+
+    /**
+     * 新增A1 线上学习学生线上观看记录表
+     *
+     * @param a1Viewed A1 线上学习学生线上观看记录表
+     * @return 结果
+     */
+    public int insertTeachingViewTable(A1Viewed a1Viewed);
 
     /**
      * 查询A1 线上学习学生线上观看记录表列表

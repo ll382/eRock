@@ -3,6 +3,8 @@ package com.ruoyi.controller.core;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.teachingExchange.domain.TeachingTable;
+import com.ruoyi.teachingExchange.service.ITeachingTableService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +39,21 @@ public class StudentController extends BaseController
 {
     @Autowired
     private IStudentService studentService;
+
+    @Autowired
+    private ITeachingTableService teachingTableService;
+
+    /**
+     * 查询A1 线上学习学生线上观看记录表列表
+     */
+    @ApiOperation("插入学生表内容")
+    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:list')")
+    @GetMapping("/chageId")
+    public AjaxResult list()
+    {
+        return AjaxResult.success(teachingTableService.updateStudent());
+    }
+
 
     /**
      * 查询学生列表

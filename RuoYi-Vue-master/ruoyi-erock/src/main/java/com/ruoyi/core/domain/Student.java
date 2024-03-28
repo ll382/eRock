@@ -8,7 +8,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 学生对象 student
- * 
+ *
  * @author heye
  * @date 2024-03-17
  */
@@ -35,51 +35,55 @@ public class Student extends BaseEntity
     @Excel(name = "学生密码")
     private String stuPassword;
 
+    /** 学生头像 */
+    @Excel(name = "学生头像")
+    private String stuImg;
+
     /** 多个学生对多个老师信息 */
     private List<StuToTea> stuToTeaList;
 
-    public void setStuId(Long stuId) 
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
     }
 
-    public Long getStuId() 
+    public Long getStuId()
     {
         return stuId;
     }
-    public void setGgId(Long ggId) 
+    public void setGgId(Long ggId)
     {
         this.ggId = ggId;
     }
 
-    public Long getGgId() 
+    public Long getGgId()
     {
         return ggId;
     }
-    public void setClassId(Long classId) 
+    public void setClassId(Long classId)
     {
         this.classId = classId;
     }
 
-    public Long getClassId() 
+    public Long getClassId()
     {
         return classId;
     }
-    public void setStuName(String stuName) 
+    public void setStuName(String stuName)
     {
         this.stuName = stuName;
     }
 
-    public String getStuName() 
+    public String getStuName()
     {
         return stuName;
     }
-    public void setStuPassword(String stuPassword) 
+    public void setStuPassword(String stuPassword)
     {
         this.stuPassword = stuPassword;
     }
 
-    public String getStuPassword() 
+    public String getStuPassword()
     {
         return stuPassword;
     }
@@ -94,6 +98,14 @@ public class Student extends BaseEntity
         this.stuToTeaList = stuToTeaList;
     }
 
+    public String getStuImg() {
+        return stuImg;
+    }
+
+    public void setStuImg(String stuImg) {
+        this.stuImg = stuImg;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -103,6 +115,7 @@ public class Student extends BaseEntity
             .append("stuName", getStuName())
             .append("stuPassword", getStuPassword())
             .append("stuToTeaList", getStuToTeaList())
+            .append("stuImg", getStuImg())
             .toString();
     }
 }
