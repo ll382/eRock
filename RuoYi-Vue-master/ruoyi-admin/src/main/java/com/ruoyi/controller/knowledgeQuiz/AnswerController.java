@@ -3,6 +3,8 @@ package com.ruoyi.controller.knowledgeQuiz;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.github.pagehelper.PageInfo;
+import com.ruoyi.common.constant.HttpStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,6 +48,7 @@ public class AnswerController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(Answer answer)
     {
+
         startPage();
         List<Answer> list = answerService.selectAnswerList(answer);
         return getDataTable(list);
