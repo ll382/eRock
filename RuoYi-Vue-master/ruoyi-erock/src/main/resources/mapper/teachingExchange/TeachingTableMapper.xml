@@ -113,7 +113,9 @@
     </sql>
 
     <sql id="selectTeachingTableVo">
-        select teaching_id, tea_id, resource_url, created_at, enum_id  from teaching_table
+        select a.teaching_id, a.tea_id, a.resource_url, a.created_at, a.enum_id,sb.enum_name
+        from teaching_table a
+        left join enumerate sb on a.enum_id = sb.enum_id
     </sql>
 
 <!--  评论主查询  -->
@@ -194,9 +196,10 @@
     </select>
 
     <select id="selectTeachingTableByTeachingId" parameterType="Long" resultMap="TeachingTableA1CommunicationResult">
-        select a.teaching_id, a.tea_id, a.resource_url, a.created_at,
+        select a.teaching_id, a.tea_id, a.resource_url, a.created_at,sb.enum_name,
                b.com_id as sub_com_id, b.teaching_id as sub_teaching_id, b.com_content as sub_com_content, b.com_by as sub_com_by, b.com_time as sub_com_time, b.com_pid as sub_com_pid
         from teaching_table a
+                 left join enumerate sb on a.enum_id = sb.enum_id
                  left join a1_communication b on b.teaching_id = a.teaching_id
         where a.teaching_id = #{teachingId}
         ORDER BY sub_com_time ASC
