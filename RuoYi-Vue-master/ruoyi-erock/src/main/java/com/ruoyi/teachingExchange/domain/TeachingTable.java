@@ -31,12 +31,15 @@ public class TeachingTable extends BaseEntity
 
     /** 枚举ID */
     @Excel(name = "枚举ID")
-    private Long enumId;
+    private Long lesId;
 
     /** 枚举名称 */
     @Excel(name = "枚举名称")
-    private String enumName;
+    private String lesName;
 
+    /** 教学标题 */
+    @Excel(name = "教学标题")
+    private String teachingTitle;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -86,20 +89,28 @@ public class TeachingTable extends BaseEntity
         return createdAt;
     }
 
-    public Long getEnumId() {
-        return enumId;
+    public Long getLesId() {
+        return lesId;
     }
 
-    public void setEnumId(Long enumId) {
-        this.enumId = enumId;
+    public void setLesId(Long lesId) {
+        this.lesId = lesId;
     }
 
-    public String getEnumName() {
-        return enumName;
+    public String getLesName() {
+        return lesName;
     }
 
-    public void setEnumName(String enumName) {
-        this.enumName = enumName;
+    public void setLesName(String lesName) {
+        this.lesName = lesName;
+    }
+
+    public String getTeachingTitle() {
+        return teachingTitle;
+    }
+
+    public void setTeachingTitle(String teachingTitle) {
+        this.teachingTitle = teachingTitle;
     }
 
     public List<A1Communication> getA1CommunicationList()
@@ -129,8 +140,9 @@ public class TeachingTable extends BaseEntity
             .append("createdAt", getCreatedAt())
             .append("a1CommunicationList", getA1CommunicationList())
             .append("a1ViewedList", getA1ViewedList())
-            .append("enumId", getEnumId())
-            .append("enumName", getEnumName())
+            .append("lesId", getLesId())
+            .append("lesName", getLesName())
+            .append("teachingTitle", getTeachingTitle())
             .toString();
     }
 }
