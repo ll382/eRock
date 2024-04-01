@@ -132,7 +132,7 @@
 
     <!--    评论父级单元-->
         <select id="selectTeachingUnitList" resultType="teachingUnit" resultMap="UnitTableResult">
-            select sb.les_id,sb.les_name,a.teaching_id, a.tea_id, a.resource_url, a.created_at,e.avatar,e.nick_name,a.teaching_title,
+            select sb.les_id,sb.les_name,a.teaching_id, a.tea_id, a.resource_url, a.created_at,e.avatar,e.nick_name,a.teaching_title,a.teaching_order,
                    b.view_id as sub_view_id, b.stu_id as sub_stu_id, b.teaching_id as sub_teaching_id, b.viewed_at as sub_viewed_at, b.view_duration as sub_view_duration, (select sum(view_duration) from a1_viewed where stu_id = b.stu_id ) as sub_view_all_duration
             from teaching_table a
                      left join a1_viewed b on b.teaching_id = a.teaching_id
@@ -166,6 +166,7 @@
         from a1_viewed b
                  left join student stu on stu.stu_id = b.stu_id
                  left join sys_user e on e.user_id = stu.user_id
+        order by sub_view_all_duration desc
     </select>
 
     <insert id="insertTeachingViewedTable" parameterType="A1Viewed" useGeneratedKeys="true" keyProperty="viewId">
