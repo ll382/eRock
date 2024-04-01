@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.teachingExchange.domain.A1Viewed;
+import com.ruoyi.teachingExchange.domain.TeachingUnit;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -116,16 +117,22 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 //    return OutCom;
 //}
     /**
-     * 查询A1 线上学习学生线上观看记录表
+     * 查询A1 id查观看记录
      *
      * @param teachingId A1 线上学习学生线上观看记录表主键
      * @return A1 线上学习学生线上观看记录表
      */
     @Override
-    public TeachingTable selectTeachingViewedTableByTeachingId(Long teachingId)
+    public List<TeachingTable> selectTeachingViewedTableByTeachingId()
     {
-        return teachingTableMapper.selectTeachingViewedTableByTeachingId(teachingId);
+        return teachingTableMapper.selectTeachingViewedTableByTeachingId();
     }
+
+    @Override
+    public List<TeachingUnit> selectTeachingUnitList() {
+        return teachingTableMapper.selectTeachingUnitList();
+    }
+
 
     @Override
     public int insertTeachingViewTable(A1Viewed a1Viewed)

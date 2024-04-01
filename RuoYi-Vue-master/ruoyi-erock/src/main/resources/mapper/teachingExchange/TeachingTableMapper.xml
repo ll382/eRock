@@ -4,13 +4,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.teachingExchange.mapper.TeachingTableMapper">
 
+    <!--    教学资源父级单元-->
+    <resultMap id="TeachingUnit" type="teachingUnit" >
+        <result property="unitId" column="les_id"/>
+        <result property="unitTitle" column="les_name"/>
+    </resultMap>
+
+    <resultMap id="UnitTableResult" type="teachingUnit" extends="TeachingUnit" >
+        <collection property="teachingTable" notNullColumn="teaching_id" javaType="java.util.List" resultMap="TeachingTableResult" />
+    </resultMap>
+    <!--    教学资源父级单元-->
+
     <resultMap type="TeachingTable" id="TeachingTableResult">
         <result property="teachingId"    column="teaching_id"    />
         <result property="teaId"    column="tea_id"    />
         <result property="resourceUrl"    column="resource_url"    />
         <result property="createdAt"    column="created_at"    />
-        <result property="enumId"    column="enum_id"    />
-        <result property="enumName"    column="enum_name"    />
+        <result property="lesId"    column="les_id"    />
+        <result property="lesName"    column="les_name"    />
+        <result property="teachingTitle" column="teaching_title" />
     </resultMap>
 
     <resultMap type="Student" id="StudentResult">
@@ -98,7 +110,7 @@
     <sql id="selectRemarkPerson">
         select u.user_id as self_user_id, u.nick_name as self_nick_name, u.avatar as self_avatar, r.role_name as self_role_name,
                c.com_id, c.com_content, c.com_by, c.com_time, c.com_pid,
-               e.user_id as to_user_id, e.nick_name as to_nick_name, e.avatar as to_avatar, l.role_name as to_role_name,sb.enum_name,
+               e.user_id as to_user_id, e.nick_name as to_nick_name, e.avatar as to_avatar, l.role_name as to_role_name,sb.les_name,
                b.teaching_id,b.tea_id, b.resource_url, b.created_at
         from teaching_table b
                  left join a1_communication c on c.teaching_id = b.teaching_id
@@ -109,14 +121,27 @@
                  left join sys_user e on e.user_id = cc.com_by
                  left join sys_user_role er on e.user_id = er.user_id
                  left join sys_role l on l.role_id = er.role_id
-                 left join enumerate sb on b.enum_id = sb.enum_id
+                 left join lesson_units sb on b.les_id = sb.les_id
     </sql>
 
     <sql id="selectTeachingTableVo">
-        select a.teaching_id, a.tea_id, a.resource_url, a.created_at, a.enum_id,sb.enum_name
+        select a.teaching_id, a.tea_id, a.resource_url, a.created_at, a.les_id, a.teaching_title,sb.les_name
         from teaching_table a
-        left join enumerate sb on a.enum_id = sb.enum_id
+        left join lesson_units sb on a.les_id = sb.les_id
     </sql>
+
+    <!--    评论父级单元-->
+        <select id="selectTeachingUnitList" resultType="teachingUnit" resultMap="UnitTableResult">
+            select sb.les_id,sb.les_name,a.teaching_id, a.tea_id, a.resource_url, a.created_at,e.avatar,e.nick_name,a.teaching_title,
+                   b.view_id as sub_view_id, b.stu_id as sub_stu_id, b.teaching_id as sub_teaching_id, b.viewed_at as sub_viewed_at, b.view_duration as sub_view_duration, (select sum(view_duration) from a1_viewed where stu_id = b.stu_id ) as sub_view_all_duration
+            from teaching_table a
+                     left join a1_viewed b on b.teaching_id = a.teaching_id
+                     left join lesson_units sb on a.les_id = sb.les_id
+                     left join student stu on stu.stu_id = b.stu_id
+                     left join sys_user e on e.user_id = stu.user_id
+            order by les_order_id asc
+        </select>
+    <!--    评论父级单元-->
 
 <!--  评论主查询  -->
     <select id="selectCommunicationList" parameterType="teachingTable" resultMap="OutTeachingCommunicationResult">
@@ -128,22 +153,19 @@
         </where>
     </select>
 <!--   评论子查询     -->
-    <select id="selectCommunicationId" parameterType="A1Communication" resultMap="CommunicationResult">
+    <select id="selectCommunicationId" resultMap="CommunicationResult">
         <include refid="selectRemarkPerson"/>
             <where>
                 c.com_pid = ${subId} order by c.com_time DESC
             </where>
     </select>
 
-    <select id="selectTeachingViewedTableByTeachingId" parameterType="Long" resultMap="TeachingTableA1ViewedResult">
-        select a.teaching_id, a.tea_id, a.resource_url, a.created_at, a.enum_id,sb.enum_name,e.avatar,e.nick_name,
+    <select id="selectTeachingViewedTableByTeachingId" resultType="teachingUnit" resultMap="A1ViewedResult">
+        select e.avatar,e.nick_name,
                b.view_id as sub_view_id, b.stu_id as sub_stu_id, b.teaching_id as sub_teaching_id, b.viewed_at as sub_viewed_at, b.view_duration as sub_view_duration, (select sum(view_duration) from a1_viewed where stu_id = b.stu_id ) as sub_view_all_duration
-        from teaching_table a
-                 left join a1_viewed b on b.teaching_id = a.teaching_id
-                 left join enumerate sb on a.enum_id = sb.enum_id
+        from a1_viewed b
                  left join student stu on stu.stu_id = b.stu_id
                  left join sys_user e on e.user_id = stu.user_id
-        where a.teaching_id = #{teachingId}
     </select>
 
     <insert id="insertTeachingViewedTable" parameterType="A1Viewed" useGeneratedKeys="true" keyProperty="viewId">
@@ -196,10 +218,10 @@
     </select>
 
     <select id="selectTeachingTableByTeachingId" parameterType="Long" resultMap="TeachingTableA1CommunicationResult">
-        select a.teaching_id, a.tea_id, a.resource_url, a.created_at,sb.enum_name,
+        select a.teaching_id, a.tea_id, a.resource_url, a.created_at,sb.les_name,
                b.com_id as sub_com_id, b.teaching_id as sub_teaching_id, b.com_content as sub_com_content, b.com_by as sub_com_by, b.com_time as sub_com_time, b.com_pid as sub_com_pid
         from teaching_table a
-                 left join enumerate sb on a.enum_id = sb.enum_id
+                 left join lesson_units sb on a.les_id = sb.les_id
                  left join a1_communication b on b.teaching_id = a.teaching_id
         where a.teaching_id = #{teachingId}
         ORDER BY sub_com_time ASC
@@ -225,7 +247,7 @@
             <if test="teaId != null">tea_id = #{teaId},</if>
             <if test="resourceUrl != null">resource_url = #{resourceUrl},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
-            <if test="enumId != null">#{enumId},</if>
+            <if test="lesId != null">#{lesId},</if>
         </trim>
         where teaching_id = #{teachingId}
     </update>

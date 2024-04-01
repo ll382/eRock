@@ -99,11 +99,24 @@ public class TeachingTableController extends BaseController
      */
     @ApiOperation("获取A1 线上学习学生线上观看记录表详细信息")
     @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:query')")
-    @GetMapping(value = "Viewed/{teachingId}")
-    public AjaxResult getViewedInfo(@PathVariable("teachingId") Long teachingId)
+    @GetMapping(value = "viewed/list")
+    public AjaxResult getViewedInfo()
     {
-        return success(teachingTableService.selectTeachingViewedTableByTeachingId(teachingId));
+        return success(teachingTableService.selectTeachingViewedTableByTeachingId());
     }
+
+
+    /** 查询父级所有单元
+     * 获取A1 线上学习学生线上观看记录表详细信息
+     */
+    @ApiOperation("获取A1 线上学习学生线上观看记录表详细信息")
+    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:query')")
+    @GetMapping(value = "Unit/List")
+    public AjaxResult getUnitList()
+    {
+        return success(teachingTableService.selectTeachingUnitList());
+    }
+
 
     /**Viewed改
      * 新增A1 线上学习学生线上观看记录表
@@ -111,7 +124,7 @@ public class TeachingTableController extends BaseController
     @ApiOperation("新增A1 线上学习学生线上观看记录表")
     @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:add')")
     @Log(title = "A1 线上学习学生线上观看记录表", businessType = BusinessType.INSERT)
-    @PostMapping("/Viewed")
+    @PostMapping("/viewed")
     public AjaxResult addViewed(@RequestBody A1Viewed a1Viewed)
     {
         return toAjax(teachingTableService.insertTeachingViewTable(a1Viewed));

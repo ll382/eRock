@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoyi.teachingExchange.domain.A1Communication;
 import com.ruoyi.teachingExchange.domain.A1Viewed;
 import com.ruoyi.teachingExchange.domain.TeachingTable;
+import com.ruoyi.teachingExchange.domain.TeachingUnit;
 
 /**
  * A1 线上学习学生线上观看记录表Service接口
@@ -27,10 +28,17 @@ public interface ITeachingTableService
     /**
      * 查询A1 线上学习学生线上观看记录表
      *
-     * @param teachingId A1 线上学习学生线上观看记录表主键
      * @return A1 线上学习学生线上观看记录表
      */
-    public TeachingTable selectTeachingViewedTableByTeachingId(Long teachingId);
+    public List<TeachingTable> selectTeachingViewedTableByTeachingId();
+
+    /**
+     * 查询A1 全查父级单元
+     *
+     * @return A1 线上学习学生线上观看记录表
+     */
+    public List<TeachingUnit> selectTeachingUnitList();
+
 
     /**
      * 新增A1 线上学习学生线上观看记录表
