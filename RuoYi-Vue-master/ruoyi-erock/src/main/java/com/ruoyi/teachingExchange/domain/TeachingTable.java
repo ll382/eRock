@@ -1,5 +1,6 @@
 package com.ruoyi.teachingExchange.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -29,8 +30,12 @@ public class TeachingTable extends BaseEntity
     @Excel(name = "资源url")
     private String resourceUrl;
 
-    /** 枚举ID */
-    @Excel(name = "枚举ID")
+    /** 排序ID */
+    @Excel(name = "排序ID")
+    private BigDecimal teachingOrder;
+
+    /** 课时ID */
+    @Excel(name = "课时ID")
     private Long lesId;
 
     /** 枚举名称 */
@@ -105,6 +110,14 @@ public class TeachingTable extends BaseEntity
         this.lesName = lesName;
     }
 
+    public BigDecimal getTeachingOrder() {
+        return teachingOrder;
+    }
+
+    public void setTeachingOrder(BigDecimal teachingOrder) {
+        this.teachingOrder = teachingOrder;
+    }
+
     public String getTeachingTitle() {
         return teachingTitle;
     }
@@ -143,6 +156,7 @@ public class TeachingTable extends BaseEntity
             .append("lesId", getLesId())
             .append("lesName", getLesName())
             .append("teachingTitle", getTeachingTitle())
+            .append("teachingOrder", getTeachingOrder())
             .toString();
     }
 }
