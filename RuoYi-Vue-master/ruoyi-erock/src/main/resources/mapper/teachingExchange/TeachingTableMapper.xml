@@ -51,7 +51,6 @@
         <collection property="a1CommunicationList" notNullColumn="teaching_id" javaType="java.util.List" resultMap="CommunicationResult" />
     </resultMap>
 
-<!--    评论映射-->
     <resultMap type="A1Communication" id="CommunicationResult">
         <result property="comId"    column="com_id"    />
         <result property="teachingId"    column="teaching_id"    />
@@ -90,7 +89,7 @@
 
 
 
-    <!--    <sql id="selectRemarkPerson">-->
+<!--    <sql id="selectRemarkPerson">-->
 <!--        select u.user_id as self_user_id, u.nick_name as self_nick_name, u.avatar as self_avatar, r.role_name as self_role_name,-->
 <!--               c.com_id, c.com_content, c.com_by, c.com_time, c.com_pid,-->
 <!--               e.user_id as to_user_id, e.nick_name as to_nick_name, e.avatar as to_avatar, l.role_name as to_role_name,-->

@@ -50,7 +50,6 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     {
 //        查询老师发布内容以及主贴回复
         TeachingTable comm = teachingTableMapper.selectCommunicationList(commId);
-        System.out.println(comm);
         if (comm == null) {
 //            如果没有内容则返回
             return comm;
