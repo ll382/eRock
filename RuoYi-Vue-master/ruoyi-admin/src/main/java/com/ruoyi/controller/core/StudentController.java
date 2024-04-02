@@ -1,10 +1,14 @@
 package com.ruoyi.controller.core;
 
-import java.util.List;
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 
+import com.github.pagehelper.PageInfo;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.core.domain.vo.StudentCourseGrades;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +52,44 @@ public class StudentController extends BaseController
     {
         startPage();
         List<Student> list = studentService.selectStudentList(student);
+        return getDataTable(list);
+    }
+
+    /**
+     * 根据班级和日期查询所有学生成绩信息等
+     */
+    @ApiOperation("根据班级和日期查询所有学生成绩信息等")
+    @PreAuthorize("@ss.hasPermi('core:StudentCourseGrades:list')")
+    @GetMapping("/getStudentCourseGradeslist")
+    public TableDataInfo getStudentCourseGradesList()
+    {
+        startPage();
+        List<StudentCourseGrades> studentCourseGradesList = studentService.selectStudentCourseGradesList();
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setMsg("查询成功");
+        rspData.setRows(studentCourseGradesList);
+        rspData.setTotal(40);
+        return rspData;
+    }
+
+    /**
+     * 根据学生ID查询当天的所有成绩次数
+     */
+    @ApiOperation("根据班级和日期查询所有学生成绩信息等")
+    @PreAuthorize("@ss.hasPermi('core:StudentCourseGrades:list')")
+    @GetMapping("/getDeduplicationCrDateList/{stuId}/{enumId}")
+    public TableDataInfo getDeduplicationCrDateList(@PathVariable("stuId") Long stuId, @PathVariable("enumId") Integer enumId){
+        startPage();
+        List<Map<String, List>> maps = studentService.selectDeduplicationCrDateByStuNameAndEnumIdList(stuId, enumId);
+        return getDataTable(maps);
+    }
+
+    @ApiOperation("根据学生ID查询成绩")
+    @PreAuthorize("@ss.hasPermi('core:StudentAchievement:list')")
+    @GetMapping("/getStudentAchievementByStuId/{stuId}")
+    public TableDataInfo getStudentAchievementByStuId(@PathVariable("stuId") Long stuId){
+        List<HashMap<String, List>> list = studentService.selectStudentAchievementByStuId(stuId);
         return getDataTable(list);
     }
 

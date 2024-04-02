@@ -1,14 +1,15 @@
-package com.ruoyi.visualization.domain;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+package com.ruoyi.core.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 /**
  * PC段首页对象 student_course_grades
@@ -19,6 +20,10 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class StudentCourseGrades extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    /** 学生学号 */
+    @Excel(name = "学生学号")
+    private Long stuId;
 
     /** 学生姓名 */
     @Excel(name = "学生姓名")
@@ -41,7 +46,7 @@ public class StudentCourseGrades extends BaseEntity
     private BigDecimal msShooting;
 
     /** 开课时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "开课时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date crDate;
 
@@ -58,11 +63,20 @@ public class StudentCourseGrades extends BaseEntity
     @Excel(name = "时辰")
     private String time;
 
+    /** 学生同一时间的成绩 */
+    @Excel(name = "学生同一时间的成绩")
     private List<BigDecimal> Score;
 
 
+    public Long getStuId() {
+        return stuId;
+    }
 
-    public void setStuName(String stuName) 
+    public void setStuId(Long stuId) {
+        this.stuId = stuId;
+    }
+
+    public void setStuName(String stuName)
     {
         this.stuName = stuName;
     }
@@ -98,21 +112,21 @@ public class StudentCourseGrades extends BaseEntity
     {
         return msDribble;
     }
-    public void setMsShooting(BigDecimal msShooting) 
+    public void setMsShooting(BigDecimal msShooting)
     {
         this.msShooting = msShooting;
     }
 
-    public BigDecimal getMsShooting() 
+    public BigDecimal getMsShooting()
     {
         return msShooting;
     }
-    public void setCrDate(Date crDate) 
+    public void setCrDate(Date crDate)
     {
         this.crDate = crDate;
     }
 
-    public Date getCrDate() 
+    public Date getCrDate()
     {
         return crDate;
     }
@@ -153,6 +167,7 @@ public class StudentCourseGrades extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("stuId", getStuId())
             .append("stuName", getStuName())
             .append("className", getClassName())
             .append("teaName", getTeaName())

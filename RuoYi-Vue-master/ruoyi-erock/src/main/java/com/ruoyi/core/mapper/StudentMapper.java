@@ -1,8 +1,15 @@
 package com.ruoyi.core.mapper;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.domain.StuToTea;
+import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,13 +40,44 @@ public interface StudentMapper
     public List<Student> selectStudentList(Student student);
 
     /**
-     * 根据班级查询学生
-     *
-     * @param className 班级名
-     * @return 学生集合
+     * 根据班级和日期查询所有学生去重成绩信息
+     * @param className  班级名
+     * @param crDate  日期
+     * @return 学生去重成绩信息
      */
-    public List<String> selectClassIdList(@Param("className") String className);
+    public List<StudentCourseGrades> selectDeduplicationStudentAchievementList(@Param("className") String className, @Param("crDate") String crDate);
 
+    /**
+     * 根据班级和日期查询所有学生成绩信息等
+     * @param stuId  学生ID
+     * @param crDate  日期
+     * @return 所有学生成绩信息
+     */
+    public List<Map<String,Object>> selectStudentAchievementList(@Param("stuId") Long stuId, @Param("crDate") Date crDate);
+
+    /**
+     * 根据学生ID查询去重日期
+     * @param stuId 学生ID
+     * @param enumId  枚举ID
+     * @return 去重日期
+     */
+    public List<Map<String,Object>> selectDeduplicationCrDateByStuIdAndEnumIdList(@Param("stuId") Long stuId, @Param("enumId") Integer enumId);
+
+    /**
+     *  根据学生ID查询当天的所有成绩次数
+     * @param stuId 学生ID
+     * @param enumId 枚举ID
+     * @param crDate 时间
+     * @return 当天的所有成绩次数
+     */
+    public List<Map<String,Object>> selectCrDateByStuIdAndEnumIdAndCrDateList(@Param("stuId") Long stuId, @Param("enumId") Integer enumId, @Param("crDate") Date crDate);
+
+    /**
+     * 根据学生ID查询成绩
+     * @param stuId 学生ID
+     * @return 学生的所有成绩
+     */
+    public List<Map<String,Object>> selectStudentAchievementByStuId(@Param("stuId") Long stuId);
     /**
      * 新增学生
      * 
