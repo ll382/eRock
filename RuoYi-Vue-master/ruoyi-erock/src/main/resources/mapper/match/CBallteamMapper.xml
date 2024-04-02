@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.match.mapper.CBallteamMapper">
 
     <resultMap type="CBallteam" id="CBallteamResult">
-        <result property="balId"    column="bal_id"    />
-        <result property="ccRId"    column="cc_r_id"    />
-        <result property="ggId"    column="gg_id"    />
-        <result property="balNum"    column="bal_num"    />
-        <result property="ggName"    column="gg_name"    /> 
+        <result property="balId" column="bal_id"/>
+        <result property="ccRId" column="cc_r_id"/>
+        <result property="ggId" column="gg_id"/>
+        <result property="balNum" column="bal_num"/>
+        <result property="ggName" column="gg_name"/>
     </resultMap>
 
     <resultMap id="CBallteamCPersonnelSheetResult" type="CBallteam" extends="CBallteamResult">
-        <collection property="cPersonnelSheetList" notNullColumn="sub_ps_id" javaType="java.util.List" resultMap="CPersonnelSheetResult" />
+        <collection property="cPersonnelSheetList" notNullColumn="sub_ps_id" javaType="java.util.List"
+                    resultMap="CPersonnelSheetResult"/>
     </resultMap>
 
     <resultMap type="CPersonnelSheet" id="CPersonnelSheetResult">
-        <result property="psId"    column="sub_ps_id"    />
-        <result property="jobId"    column="sub_job_id"    />
-        <result property="balId"    column="sub_bal_id"    />
-        <result property="stuId"    column="sub_stu_id"    />
-        <result property="psNum"    column="sub_ps_num"    />
-        <result property="stuName"    column="sub_stu_name"    />
+        <result property="psId" column="sub_ps_id"/>
+        <result property="jobId" column="sub_job_id"/>
+        <result property="balId" column="sub_bal_id"/>
+        <result property="stuId" column="sub_stu_id"/>
+        <result property="psNum" column="sub_ps_num"/>
+        <result property="stuName" column="sub_stu_name"/>
     </resultMap>
 
     <sql id="selectCBallteamVo">
-        select a.bal_id, a.cc_r_id, a.gg_id, a.bal_num,c.gg_name from c_ballteam a
-            left join stu_group c on c.gg_id = a.gg_id
+        SELECT a.bal_id, a.cc_r_id, a.gg_id, a.bal_num, c.gg_name
+        FROM c_ballteam a
+                 LEFT JOIN stu_group c ON c.gg_id = a.gg_id
     </sql>
 
     <select id="selectCBallteamList" parameterType="CBallteam" resultMap="CBallteamResult">
         <include refid="selectCBallteamVo"/>
         <where>
-            <if test="ccRId != null "> and cc_r_id = #{ccRId}</if>
-            <if test="ggId != null "> and gg_id = #{ggId}</if>
-            <if test="balNum != null  and balNum != ''"> and bal_num = #{balNum}</if>
+            <if test="ccRId != null ">and cc_r_id = #{ccRId}</if>
+            <if test="ggId != null ">and gg_id = #{ggId}</if>
+            <if test="balNum != null  and balNum != ''">and bal_num = #{balNum}</if>
         </where>
     </select>
 
     <select id="selectCBallteamByBalId" parameterType="Long" resultMap="CBallteamCPersonnelSheetResult">
-        select a.bal_id, a.cc_r_id, a.gg_id, a.bal_num,
- b.ps_id as sub_ps_id, b.job_id as sub_job_id, b.bal_id as sub_bal_id, b.stu_id as sub_stu_id, b.ps_num as sub_ps_num , c.gg_name , d.stu_name as sub_stu_name
-        from c_ballteam a
-        left join c_personnel_sheet b on b.bal_id = a.bal_id
-        left join stu_group c on c.gg_id = a.gg_id
-        left join student d on d.stu_id = b.stu_id
-        where a.bal_id = #{balId}
+        SELECT a.bal_id,
+               a.cc_r_id,
+               a.gg_id,
+               a.bal_num,
+               b.ps_id    AS sub_ps_id,
+               b.job_id   AS sub_job_id,
+               b.bal_id   AS sub_bal_id,
+               b.stu_id   AS sub_stu_id,
+               b.ps_num   AS sub_ps_num,
+               c.gg_name,
+               d.stu_name AS sub_stu_name
+        FROM c_ballteam a
+                 LEFT JOIN c_personnel_sheet b ON b.bal_id = a.bal_id
+                 LEFT JOIN stu_group c ON c.gg_id = a.gg_id
+                 LEFT JOIN student d ON d.stu_id = b.stu_id
+        WHERE a.bal_id = #{balId}
     </select>
 
     <insert id="insertCBallteam" parameterType="CBallteam" useGeneratedKeys="true" keyProperty="balId">
@@ -55,12 +66,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ccRId != null">cc_r_id,</if>
             <if test="ggId != null">gg_id,</if>
             <if test="balNum != null">bal_num,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="ccRId != null">#{ccRId},</if>
             <if test="ggId != null">#{ggId},</if>
             <if test="balNum != null">#{balNum},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateCBallteam" parameterType="CBallteam">
@@ -74,7 +85,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteCBallteamByBalId" parameterType="Long">
-        delete from c_ballteam where bal_id = #{balId}
+        DELETE
+        FROM c_ballteam
+        WHERE bal_id = #{balId}
     </delete>
 
     <delete id="deleteCBallteamByBalIds" parameterType="String">
@@ -92,13 +105,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCPersonnelSheetByBalId" parameterType="Long">
-        delete from c_personnel_sheet where bal_id = #{balId}
+        DELETE
+        FROM c_personnel_sheet
+        WHERE bal_id = #{balId}
     </delete>
 
     <insert id="batchCPersonnelSheet">
         insert into c_personnel_sheet( ps_id, job_id, bal_id, stu_id, ps_num) values
-		<foreach item="item" index="index" collection="list" separator=",">
+        <foreach item="item" index="index" collection="list" separator=",">
             ( #{item.psId}, #{item.jobId}, #{item.balId}, #{item.stuId}, #{item.psNum})
         </foreach>
     </insert>
+
+
+    <!-- 获取比赛小组信息 -->
+    <select id="selectCompetitionRecordByCcRName" parameterType="Long" resultMap="CBallteamResult">
+        <include refid="selectCBallteamVo"/>
+        WHERE cc_r_id = #{ccRId}
+    </select>
 </mapper>

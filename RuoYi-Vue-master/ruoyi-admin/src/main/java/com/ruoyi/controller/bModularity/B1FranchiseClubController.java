@@ -1,4 +1,4 @@
-package com.ruoyi.bModularity.controller;
+package com.ruoyi.controller.bModularity;
 
 import com.ruoyi.bModularity.domain.B1FranchiseClub;
 import com.ruoyi.bModularity.service.IB1FranchiseClubService;
@@ -15,93 +15,118 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * 球队、社团训练Controller
  *
  * @author houq
- * @date 2024-03-20
+ * @date 2024-03-272
  */
 @Api(tags = {"球队、社团训练"})
 @RestController
 @RequestMapping("/bModularity/club")
-public class B1FranchiseClubController extends BaseController
-{
-    @Autowired
-    private IB1FranchiseClubService b1FranchiseClubService;
-    
-    /**
-     * 查询球队、社团训练列表
-     */
-    @ApiOperation("查询球队、社团训练列表")
-    @PreAuthorize("@ss.hasPermi('bModularity:club:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(B1FranchiseClub b1FranchiseClub)
-    {
-        startPage();
-        List<B1FranchiseClub> list = b1FranchiseClubService.selectB1FranchiseClubList(b1FranchiseClub);
-        return getDataTable(list);
-    }
-    
-    /**
-     * 导出球队、社团训练列表
-     */
-    @ApiOperation("导出球队、社团训练列表")
-    @PreAuthorize("@ss.hasPermi('bModularity:club:export')")
-    @Log(title = "球队、社团训练", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    public void export(HttpServletResponse response, B1FranchiseClub b1FranchiseClub)
-    {
-        List<B1FranchiseClub> list = b1FranchiseClubService.selectB1FranchiseClubList(b1FranchiseClub);
-        ExcelUtil<B1FranchiseClub> util = new ExcelUtil<B1FranchiseClub>(B1FranchiseClub.class);
-        util.exportExcel(response, list, "球队、社团训练数据");
-    }
-    
-    /**
-     * 获取球队、社团训练详细信息
-     */
-    @ApiOperation("获取球队、社团训练详细信息")
-    @PreAuthorize("@ss.hasPermi('bModularity:club:query')")
-    @GetMapping(value = "/{tcId}")
-    public AjaxResult getInfo(@PathVariable("tcId") Long tcId)
-    {
-        return success(b1FranchiseClubService.selectB1FranchiseClubByTcId(tcId));
-    }
-    
-    /**
-     * 新增球队、社团训练
-     */
-    @ApiOperation("新增球队、社团训练")
-    @PreAuthorize("@ss.hasPermi('bModularity:club:add')")
-    @Log(title = "球队、社团训练", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody B1FranchiseClub b1FranchiseClub)
-    {
-        return toAjax(b1FranchiseClubService.insertB1FranchiseClub(b1FranchiseClub));
-    }
-    
-    /**
-     * 修改球队、社团训练
-     */
-    @ApiOperation("修改球队、社团训练")
-    @PreAuthorize("@ss.hasPermi('bModularity:club:edit')")
-    @Log(title = "球队、社团训练", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody B1FranchiseClub b1FranchiseClub)
-    {
-        return toAjax(b1FranchiseClubService.updateB1FranchiseClub(b1FranchiseClub));
-    }
-    
-    /**
-     * 删除球队、社团训练
-     */
-    @ApiOperation("删除球队、社团训练")
-    @PreAuthorize("@ss.hasPermi('bModularity:club:remove')")
-    @Log(title = "球队、社团训练", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{tcIds}")
-    public AjaxResult remove(@PathVariable Long[] tcIds)
-    {
-        return toAjax(b1FranchiseClubService.deleteB1FranchiseClubByTcIds(tcIds));
-    }
+public class B1FranchiseClubController extends BaseController {
+	@Autowired
+	private IB1FranchiseClubService b1FranchiseClubService;
+	
+	/**
+	 * 查询球队、社团训练列表
+	 */
+	@ApiOperation("查询球队、社团训练列表")
+	@PreAuthorize("@ss.hasPermi('bModularity:club:list')")
+	@GetMapping("/list")
+	public TableDataInfo list(B1FranchiseClub b1FranchiseClub) {
+		startPage();
+		List<B1FranchiseClub> list = b1FranchiseClubService.selectB1FranchiseClubList(b1FranchiseClub);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 导出球队、社团训练列表
+	 */
+	@ApiOperation("导出球队、社团训练列表")
+	@PreAuthorize("@ss.hasPermi('bModularity:club:export')")
+	@Log(title = "球队、社团训练", businessType = BusinessType.EXPORT)
+	@PostMapping("/export")
+	public void export(HttpServletResponse response, B1FranchiseClub b1FranchiseClub) {
+		List<B1FranchiseClub> list = b1FranchiseClubService.selectB1FranchiseClubList(b1FranchiseClub);
+		ExcelUtil<B1FranchiseClub> util = new ExcelUtil<B1FranchiseClub>(B1FranchiseClub.class);
+		util.exportExcel(response, list, "球队、社团训练数据");
+	}
+	
+	/**
+	 * 获取球队、社团训练详细信息
+	 */
+	@ApiOperation("获取球队、社团训练详细信息")
+	@PreAuthorize("@ss.hasPermi('bModularity:club:query')")
+	@GetMapping(value = "/{tcId}")
+	public AjaxResult getInfo(@PathVariable("tcId") Long tcId) {
+		return success(b1FranchiseClubService.selectB1FranchiseClubByTcId(tcId));
+	}
+	
+	/**
+	 * 新增球队、社团训练
+	 */
+	@ApiOperation("新增球队、社团训练")
+	@PreAuthorize("@ss.hasPermi('bModularity:club:add')")
+	@Log(title = "球队、社团训练", businessType = BusinessType.INSERT)
+	@PostMapping
+	public AjaxResult add(@RequestBody B1FranchiseClub b1FranchiseClub) {
+		return toAjax(b1FranchiseClubService.insertB1FranchiseClub(b1FranchiseClub));
+	}
+	
+	/**
+	 * 修改球队、社团训练
+	 */
+	@ApiOperation("修改球队、社团训练")
+	@PreAuthorize("@ss.hasPermi('bModularity:club:edit')")
+	@Log(title = "球队、社团训练", businessType = BusinessType.UPDATE)
+	@PutMapping
+	public AjaxResult edit(@RequestBody B1FranchiseClub b1FranchiseClub) {
+		return toAjax(b1FranchiseClubService.updateB1FranchiseClub(b1FranchiseClub));
+	}
+	
+	/**
+	 * 删除球队、社团训练
+	 */
+	@ApiOperation("删除球队、社团训练")
+	@PreAuthorize("@ss.hasPermi('bModularity:club:remove')")
+	@Log(title = "球队、社团训练", businessType = BusinessType.DELETE)
+	@DeleteMapping("/{tcIds}")
+	public AjaxResult remove(@PathVariable Long[] tcIds) {
+		return toAjax(b1FranchiseClubService.deleteB1FranchiseClubByTcIds(tcIds));
+	}
+	
+	/**
+	 * 查询球队、社团训练列表
+	 */
+	
+	@ApiOperation("查询球队、获取学生信息第一页")
+	@PreAuthorize("@ss.hasPermi('bModularity:club:studentList')")
+	@GetMapping("/studentList")
+	public TableDataInfo studentList() {
+		startPage();
+		List<HashMap<String, String>> list = b1FranchiseClubService.selectB1Student();
+		return getDataTable(list);
+	}
+	
+	@ApiOperation("获取学生本周训练记录")
+	@PreAuthorize("@ss.hasPermi('bModularity:club:franchiseClub')")
+	@GetMapping("/franchiseClub/{id}")
+	public AjaxResult franchiseClub(@PathVariable("id") Long id) {
+		return success(b1FranchiseClubService.getStudentThisWeekFranchise(id));
+	}
+	
+	@ApiOperation("获取学生本周的训练分数")
+	@PreAuthorize("@ss.hasPermi('bModularity:club:franchiseNum')")
+	@GetMapping("/franchiseNum/{id}")
+	public Double franchiseNum(@PathVariable("id") Long id) {
+		Integer num = b1FranchiseClubService.getThisWeekFranchiseNum(id);
+		if (num == null || num < 0) {
+			return 2.0;
+		}
+		return Math.max(0.0, 2.0 - num);
+	}
 }
