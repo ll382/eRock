@@ -3,6 +3,11 @@ package com.ruoyi.teachingExchange.service.impl;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.teachingExchange.domain.A1Viewed;
+import com.ruoyi.teachingExchange.domain.TeachingUnit;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -111,6 +116,41 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 //    }
 //    return OutCom;
 //}
+    /**
+     * 查询A1 id查观看记录
+     *
+     * @param teachingId A1 线上学习学生线上观看记录表主键
+     * @return A1 线上学习学生线上观看记录表
+     */
+    @Override
+    public List<TeachingTable> selectTeachingViewedTableByTeachingId()
+    {
+        return teachingTableMapper.selectTeachingViewedTableByTeachingId();
+    }
+
+    @Override
+    public List<TeachingUnit> selectTeachingUnitList() {
+        return teachingTableMapper.selectTeachingUnitList();
+    }
+
+
+    @Override
+    public int insertTeachingViewTable(A1Viewed a1Viewed)
+    {
+        return teachingTableMapper.insertTeachingViewedTable(a1Viewed);
+    }
+
+    @Override
+    public int updateStudent() {
+        int i = 0;
+        List<Student> stuList = teachingTableMapper.selectViewed();
+        for (Student a:stuList) {
+            if (teachingTableMapper.updateStudent(a) > 0){
+                i++;
+            }
+        }
+        return i;
+    }
 
 
 

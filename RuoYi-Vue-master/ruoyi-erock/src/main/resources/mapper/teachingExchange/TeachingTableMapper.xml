@@ -4,11 +4,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.teachingExchange.mapper.TeachingTableMapper">
 
+    <!--    教学资源父级单元-->
+    <resultMap id="TeachingUnit" type="teachingUnit" >
+        <result property="unitId" column="les_id"/>
+        <result property="unitTitle" column="les_name"/>
+    </resultMap>
+
+    <resultMap id="UnitTableResult" type="teachingUnit" extends="TeachingUnit" >
+        <collection property="teachingTable" notNullColumn="teaching_id" javaType="java.util.List" resultMap="TeachingTableResult" />
+    </resultMap>
+    <!--    教学资源父级单元-->
+
     <resultMap type="TeachingTable" id="TeachingTableResult">
         <result property="teachingId"    column="teaching_id"    />
         <result property="teaId"    column="tea_id"    />
         <result property="resourceUrl"    column="resource_url"    />
         <result property="createdAt"    column="created_at"    />
+        <result property="lesId"    column="les_id"    />
+        <result property="lesName"    column="les_name"    />
+        <result property="teachingTitle" column="teaching_title" />
+    </resultMap>
+
+    <resultMap type="Student" id="StudentResult">
+        <result property="stuId"    column="user_id"    />
+        <result property="stuName"    column="nick_name"    />
     </resultMap>
 
     <resultMap id="TeachingTableA1CommunicationResult" type="TeachingTable" extends="TeachingTableResult">
@@ -32,6 +51,7 @@
         <collection property="a1CommunicationList" notNullColumn="teaching_id" javaType="java.util.List" resultMap="CommunicationResult" />
     </resultMap>
 
+<!--    评论映射-->
     <resultMap type="A1Communication" id="CommunicationResult">
         <result property="comId"    column="com_id"    />
         <result property="teachingId"    column="teaching_id"    />
@@ -43,6 +63,7 @@
         <association property="remarkTo"    javaType="RemarkPerson" resultMap="RemarkToResult" />
     </resultMap>
 
+<!--    原生映射-->
     <resultMap type="A1Communication" id="A1CommunicationResult">
         <result property="comId"    column="sub_com_id"    />
         <result property="teachingId"    column="sub_teaching_id"    />
@@ -52,8 +73,24 @@
         <result property="comPid"    column="sub_com_pid"    />
     </resultMap>
 
+    <resultMap id="TeachingTableA1ViewedResult" type="TeachingTable" extends="TeachingTableResult">
+        <collection property="a1ViewedList" notNullColumn="sub_view_id" javaType="java.util.List" resultMap="A1ViewedResult" />
+    </resultMap>
 
-<!--    <sql id="selectRemarkPerson">-->
+    <resultMap type="A1Viewed" id="A1ViewedResult">
+        <result property="viewId"    column="sub_view_id"    />
+        <result property="stuId"    column="sub_stu_id"    />
+        <result property="teachingId"    column="sub_teaching_id"    />
+        <result property="viewedAt"    column="sub_viewed_at"    />
+        <result property="viewDuration"    column="sub_view_duration"    />
+        <result property="viewAllDuration"    column="sub_view_all_duration"    />
+        <result property="avatarUrl"    column="avatar"    />
+        <result property="stuName"    column="nick_name"    />
+    </resultMap>
+
+
+
+    <!--    <sql id="selectRemarkPerson">-->
 <!--        select u.user_id as self_user_id, u.nick_name as self_nick_name, u.avatar as self_avatar, r.role_name as self_role_name,-->
 <!--               c.com_id, c.com_content, c.com_by, c.com_time, c.com_pid,-->
 <!--               e.user_id as to_user_id, e.nick_name as to_nick_name, e.avatar as to_avatar, l.role_name as to_role_name,-->
@@ -73,7 +110,7 @@
     <sql id="selectRemarkPerson">
         select u.user_id as self_user_id, u.nick_name as self_nick_name, u.avatar as self_avatar, r.role_name as self_role_name,
                c.com_id, c.com_content, c.com_by, c.com_time, c.com_pid,
-               e.user_id as to_user_id, e.nick_name as to_nick_name, e.avatar as to_avatar, l.role_name as to_role_name,
+               e.user_id as to_user_id, e.nick_name as to_nick_name, e.avatar as to_avatar, l.role_name as to_role_name,sb.les_name,
                b.teaching_id,b.tea_id, b.resource_url, b.created_at
         from teaching_table b
                  left join a1_communication c on c.teaching_id = b.teaching_id
@@ -84,13 +121,29 @@
                  left join sys_user e on e.user_id = cc.com_by
                  left join sys_user_role er on e.user_id = er.user_id
                  left join sys_role l on l.role_id = er.role_id
-
+                 left join lesson_units sb on b.les_id = sb.les_id
     </sql>
 
     <sql id="selectTeachingTableVo">
-        select teaching_id, tea_id, resource_url, created_at from teaching_table
+        select a.teaching_id, a.tea_id, a.resource_url, a.created_at, a.les_id, a.teaching_title,sb.les_name
+        from teaching_table a
+        left join lesson_units sb on a.les_id = sb.les_id
     </sql>
 
+    <!--    评论父级单元-->
+        <select id="selectTeachingUnitList" resultType="teachingUnit" resultMap="UnitTableResult">
+            select sb.les_id,sb.les_name,a.teaching_id, a.tea_id, a.resource_url, a.created_at,e.avatar,e.nick_name,a.teaching_title,a.teaching_order,
+                   b.view_id as sub_view_id, b.stu_id as sub_stu_id, b.teaching_id as sub_teaching_id, b.viewed_at as sub_viewed_at, b.view_duration as sub_view_duration, (select sum(view_duration) from a1_viewed where stu_id = b.stu_id ) as sub_view_all_duration
+            from teaching_table a
+                     left join a1_viewed b on b.teaching_id = a.teaching_id
+                     left join lesson_units sb on a.les_id = sb.les_id
+                     left join student stu on stu.stu_id = b.stu_id
+                     left join sys_user e on e.user_id = stu.user_id
+            order by les_order_id asc
+        </select>
+    <!--    评论父级单元-->
+
+<!--  评论主查询  -->
     <select id="selectCommunicationList" parameterType="teachingTable" resultMap="OutTeachingCommunicationResult">
         <include refid="selectRemarkPerson"/>
         <where>
@@ -99,14 +152,63 @@
             </if>
         </where>
     </select>
-
-    <select id="selectCommunicationId" parameterType="A1Communication" resultMap="CommunicationResult">
+<!--   评论子查询     -->
+    <select id="selectCommunicationId" resultMap="CommunicationResult">
         <include refid="selectRemarkPerson"/>
             <where>
                 c.com_pid = ${subId} order by c.com_time DESC
             </where>
     </select>
 
+    <select id="selectTeachingViewedTableByTeachingId" resultType="teachingUnit" resultMap="A1ViewedResult">
+        select e.avatar,e.nick_name,
+               b.view_id as sub_view_id, b.stu_id as sub_stu_id, b.teaching_id as sub_teaching_id, b.viewed_at as sub_viewed_at, b.view_duration as sub_view_duration, (select sum(view_duration) from a1_viewed where stu_id = b.stu_id ) as sub_view_all_duration
+        from a1_viewed b
+                 left join student stu on stu.stu_id = b.stu_id
+                 left join sys_user e on e.user_id = stu.user_id
+        order by sub_view_all_duration desc
+    </select>
+
+    <insert id="insertTeachingViewedTable" parameterType="A1Viewed" useGeneratedKeys="true" keyProperty="viewId">
+        insert into a1_viewed
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">stu_id,</if>
+            <if test="teachingId != null">teaching_id,</if>
+            <if test="viewedAt != null">viewed_at,</if>
+            <if test="viewDuration != null">view_duration,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">#{stuId},</if>
+            <if test="teachingId != null">#{teachingId},</if>
+            <if test="viewedAt != null">#{viewedAt},</if>
+            <if test="viewDuration != null">#{viewDuration},</if>
+        </trim>
+    </insert>
+
+<!--    批量插入-->
+    <update id="updateStudent" parameterType="student">
+        update student
+        <trim prefix="SET" prefixOverrides="and|or" suffixOverrides=",">
+            <if test="stuId != null  and stuId != ''"> and user_id = #{stuId}</if>
+        </trim>
+        where stu_name = #{stuName}
+    </update>
+
+    <select id="selectViewed" resultMap="StudentResult">
+        select user_id ,nick_name from sys_user
+    </select>
+<!--    插入-->
+
+
+
+    <insert id="batchA1Viewed">
+        insert into a1_viewed( view_id, stu_id, teaching_id, viewed_at, view_duration) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.viewId}, #{item.stuId}, #{item.teachingId}, #{item.viewedAt}, #{item.viewDuration})
+        </foreach>
+    </insert>
+
+<!--  源生方法  -->
     <select id="selectTeachingTableList" parameterType="TeachingTable" resultMap="TeachingTableResult">
         <include refid="selectTeachingTableVo"/>
         <where>
@@ -117,9 +219,10 @@
     </select>
 
     <select id="selectTeachingTableByTeachingId" parameterType="Long" resultMap="TeachingTableA1CommunicationResult">
-        select a.teaching_id, a.tea_id, a.resource_url, a.created_at,
+        select a.teaching_id, a.tea_id, a.resource_url, a.created_at,sb.les_name,
                b.com_id as sub_com_id, b.teaching_id as sub_teaching_id, b.com_content as sub_com_content, b.com_by as sub_com_by, b.com_time as sub_com_time, b.com_pid as sub_com_pid
         from teaching_table a
+                 left join lesson_units sb on a.les_id = sb.les_id
                  left join a1_communication b on b.teaching_id = a.teaching_id
         where a.teaching_id = #{teachingId}
         ORDER BY sub_com_time ASC
@@ -145,6 +248,7 @@
             <if test="teaId != null">tea_id = #{teaId},</if>
             <if test="resourceUrl != null">resource_url = #{resourceUrl},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="lesId != null">#{lesId},</if>
         </trim>
         where teaching_id = #{teachingId}
     </update>

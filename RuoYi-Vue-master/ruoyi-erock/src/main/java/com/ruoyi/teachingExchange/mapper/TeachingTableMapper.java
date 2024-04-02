@@ -1,8 +1,12 @@
 package com.ruoyi.teachingExchange.mapper;
 
 import java.util.List;
+
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.teachingExchange.domain.A1Viewed;
 import com.ruoyi.teachingExchange.domain.TeachingTable;
 import com.ruoyi.teachingExchange.domain.A1Communication;
+import com.ruoyi.teachingExchange.domain.TeachingUnit;
 import io.lettuce.core.dynamic.annotation.Value;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.springframework.data.annotation.Version;
@@ -34,7 +38,28 @@ public interface TeachingTableMapper
      */
     public TeachingTable selectCommunicationList(Long commId);
 
+//    评论表子查询
     public List<A1Communication> selectCommunicationId(Long subId);
+
+//    父级单元全查询
+    public List<TeachingUnit> selectTeachingUnitList();
+
+//    观看记录表查询
+    public List<TeachingTable> selectTeachingViewedTableByTeachingId();
+
+    //    观看记录表插入
+    public int insertTeachingViewedTable(A1Viewed a1Viewed);
+
+//    批量插入
+    public int batchA1Viewed(List<A1Viewed> a1ViewedList);
+
+
+
+//    test
+    public int updateStudent(Student stu);
+    public List<Student> selectViewed();
+
+
 
     /**
      * 查询A1 线上学习学生线上观看记录表列表

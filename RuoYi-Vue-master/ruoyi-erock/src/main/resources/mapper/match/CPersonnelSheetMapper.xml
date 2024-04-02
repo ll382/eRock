@@ -1,49 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.match.mapper.CPersonnelSheetMapper">
-    
+
     <resultMap type="CPersonnelSheet" id="CPersonnelSheetResult">
-        <result property="psId"    column="ps_id"    />
-        <result property="jobId"    column="job_id"    />
-        <result property="balId"    column="bal_id"    />
-        <result property="stuId"    column="stu_id"    />
-        <result property="psNum"    column="ps_num"    />
+        <result property="psId" column="ps_id"/>
+        <result property="jobId" column="job_id"/>
+        <result property="balId" column="bal_id"/>
+        <result property="stuId" column="stu_id"/>
+        <result property="psNum" column="ps_num"/>
+        <result property="stuName" column="stu_name"/>
     </resultMap>
 
     <resultMap id="CPersonnelSheetCProofResult" type="CPersonnelSheet" extends="CPersonnelSheetResult">
-        <collection property="cProofList" notNullColumn="sub_proof_id" javaType="java.util.List" resultMap="CProofResult" />
+        <collection property="cProofList" notNullColumn="sub_proof_id" javaType="java.util.List"
+                    resultMap="CProofResult"/>
     </resultMap>
 
     <resultMap type="CProof" id="CProofResult">
-        <result property="proofId"    column="sub_proof_id"    />
-        <result property="psId"    column="sub_ps_id"    />
-        <result property="proofUrl"    column="sub_proof_url"    />
+        <result property="proofId" column="sub_proof_id"/>
+        <result property="psId" column="sub_ps_id"/>
+        <result property="proofUrl" column="sub_proof_url"/>
     </resultMap>
 
     <sql id="selectCPersonnelSheetVo">
-        select ps_id, job_id, bal_id, stu_id, ps_num from c_personnel_sheet
+        SELECT ps_id, job_id, bal_id, stu_id, ps_num
+        FROM c_personnel_sheet
     </sql>
 
     <select id="selectCPersonnelSheetList" parameterType="CPersonnelSheet" resultMap="CPersonnelSheetResult">
         <include refid="selectCPersonnelSheetVo"/>
-        <where>  
-            <if test="jobId != null "> and job_id = #{jobId}</if>
-            <if test="balId != null "> and bal_id = #{balId}</if>
-            <if test="stuId != null "> and stu_id = #{stuId}</if>
-            <if test="psNum != null "> and ps_num = #{psNum}</if>
+        <where>
+            <if test="jobId != null ">and job_id = #{jobId}</if>
+            <if test="balId != null ">and bal_id = #{balId}</if>
+            <if test="stuId != null ">and stu_id = #{stuId}</if>
+            <if test="psNum != null ">and ps_num = #{psNum}</if>
         </where>
     </select>
-    
+
     <select id="selectCPersonnelSheetByPsId" parameterType="Long" resultMap="CPersonnelSheetCProofResult">
-        select a.ps_id, a.job_id, a.bal_id, a.stu_id, a.ps_num,
- b.proof_id as sub_proof_id, b.ps_id as sub_ps_id, b.proof_url as sub_proof_url
-        from c_personnel_sheet a
-        left join c_proof b on b.ps_id = a.ps_id
-        where a.ps_id = #{psId}
+        SELECT a.ps_id,
+               a.job_id,
+               a.bal_id,
+               a.stu_id,
+               a.ps_num,
+               b.proof_id  AS sub_proof_id,
+               b.ps_id     AS sub_ps_id,
+               b.proof_url AS sub_proof_url
+        FROM c_personnel_sheet a
+                 LEFT JOIN c_proof b ON b.ps_id = a.ps_id
+        WHERE a.ps_id = #{psId}
     </select>
-        
+
     <insert id="insertCPersonnelSheet" parameterType="CPersonnelSheet" useGeneratedKeys="true" keyProperty="psId">
         insert into c_personnel_sheet
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -51,13 +60,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="balId != null">bal_id,</if>
             <if test="stuId != null">stu_id,</if>
             <if test="psNum != null">ps_num,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="jobId != null">#{jobId},</if>
             <if test="balId != null">#{balId},</if>
             <if test="stuId != null">#{stuId},</if>
             <if test="psNum != null">#{psNum},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateCPersonnelSheet" parameterType="CPersonnelSheet">
@@ -72,31 +81,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteCPersonnelSheetByPsId" parameterType="Long">
-        delete from c_personnel_sheet where ps_id = #{psId}
+        DELETE
+        FROM c_personnel_sheet
+        WHERE ps_id = #{psId}
     </delete>
 
     <delete id="deleteCPersonnelSheetByPsIds" parameterType="String">
-        delete from c_personnel_sheet where ps_id in 
+        delete from c_personnel_sheet where ps_id in
         <foreach item="psId" collection="array" open="(" separator="," close=")">
             #{psId}
         </foreach>
     </delete>
-    
+
     <delete id="deleteCProofByPsIds" parameterType="String">
-        delete from c_proof where ps_id in 
+        delete from c_proof where ps_id in
         <foreach item="psId" collection="array" open="(" separator="," close=")">
             #{psId}
         </foreach>
     </delete>
 
     <delete id="deleteCProofByPsId" parameterType="Long">
-        delete from c_proof where ps_id = #{psId}
+        DELETE
+        FROM c_proof
+        WHERE ps_id = #{psId}
     </delete>
 
     <insert id="batchCProof">
         insert into c_proof( proof_id, ps_id, proof_url) values
-		<foreach item="item" index="index" collection="list" separator=",">
+        <foreach item="item" index="index" collection="list" separator=",">
             ( #{item.proofId}, #{item.psId}, #{item.proofUrl})
         </foreach>
     </insert>
+
+    <!-- 根据球队id查询C 球队内人员列表 -->
+    <select id="findPersonnelShellByBalId" resultMap="CPersonnelSheetResult">
+        SELECT c.ps_id, c.job_id, c.bal_id, c.stu_id, c.ps_num, s.stu_name
+        FROM c_personnel_sheet c
+                 JOIN student s ON s.stu_id = c.stu_id
+        WHERE bal_id = #{balId}
+    </select>
 </mapper>
