@@ -51,6 +51,8 @@ public interface TeachingTableMapper
     public int insertTeachingViewedTable(A1Viewed a1Viewed);
     public int updateTeachingViewedTable(A1Viewed a1Viewed);
 
+    public int deleteViewedTeachingId(Long Id);
+
 //    批量插入
     public int batchA1Viewed(List<A1Viewed> a1ViewedList);
 

@@ -118,9 +118,14 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     public int deleteLessonUnitsByLesId(Long lesId)
     {
         lessonUnitsMapper.selectByLesId(lesId).forEach(teachingId -> {
+//            删除观看时常
+            teachingTableMapper.deleteViewedTeachingId(teachingId);
+//            删除评论
             teachingTableMapper.deleteA1CommunicationByTeachingId(teachingId);
         });
+//        删除课时
         lessonUnitsMapper.deleteTeachingTableByLesId(lesId);
+//        删除单元
         return lessonUnitsMapper.deleteLessonUnitsByLesId(lesId);
     }
 

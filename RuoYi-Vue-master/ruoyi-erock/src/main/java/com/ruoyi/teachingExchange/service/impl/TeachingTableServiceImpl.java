@@ -1,8 +1,6 @@
 package com.ruoyi.teachingExchange.service.impl;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.teachingExchange.domain.A1Viewed;
@@ -10,7 +8,6 @@ import com.ruoyi.teachingExchange.domain.TeachingUnit;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.teachingExchange.domain.A1Communication;
@@ -138,13 +135,23 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int insertTeachingViewTable(A1Viewed a1Viewed)
     {
+        a1Viewed.setViewedAt(new Date());
         return teachingTableMapper.insertTeachingViewedTable(a1Viewed);
     }
 
     @Override
     public int updateTeachingViewedTable(A1Viewed a1Viewed)
     {
-        return teachingTableMapper.insertTeachingViewedTable(a1Viewed);
+        a1Viewed.setViewedAt(new Date());
+        return teachingTableMapper.updateTeachingViewedTable(a1Viewed);
+    }
+
+
+
+    @Override
+    public int deleteViewedTeachingId(Long id)
+    {
+        return teachingTableMapper.deleteViewedTeachingId(id);
     }
 
 
@@ -229,6 +236,7 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int deleteTeachingTableByTeachingId(Long teachingId)
     {
+        teachingTableMapper.deleteViewedTeachingId(teachingId);
         teachingTableMapper.deleteA1CommunicationByTeachingId(teachingId);
         return teachingTableMapper.deleteTeachingTableByTeachingId(teachingId);
     }

@@ -49,6 +49,9 @@ public interface ITeachingTableService
     public int insertTeachingViewTable(A1Viewed a1Viewed);
     public int updateTeachingViewedTable(A1Viewed a1Viewed);
 
+    public int deleteViewedTeachingId(Long id);
+
+
     /**
      * 查询A1 线上学习学生线上观看记录表列表
      *

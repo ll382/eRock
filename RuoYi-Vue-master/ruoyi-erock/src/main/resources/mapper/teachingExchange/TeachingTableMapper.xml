@@ -169,7 +169,7 @@
         order by sub_view_all_duration desc
     </select>
 
-    <insert id="insertTeachingViewedTable" parameterType="A1Viewed" useGeneratedKeys="true" keyProperty="viewId">
+    <insert id="insertTeachingViewedTable" parameterType="a1Viewed" useGeneratedKeys="true" keyProperty="viewId">
         insert into a1_viewed
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="stuId != null">stu_id,</if>
@@ -183,18 +183,23 @@
             <if test="viewedAt != null">#{viewedAt},</if>
             <if test="viewDuration != null">#{viewDuration},</if>
         </trim>
+            where view_id = #{viewId}
     </insert>
 
-    <update id="updateTeachingViewedTable" parameterType="student">
-        update TeachingViewedTable
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="stuId != null">#{stuId},</if>
-            <if test="teachingId != null">#{teachingId},</if>
-            <if test="viewedAt != null">#{viewedAt},</if>
-            <if test="viewDuration != null">#{viewDuration},</if>
+    <update id="updateTeachingViewedTable" parameterType="a1Viewed">
+        update a1_viewed
+        <trim prefix="SET" prefixOverrides="and|or" suffixOverrides=",">
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="teachingId != null">teaching_id = #{teachingId},</if>
+            <if test="viewedAt != null">viewed_at = #{viewedAt},</if>
+            <if test="viewDuration != null">view_duration = #{viewDuration},</if>
         </trim>
-        where stu_name = #{stuName}
+        where view_id = #{viewId}
     </update>
+
+    <delete id="deleteViewedTeachingId" parameterType="Long">
+        delete from a1_viewed where view_id = #{viewId}
+    </delete>
 
 <!--    批量插入-->
     <update id="updateStudent" parameterType="student">

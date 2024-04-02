@@ -66,16 +66,6 @@ public class TeachingTableController extends BaseController
         TeachingTable list = teachingTableService.selectCommunicationList(com);
         return success(list);
     }
-    /** 查询父级所有单元
-     * 获取A1 线上学习学生线上观看记录表详细信息
-     */
-    @ApiOperation("获取A1 线上学习学生线上观看记录表详细信息")
-    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:query')")
-    @GetMapping(value = "Unit/List")
-    public AjaxResult getUnitList()
-    {
-        return success(teachingTableService.selectTeachingUnitList());
-    }
 
     /**
      * 导出A1 线上学习学生线上观看记录表列表
@@ -139,7 +129,7 @@ public class TeachingTableController extends BaseController
     }
 
 
-    /**Viewed改
+    /**Viewed修改内容
      * 新增A1 线上学习学生线上观看记录表
      */
     @ApiOperation("新增A1 线上学习学生线上观看记录表")
@@ -149,6 +139,17 @@ public class TeachingTableController extends BaseController
     public AjaxResult updateTeachingViewedTable(@RequestBody A1Viewed a1Viewed)
     {
         return toAjax(teachingTableService.updateTeachingViewedTable(a1Viewed));
+    }
+    /**Viewed删除内容
+     * 新增A1 线上学习学生线上观看记录表
+     */
+    @ApiOperation("新增A1 线上学习学生线上观看记录表")
+    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:add')")
+    @Log(title = "A1 线上学习学生线上观看记录表", businessType = BusinessType.INSERT)
+    @DeleteMapping("/viewed/{id}")
+    public AjaxResult deleteViewedTeachingId(@PathVariable("id") Long id)
+    {
+        return toAjax(teachingTableService.deleteViewedTeachingId(id));
     }
 
     /**
