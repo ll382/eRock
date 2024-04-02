@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import com.ruoyi.teachingExchange.domain.TeachingTable;
+import com.ruoyi.teachingExchange.service.ITeachingTableService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
@@ -41,6 +43,21 @@ public class StudentController extends BaseController
 {
     @Autowired
     private IStudentService studentService;
+
+    @Autowired
+    private ITeachingTableService teachingTableService;
+
+    /**
+     * 查询A1 线上学习学生线上观看记录表列表
+     */
+    @ApiOperation("插入学生表内容")
+    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:list')")
+    @GetMapping("/chageId")
+    public AjaxResult list()
+    {
+        return AjaxResult.success(teachingTableService.updateStudent());
+    }
+
 
     /**
      * 查询学生列表
