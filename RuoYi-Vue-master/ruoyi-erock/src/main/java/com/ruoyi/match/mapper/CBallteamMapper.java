@@ -1,8 +1,9 @@
 package com.ruoyi.match.mapper;
 
-import java.util.List;
 import com.ruoyi.match.domain.CBallteam;
 import com.ruoyi.match.domain.CPersonnelSheet;
+
+import java.util.List;
 
 /**
  * 球队参赛Mapper接口
@@ -84,4 +85,13 @@ public interface CBallteamMapper
      * @return 结果
      */
     public int deleteCPersonnelSheetByBalId(Long balId);
+    
+    
+    /**
+     * 获取比赛小组信息
+     *
+     * @param ccRId
+     * @return
+     */
+    public List<CBallteam> selectCompetitionRecordByCcRName(Long ccRId);
 }

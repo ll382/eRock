@@ -33,6 +33,22 @@
                         placeholder="请选择创建时间">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="训练标题" prop="tcTitle">
+        <el-input
+          v-model="queryParams.tcTitle"
+          placeholder="请输入训练标题"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="训练地点" prop="tcPlace">
+        <el-input
+          v-model="queryParams.tcPlace"
+          placeholder="请输入训练地点"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -96,6 +112,8 @@
           <span>{{ parseTime(scope.row.tcTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="训练标题" align="center" prop="tcTitle" />
+      <el-table-column label="训练地点" align="center" prop="tcPlace" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -143,6 +161,12 @@
                           value-format="yyyy-MM-dd"
                           placeholder="请选择创建时间">
           </el-date-picker>
+        </el-form-item>
+        <el-form-item label="训练标题" prop="tcTitle">
+          <el-input v-model="form.tcTitle" placeholder="请输入训练标题" />
+        </el-form-item>
+        <el-form-item label="训练地点" prop="tcPlace">
+          <el-input v-model="form.tcPlace" placeholder="请输入训练地点" />
         </el-form-item>
         <el-divider content-position="center">B1 资源信息</el-divider>
         <el-row :gutter="10" class="mb8">
@@ -207,7 +231,9 @@ export default {
         enumId: null,
         stuId: null,
         tcUrl: null,
-        tcTime: null
+        tcTime: null,
+        tcTitle: null,
+        tcPlace: null
       },
       // 表单参数
       form: {},
@@ -241,7 +267,9 @@ export default {
         enumId: null,
         stuId: null,
         tcUrl: null,
-        tcTime: null
+        tcTime: null,
+        tcTitle: null,
+        tcPlace: null
       };
       this.b1MassSourceList = [];
       this.resetForm("form");

@@ -1,50 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.match.mapper.CompetitionRecordMapper">
 
     <resultMap type="CompetitionRecord" id="CompetitionRecordResult">
-        <result property="ccRId"    column="cc_r_id"    />
-        <result property="enumId"    column="enum_id"    />
-        <result property="ccRTime"    column="cc_r_time"    />
-        <result property="ccRSpeci"    column="cc_r_speci"    />
-        <result property="ccRName"    column="cc_r_name"    />
+        <result property="ccRId" column="cc_r_id"/>
+        <result property="enumId" column="enum_id"/>
+        <result property="ccRTime" column="cc_r_time"/>
+        <result property="ccRSpeci" column="cc_r_speci"/>
+        <result property="ccRName" column="cc_r_name"/>
     </resultMap>
 
     <resultMap id="CompetitionRecordCBallteamResult" type="CompetitionRecord" extends="CompetitionRecordResult">
-        <collection property="cBallteamList" notNullColumn="sub_bal_id" javaType="java.util.List" resultMap="CBallteamResult" />
+        <collection property="cBallteamList" notNullColumn="sub_bal_id" javaType="java.util.List"
+                    resultMap="CBallteamResult"/>
     </resultMap>
 
     <resultMap type="CBallteam" id="CBallteamResult">
-        <result property="balId"    column="sub_bal_id"    />
-        <result property="ccRId"    column="sub_cc_r_id"    />
-        <result property="ggId"    column="sub_gg_id"    />
-        <result property="balNum"    column="sub_bal_num"    />
-        <result property="ggName"    column="sub_gg_name"    />
+        <result property="balId" column="sub_bal_id"/>
+        <result property="ccRId" column="sub_cc_r_id"/>
+        <result property="ggId" column="sub_gg_id"/>
+        <result property="balNum" column="sub_bal_num"/>
+        <result property="ggName" column="sub_gg_name"/>
     </resultMap>
 
     <sql id="selectCompetitionRecordVo">
-        select cc_r_id, enum_id, cc_r_time, cc_r_speci, cc_r_name from c_competition_record
+        SELECT cc_r_id, enum_id, cc_r_time, cc_r_speci, cc_r_name
+        FROM c_competition_record
     </sql>
 
     <select id="selectCompetitionRecordList" parameterType="CompetitionRecord" resultMap="CompetitionRecordResult">
         <include refid="selectCompetitionRecordVo"/>
         <where>
-            <if test="enumId != null "> and enum_id = #{enumId}</if>
-            <if test="ccRTime != null "> and cc_r_time = #{ccRTime}</if>
-            <if test="ccRSpeci != null  and ccRSpeci != ''"> and cc_r_speci = #{ccRSpeci}</if>
-            <if test="ccRName != null  and ccRName != ''"> and cc_r_name like concat('%', #{ccRName}, '%')</if>
+            <if test="enumId != null ">and enum_id = #{enumId}</if>
+            <if test="ccRTime != null ">and cc_r_time = #{ccRTime}</if>
+            <if test="ccRSpeci != null  and ccRSpeci != ''">and cc_r_speci = #{ccRSpeci}</if>
+            <if test="ccRName != null  and ccRName != ''">and cc_r_name like concat('%', #{ccRName}, '%')</if>
         </where>
     </select>
 
     <select id="selectCompetitionRecordByCcRId" parameterType="Long" resultMap="CompetitionRecordCBallteamResult">
-        select a.cc_r_id, a.enum_id, a.cc_r_time, a.cc_r_speci, a.cc_r_name ,
- b.bal_id as sub_bal_id, b.cc_r_id as sub_cc_r_id, b.gg_id as sub_gg_id, b.bal_num as sub_bal_num, c.gg_name as sub_gg_name
-        from c_competition_record a
-        left join c_ballteam b on b.cc_r_id = a.cc_r_id
-        left join stu_group c on c.gg_id = b.gg_id
-        where a.cc_r_id = #{ccRId}
+        SELECT a.cc_r_id,
+               a.enum_id,
+               a.cc_r_time,
+               a.cc_r_speci,
+               a.cc_r_name,
+               b.bal_id  AS sub_bal_id,
+               b.cc_r_id AS sub_cc_r_id,
+               b.gg_id   AS sub_gg_id,
+               b.bal_num AS sub_bal_num,
+               c.gg_name AS sub_gg_name
+        FROM c_competition_record a
+                 LEFT JOIN c_ballteam b ON b.cc_r_id = a.cc_r_id
+                 LEFT JOIN stu_group c ON c.gg_id = b.gg_id
+        WHERE a.cc_r_id = #{ccRId}
     </select>
 
     <insert id="insertCompetitionRecord" parameterType="CompetitionRecord" useGeneratedKeys="true" keyProperty="ccRId">
@@ -54,13 +64,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ccRTime != null">cc_r_time,</if>
             <if test="ccRSpeci != null">cc_r_speci,</if>
             <if test="ccRName != null">cc_r_name,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="enumId != null">#{enumId},</if>
             <if test="ccRTime != null">#{ccRTime},</if>
             <if test="ccRSpeci != null">#{ccRSpeci},</if>
             <if test="ccRName != null">#{ccRName},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateCompetitionRecord" parameterType="CompetitionRecord">
@@ -75,7 +85,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteCompetitionRecordByCcRId" parameterType="Long">
-        delete from c_competition_record where cc_r_id = #{ccRId}
+        DELETE
+        FROM c_competition_record
+        WHERE cc_r_id = #{ccRId}
     </delete>
 
     <delete id="deleteCompetitionRecordByCcRIds" parameterType="String">
@@ -93,13 +105,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCBallteamByCcRId" parameterType="Long">
-        delete from c_ballteam where cc_r_id = #{ccRId}
+        DELETE
+        FROM c_ballteam
+        WHERE cc_r_id = #{ccRId}
     </delete>
 
     <insert id="batchCBallteam">
         insert into c_ballteam( bal_id, cc_r_id, gg_id, bal_num) values
-		<foreach item="item" index="index" collection="list" separator=",">
+        <foreach item="item" index="index" collection="list" separator=",">
             ( #{item.balId}, #{item.ccRId}, #{item.ggId}, #{item.balNum})
         </foreach>
     </insert>
+
+    <!-- 获取比赛记录 -->
+    <select id="selectGameRecord" resultType="HashMap">
+        SELECT r.cc_r_id,r.cc_r_speci, c.*, g.class_name
+        FROM c_competition_record r
+        JOIN class_register c ON r.cr_id = c.cr_id
+        JOIN ruoyi.grade g ON c.class_id = g.class_id
+        <where>
+            <if test="speci != null">AND cc_r_speci = #{speci}</if>
+        </where>
+    </select>
 </mapper>
