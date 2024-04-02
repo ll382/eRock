@@ -48,7 +48,6 @@ public class TeachingTableController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(TeachingTable teachingTable)
     {
-        startPage();
         List<TeachingTable> list = teachingTableService.selectTeachingTableList(teachingTable);
         return getDataTable(list);
     }
@@ -63,10 +62,19 @@ public class TeachingTableController extends BaseController
     @GetMapping("/comm/{commId}")
     public AjaxResult A1Communicationlist(@PathVariable("commId")String commId)
     {
-//        startPage();
         Long com = Long.parseLong(commId);
         TeachingTable list = teachingTableService.selectCommunicationList(com);
         return success(list);
+    }
+    /** 查询父级所有单元
+     * 获取A1 线上学习学生线上观看记录表详细信息
+     */
+    @ApiOperation("获取A1 线上学习学生线上观看记录表详细信息")
+    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:query')")
+    @GetMapping(value = "Unit/List")
+    public AjaxResult getUnitList()
+    {
+        return success(teachingTableService.selectTeachingUnitList());
     }
 
     /**
