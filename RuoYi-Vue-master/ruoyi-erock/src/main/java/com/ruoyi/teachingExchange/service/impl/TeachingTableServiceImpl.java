@@ -142,6 +142,14 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     }
 
     @Override
+    public int updateTeachingViewedTable(A1Viewed a1Viewed)
+    {
+        return teachingTableMapper.insertTeachingViewedTable(a1Viewed);
+    }
+
+
+
+    @Override
     public int updateStudent() {
         int i = 0;
         List<Student> stuList = teachingTableMapper.selectViewed();

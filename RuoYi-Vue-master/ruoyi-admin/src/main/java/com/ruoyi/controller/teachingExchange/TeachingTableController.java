@@ -138,6 +138,19 @@ public class TeachingTableController extends BaseController
         return toAjax(teachingTableService.insertTeachingViewTable(a1Viewed));
     }
 
+
+    /**Viewed改
+     * 新增A1 线上学习学生线上观看记录表
+     */
+    @ApiOperation("新增A1 线上学习学生线上观看记录表")
+    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:add')")
+    @Log(title = "A1 线上学习学生线上观看记录表", businessType = BusinessType.INSERT)
+    @PutMapping("/viewed")
+    public AjaxResult updateTeachingViewedTable(@RequestBody A1Viewed a1Viewed)
+    {
+        return toAjax(teachingTableService.updateTeachingViewedTable(a1Viewed));
+    }
+
     /**
      * 新增A1 线上学习学生线上观看记录表
      */

@@ -185,6 +185,17 @@
         </trim>
     </insert>
 
+    <update id="updateTeachingViewedTable" parameterType="student">
+        update TeachingViewedTable
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">#{stuId},</if>
+            <if test="teachingId != null">#{teachingId},</if>
+            <if test="viewedAt != null">#{viewedAt},</if>
+            <if test="viewDuration != null">#{viewDuration},</if>
+        </trim>
+        where stu_name = #{stuName}
+    </update>
+
 <!--    批量插入-->
     <update id="updateStudent" parameterType="student">
         update student
