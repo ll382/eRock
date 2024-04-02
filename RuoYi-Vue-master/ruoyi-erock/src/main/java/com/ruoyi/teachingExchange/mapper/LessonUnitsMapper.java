@@ -25,6 +25,9 @@ public interface LessonUnitsMapper
      */
     public LessonUnits selectLessonUnitsByLesId(Long lesId);
 
+    @Select("select b.teaching_id from lesson_units a left join teaching_table b on b.les_id = a.les_id where a.les_id = #{lesId}")
+    public List<Long> selectByLesId(Long lesId);
+
     /**
      * 查询课时单元列表
      *

@@ -51,7 +51,7 @@ public interface TeachingTableMapper
     public int insertTeachingViewedTable(A1Viewed a1Viewed);
 
 //    批量插入
-    public int batchA1Viewed(List<A1Viewed> a1ViewedList);
+    public int batchA1Viewed(A1Viewed a1ViewedList);
 
 
 

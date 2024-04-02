@@ -3,6 +3,8 @@ package com.ruoyi.teachingExchange.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.teachingExchange.mapper.TeachingTableMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
 {
     @Autowired
     private LessonUnitsMapper lessonUnitsMapper;
+
+    @Autowired
+    private TeachingTableMapper teachingTableMapper;
 
     /**
      * 查询课时单元
@@ -112,6 +117,9 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     @Override
     public int deleteLessonUnitsByLesId(Long lesId)
     {
+        lessonUnitsMapper.selectByLesId(lesId).forEach(teachingId -> {
+            teachingTableMapper.deleteA1CommunicationByTeachingId(teachingId);
+        });
         lessonUnitsMapper.deleteTeachingTableByLesId(lesId);
         return lessonUnitsMapper.deleteLessonUnitsByLesId(lesId);
     }
