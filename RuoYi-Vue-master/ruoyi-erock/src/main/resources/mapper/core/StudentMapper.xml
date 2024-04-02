@@ -21,6 +21,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="teaId"    column="sub_tea_id"    />
     </resultMap>
 
+    <resultMap type="StudentCourseGrades" id="StudentCourseGradesResult">
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="className"    column="class_name"    />
+        <result property="teaName"    column="tea_name"    />
+        <result property="msDribble"    column="ms_dribble"    />
+        <result property="msShooting"    column="ms_shooting"    />
+        <result property="crDate"    column="cr_date"    />
+        <result property="crMain"    column="cr_main"    />
+    </resultMap>
+
     <sql id="selectStudentVo">
         select stu_id, gg_id, class_id, stu_name, stu_password from student
     </sql>
@@ -42,11 +53,100 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where a.stu_id = #{stuId}
     </select>
 
-    <select id="selectClassIdList" parameterType="String">
-        select stu_name from student where class_id = (select class_id from grade where class_name = #{className})
+    <select id="selectDeduplicationCrDateByStuIdAndEnumIdList" resultType="map">
+        SELECT
+            stu_name, cr_date, enum_id, case
+                WHEN td ="08" THEN "一二节课"
+                WHEN td = "10" THEN "三四节课"
+            END type
+        FROM (
+                 SELECT
+                     student.stu_name,
+                     class_register.cr_date,
+                     a_exercise_task.enum_id,
+                     SUBSTR(cr_date, 12, 2) as td
+                 FROM student
+                          JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+                          JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+                          JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+                 WHERE a_exercise_task.enum_id = #{enumId} and student.stu_id = #{stuId} and class_register.cr_date BETWEEN '2024-01-01 08:00:00' AND '2024-12-31 10:00:00'
+                 GROUP BY
+                     student.stu_name,
+                     class_register.cr_date,
+                     a_exercise_task.enum_id
+             ) f WHERE td = "10" or td = "08"
     </select>
 
-        
+    <select id="selectCrDateByStuIdAndEnumIdAndCrDateList" resultType="map">
+        SELECT
+            student.stu_name,
+            class_register.cr_date,
+            a_exercise_task.enum_id
+        FROM student
+                 JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+                 JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+                 JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+        WHERE a_exercise_task.enum_id = #{enumId} and student.stu_id = #{stuId} and class_register.cr_date = #{crDate}
+    </select>
+
+    <select id="selectDeduplicationStudentAchievementList" parameterType="String" resultMap="StudentCourseGradesResult">
+        SELECT
+            student.stu_id,
+            student.stu_name,
+            teacher.tea_name,
+            grade.class_name,
+            class_register.cr_date,
+            class_register.cr_main
+        FROM student
+            JOIN grade ON student.class_id = grade.class_id
+            JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+            JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+            JOIN teacher ON teacher.tea_id = a_exercise_task.tea_id
+            JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+        WHERE student.class_id = (SELECT class_id FROM grade WHERE class_name = #{className})
+          AND class_register.cr_date = #{crDate}
+        GROUP BY
+            student.stu_id,
+            student.stu_name,
+            teacher.tea_name,
+            grade.class_name,
+            class_register.cr_date,
+            class_register.cr_main
+
+    </select>
+
+    <select id="selectStudentAchievementList" parameterType="map" resultType="map">
+        select
+            student.stu_id,
+            student.stu_name,
+            teacher.tea_name,
+            grade.class_name ,
+            a_mark_sheet.ms_shooting,
+            class_register.cr_date,
+            class_register.cr_main
+        from student
+                 JOIN grade on student.class_id = grade.class_id
+                 JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+                 JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+                 JOIN teacher on teacher.tea_id = a_exercise_task.tea_id
+                 JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+        WHERE student.stu_id = #{stuId}
+          and class_register.cr_date = #{crDate}
+    </select>
+
+    <select id="selectStudentAchievementByStuId" resultType="map">
+        SELECT
+            student.stu_name,
+            class_register.cr_date,
+            a_mark_sheet.ms_shooting
+        FROM student
+                 JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+                 JOIN a_exercise_task on a_mark_sheet.et_id = a_exercise_task.et_id
+                 JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+        WHERE a_exercise_task.enum_id = 2 and student.stu_id = #{stuId} and class_register.cr_date = "2024-03-15 08:00:00" ORDER BY class_register.cr_date
+    </select>
+
+
     <insert id="insertStudent" parameterType="Student" useGeneratedKeys="true" keyProperty="stuId">
         insert into student
         <trim prefix="(" suffix=")" suffixOverrides=",">

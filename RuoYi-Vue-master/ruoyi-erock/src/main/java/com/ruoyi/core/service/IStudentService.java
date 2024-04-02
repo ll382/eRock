@@ -1,7 +1,13 @@
 package com.ruoyi.core.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.domain.vo.StudentCourseGrades;
+
 
 /**
  * 学生Service接口
@@ -18,6 +24,27 @@ public interface IStudentService
      * @return 学生
      */
     public Student selectStudentByStuId(Long stuId);
+
+    /**
+     * 根据班级和日期查询所有学生成绩信息等
+     * @return 所有学生成绩信息等
+     */
+    public List<StudentCourseGrades> selectStudentCourseGradesList();
+
+    /**
+     *  根据学生ID查询当天的所有成绩次数
+     * @param stuId 学生ID
+     * @param enumId 枚举ID
+     * @return
+     */
+    public List<Map<String,List>> selectDeduplicationCrDateByStuNameAndEnumIdList(Long stuId, Integer enumId);
+
+    /**
+     * 根据学生ID查询成绩
+     * @param stuId 学生ID
+     * @return 学生的所有成绩
+     */
+    public List<HashMap<String, List>> selectStudentAchievementByStuId(Long stuId);
 
     /**
      * 查询学生列表
