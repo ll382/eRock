@@ -135,7 +135,7 @@
                    b.view_id as sub_view_id, b.stu_id as sub_stu_id, b.teaching_id as sub_teaching_id, b.viewed_at as sub_viewed_at, b.view_duration as sub_view_duration, (select sum(view_duration) from a1_viewed where stu_id = b.stu_id ) as sub_view_all_duration
             from teaching_table a
                      left join a1_viewed b on b.teaching_id = a.teaching_id
-                     left join lesson_units sb on a.les_id = sb.les_id
+                     right join lesson_units sb on a.les_id = sb.les_id
                      left join student stu on stu.stu_id = b.stu_id
                      left join sys_user e on e.user_id = stu.user_id
             order by les_order_id asc
@@ -160,12 +160,20 @@
     </select>
 
     <select id="selectTeachingViewedTableByTeachingId" resultType="teachingUnit" resultMap="A1ViewedResult">
-        select e.avatar,e.nick_name,
-               b.view_id as sub_view_id, b.stu_id as sub_stu_id, b.teaching_id as sub_teaching_id, b.viewed_at as sub_viewed_at, b.view_duration as sub_view_duration, (select sum(view_duration) from a1_viewed where stu_id = b.stu_id ) as sub_view_all_duration
-        from a1_viewed b
-                 left join student stu on stu.stu_id = b.stu_id
-                 left join sys_user e on e.user_id = stu.user_id
-        order by sub_view_all_duration desc
+        WITH ranked_data AS (
+            SELECT e.avatar, e.nick_name,
+                   b.view_id AS sub_view_id, b.stu_id AS sub_stu_id, b.teaching_id AS sub_teaching_id, b.viewed_at AS sub_viewed_at, b.view_duration AS sub_view_duration,
+                   (SELECT SUM(view_duration) FROM a1_viewed WHERE stu_id = b.stu_id ) AS sub_view_all_duration,
+                   ROW_NUMBER() OVER (PARTITION BY e.nick_name ORDER BY b.viewed_at) AS row_num
+            FROM a1_viewed b
+                     RIGHT JOIN student stu ON stu.stu_id = b.stu_id
+                     RIGHT JOIN sys_user e ON e.user_id = stu.user_id
+        )
+        SELECT avatar, nick_name, sub_view_id, sub_stu_id, sub_teaching_id, sub_viewed_at, sub_view_duration, sub_view_all_duration
+        FROM ranked_data
+        WHERE row_num = 1
+        ORDER BY sub_view_all_duration DESC
+
     </select>
 
     <insert id="insertTeachingViewedTable" parameterType="a1Viewed" useGeneratedKeys="true" keyProperty="viewId">
