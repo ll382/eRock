@@ -70,11 +70,12 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
         Long bd2 = 0L;
 //        判断是否是最后一个排序，如果是，加100
         if (bd.size() == 1) {
-            lessonUnits.setLesOrderId(100L);
+            lessonUnits.setLesOrderId(bd1 + 100L);
         }else {
+//            不是则讲其和后面顺序的值之差的一半与自生相加
             bd2 = bd.get(1);
+            lessonUnits.setLesOrderId(bd1 + ((bd2 - bd1)/2));
         }
-        lessonUnits.setLesOrderId(bd1 + ((bd2 - bd1)/2));
         return lessonUnitsMapper.insertLessonUnits(lessonUnits);
     }
 
@@ -171,8 +172,8 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
             teachingTableList.setTeachingOrder(bd1.add(BigDecimal.valueOf(100)));
         }else {
             bd2 = bd.get(1);
+            teachingTableList.setTeachingOrder(bd1.add(bd2.subtract(bd1).divide(BigDecimal.valueOf(2))));
         }
-        teachingTableList.setTeachingOrder(bd1.add(bd2.subtract(bd1).divide(BigDecimal.valueOf(2))));
         return lessonUnitsMapper.batchUnitsTable(teachingTableList);
     }
 }
