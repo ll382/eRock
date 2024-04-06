@@ -65,7 +65,12 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     public int insertLessonUnits(LessonUnits lessonUnits)
     {
 //        给出排序
-        List<Long> bd = lessonUnitsMapper.batchLessonUnitsByLesId(lessonUnits.getLesId());
+        List<Long> bd = new ArrayList<>();
+        if (lessonUnits.getLesId() == 0) {
+            bd.add(lessonUnitsMapper.batchLessonUnitsLesList());
+        } else {
+            bd = lessonUnitsMapper.batchLessonUnitsByLesId(lessonUnits.getLesId());
+        }
         Long bd1 = bd.get(0);
         Long bd2 = 0L;
 //        判断是否是最后一个排序，如果是，加100
@@ -164,13 +169,18 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
 //        增加时间
         teachingTableList.setCreatedAt(new Date());
 //        给出排序
-        List<BigDecimal> bd = lessonUnitsMapper.batchTeachingTableByLesId(teachingTableList.getTeachingId());
+        List<BigDecimal> bd = new ArrayList<BigDecimal>();
+        if (teachingTableList.getTeachingId().equals(0L)) {
+            bd.add(lessonUnitsMapper.batchTeachingTableLesList());
+        }else {
+            bd = lessonUnitsMapper.batchTeachingTableByLesId(teachingTableList.getTeachingId());
+        }
         BigDecimal bd1 = bd.get(0);
         BigDecimal bd2 = BigDecimal.ZERO;
 //        判断是否是最后一个排序，如果是，加100
         if (bd.size() == 1) {
             teachingTableList.setTeachingOrder(bd1.add(BigDecimal.valueOf(100)));
-        }else {
+        } else {
             bd2 = bd.get(1);
             teachingTableList.setTeachingOrder(bd1.add(bd2.subtract(bd1).divide(BigDecimal.valueOf(2))));
         }

@@ -89,8 +89,14 @@ public interface LessonUnitsMapper
     @Select("SELECT teaching_order FROM teaching_table WHERE teaching_order >= (select teaching_order from teaching_table where teaching_id = #{orderId}) ORDER BY teaching_order asc limit 2")
     public List<BigDecimal> batchTeachingTableByLesId(@PathVariable("orderId") Long orderId);
 
-    @Select("SELECT les_order_id  FROM lesson_units WHERE les_order_id >= (select les_order_id from lesson_units where les_id = #{orderId}) ORDER BY les_order_id asc limit 2")
+    @Select("SELECT MAX(teaching_order) AS max_teaching_order FROM teaching_table;")
+    public BigDecimal batchTeachingTableLesList();
+
+    @Select("SELECT les_order_id  FROM lesson_units WHERE les_order_id >= (select les_order_id from lesson_units where les_id = #{orderId}) ORDER BY les_order_id asc limit 2;")
     public List<Long> batchLessonUnitsByLesId(@PathVariable("orderId") Long orderId);
+
+    @Select("SELECT MAX(les_order_id) AS max_les_order_id FROM lesson_units ;")
+    public Long batchLessonUnitsLesList();
 
     /**
      * 通过课时单元主键删除A1 线上学习学生线上观看记录表信息
