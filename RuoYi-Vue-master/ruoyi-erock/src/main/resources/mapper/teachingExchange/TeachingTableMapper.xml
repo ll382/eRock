@@ -110,7 +110,7 @@
         select u.user_id as self_user_id, u.nick_name as self_nick_name, u.avatar as self_avatar, r.role_name as self_role_name,
                c.com_id, c.com_content, c.com_by, c.com_time, c.com_pid,
                e.user_id as to_user_id, e.nick_name as to_nick_name, e.avatar as to_avatar, l.role_name as to_role_name,sb.les_name,
-               b.teaching_id,b.tea_id, b.resource_url, b.created_at
+               b.teaching_id,b.tea_id, b.resource_url, b.created_at, b.teaching_title
         from teaching_table b
                  left join a1_communication c on c.teaching_id = b.teaching_id
                  left join sys_user u on  u.user_id = c.com_by
@@ -131,14 +131,15 @@
 
     <!--    评论父级单元-->
         <select id="selectTeachingUnitList" resultType="teachingUnit" resultMap="UnitTableResult">
-            select sb.les_id,sb.les_name,a.teaching_id, a.tea_id, a.resource_url, a.created_at,e.avatar,e.nick_name,a.teaching_title,a.teaching_order,
-                   b.view_id as sub_view_id, b.stu_id as sub_stu_id, b.teaching_id as sub_teaching_id, b.viewed_at as sub_viewed_at, b.view_duration as sub_view_duration, (select sum(view_duration) from a1_viewed where stu_id = b.stu_id ) as sub_view_all_duration
-            from teaching_table a
-                     left join a1_viewed b on b.teaching_id = a.teaching_id
-                     right join lesson_units sb on a.les_id = sb.les_id
-                     left join student stu on stu.stu_id = b.stu_id
-                     left join sys_user e on e.user_id = stu.user_id
-            order by les_order_id asc
+            SELECT sb.les_id, sb.les_name, a.teaching_id, a.tea_id, a.resource_url, a.created_at, e.avatar, e.nick_name, a.teaching_title, a.teaching_order,
+                   b.view_id AS sub_view_id, b.stu_id AS sub_stu_id, b.teaching_id AS sub_teaching_id, b.viewed_at AS sub_viewed_at, b.view_duration AS sub_view_duration,
+                   (SELECT SUM(view_duration) FROM a1_viewed WHERE stu_id = b.stu_id) AS sub_view_all_duration
+            FROM teaching_table a
+                     LEFT JOIN a1_viewed b ON b.teaching_id = a.teaching_id
+                     RIGHT JOIN lesson_units sb ON a.les_id = sb.les_id
+                     LEFT JOIN student stu ON stu.stu_id = b.stu_id
+                     LEFT JOIN sys_user e ON e.user_id = stu.user_id
+            ORDER BY sb.les_order_id ASC, a.teaching_order ASC
         </select>
     <!--    评论父级单元-->
 

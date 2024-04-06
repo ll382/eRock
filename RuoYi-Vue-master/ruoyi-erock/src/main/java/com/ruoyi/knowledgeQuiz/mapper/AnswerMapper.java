@@ -1,7 +1,7 @@
 package com.ruoyi.knowledgeQuiz.mapper;
 
 import java.util.List;
-import com.ruoyi.knowledgeQuiz.domain.Answer;
+import com.ruoyi.teachingExchange.domain.Answer;
 
 /**
  * A1 知识测试 学生成绩Mapper接口
