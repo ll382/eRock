@@ -160,6 +160,7 @@
             </where>
     </select>
 
+<!--    学习时长接口列表-->
     <select id="selectTeachingViewedTableByTeachingId" resultType="teachingUnit" resultMap="A1ViewedResult">
         WITH ranked_data AS (
             SELECT e.avatar, e.nick_name,
@@ -243,7 +244,7 @@
     </select>
 
     <select id="selectTeachingTableByTeachingId" parameterType="Long" resultMap="TeachingTableA1CommunicationResult">
-        select a.teaching_id, a.tea_id, a.resource_url, a.created_at,sb.les_name,
+        select a.teaching_id, a.tea_id, a.resource_url, a.created_at,sb.les_name,a.teaching_title,a.les_id,
                b.com_id as sub_com_id, b.teaching_id as sub_teaching_id, b.com_content as sub_com_content, b.com_by as sub_com_by, b.com_time as sub_com_time, b.com_pid as sub_com_pid
         from teaching_table a
                  left join lesson_units sb on a.les_id = sb.les_id
@@ -272,7 +273,8 @@
             <if test="teaId != null">tea_id = #{teaId},</if>
             <if test="resourceUrl != null">resource_url = #{resourceUrl},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
-            <if test="lesId != null">#{lesId},</if>
+            <if test="teachingTitle != null">teaching_title = #{teachingTitle},</if>
+            <if test="lesId != null">les_id = #{lesId},</if>
         </trim>
         where teaching_id = #{teachingId}
     </update>

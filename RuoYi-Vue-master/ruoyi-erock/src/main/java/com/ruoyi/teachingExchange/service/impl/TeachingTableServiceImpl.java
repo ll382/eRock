@@ -206,8 +206,10 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int updateTeachingTable(TeachingTable teachingTable)
     {
-        teachingTableMapper.deleteA1CommunicationByTeachingId(teachingTable.getTeachingId());
-        insertA1Communication(teachingTable);
+//        不需要更新评论等底下内容,直接注释
+//        teachingTableMapper.deleteA1CommunicationByTeachingId(teachingTable.getTeachingId());
+//        insertA1Communication(teachingTable);
+//        返回更新内容
         return teachingTableMapper.updateTeachingTable(teachingTable);
     }
 

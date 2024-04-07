@@ -28,6 +28,10 @@ public class Answer extends BaseEntity
     @Excel(name = "学生学号")
     private String stuId;
 
+    /** 学生姓名 */
+    @Excel(name = "学生姓名")
+    private String stuName;
+
     /** 回答次数 */
     @Excel(name = "回答次数")
     private Long ansResponse;
@@ -68,6 +72,15 @@ public class Answer extends BaseEntity
     {
         return stuId;
     }
+
+    public String getStuName() {
+        return stuName;
+    }
+
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
+    }
+
     public void setAnsResponse(Long ansResponse)
     {
         this.ansResponse = ansResponse;
@@ -105,6 +118,7 @@ public class Answer extends BaseEntity
             .append("ansResponse", getAnsResponse())
             .append("ansApos", getAnsApos())
             .append("ansTime", getAnsTime())
+            .append( "stuName", getStuName())
             .toString();
     }
 }

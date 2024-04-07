@@ -94,8 +94,8 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     @Override
     public int updateLessonUnits(LessonUnits lessonUnits)
     {
-        lessonUnitsMapper.deleteTeachingTableByLesId(lessonUnits.getLesId());
-        insertTeachingTable(lessonUnits);
+//        lessonUnitsMapper.deleteTeachingTableByLesId(lessonUnits.getLesId());
+//        insertTeachingTable(lessonUnits);
         return lessonUnitsMapper.updateLessonUnits(lessonUnits);
     }
 

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper">
-    
+
     <resultMap type="A1Task" id="A1TaskResult">
         <result property="taskId"    column="task_id"    />
         <result property="teaId"    column="tea_id"    />
@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ansResponse"    column="sub_ans_response"    />
         <result property="ansApos"    column="sub_ans_apos"    />
         <result property="ansTime"    column="sub_ans_time"    />
+        <result property="stuName"    column="sub_stu_name"    />
     </resultMap>
 
     <sql id="selectA1TaskVo">
@@ -31,22 +32,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectA1TaskList" parameterType="A1Task" resultMap="A1TaskResult">
         <include refid="selectA1TaskVo"/>
-        <where>  
+        <where>
             <if test="teaId != null "> and tea_id = #{teaId}</if>
             <if test="taskDatetime != null "> and task_datetime = #{taskDatetime}</if>
             <if test="taskTitle != null  and taskTitle != ''"> and task_title = #{taskTitle}</if>
             <if test="taskContent != null  and taskContent != ''"> and task_content = #{taskContent}</if>
         </where>
     </select>
-    
+
     <select id="selectA1TaskByTaskId" parameterType="Long" resultMap="A1TaskAnswerResult">
         select a.task_id, a.tea_id, a.task_datetime, a.task_title, a.task_content,
- b.ans_id as sub_ans_id, b.task_id as sub_task_id, b.stu_id as sub_stu_id, b.ans_response as sub_ans_response, b.ans_apos as sub_ans_apos, b.ans_time as sub_ans_time
+               b.ans_id as sub_ans_id, b.task_id as sub_task_id, b.stu_id as sub_stu_id, b.ans_response as sub_ans_response, b.ans_apos as sub_ans_apos, b.ans_time as sub_ans_time,
+               s.stu_name as sub_stu_name
         from a1_task a
-        left join a1_answer b on b.task_id = a.task_id
+                 left join a1_answer b on b.task_id = a.task_id
+                 left join student s on s.stu_id = b.stu_id
         where a.task_id = #{taskId}
     </select>
-        
+
     <insert id="insertA1Task" parameterType="A1Task" useGeneratedKeys="true" keyProperty="taskId">
         insert into a1_task
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -79,14 +82,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteA1TaskByTaskIds" parameterType="String">
-        delete from a1_task where task_id in 
+        delete from a1_task where task_id in
         <foreach item="taskId" collection="array" open="(" separator="," close=")">
             #{taskId}
         </foreach>
     </delete>
-    
+
     <delete id="deleteAnswerByTaskIds" parameterType="String">
-        delete from a1_answer where task_id in 
+        delete from a1_answer where task_id in
         <foreach item="taskId" collection="array" open="(" separator="," close=")">
             #{taskId}
         </foreach>
