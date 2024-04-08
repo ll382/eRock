@@ -55,9 +55,9 @@ public class TeachingTableServiceImpl implements ITeachingTableService
             return comm;
         }else {
 //            循环遍历里面list主贴内容
-            for (A1Communication com: comm.getA1CommunicationList()) {
+            for (A1Communication com : comm.getA1CommunicationList()) {
 //                如果主贴ID为空则跳过本次循环
-                if (com.getComId() == null){
+                if (com.getComId() == null) {
                     continue;
                 }
 //                递归遍历主贴内所有子帖内容，带出所有排好序的子帖
