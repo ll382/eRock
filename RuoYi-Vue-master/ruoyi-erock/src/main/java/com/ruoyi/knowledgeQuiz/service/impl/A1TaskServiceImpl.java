@@ -1,5 +1,6 @@
 package com.ruoyi.knowledgeQuiz.service.impl;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.teachingExchange.domain.Answer;
 import com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper;
 import com.ruoyi.knowledgeQuiz.service.IA1TaskService;
+
+import static com.ruoyi.common.utils.PageUtils.startPage;
 
 /**
  * A1 知识测试任务Service业务层处理
@@ -33,7 +36,21 @@ public class A1TaskServiceImpl implements IA1TaskService
     @Override
     public A1Task selectA1TaskByTaskId(Long taskId)
     {
-        return a1TaskMapper.selectA1TaskByTaskId(taskId);
+//        获取未处理过的学生成绩单
+        startPage();
+        A1Task a1Task = a1TaskMapper.selectA1TaskByTaskId(taskId);
+//        计算每道题平均百分制占分
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
+        Double tNum = Double.parseDouble(nf.format(100.0 / a1Task.getTaskNum()));
+//        为每位同学计算对应的分数
+        a1Task.getAnswerList().forEach(obj -> {
+            obj.setAnsScore(tNum * obj.getAnsApos());
+        });
+        startPage();
+        a1Task.setUnpaidList(a1TaskMapper.selectStudentList(a1Task.getTaskId()));
+//        返回内容
+        return a1Task;
     }
 
     /**
@@ -45,7 +62,16 @@ public class A1TaskServiceImpl implements IA1TaskService
     @Override
     public List<A1Task> selectA1TaskList(A1Task a1Task)
     {
-        return a1TaskMapper.selectA1TaskList(a1Task);
+//        获取基础知识测试任务数据
+        List<A1Task> a1Tasks = a1TaskMapper.selectTaskList(a1Task);
+////        查找当前任务学生提交情况
+//        a1Tasks.forEach(task -> {
+////            查看未交名单
+//            task.setUnpaid(a1TaskMapper.selectStudentList(task.getTaskId()));
+////            查看已交名单
+//            task.setSubmitted(a1TaskMapper.selectFinishStudentList(task.getTaskId()));
+//        });
+        return a1Tasks;
     }
 
     /**

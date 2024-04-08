@@ -43,11 +43,11 @@ public class A1Viewed extends BaseEntity
 
     /** 观看时长 */
     @Excel(name = "观看时长")
-    private Long viewDuration;
+    private Long viewDuration = 0L;
 
     /** 观看总时长 */
     @Excel(name = "观看总时长")
-    private Long viewAllDuration;
+    private Long viewAllDuration =0L;
 
     public void setViewId(Long viewId)
     {

@@ -40,10 +40,18 @@ public class Answer extends BaseEntity
     @Excel(name = "正确次数")
     private Long ansApos;
 
+    /** 二次计算分数 */
+    @Excel(name = "二次计算分数")
+    private Double ansScore;
+
     /** 时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date ansTime;
+
+    /** 学生图片 */
+    @Excel(name = "学生图片")
+    private String stuImg;
 
     public void setAnsId(Long ansId)
     {
@@ -99,6 +107,23 @@ public class Answer extends BaseEntity
     {
         return ansApos;
     }
+
+    public Double getAnsScore() {
+        return ansScore;
+    }
+
+    public void setAnsScore(Double ansScore) {
+        this.ansScore = ansScore;
+    }
+
+    public String getStuImg() {
+        return stuImg;
+    }
+
+    public void setStuImg(String stuImg) {
+        this.stuImg = stuImg;
+    }
+
     public void setAnsTime(Date ansTime)
     {
         this.ansTime = ansTime;
@@ -119,6 +144,7 @@ public class Answer extends BaseEntity
             .append("ansApos", getAnsApos())
             .append("ansTime", getAnsTime())
             .append( "stuName", getStuName())
+            .append("ansTime", getAnsScore())
             .toString();
     }
 }

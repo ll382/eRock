@@ -87,6 +87,7 @@
         <result property="stuName"    column="nick_name"    />
     </resultMap>
 
+
     <sql id="selectRemarkPerson">
         select u.user_id as self_user_id, u.nick_name as self_nick_name, u.avatar as self_avatar, r.role_name as self_role_name,
                c.com_id, c.com_content, c.com_by, c.com_time, c.com_pid,
@@ -145,7 +146,7 @@
     <select id="selectTeachingViewedTableByTeachingId" resultType="teachingUnit" resultMap="A1ViewedResult">
         WITH ranked_data AS (
             SELECT e.avatar, e.nick_name,
-                   b.view_id AS sub_view_id, b.stu_id AS sub_stu_id, b.teaching_id AS sub_teaching_id, b.viewed_at AS sub_viewed_at, b.view_duration AS sub_view_duration,
+                   b.view_id AS sub_view_id, stu.stu_id AS sub_stu_id, b.teaching_id AS sub_teaching_id, b.viewed_at AS sub_viewed_at, b.view_duration AS sub_view_duration,
                    (SELECT SUM(view_duration) FROM a1_viewed WHERE stu_id = b.stu_id ) AS sub_view_all_duration,
                    ROW_NUMBER() OVER (PARTITION BY e.nick_name ORDER BY b.viewed_at) AS row_num
             FROM a1_viewed b
@@ -154,7 +155,7 @@
         )
         SELECT avatar, nick_name, sub_view_id, sub_stu_id, sub_teaching_id, sub_viewed_at, sub_view_duration, sub_view_all_duration
         FROM ranked_data
-        WHERE row_num = 1
+        WHERE row_num = 1 AND sub_stu_id IS NOT NULL
         ORDER BY sub_view_all_duration DESC
 
     </select>

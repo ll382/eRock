@@ -69,7 +69,7 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         }
     }
 
-//    递归方法
+//    评论递归方法
     public List<A1Communication> recursion(List<A1Communication> InComm) {
 //        申明一个用于存储历史查询对象的空数组
         List<A1Communication> OutCom = new ArrayList<>();
@@ -115,8 +115,6 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 //}
     /**
      * 查询A1 id查观看记录
-     *
-     * @param teachingId A1 线上学习学生线上观看记录表主键
      * @return A1 线上学习学生线上观看记录表
      */
     @Override

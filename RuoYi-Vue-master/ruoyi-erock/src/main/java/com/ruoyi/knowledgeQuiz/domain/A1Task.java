@@ -3,6 +3,7 @@ package com.ruoyi.knowledgeQuiz.domain;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.core.domain.Student;
 import com.ruoyi.teachingExchange.domain.Answer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -39,8 +40,21 @@ public class A1Task extends BaseEntity
     @Excel(name = "发布简介")
     private String taskContent;
 
+    /** 任务总题数 */
+    @Excel(name = "任务总题数")
+    private Integer taskNum;
+
     /** A1 知识测试 学生成绩信息 */
     private List<Answer> answerList;
+
+    /** A1 已交学生名单 */
+    private Long Submitted;
+
+    /** A1 未交学生名单 */
+    private Long Unpaid;
+
+    /** A1 未交学生名单 */
+    private List<Student> UnpaidList;
 
     public void setTaskId(Long taskId)
     {
@@ -88,6 +102,38 @@ public class A1Task extends BaseEntity
         return taskContent;
     }
 
+    public Integer getTaskNum() {
+        return taskNum;
+    }
+
+    public void setTaskNum(Integer taskNum) {
+        this.taskNum = taskNum;
+    }
+
+    public Long getSubmitted() {
+        return Submitted;
+    }
+
+    public void setSubmitted(Long submitted) {
+        Submitted = submitted;
+    }
+
+    public Long getUnpaid() {
+        return Unpaid;
+    }
+
+    public void setUnpaid(Long unpaid) {
+        Unpaid = unpaid;
+    }
+
+    public List<Student> getUnpaidList() {
+        return UnpaidList;
+    }
+
+    public void setUnpaidList(List<Student> unpaidList) {
+        UnpaidList = unpaidList;
+    }
+
     public List<Answer> getAnswerList()
     {
         return answerList;
@@ -107,6 +153,9 @@ public class A1Task extends BaseEntity
             .append("taskTitle", getTaskTitle())
             .append("taskContent", getTaskContent())
             .append("answerList", getAnswerList())
+            .append("taskNum", getTaskNum())
+            .append("submitted", getSubmitted())
+            .append("unpaid", getUnpaid())
             .toString();
     }
 }
