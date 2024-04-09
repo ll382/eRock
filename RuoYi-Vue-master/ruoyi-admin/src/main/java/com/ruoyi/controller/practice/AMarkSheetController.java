@@ -1,4 +1,4 @@
-    package com.ruoyi.controller.practice;
+package com.ruoyi.controller.practice;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;

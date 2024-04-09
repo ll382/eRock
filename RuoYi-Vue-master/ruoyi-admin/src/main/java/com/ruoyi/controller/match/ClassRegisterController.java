@@ -44,6 +44,22 @@ public class ClassRegisterController extends BaseController {
 	@Autowired
 	private IClassRegisterService classRegisterService;
 
+
+
+	/**
+	 * 查询课堂记录列表
+	 */
+	@ApiOperation("查询课堂记录列表")
+	@PreAuthorize("@ss.hasPermi('match:register:list')")
+	@GetMapping("/unitA/{crId}")
+	public AjaxResult AmodeClassRegister(@PathVariable("crId") Long crId) {
+		startPage();
+		ClassRegister list = classRegisterService.selectAmodeClassRegisterByCrId(crId);
+		return AjaxResult.success(list);
+	}
+
+	//   --------------------分界线-----------------------
+
 	/**
 	 * 查询课堂记录列表
 	 */

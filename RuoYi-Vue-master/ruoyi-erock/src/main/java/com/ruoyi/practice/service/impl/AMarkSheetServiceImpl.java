@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
-import com.ruoyi.practice.domain.ABallExam;
+import com.ruoyi.practice.domain.AExerciseResource;
 import com.ruoyi.practice.mapper.AMarkSheetMapper;
 import com.ruoyi.practice.domain.AMarkSheet;
 import com.ruoyi.practice.service.IAMarkSheetService;
@@ -58,7 +58,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
         int rows = aMarkSheetMapper.insertAMarkSheet(aMarkSheet);
-        insertABallExam(aMarkSheet);
+        insertAExerciseResource(aMarkSheet);
         return rows;
     }
 
@@ -72,8 +72,8 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int updateAMarkSheet(AMarkSheet aMarkSheet)
     {
-        aMarkSheetMapper.deleteABallExamByMsId(aMarkSheet.getMsId());
-        insertABallExam(aMarkSheet);
+        aMarkSheetMapper.deleteAExerciseResourceByMsId(aMarkSheet.getMsId());
+        insertAExerciseResource(aMarkSheet);
         return aMarkSheetMapper.updateAMarkSheet(aMarkSheet);
     }
 
@@ -87,7 +87,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int deleteAMarkSheetByMsIds(Long[] msIds)
     {
-        aMarkSheetMapper.deleteABallExamByMsIds(msIds);
+        aMarkSheetMapper.deleteAExerciseResourceByMsIds(msIds);
         return aMarkSheetMapper.deleteAMarkSheetByMsIds(msIds);
     }
 
@@ -101,30 +101,30 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int deleteAMarkSheetByMsId(Long msId)
     {
-        aMarkSheetMapper.deleteABallExamByMsId(msId);
+        aMarkSheetMapper.deleteAExerciseResourceByMsId(msId);
         return aMarkSheetMapper.deleteAMarkSheetByMsId(msId);
     }
 
     /**
-     * 新增投篮运球表信息
+     * 新增练习资源表信息
      * 
      * @param aMarkSheet 练习、测试评分表对象
      */
-    public void insertABallExam(AMarkSheet aMarkSheet)
+    public void insertAExerciseResource(AMarkSheet aMarkSheet)
     {
-        List<ABallExam> aBallExamList = aMarkSheet.getABallExamList();
+        List<AExerciseResource> aExerciseResourceList = aMarkSheet.getAExerciseResourceList();
         Long msId = aMarkSheet.getMsId();
-        if (StringUtils.isNotNull(aBallExamList))
+        if (StringUtils.isNotNull(aExerciseResourceList))
         {
-            List<ABallExam> list = new ArrayList<ABallExam>();
-            for (ABallExam aBallExam : aBallExamList)
+            List<AExerciseResource> list = new ArrayList<AExerciseResource>();
+            for (AExerciseResource aExerciseResource : aExerciseResourceList)
             {
-                aBallExam.setMsId(msId);
-                list.add(aBallExam);
+                aExerciseResource.setMsId(msId);
+                list.add(aExerciseResource);
             }
             if (list.size() > 0)
             {
-                aMarkSheetMapper.batchABallExam(list);
+                aMarkSheetMapper.batchAExerciseResource(list);
             }
         }
     }

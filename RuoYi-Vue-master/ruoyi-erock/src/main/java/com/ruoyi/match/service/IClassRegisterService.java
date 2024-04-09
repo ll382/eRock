@@ -6,15 +6,16 @@ import com.ruoyi.match.domain.ClassRegister;
 
 /**
  * 课堂记录Service接口
- * 
+ *
  * @author houq
  * @date 2024-04-08
  */
-public interface IClassRegisterService 
+public interface IClassRegisterService
 {
+    public ClassRegister selectAmodeClassRegisterByCrId(Long crId);
     /**
      * 查询课堂记录
-     * 
+     *
      * @param crId 课堂记录主键
      * @return 课堂记录
      */
@@ -22,7 +23,7 @@ public interface IClassRegisterService
 
     /**
      * 查询课堂记录列表
-     * 
+     *
      * @param classRegister 课堂记录
      * @return 课堂记录集合
      */
@@ -30,7 +31,7 @@ public interface IClassRegisterService
 
     /**
      * 新增课堂记录
-     * 
+     *
      * @param classRegister 课堂记录
      * @return 结果
      */
@@ -38,7 +39,7 @@ public interface IClassRegisterService
 
     /**
      * 修改课堂记录
-     * 
+     *
      * @param classRegister 课堂记录
      * @return 结果
      */
@@ -46,7 +47,7 @@ public interface IClassRegisterService
 
     /**
      * 批量删除课堂记录
-     * 
+     *
      * @param crIds 需要删除的课堂记录主键集合
      * @return 结果
      */
@@ -54,7 +55,7 @@ public interface IClassRegisterService
 
     /**
      * 删除课堂记录信息
-     * 
+     *
      * @param crId 课堂记录主键
      * @return 结果
      */

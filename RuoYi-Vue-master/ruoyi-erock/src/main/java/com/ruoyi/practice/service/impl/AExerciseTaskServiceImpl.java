@@ -1,6 +1,8 @@
 package com.ruoyi.practice.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.core.service.SelectUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -13,19 +15,20 @@ import com.ruoyi.practice.service.IAExerciseTaskService;
 
 /**
  * 练习、测试任务表Service业务层处理
- * 
+ *
  * @author houq
  * @date 2024-04-09
  */
 @Service
-public class AExerciseTaskServiceImpl implements IAExerciseTaskService 
+public class AExerciseTaskServiceImpl implements IAExerciseTaskService
 {
     @Autowired
     private AExerciseTaskMapper aExerciseTaskMapper;
 
+
     /**
      * 查询练习、测试任务表
-     * 
+     *
      * @param etId 练习、测试任务表主键
      * @return 练习、测试任务表
      */
@@ -37,7 +40,7 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
 
     /**
      * 查询练习、测试任务表列表
-     * 
+     *
      * @param aExerciseTask 练习、测试任务表
      * @return 练习、测试任务表
      */
@@ -49,7 +52,7 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
 
     /**
      * 新增练习、测试任务表
-     * 
+     *
      * @param aExerciseTask 练习、测试任务表
      * @return 结果
      */
@@ -64,7 +67,7 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
 
     /**
      * 修改练习、测试任务表
-     * 
+     *
      * @param aExerciseTask 练习、测试任务表
      * @return 结果
      */
@@ -79,7 +82,7 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
 
     /**
      * 批量删除练习、测试任务表
-     * 
+     *
      * @param etIds 需要删除的练习、测试任务表主键
      * @return 结果
      */
@@ -93,7 +96,7 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
 
     /**
      * 删除练习、测试任务表信息
-     * 
+     *
      * @param etId 练习、测试任务表主键
      * @return 结果
      */
@@ -107,7 +110,7 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
 
     /**
      * 新增练习、测试评分表信息
-     * 
+     *
      * @param aExerciseTask 练习、测试任务表对象
      */
     public void insertAMarkSheet(AExerciseTask aExerciseTask)

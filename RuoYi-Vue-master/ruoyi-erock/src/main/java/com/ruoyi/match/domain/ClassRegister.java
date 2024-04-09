@@ -8,10 +8,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.practice.domain.AExerciseTask;
 
 /**
  * 课堂记录对象 class_register
- * 
+ *
  * @author houq
  * @date 2024-04-08
  */
@@ -43,60 +44,67 @@ public class ClassRegister extends BaseEntity
     @Excel(name = "班级编号")
     private Long classId;
 
+    /** 枚举ID */
+    @Excel(name = "枚举ID")
+    private Long enumId;
+
+    /** 练习、测试任务表信息 */
+    private List<AExerciseTask> aExerciseTaskList;
+
     /** C 比赛记录信息 */
     private List<CompetitionRecord> competitionRecordList;
 
-    public void setCrId(Long crId) 
+    public void setCrId(Long crId)
     {
         this.crId = crId;
     }
 
-    public Long getCrId() 
+    public Long getCrId()
     {
         return crId;
     }
-    public void setSemesterId(Long semesterId) 
+    public void setSemesterId(Long semesterId)
     {
         this.semesterId = semesterId;
     }
 
-    public Long getSemesterId() 
+    public Long getSemesterId()
     {
         return semesterId;
     }
-    public void setCrDate(Date crDate) 
+    public void setCrDate(Date crDate)
     {
         this.crDate = crDate;
     }
 
-    public Date getCrDate() 
+    public Date getCrDate()
     {
         return crDate;
     }
-    public void setCrMain(String crMain) 
+    public void setCrMain(String crMain)
     {
         this.crMain = crMain;
     }
 
-    public String getCrMain() 
+    public String getCrMain()
     {
         return crMain;
     }
-    public void setCrDuration(BigDecimal crDuration) 
+    public void setCrDuration(BigDecimal crDuration)
     {
         this.crDuration = crDuration;
     }
 
-    public BigDecimal getCrDuration() 
+    public BigDecimal getCrDuration()
     {
         return crDuration;
     }
-    public void setClassId(Long classId) 
+    public void setClassId(Long classId)
     {
         this.classId = classId;
     }
 
-    public Long getClassId() 
+    public Long getClassId()
     {
         return classId;
     }
@@ -109,6 +117,22 @@ public class ClassRegister extends BaseEntity
     public void setCompetitionRecordList(List<CompetitionRecord> competitionRecordList)
     {
         this.competitionRecordList = competitionRecordList;
+    }
+
+    public Long getEnumId() {
+        return enumId;
+    }
+
+    public void setEnumId(Long enumId) {
+        this.enumId = enumId;
+    }
+
+    public List<AExerciseTask> getaExerciseTaskList() {
+        return aExerciseTaskList;
+    }
+
+    public void setaExerciseTaskList(List<AExerciseTask> aExerciseTaskList) {
+        this.aExerciseTaskList = aExerciseTaskList;
     }
 
     @Override

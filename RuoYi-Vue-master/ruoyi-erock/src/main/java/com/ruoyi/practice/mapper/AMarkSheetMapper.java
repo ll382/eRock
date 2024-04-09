@@ -2,7 +2,7 @@ package com.ruoyi.practice.mapper;
 
 import java.util.List;
 import com.ruoyi.practice.domain.AMarkSheet;
-import com.ruoyi.practice.domain.ABallExam;
+import com.ruoyi.practice.domain.AExerciseResource;
 
 /**
  * 练习、测试评分表Mapper接口
@@ -61,27 +61,27 @@ public interface AMarkSheetMapper
     public int deleteAMarkSheetByMsIds(Long[] msIds);
 
     /**
-     * 批量删除投篮运球表
+     * 批量删除练习资源表
      * 
      * @param msIds 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteABallExamByMsIds(Long[] msIds);
+    public int deleteAExerciseResourceByMsIds(Long[] msIds);
     
     /**
-     * 批量新增投篮运球表
+     * 批量新增练习资源表
      * 
-     * @param aBallExamList 投篮运球表列表
+     * @param aExerciseResourceList 练习资源表列表
      * @return 结果
      */
-    public int batchABallExam(List<ABallExam> aBallExamList);
+    public int batchAExerciseResource(List<AExerciseResource> aExerciseResourceList);
     
 
     /**
-     * 通过练习、测试评分表主键删除投篮运球表信息
+     * 通过练习、测试评分表主键删除练习资源表信息
      * 
      * @param msId 练习、测试评分表ID
      * @return 结果
      */
-    public int deleteABallExamByMsId(Long msId);
+    public int deleteAExerciseResourceByMsId(Long msId);
 }

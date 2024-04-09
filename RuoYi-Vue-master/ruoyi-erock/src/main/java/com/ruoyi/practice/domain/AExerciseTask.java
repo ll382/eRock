@@ -46,6 +46,11 @@ public class AExerciseTask extends BaseEntity
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date etCreateTime;
 
+    /** 结束时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date etEndTime;
+
     /** 练习、测试评分表信息 */
     private List<AMarkSheet> aMarkSheetList;
 
@@ -112,6 +117,15 @@ public class AExerciseTask extends BaseEntity
     {
         return etCreateTime;
     }
+    public void setEtEndTime(Date etEndTime) 
+    {
+        this.etEndTime = etEndTime;
+    }
+
+    public Date getEtEndTime() 
+    {
+        return etEndTime;
+    }
 
     public List<AMarkSheet> getAMarkSheetList()
     {
@@ -133,6 +147,7 @@ public class AExerciseTask extends BaseEntity
             .append("etName", getEtName())
             .append("etDescription", getEtDescription())
             .append("etCreateTime", getEtCreateTime())
+            .append("etEndTime", getEtEndTime())
             .append("aMarkSheetList", getAMarkSheetList())
             .toString();
     }

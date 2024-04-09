@@ -5,7 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import com.alibaba.fastjson2.JSON;
+import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.practice.mapper.AmodeClassRegisterMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,29 @@ import com.ruoyi.match.service.IClassRegisterService;
 public class ClassRegisterServiceImpl implements IClassRegisterService {
 	@Autowired
 	private ClassRegisterMapper classRegisterMapper;
+	@Autowired
+	private AmodeClassRegisterMapper amodeClassRegisterMapper;
+
+	@Autowired
+	private SelectUser selectUser;
+
+
+	/**
+	 * 查询课堂记录
+	 *
+	 * @param crId 课堂记录主键
+	 * @return 课堂记录
+	 */
+	@Override
+	public ClassRegister selectAmodeClassRegisterByCrId(Long crId) {
+
+		System.out.println(selectUser.selectUser(crId));
+
+		return amodeClassRegisterMapper.selectAmodeClassRegisterByCrId(crId);
+	}
+
+//   --------------------分界线-----------------------
+
 
 	/**
 	 * 查询课堂记录

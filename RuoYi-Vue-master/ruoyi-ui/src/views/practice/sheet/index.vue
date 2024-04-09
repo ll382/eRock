@@ -49,14 +49,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="枚举ID" prop="enumId">
-        <el-input
-          v-model="queryParams.enumId"
-          placeholder="请输入枚举ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="erock评分" prop="msScore">
         <el-input
           v-model="queryParams.msScore"
@@ -154,7 +146,6 @@
       </el-table-column>
       <el-table-column label="运球分数" align="center" prop="msDribble" />
       <el-table-column label="投篮分数" align="center" prop="msShooting" />
-      <el-table-column label="枚举ID" align="center" prop="enumId" />
       <el-table-column label="erock评分" align="center" prop="msScore" />
       <el-table-column label="技能数值1" align="center" prop="ms1" />
       <el-table-column label="技能数值2" align="center" prop="ms2" />
@@ -215,9 +206,6 @@
         <el-form-item label="投篮分数" prop="msShooting">
           <el-input v-model="form.msShooting" placeholder="请输入投篮分数" />
         </el-form-item>
-        <el-form-item label="枚举ID" prop="enumId">
-          <el-input v-model="form.enumId" placeholder="请输入枚举ID" />
-        </el-form-item>
         <el-form-item label="erock评分" prop="msScore">
           <el-input v-model="form.msScore" placeholder="请输入erock评分" />
         </el-form-item>
@@ -236,56 +224,21 @@
         <el-form-item label="erock截图" prop="msImg">
           <el-input v-model="form.msImg" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-divider content-position="center">投篮运球表信息</el-divider>
+        <el-divider content-position="center">练习资源表信息</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddABallExam">添加</el-button>
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddAExerciseResource">添加</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteABallExam">删除</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteAExerciseResource">删除</el-button>
           </el-col>
         </el-row>
-        <el-table :data="aBallExamList" :row-class-name="rowABallExamIndex" @selection-change="handleABallExamSelectionChange" ref="aBallExam">
+        <el-table :data="aExerciseResourceList" :row-class-name="rowAExerciseResourceIndex" @selection-change="handleAExerciseResourceSelectionChange" ref="aExerciseResource">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
-          <el-table-column label="稳定性" prop="driStability" width="150">
+          <el-table-column label="提交时间" prop="erTime" width="240">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.driStability" placeholder="请输入稳定性" />
-            </template>
-          </el-table-column>
-          <el-table-column label="力量" prop="driPower" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.driPower" placeholder="请输入力量" />
-            </template>
-          </el-table-column>
-          <el-table-column label="速度" prop="driSpeed" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.driSpeed" placeholder="请输入速度" />
-            </template>
-          </el-table-column>
-          <el-table-column label="分析" prop="driAnalysis" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.driAnalysis" placeholder="请输入分析" />
-            </template>
-          </el-table-column>
-          <el-table-column label="弧线" prop="shoArc" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.shoArc" placeholder="请输入弧线" />
-            </template>
-          </el-table-column>
-          <el-table-column label="后旋" prop="shoSpinner" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.shoSpinner" placeholder="请输入后旋" />
-            </template>
-          </el-table-column>
-          <el-table-column label="偏角" prop="shoAngle" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.shoAngle" placeholder="请输入偏角" />
-            </template>
-          </el-table-column>
-          <el-table-column label="评价" prop="shoAnalysis" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.shoAnalysis" placeholder="请输入评价" />
+              <el-date-picker clearable v-model="scope.row.erTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择提交时间" />
             </template>
           </el-table-column>
         </el-table>
@@ -310,7 +263,7 @@ export default {
       // 选中数组
       ids: [],
       // 子表选中数据
-      checkedABallExam: [],
+      checkedAExerciseResource: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -321,8 +274,8 @@ export default {
       total: 0,
       // 练习、测试评分表表格数据
       sheetList: [],
-      // 投篮运球表表格数据
-      aBallExamList: [],
+      // 练习资源表表格数据
+      aExerciseResourceList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -337,7 +290,6 @@ export default {
         msTime: null,
         msDribble: null,
         msShooting: null,
-        enumId: null,
         msScore: null,
         ms1: null,
         ms2: null,
@@ -380,7 +332,6 @@ export default {
         msTime: null,
         msDribble: null,
         msShooting: null,
-        enumId: null,
         msScore: null,
         ms1: null,
         ms2: null,
@@ -388,7 +339,7 @@ export default {
         msClass: null,
         msImg: null
       };
-      this.aBallExamList = [];
+      this.aExerciseResourceList = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -419,7 +370,7 @@ export default {
       const msId = row.msId || this.ids
       getSheet(msId).then(response => {
         this.form = response.data;
-        this.aBallExamList = response.data.aBallExamList;
+        this.aExerciseResourceList = response.data.aExerciseResourceList;
         this.open = true;
         this.title = "修改练习、测试评分表";
       });
@@ -428,7 +379,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.form.aBallExamList = this.aBallExamList;
+          this.form.aExerciseResourceList = this.aExerciseResourceList;
           if (this.form.msId != null) {
             updateSheet(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -455,38 +406,32 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
-	/** 投篮运球表序号 */
-    rowABallExamIndex({ row, rowIndex }) {
+	/** 练习资源表序号 */
+    rowAExerciseResourceIndex({ row, rowIndex }) {
       row.index = rowIndex + 1;
     },
-    /** 投篮运球表添加按钮操作 */
-    handleAddABallExam() {
+    /** 练习资源表添加按钮操作 */
+    handleAddAExerciseResource() {
       let obj = {};
-      obj.driStability = "";
-      obj.driPower = "";
-      obj.driSpeed = "";
-      obj.driAnalysis = "";
-      obj.shoArc = "";
-      obj.shoSpinner = "";
-      obj.shoAngle = "";
-      obj.shoAnalysis = "";
-      this.aBallExamList.push(obj);
+      obj.erTime = "";
+      obj.erSource = "";
+      this.aExerciseResourceList.push(obj);
     },
-    /** 投篮运球表删除按钮操作 */
-    handleDeleteABallExam() {
-      if (this.checkedABallExam.length == 0) {
-        this.$modal.msgError("请先选择要删除的投篮运球表数据");
+    /** 练习资源表删除按钮操作 */
+    handleDeleteAExerciseResource() {
+      if (this.checkedAExerciseResource.length == 0) {
+        this.$modal.msgError("请先选择要删除的练习资源表数据");
       } else {
-        const aBallExamList = this.aBallExamList;
-        const checkedABallExam = this.checkedABallExam;
-        this.aBallExamList = aBallExamList.filter(function(item) {
-          return checkedABallExam.indexOf(item.index) == -1
+        const aExerciseResourceList = this.aExerciseResourceList;
+        const checkedAExerciseResource = this.checkedAExerciseResource;
+        this.aExerciseResourceList = aExerciseResourceList.filter(function(item) {
+          return checkedAExerciseResource.indexOf(item.index) == -1
         });
       }
     },
     /** 复选框选中数据 */
-    handleABallExamSelectionChange(selection) {
-      this.checkedABallExam = selection.map(item => item.index)
+    handleAExerciseResourceSelectionChange(selection) {
+      this.checkedAExerciseResource = selection.map(item => item.index)
     },
     /** 导出按钮操作 */
     handleExport() {
