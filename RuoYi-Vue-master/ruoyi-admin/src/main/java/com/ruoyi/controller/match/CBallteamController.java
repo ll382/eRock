@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -109,5 +110,16 @@ public class CBallteamController extends BaseController {
 		// startPage();
 		List<CBallteam> list = cBallteamService.selectCompetitionRecordByCcRName(ccRId);
 		return getDataTable(list);
+	}
+
+	/**
+	 * 新增参赛小组
+	 */
+	@ApiOperation("新增参赛小组")
+	@PreAuthorize("@ss.hasPermi('match:ballteam:addStuGroup')")
+	@Log(title = "小组", businessType = BusinessType.INSERT)
+	@PostMapping("/addStuGroup")
+	public AjaxResult addStuGroup(@RequestBody HashMap<String, Object> map) {
+		return toAjax(cBallteamService.insertStuGroup(map));
 	}
 }

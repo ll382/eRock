@@ -1,8 +1,12 @@
 package com.ruoyi.match.service;
 
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
 import com.ruoyi.match.domain.CBallteam;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 球队参赛Service接口
@@ -67,4 +71,12 @@ public interface ICBallteamService {
 	 * @return
 	 */
 	public List<CBallteam> selectCompetitionRecordByCcRName(Long ccRId);
+
+	/**
+	 * 新增小组
+	 *
+	 * @param map 小组
+	 * @return 结果
+	 */
+	public int insertStuGroup(HashMap<String, Object> map);
 }

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询比赛记录列表
+// 查询C 比赛记录列表
 export function listRecord(query) {
   return request({
     url: '/match/record/list',
@@ -9,7 +9,7 @@ export function listRecord(query) {
   })
 }
 
-// 查询比赛记录详细
+// 查询C 比赛记录详细
 export function getRecord(ccRId) {
   return request({
     url: '/match/record/' + ccRId,
@@ -17,7 +17,7 @@ export function getRecord(ccRId) {
   })
 }
 
-// 新增比赛记录
+// 新增C 比赛记录
 export function addRecord(data) {
   return request({
     url: '/match/record',
@@ -26,7 +26,7 @@ export function addRecord(data) {
   })
 }
 
-// 修改比赛记录
+// 修改C 比赛记录
 export function updateRecord(data) {
   return request({
     url: '/match/record',
@@ -35,7 +35,7 @@ export function updateRecord(data) {
   })
 }
 
-// 删除比赛记录
+// 删除C 比赛记录
 export function delRecord(ccRId) {
   return request({
     url: '/match/record/' + ccRId,

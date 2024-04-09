@@ -11,10 +11,10 @@
       </el-form-item>
       <el-form-item label="场次时间" prop="ccRTime">
         <el-date-picker clearable
-          v-model="queryParams.ccRTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择场次时间">
+                        v-model="queryParams.ccRTime"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="请选择场次时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="比赛规格" prop="ccRSpeci">
@@ -29,6 +29,28 @@
         <el-input
           v-model="queryParams.ccRName"
           placeholder="请输入比赛名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="审核状态
+0：未提交
+1：未审核
+2：已审核" prop="ccRAudit">
+        <el-input
+          v-model="queryParams.ccRAudit"
+          placeholder="请输入审核状态
+0：未提交
+1：未审核
+2：已审核"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="课堂ID" prop="crId">
+        <el-input
+          v-model="queryParams.crId"
+          placeholder="请输入课堂ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -87,7 +109,7 @@
 
     <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="比赛ID" align="center" prop="ccRId" />
+      <el-table-column label="记录ID" align="center" prop="ccRId" />
       <el-table-column label="枚举ID" align="center" prop="enumId" />
       <el-table-column label="场次时间" align="center" prop="ccRTime" width="180">
         <template slot-scope="scope">
@@ -96,6 +118,8 @@
       </el-table-column>
       <el-table-column label="比赛规格" align="center" prop="ccRSpeci" />
       <el-table-column label="比赛名称" align="center" prop="ccRName" />
+      <el-table-column label="审核状态 0：未提交1：未审核2：已审核" align="center" prop="ccRAudit" />
+      <el-table-column label="课堂ID" align="center" prop="crId" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -115,7 +139,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -124,7 +148,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改比赛记录对话框 -->
+    <!-- 添加或修改C 比赛记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="枚举ID" prop="enumId">
@@ -132,10 +156,10 @@
         </el-form-item>
         <el-form-item label="场次时间" prop="ccRTime">
           <el-date-picker clearable
-            v-model="form.ccRTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择场次时间">
+                          v-model="form.ccRTime"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="请选择场次时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="比赛规格" prop="ccRSpeci">
@@ -143,6 +167,18 @@
         </el-form-item>
         <el-form-item label="比赛名称" prop="ccRName">
           <el-input v-model="form.ccRName" placeholder="请输入比赛名称" />
+        </el-form-item>
+        <el-form-item label="审核状态
+0：未提交
+1：未审核
+2：已审核" prop="ccRAudit">
+          <el-input v-model="form.ccRAudit" placeholder="请输入审核状态
+0：未提交
+1：未审核
+2：已审核" />
+        </el-form-item>
+        <el-form-item label="课堂ID" prop="crId">
+          <el-input v-model="form.crId" placeholder="请输入课堂ID" />
         </el-form-item>
         <el-divider content-position="center">球队参赛信息</el-divider>
         <el-row :gutter="10" class="mb8">
@@ -153,12 +189,19 @@
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteCBallteam">删除</el-button>
           </el-col>
         </el-row>
-        <el-table :data="cballteamList" :row-class-name="rowCBallteamIndex" @selection-change="handleCBallteamSelectionChange" ref="cBallteam">
+        <el-table :data="cBallteamList" :row-class-name="rowCBallteamIndex" @selection-change="handleCBallteamSelectionChange" ref="cBallteam">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="小组ID" prop="ggId" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.ggId" placeholder="请输入小组ID" />
+              <el-select v-model="scope.row.ggId" placeholder="请选择小组ID">
+                <el-option
+                  v-for="dict in dict.type.stu_group"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column label="球队比分" prop="balNum" width="150">
@@ -181,6 +224,7 @@ import { listRecord, getRecord, delRecord, addRecord, updateRecord } from "@/api
 
 export default {
   name: "Record",
+  dicts: ['stu_group'],
   data() {
     return {
       // 遮罩层
@@ -197,10 +241,10 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 比赛记录表格数据
+      // C 比赛记录表格数据
       recordList: [],
       // 球队参赛表格数据
-      cballteamList: [],
+      cBallteamList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -212,7 +256,9 @@ export default {
         enumId: null,
         ccRTime: null,
         ccRSpeci: null,
-        ccRName: null
+        ccRName: null,
+        ccRAudit: null,
+        crId: null
       },
       // 表单参数
       form: {},
@@ -225,7 +271,7 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询比赛记录列表 */
+    /** 查询C 比赛记录列表 */
     getList() {
       this.loading = true;
       listRecord(this.queryParams).then(response => {
@@ -246,9 +292,11 @@ export default {
         enumId: null,
         ccRTime: null,
         ccRSpeci: null,
-        ccRName: null
+        ccRName: null,
+        ccRAudit: null,
+        crId: null
       };
-      this.cballteamList = [];
+      this.cBallteamList = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -271,7 +319,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加比赛记录";
+      this.title = "添加C 比赛记录";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -279,16 +327,16 @@ export default {
       const ccRId = row.ccRId || this.ids
       getRecord(ccRId).then(response => {
         this.form = response.data;
-        this.cballteamList = response.data.cballteamList;
+        this.cBallteamList = response.data.cballteamList;
         this.open = true;
-        this.title = "修改比赛记录";
+        this.title = "修改C 比赛记录";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.form.cballteamList = this.cballteamList;
+          this.form.cBallteamList = this.cBallteamList;
           if (this.form.ccRId != null) {
             updateRecord(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -308,14 +356,14 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ccRIds = row.ccRId || this.ids;
-      this.$modal.confirm('是否确认删除比赛记录编号为"' + ccRIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除C 比赛记录编号为"' + ccRIds + '"的数据项？').then(function() {
         return delRecord(ccRIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
-	/** 球队参赛序号 */
+    /** 球队参赛序号 */
     rowCBallteamIndex({ row, rowIndex }) {
       row.index = rowIndex + 1;
     },
@@ -324,16 +372,16 @@ export default {
       let obj = {};
       obj.ggId = "";
       obj.balNum = "";
-      this.cballteamList.push(obj);
+      this.cBallteamList.push(obj);
     },
     /** 球队参赛删除按钮操作 */
     handleDeleteCBallteam() {
       if (this.checkedCBallteam.length == 0) {
         this.$modal.msgError("请先选择要删除的球队参赛数据");
       } else {
-        const cballteamList = this.cballteamList;
+        const cBallteamList = this.cBallteamList;
         const checkedCBallteam = this.checkedCBallteam;
-        this.cballteamList = cballteamList.filter(function(item) {
+        this.cBallteamList = cBallteamList.filter(function(item) {
           return checkedCBallteam.indexOf(item.index) == -1
         });
       }

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.match.mapper.ClassRegisterMapper">
+    
+    <resultMap type="ClassRegister" id="ClassRegisterResult">
+        <result property="crId"    column="cr_id"    />
+        <result property="semesterId"    column="semester_id"    />
+        <result property="crDate"    column="cr_date"    />
+        <result property="crMain"    column="cr_main"    />
+        <result property="crDuration"    column="cr_duration"    />
+        <result property="classId"    column="class_id"    />
+    </resultMap>
+
+    <resultMap id="ClassRegisterCompetitionRecordResult" type="ClassRegister" extends="ClassRegisterResult">
+        <collection property="competitionRecordList" notNullColumn="sub_cc_r_id" javaType="java.util.List" resultMap="CompetitionRecordResult" />
+    </resultMap>
+
+    <resultMap type="CompetitionRecord" id="CompetitionRecordResult">
+        <result property="ccRId"    column="sub_cc_r_id"    />
+        <result property="enumId"    column="sub_enum_id"    />
+        <result property="ccRTime"    column="sub_cc_r_time"    />
+        <result property="ccRSpeci"    column="sub_cc_r_speci"    />
+        <result property="ccRName"    column="sub_cc_r_name"    />
+        <result property="ccRAudit"    column="sub_cc_r_audit"    />
+        <result property="crId"    column="sub_cr_id"    />
+    </resultMap>
+
+    <sql id="selectClassRegisterVo">
+        select cr_id, semester_id, cr_date, cr_main, cr_duration, class_id from class_register
+    </sql>
+
+    <select id="selectClassRegisterList" parameterType="ClassRegister" resultMap="ClassRegisterResult">
+        <include refid="selectClassRegisterVo"/>
+        <where>  
+            <if test="semesterId != null "> and semester_id = #{semesterId}</if>
+            <if test="crDate != null "> and cr_date = #{crDate}</if>
+            <if test="crMain != null  and crMain != ''"> and cr_main = #{crMain}</if>
+            <if test="crDuration != null "> and cr_duration = #{crDuration}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+        </where>
+    </select>
+    
+    <select id="selectClassRegisterByCrId" parameterType="Long" resultMap="ClassRegisterCompetitionRecordResult">
+        select a.cr_id, a.semester_id, a.cr_date, a.cr_main, a.cr_duration, a.class_id,
+ b.cc_r_id as sub_cc_r_id, b.enum_id as sub_enum_id, b.cc_r_time as sub_cc_r_time, b.cc_r_speci as sub_cc_r_speci, b.cc_r_name as sub_cc_r_name, b.cc_r_audit as sub_cc_r_audit, b.cr_id as sub_cr_id
+        from class_register a
+        left join c_competition_record b on b.cr_id = a.cr_id
+        where a.cr_id = #{crId}
+    </select>
+        
+    <insert id="insertClassRegister" parameterType="ClassRegister" useGeneratedKeys="true" keyProperty="crId">
+        insert into class_register
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="semesterId != null">semester_id,</if>
+            <if test="crDate != null">cr_date,</if>
+            <if test="crMain != null">cr_main,</if>
+            <if test="crDuration != null">cr_duration,</if>
+            <if test="classId != null">class_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="semesterId != null">#{semesterId},</if>
+            <if test="crDate != null">#{crDate},</if>
+            <if test="crMain != null">#{crMain},</if>
+            <if test="crDuration != null">#{crDuration},</if>
+            <if test="classId != null">#{classId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClassRegister" parameterType="ClassRegister">
+        update class_register
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="semesterId != null">semester_id = #{semesterId},</if>
+            <if test="crDate != null">cr_date = #{crDate},</if>
+            <if test="crMain != null">cr_main = #{crMain},</if>
+            <if test="crDuration != null">cr_duration = #{crDuration},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+        </trim>
+        where cr_id = #{crId}
+    </update>
+
+    <delete id="deleteClassRegisterByCrId" parameterType="Long">
+        delete from class_register where cr_id = #{crId}
+    </delete>
+
+    <delete id="deleteClassRegisterByCrIds" parameterType="String">
+        delete from class_register where cr_id in 
+        <foreach item="crId" collection="array" open="(" separator="," close=")">
+            #{crId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteCompetitionRecordByCrIds" parameterType="String">
+        delete from c_competition_record where cr_id in 
+        <foreach item="crId" collection="array" open="(" separator="," close=")">
+            #{crId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteCompetitionRecordByCrId" parameterType="Long">
+        delete from c_competition_record where cr_id = #{crId}
+    </delete>
+
+    <insert id="batchCompetitionRecord">
+        insert into c_competition_record( cc_r_id, enum_id, cc_r_time, cc_r_speci, cc_r_name, cc_r_audit, cr_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.ccRId}, #{item.enumId}, #{item.ccRTime}, #{item.ccRSpeci}, #{item.ccRName}, #{item.ccRAudit}, #{item.crId})
+        </foreach>
+    </insert>
+</mapper>
