@@ -10,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 投篮运球表对象 a_ball_exam
  * 
  * @author houq
- * @date 2024-03-19
+ * @date 2024-04-09
  */
 public class ABallExam extends BaseEntity
 {

@@ -25,14 +25,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="EROCK评分" prop="msScore">
-        <el-input
-          v-model="queryParams.msScore"
-          placeholder="请输入EROCK评分"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="评分时间" prop="msTime">
         <el-date-picker clearable
           v-model="queryParams.msTime"
@@ -53,6 +45,46 @@
         <el-input
           v-model="queryParams.msShooting"
           placeholder="请输入投篮分数"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="枚举ID" prop="enumId">
+        <el-input
+          v-model="queryParams.enumId"
+          placeholder="请输入枚举ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="erock评分" prop="msScore">
+        <el-input
+          v-model="queryParams.msScore"
+          placeholder="请输入erock评分"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="技能数值1" prop="ms1">
+        <el-input
+          v-model="queryParams.ms1"
+          placeholder="请输入技能数值1"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="技能数值2" prop="ms2">
+        <el-input
+          v-model="queryParams.ms2"
+          placeholder="请输入技能数值2"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="技能数值3" prop="ms3">
+        <el-input
+          v-model="queryParams.ms3"
+          placeholder="请输入技能数值3"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -111,11 +143,10 @@
 
     <el-table v-loading="loading" :data="sheetList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="评测ID" align="center" prop="msId" />
+      <el-table-column label="评分ID" align="center" prop="msId" />
       <el-table-column label="任务ID" align="center" prop="etId" />
       <el-table-column label="学生学号" align="center" prop="stuId" />
       <el-table-column label="老师工号" align="center" prop="teaId" />
-      <el-table-column label="EROCK评分" align="center" prop="msScore" />
       <el-table-column label="评分时间" align="center" prop="msTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.msTime, '{y}-{m}-{d}') }}</span>
@@ -123,6 +154,13 @@
       </el-table-column>
       <el-table-column label="运球分数" align="center" prop="msDribble" />
       <el-table-column label="投篮分数" align="center" prop="msShooting" />
+      <el-table-column label="枚举ID" align="center" prop="enumId" />
+      <el-table-column label="erock评分" align="center" prop="msScore" />
+      <el-table-column label="技能数值1" align="center" prop="ms1" />
+      <el-table-column label="技能数值2" align="center" prop="ms2" />
+      <el-table-column label="技能数值3" align="center" prop="ms3" />
+      <el-table-column label="运动处方" align="center" prop="msClass" />
+      <el-table-column label="erock截图" align="center" prop="msImg" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -163,9 +201,6 @@
         <el-form-item label="老师工号" prop="teaId">
           <el-input v-model="form.teaId" placeholder="请输入老师工号" />
         </el-form-item>
-        <el-form-item label="EROCK评分" prop="msScore">
-          <el-input v-model="form.msScore" placeholder="请输入EROCK评分" />
-        </el-form-item>
         <el-form-item label="评分时间" prop="msTime">
           <el-date-picker clearable
             v-model="form.msTime"
@@ -179,6 +214,27 @@
         </el-form-item>
         <el-form-item label="投篮分数" prop="msShooting">
           <el-input v-model="form.msShooting" placeholder="请输入投篮分数" />
+        </el-form-item>
+        <el-form-item label="枚举ID" prop="enumId">
+          <el-input v-model="form.enumId" placeholder="请输入枚举ID" />
+        </el-form-item>
+        <el-form-item label="erock评分" prop="msScore">
+          <el-input v-model="form.msScore" placeholder="请输入erock评分" />
+        </el-form-item>
+        <el-form-item label="技能数值1" prop="ms1">
+          <el-input v-model="form.ms1" placeholder="请输入技能数值1" />
+        </el-form-item>
+        <el-form-item label="技能数值2" prop="ms2">
+          <el-input v-model="form.ms2" placeholder="请输入技能数值2" />
+        </el-form-item>
+        <el-form-item label="技能数值3" prop="ms3">
+          <el-input v-model="form.ms3" placeholder="请输入技能数值3" />
+        </el-form-item>
+        <el-form-item label="运动处方" prop="msClass">
+          <el-input v-model="form.msClass" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="erock截图" prop="msImg">
+          <el-input v-model="form.msImg" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-divider content-position="center">投篮运球表信息</el-divider>
         <el-row :gutter="10" class="mb8">
@@ -278,10 +334,16 @@ export default {
         etId: null,
         stuId: null,
         teaId: null,
-        msScore: null,
         msTime: null,
         msDribble: null,
-        msShooting: null
+        msShooting: null,
+        enumId: null,
+        msScore: null,
+        ms1: null,
+        ms2: null,
+        ms3: null,
+        msClass: null,
+        msImg: null
       },
       // 表单参数
       form: {},
@@ -315,10 +377,16 @@ export default {
         etId: null,
         stuId: null,
         teaId: null,
-        msScore: null,
         msTime: null,
         msDribble: null,
-        msShooting: null
+        msShooting: null,
+        enumId: null,
+        msScore: null,
+        ms1: null,
+        ms2: null,
+        ms3: null,
+        msClass: null,
+        msImg: null
       };
       this.aBallExamList = [];
       this.resetForm("form");
@@ -351,7 +419,7 @@ export default {
       const msId = row.msId || this.ids
       getSheet(msId).then(response => {
         this.form = response.data;
-        this.aBallExamList = response.data.aballExamList;
+        this.aBallExamList = response.data.aBallExamList;
         this.open = true;
         this.title = "修改练习、测试评分表";
       });

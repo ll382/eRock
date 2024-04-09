@@ -190,11 +190,6 @@
               <el-input v-model="scope.row.teaId" placeholder="请输入老师工号" />
             </template>
           </el-table-column>
-          <el-table-column label="EROCK评分" prop="msScore" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.msScore" placeholder="请输入EROCK评分" />
-            </template>
-          </el-table-column>
           <el-table-column label="评分时间" prop="msTime" width="240">
             <template slot-scope="scope">
               <el-date-picker clearable v-model="scope.row.msTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择评分时间" />
@@ -208,6 +203,31 @@
           <el-table-column label="投篮分数" prop="msShooting" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.msShooting" placeholder="请输入投篮分数" />
+            </template>
+          </el-table-column>
+          <el-table-column label="枚举ID" prop="enumId" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.enumId" placeholder="请输入枚举ID" />
+            </template>
+          </el-table-column>
+          <el-table-column label="erock评分" prop="msScore" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.msScore" placeholder="请输入erock评分" />
+            </template>
+          </el-table-column>
+          <el-table-column label="技能数值1" prop="ms1" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.ms1" placeholder="请输入技能数值1" />
+            </template>
+          </el-table-column>
+          <el-table-column label="技能数值2" prop="ms2" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.ms2" placeholder="请输入技能数值2" />
+            </template>
+          </el-table-column>
+          <el-table-column label="技能数值3" prop="ms3" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.ms3" placeholder="请输入技能数值3" />
             </template>
           </el-table-column>
         </el-table>
@@ -327,7 +347,7 @@ export default {
       const etId = row.etId || this.ids
       getTask(etId).then(response => {
         this.form = response.data;
-        this.aMarkSheetList = response.data.amarkSheetList;
+        this.aMarkSheetList = response.data.aMarkSheetList;
         this.open = true;
         this.title = "修改练习、测试任务表";
       });
@@ -372,10 +392,16 @@ export default {
       let obj = {};
       obj.stuId = "";
       obj.teaId = "";
-      obj.msScore = "";
       obj.msTime = "";
       obj.msDribble = "";
       obj.msShooting = "";
+      obj.enumId = "";
+      obj.msScore = "";
+      obj.ms1 = "";
+      obj.ms2 = "";
+      obj.ms3 = "";
+      obj.msClass = "";
+      obj.msImg = "";
       this.aMarkSheetList.push(obj);
     },
     /** 练习、测试评分表删除按钮操作 */

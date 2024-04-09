@@ -12,7 +12,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 练习、测试任务表对象 a_exercise_task
  * 
  * @author houq
- * @date 2024-03-19
+ * @date 2024-04-09
  */
 public class AExerciseTask extends BaseEntity
 {
