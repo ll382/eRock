@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.knowledgeQuiz.mapper.AnswerMapper;
-import com.ruoyi.knowledgeQuiz.domain.Answer;
+import com.ruoyi.teachingExchange.domain.Answer;
 import com.ruoyi.knowledgeQuiz.service.IAnswerService;
 
 /**

@@ -8,8 +8,6 @@ import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
 import com.ruoyi.teachingExchange.domain.TeachingTable;
 import com.ruoyi.teachingExchange.service.ITeachingTableService;
-import com.ruoyi.teachingExchange.domain.TeachingTable;
-import com.ruoyi.teachingExchange.service.ITeachingTableService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;

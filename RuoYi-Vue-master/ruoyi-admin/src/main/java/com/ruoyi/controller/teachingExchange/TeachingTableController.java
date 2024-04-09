@@ -48,11 +48,9 @@ public class TeachingTableController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(TeachingTable teachingTable)
     {
-        startPage();
         List<TeachingTable> list = teachingTableService.selectTeachingTableList(teachingTable);
         return getDataTable(list);
     }
-
 
 
     /**
@@ -63,7 +61,6 @@ public class TeachingTableController extends BaseController
     @GetMapping("/comm/{commId}")
     public AjaxResult A1Communicationlist(@PathVariable("commId")String commId)
     {
-        startPage();
         Long com = Long.parseLong(commId);
         TeachingTable list = teachingTableService.selectCommunicationList(com);
         return success(list);
@@ -128,6 +125,30 @@ public class TeachingTableController extends BaseController
     public AjaxResult addViewed(@RequestBody A1Viewed a1Viewed)
     {
         return toAjax(teachingTableService.insertTeachingViewTable(a1Viewed));
+    }
+
+
+    /**Viewed修改内容
+     * 新增A1 线上学习学生线上观看记录表
+     */
+    @ApiOperation("新增A1 线上学习学生线上观看记录表")
+    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:add')")
+    @Log(title = "A1 线上学习学生线上观看记录表", businessType = BusinessType.INSERT)
+    @PutMapping("/viewed")
+    public AjaxResult updateTeachingViewedTable(@RequestBody A1Viewed a1Viewed)
+    {
+        return toAjax(teachingTableService.updateTeachingViewedTable(a1Viewed));
+    }
+    /**Viewed删除内容
+     * 新增A1 线上学习学生线上观看记录表
+     */
+    @ApiOperation("新增A1 线上学习学生线上观看记录表")
+    @PreAuthorize("@ss.hasPermi('teachingExchange:teachingExchange:add')")
+    @Log(title = "A1 线上学习学生线上观看记录表", businessType = BusinessType.INSERT)
+    @DeleteMapping("/viewed/{id}")
+    public AjaxResult deleteViewedTeachingId(@PathVariable("id") Long id)
+    {
+        return toAjax(teachingTableService.deleteViewedTeachingId(id));
     }
 
     /**

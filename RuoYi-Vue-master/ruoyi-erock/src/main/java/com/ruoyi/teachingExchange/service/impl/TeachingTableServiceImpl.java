@@ -1,8 +1,6 @@
 package com.ruoyi.teachingExchange.service.impl;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.teachingExchange.domain.A1Viewed;
@@ -10,7 +8,6 @@ import com.ruoyi.teachingExchange.domain.TeachingUnit;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.teachingExchange.domain.A1Communication;
@@ -58,9 +55,9 @@ public class TeachingTableServiceImpl implements ITeachingTableService
             return comm;
         }else {
 //            循环遍历里面list主贴内容
-            for (A1Communication com: comm.getA1CommunicationList()) {
+            for (A1Communication com : comm.getA1CommunicationList()) {
 //                如果主贴ID为空则跳过本次循环
-                if (com.getComId() == null){
+                if (com.getComId() == null) {
                     continue;
                 }
 //                递归遍历主贴内所有子帖内容，带出所有排好序的子帖
@@ -72,7 +69,7 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         }
     }
 
-//    递归方法
+//    评论递归方法
     public List<A1Communication> recursion(List<A1Communication> InComm) {
 //        申明一个用于存储历史查询对象的空数组
         List<A1Communication> OutCom = new ArrayList<>();
@@ -118,8 +115,6 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 //}
     /**
      * 查询A1 id查观看记录
-     *
-     * @param teachingId A1 线上学习学生线上观看记录表主键
      * @return A1 线上学习学生线上观看记录表
      */
     @Override
@@ -137,8 +132,26 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int insertTeachingViewTable(A1Viewed a1Viewed)
     {
+        a1Viewed.setViewedAt(new Date());
         return teachingTableMapper.insertTeachingViewedTable(a1Viewed);
     }
+
+    @Override
+    public int updateTeachingViewedTable(A1Viewed a1Viewed)
+    {
+        a1Viewed.setViewedAt(new Date());
+        return teachingTableMapper.updateTeachingViewedTable(a1Viewed);
+    }
+
+
+
+    @Override
+    public int deleteViewedTeachingId(Long id)
+    {
+        return teachingTableMapper.deleteViewedTeachingId(id);
+    }
+
+
 
     @Override
     public int updateStudent() {
@@ -191,8 +204,10 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int updateTeachingTable(TeachingTable teachingTable)
     {
-        teachingTableMapper.deleteA1CommunicationByTeachingId(teachingTable.getTeachingId());
-        insertA1Communication(teachingTable);
+//        不需要更新评论等底下内容,直接注释
+//        teachingTableMapper.deleteA1CommunicationByTeachingId(teachingTable.getTeachingId());
+//        insertA1Communication(teachingTable);
+//        返回更新内容
         return teachingTableMapper.updateTeachingTable(teachingTable);
     }
 
@@ -220,6 +235,7 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int deleteTeachingTableByTeachingId(Long teachingId)
     {
+        teachingTableMapper.deleteViewedTeachingId(teachingId);
         teachingTableMapper.deleteA1CommunicationByTeachingId(teachingId);
         return teachingTableMapper.deleteTeachingTableByTeachingId(teachingId);
     }

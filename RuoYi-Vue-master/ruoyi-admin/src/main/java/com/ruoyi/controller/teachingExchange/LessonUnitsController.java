@@ -47,7 +47,7 @@ public class LessonUnitsController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(LessonUnits lessonUnits)
     {
-        startPage();
+//        startPage();
         List<LessonUnits> list = lessonUnitsService.selectLessonUnitsList(lessonUnits);
         return getDataTable(list);
     }

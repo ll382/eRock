@@ -34,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lesName != null  and lesName != ''"> and les_name like concat('%', #{lesName}, '%')</if>
             <if test="lesOrderId != null "> and les_order_id = #{lesOrderId}</if>
         </where>
+        order by les_order_id asc
     </select>
 
     <select id="selectLessonUnitsByLesId" parameterType="Long" resultMap="LessonUnitsTeachingTableResult">

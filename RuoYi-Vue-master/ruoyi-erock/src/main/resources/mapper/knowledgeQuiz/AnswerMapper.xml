@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.knowledgeQuiz.mapper.AnswerMapper">
-    
+
     <resultMap type="Answer" id="AnswerResult">
         <result property="ansId"    column="ans_id"    />
         <result property="stuId"    column="stu_id"    />
@@ -18,19 +18,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAnswerList" parameterType="Answer" resultMap="AnswerResult">
         <include refid="selectAnswerVo"/>
-        <where>  
+        <where>
             <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
             <if test="ansResponse != null "> and ans_response = #{ansResponse}</if>
             <if test="ansApos != null "> and ans_apos = #{ansApos}</if>
             <if test="ansTime != null "> and ans_time = #{ansTime}</if>
         </where>
     </select>
-    
+
     <select id="selectAnswerByAnsId" parameterType="Long" resultMap="AnswerResult">
         <include refid="selectAnswerVo"/>
         where ans_id = #{ansId}
     </select>
-        
+
     <insert id="insertAnswer" parameterType="Answer" useGeneratedKeys="true" keyProperty="ansId">
         insert into a1_answer
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAnswerByAnsIds" parameterType="String">
-        delete from a1_answer where ans_id in 
+        delete from a1_answer where ans_id in
         <foreach item="ansId" collection="array" open="(" separator="," close=")">
             #{ansId}
         </foreach>
