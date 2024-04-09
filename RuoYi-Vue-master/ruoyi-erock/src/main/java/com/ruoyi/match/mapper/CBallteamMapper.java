@@ -1,5 +1,7 @@
 package com.ruoyi.match.mapper;
 
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
 import com.ruoyi.match.domain.CBallteam;
 import com.ruoyi.match.domain.CPersonnelSheet;
 
@@ -94,4 +96,13 @@ public interface CBallteamMapper
      * @return
      */
     public List<CBallteam> selectCompetitionRecordByCcRName(Long ccRId);
+
+
+    /**
+     * 新增小组
+     *
+     * @param stuGroup 小组
+     * @return 结果
+     */
+    public int insertStuGroup(StuGroup stuGroup);
 }

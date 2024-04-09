@@ -74,7 +74,7 @@
         </foreach>
     </delete>
 
-    <delete id="deleteStudentByGgIds" parameterType="String">
+    <delete id="deleteStudentByStuIds" parameterType="String">
         delete from student where gg_id in
         <foreach item="ggId" collection="array" open="(" separator="," close=")">
             #{ggId}

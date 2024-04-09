@@ -5,56 +5,48 @@
 <mapper namespace="com.ruoyi.match.mapper.CompetitionRecordMapper">
 
     <resultMap type="CompetitionRecord" id="CompetitionRecordResult">
-        <result property="ccRId" column="cc_r_id"/>
-        <result property="enumId" column="enum_id"/>
-        <result property="ccRTime" column="cc_r_time"/>
-        <result property="ccRSpeci" column="cc_r_speci"/>
-        <result property="ccRName" column="cc_r_name"/>
+        <result property="ccRId"    column="cc_r_id"    />
+        <result property="enumId"    column="enum_id"    />
+        <result property="ccRTime"    column="cc_r_time"    />
+        <result property="ccRSpeci"    column="cc_r_speci"    />
+        <result property="ccRName"    column="cc_r_name"    />
+        <result property="ccRAudit"    column="cc_r_audit"    />
+        <result property="crId"    column="cr_id"    />
     </resultMap>
 
     <resultMap id="CompetitionRecordCBallteamResult" type="CompetitionRecord" extends="CompetitionRecordResult">
-        <collection property="cBallteamList" notNullColumn="sub_bal_id" javaType="java.util.List"
-                    resultMap="CBallteamResult"/>
+        <collection property="cBallteamList" notNullColumn="sub_bal_id" javaType="java.util.List" resultMap="CBallteamResult" />
     </resultMap>
 
     <resultMap type="CBallteam" id="CBallteamResult">
-        <result property="balId" column="sub_bal_id"/>
-        <result property="ccRId" column="sub_cc_r_id"/>
-        <result property="ggId" column="sub_gg_id"/>
-        <result property="balNum" column="sub_bal_num"/>
-        <result property="ggName" column="sub_gg_name"/>
+        <result property="balId"    column="sub_bal_id"    />
+        <result property="ccRId"    column="sub_cc_r_id"    />
+        <result property="ggId"    column="sub_gg_id"    />
+        <result property="balNum"    column="sub_bal_num"    />
     </resultMap>
 
     <sql id="selectCompetitionRecordVo">
-        SELECT cc_r_id, enum_id, cc_r_time, cc_r_speci, cc_r_name
-        FROM c_competition_record
+        select cc_r_id, enum_id, cc_r_time, cc_r_speci, cc_r_name, cc_r_audit, cr_id from c_competition_record
     </sql>
 
     <select id="selectCompetitionRecordList" parameterType="CompetitionRecord" resultMap="CompetitionRecordResult">
         <include refid="selectCompetitionRecordVo"/>
         <where>
-            <if test="enumId != null ">and enum_id = #{enumId}</if>
-            <if test="ccRTime != null ">and cc_r_time = #{ccRTime}</if>
-            <if test="ccRSpeci != null  and ccRSpeci != ''">and cc_r_speci = #{ccRSpeci}</if>
-            <if test="ccRName != null  and ccRName != ''">and cc_r_name like concat('%', #{ccRName}, '%')</if>
+            <if test="enumId != null "> and enum_id = #{enumId}</if>
+            <if test="ccRTime != null "> and cc_r_time = #{ccRTime}</if>
+            <if test="ccRSpeci != null  and ccRSpeci != ''"> and cc_r_speci = #{ccRSpeci}</if>
+            <if test="ccRName != null  and ccRName != ''"> and cc_r_name like concat('%', #{ccRName}, '%')</if>
+            <if test="ccRAudit != null "> and cc_r_audit = #{ccRAudit}</if>
+            <if test="crId != null "> and cr_id = #{crId}</if>
         </where>
     </select>
 
     <select id="selectCompetitionRecordByCcRId" parameterType="Long" resultMap="CompetitionRecordCBallteamResult">
-        SELECT a.cc_r_id,
-               a.enum_id,
-               a.cc_r_time,
-               a.cc_r_speci,
-               a.cc_r_name,
-               b.bal_id  AS sub_bal_id,
-               b.cc_r_id AS sub_cc_r_id,
-               b.gg_id   AS sub_gg_id,
-               b.bal_num AS sub_bal_num,
-               c.gg_name AS sub_gg_name
-        FROM c_competition_record a
-                 LEFT JOIN c_ballteam b ON b.cc_r_id = a.cc_r_id
-                 LEFT JOIN stu_group c ON c.gg_id = b.gg_id
-        WHERE a.cc_r_id = #{ccRId}
+        select a.cc_r_id, a.enum_id, a.cc_r_time, a.cc_r_speci, a.cc_r_name, a.cc_r_audit, a.cr_id,
+               b.bal_id as sub_bal_id, b.cc_r_id as sub_cc_r_id, b.gg_id as sub_gg_id, b.bal_num as sub_bal_num
+        from c_competition_record a
+                 left join c_ballteam b on b.cc_r_id = a.cc_r_id
+        where a.cc_r_id = #{ccRId}
     </select>
 
     <insert id="insertCompetitionRecord" parameterType="CompetitionRecord" useGeneratedKeys="true" keyProperty="ccRId">
@@ -64,12 +56,16 @@
             <if test="ccRTime != null">cc_r_time,</if>
             <if test="ccRSpeci != null">cc_r_speci,</if>
             <if test="ccRName != null">cc_r_name,</if>
+            <if test="ccRAudit != null">cc_r_audit,</if>
+            <if test="crId != null">cr_id,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="enumId != null">#{enumId},</if>
             <if test="ccRTime != null">#{ccRTime},</if>
             <if test="ccRSpeci != null">#{ccRSpeci},</if>
             <if test="ccRName != null">#{ccRName},</if>
+            <if test="ccRAudit != null">#{ccRAudit},</if>
+            <if test="crId != null">#{crId},</if>
         </trim>
     </insert>
 
@@ -80,14 +76,14 @@
             <if test="ccRTime != null">cc_r_time = #{ccRTime},</if>
             <if test="ccRSpeci != null">cc_r_speci = #{ccRSpeci},</if>
             <if test="ccRName != null">cc_r_name = #{ccRName},</if>
+            <if test="ccRAudit != null">cc_r_audit = #{ccRAudit},</if>
+            <if test="crId != null">cr_id = #{crId},</if>
         </trim>
         where cc_r_id = #{ccRId}
     </update>
 
     <delete id="deleteCompetitionRecordByCcRId" parameterType="Long">
-        DELETE
-        FROM c_competition_record
-        WHERE cc_r_id = #{ccRId}
+        delete from c_competition_record where cc_r_id = #{ccRId}
     </delete>
 
     <delete id="deleteCompetitionRecordByCcRIds" parameterType="String">
@@ -105,9 +101,7 @@
     </delete>
 
     <delete id="deleteCBallteamByCcRId" parameterType="Long">
-        DELETE
-        FROM c_ballteam
-        WHERE cc_r_id = #{ccRId}
+        delete from c_ballteam where cc_r_id = #{ccRId}
     </delete>
 
     <insert id="batchCBallteam">

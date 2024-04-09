@@ -1,6 +1,9 @@
 package com.ruoyi.match.service.impl;
 
+import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
 import com.ruoyi.match.domain.CBallteam;
 import com.ruoyi.match.domain.CPersonnelSheet;
 import com.ruoyi.match.domain.CompetitionRecord;
@@ -11,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 球队参赛Service业务层处理
@@ -23,7 +28,7 @@ import java.util.List;
 public class CBallteamServiceImpl implements ICBallteamService {
 	@Autowired
 	private CBallteamMapper cBallteamMapper;
-	
+
 	/**
 	 * 查询球队参赛
 	 *
@@ -34,7 +39,7 @@ public class CBallteamServiceImpl implements ICBallteamService {
 	public CBallteam selectCBallteamByBalId(Long balId) {
 		return cBallteamMapper.selectCBallteamByBalId(balId);
 	}
-	
+
 	/**
 	 * 查询球队参赛列表
 	 *
@@ -45,7 +50,7 @@ public class CBallteamServiceImpl implements ICBallteamService {
 	public List<CBallteam> selectCBallteamList(CBallteam cBallteam) {
 		return cBallteamMapper.selectCBallteamList(cBallteam);
 	}
-	
+
 	/**
 	 * 新增球队参赛
 	 *
@@ -59,7 +64,7 @@ public class CBallteamServiceImpl implements ICBallteamService {
 		insertCPersonnelSheet(cBallteam);
 		return rows;
 	}
-	
+
 	/**
 	 * 修改球队参赛
 	 *
@@ -73,7 +78,7 @@ public class CBallteamServiceImpl implements ICBallteamService {
 		insertCPersonnelSheet(cBallteam);
 		return cBallteamMapper.updateCBallteam(cBallteam);
 	}
-	
+
 	/**
 	 * 批量删除球队参赛
 	 *
@@ -86,7 +91,7 @@ public class CBallteamServiceImpl implements ICBallteamService {
 		cBallteamMapper.deleteCPersonnelSheetByBalIds(balIds);
 		return cBallteamMapper.deleteCBallteamByBalIds(balIds);
 	}
-	
+
 	/**
 	 * 删除球队参赛信息
 	 *
@@ -99,7 +104,7 @@ public class CBallteamServiceImpl implements ICBallteamService {
 		cBallteamMapper.deleteCPersonnelSheetByBalId(balId);
 		return cBallteamMapper.deleteCBallteamByBalId(balId);
 	}
-	
+
 	/**
 	 * 新增C 球队内人员信息
 	 *
@@ -114,13 +119,13 @@ public class CBallteamServiceImpl implements ICBallteamService {
 				cPersonnelSheet.setBalId(balId);
 				list.add(cPersonnelSheet);
 			}
-			if (list.size() > 0) {
+			if (!list.isEmpty()) {
 				cBallteamMapper.batchCPersonnelSheet(list);
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * 获取比赛小组信息
 	 *
@@ -130,5 +135,23 @@ public class CBallteamServiceImpl implements ICBallteamService {
 	@Override
 	public List<CBallteam> selectCompetitionRecordByCcRName(Long ccRId) {
 		return cBallteamMapper.selectCompetitionRecordByCcRName(ccRId);
+	}
+
+	/**
+	 * 新增小组
+	 *
+	 * @param map 小组
+	 * @return 结果
+	 */
+	@Transactional
+	@Override
+	public int insertStuGroup(HashMap<String, Object> map) {
+		StuGroup stuGroup = new StuGroup();
+		stuGroup.setGgName(String.valueOf(map.get("ggName")));
+		CBallteam cBallteam = JSON.parseObject(JSON.toJSONString(map), CBallteam.class);
+		cBallteamMapper.insertStuGroup(stuGroup);
+		int rows = cBallteamMapper.insertCBallteam(cBallteam);
+		insertCPersonnelSheet(cBallteam);
+		return rows;
 	}
 }
