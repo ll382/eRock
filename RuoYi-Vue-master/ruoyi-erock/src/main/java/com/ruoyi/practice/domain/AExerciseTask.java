@@ -3,6 +3,7 @@ package com.ruoyi.practice.domain;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.core.domain.vo.SelectUserVo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -10,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 练习、测试任务表对象 a_exercise_task
- * 
+ *
  * @author houq
  * @date 2024-04-09
  */
@@ -27,7 +28,7 @@ public class AExerciseTask extends BaseEntity
 
     /** 老师工号 */
     @Excel(name = "老师工号")
-    private String teaId;
+    private Long teaId;
 
     /** 枚举ID */
     @Excel(name = "枚举ID")
@@ -42,89 +43,101 @@ public class AExerciseTask extends BaseEntity
     private String etDescription;
 
     /** 创建时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date etCreateTime;
 
     /** 结束时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date etEndTime;
+
+    /** 教师类 */
+    @Excel(name = "教师类")
+    private SelectUserVo teacher;
 
     /** 练习、测试评分表信息 */
     private List<AMarkSheet> aMarkSheetList;
 
-    public void setEtId(Long etId) 
+    public void setEtId(Long etId)
     {
         this.etId = etId;
     }
 
-    public Long getEtId() 
+    public Long getEtId()
     {
         return etId;
     }
-    public void setCrId(Long crId) 
+    public void setCrId(Long crId)
     {
         this.crId = crId;
     }
 
-    public Long getCrId() 
+    public Long getCrId()
     {
         return crId;
     }
-    public void setTeaId(String teaId) 
-    {
+
+    public Long getTeaId() {
+        return teaId;
+    }
+
+    public void setTeaId(Long teaId) {
         this.teaId = teaId;
     }
 
-    public String getTeaId() 
-    {
-        return teaId;
-    }
-    public void setEnumId(Long enumId) 
+    public void setEnumId(Long enumId)
     {
         this.enumId = enumId;
     }
 
-    public Long getEnumId() 
+    public Long getEnumId()
     {
         return enumId;
     }
-    public void setEtName(String etName) 
+    public void setEtName(String etName)
     {
         this.etName = etName;
     }
 
-    public String getEtName() 
+    public String getEtName()
     {
         return etName;
     }
-    public void setEtDescription(String etDescription) 
+    public void setEtDescription(String etDescription)
     {
         this.etDescription = etDescription;
     }
 
-    public String getEtDescription() 
+    public String getEtDescription()
     {
         return etDescription;
     }
-    public void setEtCreateTime(Date etCreateTime) 
+    public void setEtCreateTime(Date etCreateTime)
     {
         this.etCreateTime = etCreateTime;
     }
 
-    public Date getEtCreateTime() 
+    public Date getEtCreateTime()
     {
         return etCreateTime;
     }
-    public void setEtEndTime(Date etEndTime) 
+    public void setEtEndTime(Date etEndTime)
     {
         this.etEndTime = etEndTime;
     }
 
-    public Date getEtEndTime() 
+    public Date getEtEndTime()
     {
         return etEndTime;
+    }
+
+    public SelectUserVo getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(SelectUserVo teacher) {
+        this.teacher = teacher;
     }
 
     public List<AMarkSheet> getAMarkSheetList()

@@ -72,6 +72,7 @@ public class AExerciseTaskController extends BaseController
     @GetMapping(value = "/{etId}")
     public AjaxResult getInfo(@PathVariable("etId") Long etId)
     {
+        startPage();
         return success(aExerciseTaskService.selectAExerciseTaskByEtId(etId));
     }
 

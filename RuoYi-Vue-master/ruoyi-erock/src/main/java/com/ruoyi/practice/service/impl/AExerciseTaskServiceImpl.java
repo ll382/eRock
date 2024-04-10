@@ -6,6 +6,7 @@ import com.ruoyi.core.service.SelectUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.practice.domain.AMarkSheet;
@@ -25,6 +26,8 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
     @Autowired
     private AExerciseTaskMapper aExerciseTaskMapper;
 
+    @Autowired
+    private SelectUser selectUser;
 
     /**
      * 查询练习、测试任务表
@@ -35,7 +38,10 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
     @Override
     public AExerciseTask selectAExerciseTaskByEtId(Long etId)
     {
-        return aExerciseTaskMapper.selectAExerciseTaskByEtId(etId);
+        AExerciseTask eTask = aExerciseTaskMapper.selectAExerciseTaskByEtId(etId);
+        eTask.setTeacher(selectUser.selectTeacher(eTask).getTeacher());
+        eTask.setAMarkSheetList(selectUser.selectStudent(eTask.getAMarkSheetList()));
+        return eTask;
     }
 
     /**
@@ -47,7 +53,9 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
     @Override
     public List<AExerciseTask> selectAExerciseTaskList(AExerciseTask aExerciseTask)
     {
-        return aExerciseTaskMapper.selectAExerciseTaskList(aExerciseTask);
+        List<AExerciseTask> aExerciseTasks = aExerciseTaskMapper.selectAExerciseTaskList(aExerciseTask);
+
+        return selectUser.selectTeacher(aExerciseTasks);
     }
 
     /**

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.core.domain.vo.SelectUserVo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -11,7 +12,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 练习、测试评分表对象 a_mark_sheet
- * 
+ *
  * @author houq
  * @date 2024-04-09
  */
@@ -71,123 +72,140 @@ public class AMarkSheet extends BaseEntity
     @Excel(name = "erock截图")
     private String msImg;
 
+    /** 学生类 */
+    @Excel(name = "学生类")
+    private SelectUserVo student;
+
     /** 练习资源表信息 */
     private List<AExerciseResource> aExerciseResourceList;
 
-    public void setMsId(Long msId) 
+    public void setMsId(Long msId)
     {
         this.msId = msId;
     }
 
-    public Long getMsId() 
+    public Long getMsId()
     {
         return msId;
     }
-    public void setEtId(Long etId) 
+    public void setEtId(Long etId)
     {
         this.etId = etId;
     }
 
-    public Long getEtId() 
+    public Long getEtId()
     {
         return etId;
     }
-    public void setStuId(Long stuId) 
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
     }
 
-    public Long getStuId() 
+    public Long getStuId()
     {
         return stuId;
     }
-    public void setTeaId(Long teaId) 
+    public void setTeaId(Long teaId)
     {
         this.teaId = teaId;
     }
 
-    public Long getTeaId() 
+    public Long getTeaId()
     {
         return teaId;
     }
-    public void setMsTime(Date msTime) 
+    public void setMsTime(Date msTime)
     {
         this.msTime = msTime;
     }
 
-    public Date getMsTime() 
+    public Date getMsTime()
     {
         return msTime;
     }
-    public void setMsDribble(BigDecimal msDribble) 
+    public void setMsDribble(BigDecimal msDribble)
     {
         this.msDribble = msDribble;
     }
 
-    public BigDecimal getMsDribble() 
+    public BigDecimal getMsDribble()
     {
         return msDribble;
     }
-    public void setMsShooting(BigDecimal msShooting) 
+    public void setMsShooting(BigDecimal msShooting)
     {
         this.msShooting = msShooting;
     }
 
-    public BigDecimal getMsShooting() 
+    public BigDecimal getMsShooting()
     {
         return msShooting;
     }
-    public void setMsScore(BigDecimal msScore) 
+    public void setMsScore(BigDecimal msScore)
     {
         this.msScore = msScore;
     }
 
-    public BigDecimal getMsScore() 
+    public BigDecimal getMsScore()
     {
         return msScore;
     }
-    public void setMs1(BigDecimal ms1) 
+
+    public SelectUserVo getStudent() {
+        return student;
+    }
+
+    public void setStudent(SelectUserVo student) {
+        this.student = student;
+    }
+
+    public void setaExerciseResourceList(List<AExerciseResource> aExerciseResourceList) {
+        this.aExerciseResourceList = aExerciseResourceList;
+    }
+
+    public void setMs1(BigDecimal ms1)
     {
         this.ms1 = ms1;
     }
 
-    public BigDecimal getMs1() 
+    public BigDecimal getMs1()
     {
         return ms1;
     }
-    public void setMs2(BigDecimal ms2) 
+    public void setMs2(BigDecimal ms2)
     {
         this.ms2 = ms2;
     }
 
-    public BigDecimal getMs2() 
+    public BigDecimal getMs2()
     {
         return ms2;
     }
-    public void setMs3(BigDecimal ms3) 
+    public void setMs3(BigDecimal ms3)
     {
         this.ms3 = ms3;
     }
 
-    public BigDecimal getMs3() 
+    public BigDecimal getMs3()
     {
         return ms3;
     }
-    public void setMsClass(String msClass) 
+    public void setMsClass(String msClass)
     {
         this.msClass = msClass;
     }
 
-    public String getMsClass() 
+    public String getMsClass()
     {
         return msClass;
     }
-    public void setMsImg(String msImg) 
+    public void setMsImg(String msImg)
     {
         this.msImg = msImg;
     }
 
-    public String getMsImg() 
+    public String getMsImg()
     {
         return msImg;
     }
@@ -204,21 +222,22 @@ public class AMarkSheet extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("msId", getMsId())
-            .append("etId", getEtId())
-            .append("stuId", getStuId())
-            .append("teaId", getTeaId())
-            .append("msTime", getMsTime())
-            .append("msDribble", getMsDribble())
-            .append("msShooting", getMsShooting())
-            .append("msScore", getMsScore())
-            .append("ms1", getMs1())
-            .append("ms2", getMs2())
-            .append("ms3", getMs3())
-            .append("msClass", getMsClass())
-            .append("msImg", getMsImg())
-            .append("aExerciseResourceList", getAExerciseResourceList())
-            .toString();
+        return "AMarkSheet{" +
+                "msId=" + msId +
+                ", etId=" + etId +
+                ", stuId=" + stuId +
+                ", teaId=" + teaId +
+                ", msTime=" + msTime +
+                ", msDribble=" + msDribble +
+                ", msShooting=" + msShooting +
+                ", msScore=" + msScore +
+                ", ms1=" + ms1 +
+                ", ms2=" + ms2 +
+                ", ms3=" + ms3 +
+                ", msClass='" + msClass + '\'' +
+                ", msImg='" + msImg + '\'' +
+                ", Student=" + student +
+                ", aExerciseResourceList=" + aExerciseResourceList +
+                '}';
     }
 }

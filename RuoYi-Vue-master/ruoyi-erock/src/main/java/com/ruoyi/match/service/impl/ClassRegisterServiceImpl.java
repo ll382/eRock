@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.practice.domain.AExerciseTask;
 import com.ruoyi.practice.mapper.AmodeClassRegisterMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,8 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	private ClassRegisterMapper classRegisterMapper;
 	@Autowired
 	private AmodeClassRegisterMapper amodeClassRegisterMapper;
-
 	@Autowired
 	private SelectUser selectUser;
-
-
 	/**
 	 * 查询课堂记录
 	 *
@@ -42,10 +40,9 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	 */
 	@Override
 	public ClassRegister selectAmodeClassRegisterByCrId(Long crId) {
-
-		System.out.println(selectUser.selectUser(crId));
-
-		return amodeClassRegisterMapper.selectAmodeClassRegisterByCrId(crId);
+		ClassRegister classRegister = amodeClassRegisterMapper.selectAmodeClassRegisterByCrId(crId);
+		classRegister.setaExerciseTaskList(selectUser.selectTeacher(classRegister.getaExerciseTaskList()));
+		return classRegister;
 	}
 
 //   --------------------分界线-----------------------
