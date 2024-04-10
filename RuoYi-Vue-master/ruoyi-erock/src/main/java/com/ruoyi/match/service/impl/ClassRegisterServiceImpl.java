@@ -32,6 +32,7 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	private AmodeClassRegisterMapper amodeClassRegisterMapper;
 	@Autowired
 	private SelectUser selectUser;
+
 	/**
 	 * 查询课堂记录
 	 *
@@ -41,6 +42,7 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	@Override
 	public ClassRegister selectAmodeClassRegisterByCrId(Long crId) {
 		ClassRegister classRegister = amodeClassRegisterMapper.selectAmodeClassRegisterByCrId(crId);
+		System.out.println(classRegister.toString());
 		classRegister.setaExerciseTaskList(selectUser.selectTeacher(classRegister.getaExerciseTaskList()));
 		return classRegister;
 	}
@@ -172,7 +174,6 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 		// CompetitionRecord competitionRecord = JSON.parseObject(JSON.toJSONString(map), CompetitionRecord.class);
 
 		classRegister.setCompetitionRecordList(Collections.singletonList(competitionRecord));
-		System.out.println(classRegister);
 		return insertClassRegister(classRegister);
 	}
 

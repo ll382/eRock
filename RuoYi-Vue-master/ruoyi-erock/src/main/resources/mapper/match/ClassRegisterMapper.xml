@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.match.mapper.ClassRegisterMapper">
-    
+
     <resultMap type="ClassRegister" id="ClassRegisterResult">
         <result property="crId"    column="cr_id"    />
         <result property="semesterId"    column="semester_id"    />
@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="crMain"    column="cr_main"    />
         <result property="crDuration"    column="cr_duration"    />
         <result property="classId"    column="class_id"    />
+        <result property="enumId"    column="enum_id"    />
     </resultMap>
 
     <resultMap id="ClassRegisterCompetitionRecordResult" type="ClassRegister" extends="ClassRegisterResult">
@@ -28,12 +29,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectClassRegisterVo">
-        select cr_id, semester_id, cr_date, cr_main, cr_duration, class_id from class_register
+        select cr_id, semester_id, cr_date, cr_main, cr_duration, class_id, enum_id from class_register
     </sql>
 
     <select id="selectClassRegisterList" parameterType="ClassRegister" resultMap="ClassRegisterResult">
         <include refid="selectClassRegisterVo"/>
-        <where>  
+        <where>
             <if test="semesterId != null "> and semester_id = #{semesterId}</if>
             <if test="crDate != null "> and cr_date = #{crDate}</if>
             <if test="crMain != null  and crMain != ''"> and cr_main = #{crMain}</if>
@@ -41,15 +42,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="classId != null "> and class_id = #{classId}</if>
         </where>
     </select>
-    
+
     <select id="selectClassRegisterByCrId" parameterType="Long" resultMap="ClassRegisterCompetitionRecordResult">
-        select a.cr_id, a.semester_id, a.cr_date, a.cr_main, a.cr_duration, a.class_id,
+        select a.cr_id, a.semester_id, a.cr_date, a.cr_main, a.cr_duration, a.class_id,a.enum_id,
  b.cc_r_id as sub_cc_r_id, b.enum_id as sub_enum_id, b.cc_r_time as sub_cc_r_time, b.cc_r_speci as sub_cc_r_speci, b.cc_r_name as sub_cc_r_name, b.cc_r_audit as sub_cc_r_audit, b.cr_id as sub_cr_id
         from class_register a
         left join c_competition_record b on b.cr_id = a.cr_id
         where a.cr_id = #{crId}
     </select>
-        
+
     <insert id="insertClassRegister" parameterType="ClassRegister" useGeneratedKeys="true" keyProperty="crId">
         insert into class_register
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -85,14 +86,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteClassRegisterByCrIds" parameterType="String">
-        delete from class_register where cr_id in 
+        delete from class_register where cr_id in
         <foreach item="crId" collection="array" open="(" separator="," close=")">
             #{crId}
         </foreach>
     </delete>
-    
+
     <delete id="deleteCompetitionRecordByCrIds" parameterType="String">
-        delete from c_competition_record where cr_id in 
+        delete from c_competition_record where cr_id in
         <foreach item="crId" collection="array" open="(" separator="," close=")">
             #{crId}
         </foreach>

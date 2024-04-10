@@ -38,7 +38,7 @@ public class AMarkSheetController extends BaseController
     private IAMarkSheetService aMarkSheetService;
 
     /**
-     * 查询练习、测试评分表列表
+     * 查询练习、测试评分表列表未完成
      */
     @ApiOperation("查询练习、测试评分表列表")
     @PreAuthorize("@ss.hasPermi('practice:sheet:list')")
@@ -62,6 +62,17 @@ public class AMarkSheetController extends BaseController
         List<AMarkSheet> list = aMarkSheetService.selectAMarkSheetList(aMarkSheet);
         ExcelUtil<AMarkSheet> util = new ExcelUtil<AMarkSheet>(AMarkSheet.class);
         util.exportExcel(response, list, "练习、测试评分表数据");
+    }
+
+    /**
+     * 获取未交学生名单
+     */
+    @ApiOperation("获取练习、测试评分表详细信息")
+    @PreAuthorize("@ss.hasPermi('practice:sheet:query')")
+    @GetMapping(value = "unsubmitted/{etId}")
+    public AjaxResult selectAMarkSheetList(@PathVariable("etId") Long etId)
+    {
+        return success(aMarkSheetService.selectAMarkSheetList(etId));
     }
 
     /**

@@ -2,6 +2,7 @@ package com.ruoyi.practice.service.impl;
 
 import java.util.List;
 
+import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.service.SelectUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,21 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public AMarkSheet selectAMarkSheetByMsId(Long msId)
     {
-        return aMarkSheetMapper.selectAMarkSheetByMsId(msId);
+        return selectUser.selectStudent(aMarkSheetMapper.selectAMarkSheetByMsId(msId));
     }
+
+    /**
+     * 查询未提交名单
+     *
+     * @param List<Student> 练习、测试评分表
+     * @return 练习、测试评分表
+     */
+    @Override
+    public List<Student> selectAMarkSheetList(Long etId)
+    {
+        return aMarkSheetMapper.selectAMarkSheet(etId);
+    }
+
 
     /**
      * 查询练习、测试评分表列表
