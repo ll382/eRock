@@ -42,7 +42,6 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	@Override
 	public ClassRegister selectAmodeClassRegisterByCrId(Long crId) {
 		ClassRegister classRegister = amodeClassRegisterMapper.selectAmodeClassRegisterByCrId(crId);
-		System.out.println(classRegister.toString());
 		classRegister.setaExerciseTaskList(selectUser.selectTeacher(classRegister.getaExerciseTaskList()));
 		return classRegister;
 	}
@@ -81,6 +80,7 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	@Transactional
 	@Override
 	public int insertClassRegister(ClassRegister classRegister) {
+		classRegister.setCrDate(new Date());
 		int rows = classRegisterMapper.insertClassRegister(classRegister);
 		insertCompetitionRecord(classRegister);
 		return rows;

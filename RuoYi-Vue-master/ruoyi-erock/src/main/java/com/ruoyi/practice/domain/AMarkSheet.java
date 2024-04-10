@@ -37,7 +37,7 @@ public class AMarkSheet extends BaseEntity
 
     /** 评分时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "评分时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "评分时间", width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
     private Date msTime;
 
     /** 运球分数 */
@@ -167,6 +167,7 @@ public class AMarkSheet extends BaseEntity
     public void setMs1(BigDecimal ms1)
     {
         this.ms1 = ms1;
+        this.msDribble =ms1;
     }
 
     public BigDecimal getMs1()
@@ -176,6 +177,7 @@ public class AMarkSheet extends BaseEntity
     public void setMs2(BigDecimal ms2)
     {
         this.ms2 = ms2;
+        this.msShooting = ms2;
     }
 
     public BigDecimal getMs2()
@@ -185,6 +187,7 @@ public class AMarkSheet extends BaseEntity
     public void setMs3(BigDecimal ms3)
     {
         this.ms3 = ms3;
+        this.msScore = ms3;
     }
 
     public BigDecimal getMs3()

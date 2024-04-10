@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.practice.mapper.AMarkSheetMapper">
-    
+
     <resultMap type="AMarkSheet" id="AMarkSheetResult">
         <result property="msId"    column="ms_id"    />
         <result property="etId"    column="et_id"    />
@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAMarkSheetList" parameterType="AMarkSheet" resultMap="AMarkSheetResult">
         <include refid="selectAMarkSheetVo"/>
-        <where>  
+        <where>
             <if test="etId != null "> and et_id = #{etId}</if>
             <if test="stuId != null "> and stu_id = #{stuId}</if>
             <if test="teaId != null "> and tea_id = #{teaId}</if>
@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="msImg != null  and msImg != ''"> and ms_img = #{msImg}</if>
         </where>
     </select>
-    
+
     <select id="selectAMarkSheetByMsId" parameterType="Long" resultMap="AMarkSheetAExerciseResourceResult">
         select a.ms_id, a.et_id, a.stu_id, a.tea_id, a.ms_time, a.ms_dribble, a.ms_shooting, a.ms_score, a.ms_1, a.ms_2, a.ms_3, a.ms_class, a.ms_img,
  b.er_id as sub_er_id, b.ms_id as sub_ms_id, b.er_time as sub_er_time, b.er_source as sub_er_source
@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join a_exercise_resource b on b.ms_id = a.ms_id
         where a.ms_id = #{msId}
     </select>
-        
+
     <insert id="insertAMarkSheet" parameterType="AMarkSheet" useGeneratedKeys="true" keyProperty="msId">
         insert into a_mark_sheet
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -117,14 +117,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAMarkSheetByMsIds" parameterType="String">
-        delete from a_mark_sheet where ms_id in 
+        delete from a_mark_sheet where ms_id in
         <foreach item="msId" collection="array" open="(" separator="," close=")">
             #{msId}
         </foreach>
     </delete>
-    
+
     <delete id="deleteAExerciseResourceByMsIds" parameterType="String">
-        delete from a_exercise_resource where ms_id in 
+        delete from a_exercise_resource where ms_id in
         <foreach item="msId" collection="array" open="(" separator="," close=")">
             #{msId}
         </foreach>

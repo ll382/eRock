@@ -1,5 +1,6 @@
 package com.ruoyi.practice.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.core.service.SelectUser;
@@ -68,6 +69,7 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
     @Override
     public int insertAExerciseTask(AExerciseTask aExerciseTask)
     {
+        aExerciseTask.setEtCreateTime(new Date());
         int rows = aExerciseTaskMapper.insertAExerciseTask(aExerciseTask);
         insertAMarkSheet(aExerciseTask);
         return rows;

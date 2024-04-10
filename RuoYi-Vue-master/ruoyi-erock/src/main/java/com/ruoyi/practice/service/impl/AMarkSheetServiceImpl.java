@@ -1,5 +1,6 @@
 package com.ruoyi.practice.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.core.domain.Student;
@@ -76,6 +77,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
+        aMarkSheet.setMsTime(new Date());
         int rows = aMarkSheetMapper.insertAMarkSheet(aMarkSheet);
         insertAExerciseResource(aMarkSheet);
         return rows;

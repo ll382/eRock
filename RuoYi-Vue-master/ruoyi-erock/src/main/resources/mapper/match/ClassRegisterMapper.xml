@@ -59,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="crMain != null">cr_main,</if>
             <if test="crDuration != null">cr_duration,</if>
             <if test="classId != null">class_id,</if>
+            <if test="classId != null">enum_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="semesterId != null">#{semesterId},</if>
@@ -66,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="crMain != null">#{crMain},</if>
             <if test="crDuration != null">#{crDuration},</if>
             <if test="classId != null">#{classId},</if>
+            <if test="enumId != null">#{enumId},</if>
          </trim>
     </insert>
 
