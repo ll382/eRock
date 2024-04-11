@@ -3,8 +3,11 @@ package com.ruoyi.practice.mapper;
 import java.util.List;
 
 import com.ruoyi.core.domain.Student;
+import com.ruoyi.practice.domain.ABallExam;
 import com.ruoyi.practice.domain.AMarkSheet;
 import com.ruoyi.practice.domain.AExerciseResource;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -46,6 +49,7 @@ public interface AMarkSheetMapper
      * @param aMarkSheet 练习、测试评分表
      * @return 结果
      */
+    @Options(useGeneratedKeys = true, keyProperty = "msId")
     public int insertAMarkSheet(AMarkSheet aMarkSheet);
 
     /**
@@ -55,6 +59,9 @@ public interface AMarkSheetMapper
      * @return 结果
      */
     public int updateAMarkSheet(AMarkSheet aMarkSheet);
+
+    @Insert(" INSERT INTO `a_ball_exam` (`ms_id`, `dri_stability`, `dri_power`, `dri_speed`, `dri_analysis`, `sho_arc`, `sho_spinner`, `sho_angle`, `sho_analysis`) VALUES (#{msId}, #{driStability}, #{driPower}, #{driSpeed}, #{driAnalysis}, #{shoArc}, #{shoSpinner}, #{shoAngle}, #{shoAnalysis})")
+    public int insertBallTeam(ABallExam aBallExam);
 
     /**
      * 删除练习、测试评分表

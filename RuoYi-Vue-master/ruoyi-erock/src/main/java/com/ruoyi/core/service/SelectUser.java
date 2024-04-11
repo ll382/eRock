@@ -16,4 +16,7 @@ public interface SelectUser {
     public AMarkSheet selectStudent(AMarkSheet student);
     public List<AExerciseTask> selectTeacher(List<AExerciseTask> teaList);
     public AExerciseTask selectTeacher(AExerciseTask teacher);
+//    public List<Object> selectTeacher(List<Object> teaList);
+//
+//    public Object selectTeacher(Object teacher);
 }

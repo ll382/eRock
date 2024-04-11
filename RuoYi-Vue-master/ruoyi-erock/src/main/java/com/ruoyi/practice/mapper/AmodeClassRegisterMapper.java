@@ -3,6 +3,7 @@ package com.ruoyi.practice.mapper;
 import java.util.List;
 import com.ruoyi.match.domain.ClassRegister;
 import com.ruoyi.practice.domain.AExerciseTask;
+import org.apache.ibatis.annotations.Select;
 
 
 /**

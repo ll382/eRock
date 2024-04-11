@@ -7,10 +7,12 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.entity.SelectUserVo;
 
 /**
  * Entity基类
- * 
+ *
  * @author ruoyi
  */
 public class BaseEntity implements Serializable
@@ -41,6 +43,10 @@ public class BaseEntity implements Serializable
     /** 请求参数 */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, Object> params;
+
+    /** 教师类 */
+    @Excel(name = "教师类")
+    private SelectUserVo teacher;
 
     public String getSearchValue()
     {
@@ -100,6 +106,14 @@ public class BaseEntity implements Serializable
     public void setRemark(String remark)
     {
         this.remark = remark;
+    }
+
+    public SelectUserVo getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(SelectUserVo teacher) {
+        this.teacher = teacher;
     }
 
     public Map<String, Object> getParams()

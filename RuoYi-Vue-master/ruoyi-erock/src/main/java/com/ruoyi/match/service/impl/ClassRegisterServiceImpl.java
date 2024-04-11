@@ -6,8 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.ruoyi.core.service.SelectUser;
-import com.ruoyi.practice.domain.AExerciseTask;
 import com.ruoyi.practice.mapper.AmodeClassRegisterMapper;
+import com.ruoyi.practice.service.IAMarkSheetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +32,8 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	private AmodeClassRegisterMapper amodeClassRegisterMapper;
 	@Autowired
 	private SelectUser selectUser;
+	@Autowired
+	private IAMarkSheetService	aMarkSheetService;
 
 	/**
 	 * 查询课堂记录
@@ -44,6 +46,21 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 		ClassRegister classRegister = amodeClassRegisterMapper.selectAmodeClassRegisterByCrId(crId);
 		classRegister.setaExerciseTaskList(selectUser.selectTeacher(classRegister.getaExerciseTaskList()));
 		return classRegister;
+	}
+	/**
+	 * 删除A模块课堂记录
+	 *
+	 * @return 课堂记录
+	 */
+	public int deleteAmodeClassRegister(Long crIds) {
+//		删除子子表评分表,测试表
+		amodeClassRegisterMapper.selectAmodeClassRegisterByCrId(crIds).getaExerciseTaskList().forEach(task -> {
+			aMarkSheetService.selectAMarkSheetByMsId(task.getEtId()).getAExerciseResourceList().forEach(mark -> {
+				aMarkSheetService.deleteAMarkSheetByMsId(mark.getMsId());
+			});
+		});
+		amodeClassRegisterMapper.deleteAExerciseTaskByCrId(crIds);
+		return amodeClassRegisterMapper.deleteAmodeClassRegisterByCrId(crIds);
 	}
 
 //   --------------------分界线-----------------------
@@ -80,7 +97,14 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	@Transactional
 	@Override
 	public int insertClassRegister(ClassRegister classRegister) {
+//		设置当前实践
 		classRegister.setCrDate(new Date());
+//		用当前时间动态查找学期
+		classRegister.setSemesterId(classRegisterMapper.selectDate(classRegister.getCrDate()).getSemesterId());
+//		设置班级id为8的外键
+		classRegister.setClassId(8L);
+//		设置当前课程为40分钟
+		classRegister.setCrDuration(BigDecimal.valueOf(40));
 		int rows = classRegisterMapper.insertClassRegister(classRegister);
 		insertCompetitionRecord(classRegister);
 		return rows;

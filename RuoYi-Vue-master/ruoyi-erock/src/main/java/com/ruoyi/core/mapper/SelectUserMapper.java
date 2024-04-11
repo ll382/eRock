@@ -1,10 +1,8 @@
 package com.ruoyi.core.mapper;
 
-import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.domain.vo.SelectUserVo;
 import com.ruoyi.practice.domain.AExerciseTask;
 import com.ruoyi.practice.domain.AMarkSheet;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
