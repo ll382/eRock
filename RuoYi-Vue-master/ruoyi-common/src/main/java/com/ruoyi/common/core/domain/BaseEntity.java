@@ -48,6 +48,10 @@ public class BaseEntity implements Serializable
     @Excel(name = "教师类")
     private SelectUserVo teacher;
 
+    /** 学生类 */
+    @Excel(name = "学生类")
+    private SelectUserVo student;
+
     public String getSearchValue()
     {
         return searchValue;
@@ -114,6 +118,14 @@ public class BaseEntity implements Serializable
 
     public void setTeacher(SelectUserVo teacher) {
         this.teacher = teacher;
+    }
+
+    public SelectUserVo getStudent() {
+        return student;
+    }
+
+    public void setStudent(SelectUserVo student) {
+        this.student = student;
     }
 
     public Map<String, Object> getParams()

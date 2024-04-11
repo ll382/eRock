@@ -1,6 +1,6 @@
 package com.ruoyi.core.mapper;
 
-import com.ruoyi.core.domain.vo.SelectUserVo;
+import com.ruoyi.common.core.domain.entity.SelectUserVo;
 import com.ruoyi.practice.domain.AExerciseTask;
 import com.ruoyi.practice.domain.AMarkSheet;
 import org.apache.ibatis.annotations.Select;

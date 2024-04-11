@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ruoyi.core.domain.vo.SelectUserVo;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
@@ -69,10 +68,6 @@ public class AMarkSheet extends BaseEntity
     /** erock截图 */
     @Excel(name = "erock截图")
     private String msImg;
-
-    /** 学生类 */
-    @Excel(name = "学生类")
-    private SelectUserVo student;
 
     /** 练习资源表信息 */
     private List<AExerciseResource> aExerciseResourceList;
@@ -148,14 +143,6 @@ public class AMarkSheet extends BaseEntity
     public BigDecimal getMsScore()
     {
         return msScore;
-    }
-
-    public SelectUserVo getStudent() {
-        return student;
-    }
-
-    public void setStudent(SelectUserVo student) {
-        this.student = student;
     }
 
     public void setaExerciseResourceList(List<AExerciseResource> aExerciseResourceList) {
@@ -237,7 +224,6 @@ public class AMarkSheet extends BaseEntity
                 ", ms3=" + ms3 +
                 ", msClass='" + msClass + '\'' +
                 ", msImg='" + msImg + '\'' +
-                ", Student=" + student +
                 ", aExerciseResourceList=" + aExerciseResourceList +
                 '}';
     }
