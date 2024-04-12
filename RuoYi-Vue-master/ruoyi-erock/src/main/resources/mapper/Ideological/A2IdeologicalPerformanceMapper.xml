@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.InClassModule.mapper.A2IdeologicalPerformanceMapper">
-    
+
     <resultMap type="A2IdeologicalPerformance" id="A2IdeologicalPerformanceResult">
         <result property="ipId"    column="ip_id"    />
         <result property="stuId"    column="stu_id"    />
@@ -17,18 +17,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectA2IdeologicalPerformanceList" parameterType="A2IdeologicalPerformance" resultMap="A2IdeologicalPerformanceResult">
         <include refid="selectA2IdeologicalPerformanceVo"/>
-        <where>  
+        <where>
             <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
             <if test="crId != null "> and cr_id = #{crId}</if>
             <if test="ipType != null  and ipType != ''"> and ip_type = #{ipType}</if>
         </where>
     </select>
-    
+
     <select id="selectA2IdeologicalPerformanceByIpId" parameterType="Long" resultMap="A2IdeologicalPerformanceResult">
         <include refid="selectA2IdeologicalPerformanceVo"/>
-        where ip_id = #{ipId}
+        where cr_id = #{crId}
     </select>
-        
+
     <insert id="insertA2IdeologicalPerformance" parameterType="A2IdeologicalPerformance" useGeneratedKeys="true" keyProperty="ipId">
         insert into a2_ideological_performance
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteA2IdeologicalPerformanceByIpIds" parameterType="String">
-        delete from a2_ideological_performance where ip_id in 
+        delete from a2_ideological_performance where ip_id in
         <foreach item="ipId" collection="array" open="(" separator="," close=")">
             #{ipId}
         </foreach>

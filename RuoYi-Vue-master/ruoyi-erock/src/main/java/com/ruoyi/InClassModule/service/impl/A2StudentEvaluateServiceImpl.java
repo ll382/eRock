@@ -26,13 +26,13 @@ public class A2StudentEvaluateServiceImpl implements IA2StudentEvaluateService
     /**
      * 查询A2 合作学习 学生互评
      *
-     * @param seId A2 合作学习 学生互评主键
+     * @param crId A2 合作学习 学生互评主键
      * @return A2 合作学习 学生互评
      */
     @Override
-    public A2StudentEvaluate selectA2StudentEvaluateBySeId(Long seId)
+    public List<A2StudentEvaluate> selectA2StudentEvaluateBySeId(Long crId)
     {
-        return (A2StudentEvaluate)selectUser.selectStudent(a2StudentEvaluateMapper.selectA2StudentEvaluateBySeId(seId));
+        return selectUser.selectStudent(a2StudentEvaluateMapper.selectA2StudentEvaluateBySeId(crId));
     }
 
     /**

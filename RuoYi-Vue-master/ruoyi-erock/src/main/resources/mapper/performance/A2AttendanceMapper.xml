@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.InClassModule.mapper.A2AttendanceMapper">
-    
+
     <resultMap type="A2Attendance" id="A2AttendanceResult">
         <result property="aaId"    column="aa_id"    />
         <result property="stuId"    column="stu_id"    />
@@ -18,19 +18,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectA2AttendanceList" parameterType="A2Attendance" resultMap="A2AttendanceResult">
         <include refid="selectA2AttendanceVo"/>
-        <where>  
+        <where>
             <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
             <if test="crId != null "> and cr_id = #{crId}</if>
             <if test="aaType != null  and aaType != ''"> and aa_type = #{aaType}</if>
             <if test="evaluationType2 != null  and evaluationType2 != ''"> and evaluation_type2 = #{evaluationType2}</if>
         </where>
     </select>
-    
+
     <select id="selectA2AttendanceByAaId" parameterType="Long" resultMap="A2AttendanceResult">
         <include refid="selectA2AttendanceVo"/>
-        where aa_id = #{aaId}
+        where cr_id = #{crId}
     </select>
-        
+
     <insert id="insertA2Attendance" parameterType="A2Attendance" useGeneratedKeys="true" keyProperty="aaId">
         insert into a2_attendance
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteA2AttendanceByAaIds" parameterType="String">
-        delete from a2_attendance where aa_id in 
+        delete from a2_attendance where aa_id in
         <foreach item="aaId" collection="array" open="(" separator="," close=")">
             #{aaId}
         </foreach>

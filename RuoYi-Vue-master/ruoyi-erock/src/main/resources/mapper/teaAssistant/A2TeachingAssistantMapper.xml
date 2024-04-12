@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.InClassModule.mapper.A2TeachingAssistantMapper">
-    
+
     <resultMap type="A2TeachingAssistant" id="A2TeachingAssistantResult">
         <result property="taId"    column="ta_id"    />
         <result property="stuId"    column="stu_id"    />
@@ -18,19 +18,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectA2TeachingAssistantList" parameterType="A2TeachingAssistant" resultMap="A2TeachingAssistantResult">
         <include refid="selectA2TeachingAssistantVo"/>
-        <where>  
+        <where>
             <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
             <if test="crId != null "> and cr_id = #{crId}</if>
             <if test="taType != null  and taType != ''"> and ta_type = #{taType}</if>
             <if test="taStu != null "> and ta_stu = #{taStu}</if>
         </where>
     </select>
-    
+
     <select id="selectA2TeachingAssistantByTaId" parameterType="Long" resultMap="A2TeachingAssistantResult">
         <include refid="selectA2TeachingAssistantVo"/>
-        where ta_id = #{taId}
+        where cr_id = #{crId}
     </select>
-        
+
     <insert id="insertA2TeachingAssistant" parameterType="A2TeachingAssistant" useGeneratedKeys="true" keyProperty="taId">
         insert into a2_teaching_assistant
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteA2TeachingAssistantByTaIds" parameterType="String">
-        delete from a2_teaching_assistant where ta_id in 
+        delete from a2_teaching_assistant where ta_id in
         <foreach item="taId" collection="array" open="(" separator="," close=")">
             #{taId}
         </foreach>

@@ -5,23 +5,23 @@ import com.ruoyi.InClassModule.domain.A2StudentEvaluate;
 
 /**
  * A2 合作学习 学生互评Service接口
- * 
+ *
  * @author heye
  * @date 2024-04-11
  */
-public interface IA2StudentEvaluateService 
+public interface IA2StudentEvaluateService
 {
     /**
      * 查询A2 合作学习 学生互评
-     * 
-     * @param seId A2 合作学习 学生互评主键
+     *
+     * @param crId A2 合作学习 学生互评主键
      * @return A2 合作学习 学生互评
      */
-    public A2StudentEvaluate selectA2StudentEvaluateBySeId(Long seId);
+    public List<A2StudentEvaluate> selectA2StudentEvaluateBySeId(Long crId);
 
     /**
      * 查询A2 合作学习 学生互评列表
-     * 
+     *
      * @param a2StudentEvaluate A2 合作学习 学生互评
      * @return A2 合作学习 学生互评集合
      */
@@ -29,7 +29,7 @@ public interface IA2StudentEvaluateService
 
     /**
      * 新增A2 合作学习 学生互评
-     * 
+     *
      * @param a2StudentEvaluate A2 合作学习 学生互评
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface IA2StudentEvaluateService
 
     /**
      * 修改A2 合作学习 学生互评
-     * 
+     *
      * @param a2StudentEvaluate A2 合作学习 学生互评
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface IA2StudentEvaluateService
 
     /**
      * 批量删除A2 合作学习 学生互评
-     * 
+     *
      * @param seIds 需要删除的A2 合作学习 学生互评主键集合
      * @return 结果
      */
@@ -53,7 +53,7 @@ public interface IA2StudentEvaluateService
 
     /**
      * 删除A2 合作学习 学生互评信息
-     * 
+     *
      * @param seId A2 合作学习 学生互评主键
      * @return 结果
      */

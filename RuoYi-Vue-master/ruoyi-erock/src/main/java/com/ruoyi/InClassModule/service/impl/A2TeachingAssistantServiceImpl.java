@@ -28,15 +28,15 @@ public class A2TeachingAssistantServiceImpl implements IA2TeachingAssistantServi
      * 查询A2 合作学习 助教评价
 
      *
-     * @param taId A2 合作学习 助教评价
+     * @param crId A2 合作学习 助教评价
 主键
      * @return A2 合作学习 助教评价
 
      */
     @Override
-    public A2TeachingAssistant selectA2TeachingAssistantByTaId(Long taId)
+    public List<A2TeachingAssistant> selectA2TeachingAssistantByTaId(Long crId)
     {
-        return (A2TeachingAssistant)selectUser.selectStudent(a2TeachingAssistantMapper.selectA2TeachingAssistantByTaId(taId));
+        return selectUser.selectStudent(a2TeachingAssistantMapper.selectA2TeachingAssistantByTaId(crId));
     }
 
     /**

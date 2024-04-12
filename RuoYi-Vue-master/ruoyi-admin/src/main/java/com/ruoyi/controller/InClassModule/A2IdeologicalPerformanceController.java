@@ -69,10 +69,11 @@ public class A2IdeologicalPerformanceController extends BaseController
      */
     @ApiOperation("获取A2  思政教育 思政现详细信息")
     @PreAuthorize("@ss.hasPermi('Ideological:performance:query')")
-    @GetMapping(value = "/{ipId}")
-    public AjaxResult getInfo(@PathVariable("ipId") Long ipId)
+    @GetMapping(value = "/{crId}")
+    public AjaxResult getInfo(@PathVariable("crId") Long crId)
     {
-        return success(a2IdeologicalPerformanceService.selectA2IdeologicalPerformanceByIpId(ipId));
+        startPage();
+        return success(a2IdeologicalPerformanceService.selectA2IdeologicalPerformanceByIpId(crId));
     }
 
     /**

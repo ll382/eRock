@@ -5,23 +5,23 @@ import com.ruoyi.InClassModule.domain.A2IdeologicalPerformance;
 
 /**
  * A2  思政教育 思政现Service接口
- * 
+ *
  * @author heye
  * @date 2024-04-11
  */
-public interface IA2IdeologicalPerformanceService 
+public interface IA2IdeologicalPerformanceService
 {
     /**
      * 查询A2  思政教育 思政现
-     * 
-     * @param ipId A2  思政教育 思政现主键
+     *
+     * @param crId A2  思政教育 思政现主键
      * @return A2  思政教育 思政现
      */
-    public A2IdeologicalPerformance selectA2IdeologicalPerformanceByIpId(Long ipId);
+    public List<A2IdeologicalPerformance> selectA2IdeologicalPerformanceByIpId(Long crId);
 
     /**
      * 查询A2  思政教育 思政现列表
-     * 
+     *
      * @param a2IdeologicalPerformance A2  思政教育 思政现
      * @return A2  思政教育 思政现集合
      */
@@ -29,7 +29,7 @@ public interface IA2IdeologicalPerformanceService
 
     /**
      * 新增A2  思政教育 思政现
-     * 
+     *
      * @param a2IdeologicalPerformance A2  思政教育 思政现
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface IA2IdeologicalPerformanceService
 
     /**
      * 修改A2  思政教育 思政现
-     * 
+     *
      * @param a2IdeologicalPerformance A2  思政教育 思政现
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface IA2IdeologicalPerformanceService
 
     /**
      * 批量删除A2  思政教育 思政现
-     * 
+     *
      * @param ipIds 需要删除的A2  思政教育 思政现主键集合
      * @return 结果
      */
@@ -53,7 +53,7 @@ public interface IA2IdeologicalPerformanceService
 
     /**
      * 删除A2  思政教育 思政现信息
-     * 
+     *
      * @param ipId A2  思政教育 思政现主键
      * @return 结果
      */

@@ -69,10 +69,11 @@ public class A2AttendanceController extends BaseController
      */
     @ApiOperation("获取A2 课堂表现classRegistercr         详细信息")
     @PreAuthorize("@ss.hasPermi('performance:attendance:query')")
-    @GetMapping(value = "/{aaId}")
-    public AjaxResult getInfo(@PathVariable("aaId") Long aaId)
+    @GetMapping(value = "/{crId}")
+    public AjaxResult getInfo(@PathVariable("crId") Long crId)
     {
-        return success(a2AttendanceService.selectA2AttendanceByAaId(aaId));
+        startPage();
+        return success(a2AttendanceService.selectA2AttendanceByAaId(crId));
     }
 
     /**

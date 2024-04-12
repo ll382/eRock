@@ -69,10 +69,11 @@ public class A2StudentEvaluateController extends BaseController
      */
     @ApiOperation("获取A2 合作学习 学生互评详细信息")
     @PreAuthorize("@ss.hasPermi('peerRevision:evaluate:query')")
-    @GetMapping(value = "/{seId}")
-    public AjaxResult getInfo(@PathVariable("seId") Long seId)
+    @GetMapping(value = "/{crId}")
+    public AjaxResult getInfo(@PathVariable("crId") Long crId)
     {
-        return success(a2StudentEvaluateService.selectA2StudentEvaluateBySeId(seId));
+        startPage();
+        return success(a2StudentEvaluateService.selectA2StudentEvaluateBySeId(crId));
     }
 
     /**

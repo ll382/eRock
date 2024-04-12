@@ -69,10 +69,11 @@ public class A2TeachingAssistantEvaluationController extends BaseController
      */
     @ApiOperation("获取A2 合作学习 教师评价详细信息")
     @PreAuthorize("@ss.hasPermi('evaluate:evaluation:query')")
-    @GetMapping(value = "/{taeId}")
-    public AjaxResult getInfo(@PathVariable("taeId") Long taeId)
+    @GetMapping(value = "/{crId}")
+    public AjaxResult getInfo(@PathVariable("crId") Long crId)
     {
-        return success(a2TeachingAssistantEvaluationService.selectA2TeachingAssistantEvaluationByTaeId(taeId));
+        startPage();
+        return success(a2TeachingAssistantEvaluationService.selectA2TeachingAssistantEvaluationByTaeId(crId));
     }
 
     /**

@@ -26,13 +26,13 @@ public class A2AttendanceServiceImpl implements IA2AttendanceService
     /**
      * 查询A2 课堂表现classRegistercr
      *
-     * @param aaId A2 课堂表现classRegistercr         主键
+     * @param crId A2 课堂表现classRegistercr         主键
      * @return A2 课堂表现classRegistercr
      */
     @Override
-    public A2Attendance selectA2AttendanceByAaId(Long aaId)
+    public List<A2Attendance> selectA2AttendanceByAaId(Long crId)
     {
-        return a2AttendanceMapper.selectA2AttendanceByAaId(aaId);
+        return selectUser.selectStudent(a2AttendanceMapper.selectA2AttendanceByAaId(crId));
     }
 
     /**

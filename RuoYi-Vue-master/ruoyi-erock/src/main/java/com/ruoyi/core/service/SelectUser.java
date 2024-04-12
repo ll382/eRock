@@ -13,10 +13,6 @@ import java.util.List;
  * @Date 2024/4/9
  */
 public interface SelectUser<T extends BaseEntity>  {
-//    public List<AMarkSheet> selectStudent(List<AMarkSheet> stuList);
-//    public AMarkSheet selectStudent(AMarkSheet student);
-//    public List<AExerciseTask> selectTeacher(List<AExerciseTask> teaList);
-//    public AExerciseTask selectTeacher(AExerciseTask teacher);
 
     public List<T> selectStudent(List<T> stuList);
     public T selectStudent(T student);

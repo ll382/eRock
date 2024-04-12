@@ -69,10 +69,11 @@ public class A2TeachingAssistantController extends BaseController
      */
     @ApiOperation("获取A2 合作学习 助教评价 详细信息")
     @PreAuthorize("@ss.hasPermi('teaAssistant:assistant:query')")
-    @GetMapping(value = "/{taId}")
-    public AjaxResult getInfo(@PathVariable("taId") Long taId)
+    @GetMapping(value = "/{crId}")
+    public AjaxResult getInfo(@PathVariable("crId") Long crId)
     {
-        return success(a2TeachingAssistantService.selectA2TeachingAssistantByTaId(taId));
+        startPage();
+        return success(a2TeachingAssistantService.selectA2TeachingAssistantByTaId(crId));
     }
 
     /**

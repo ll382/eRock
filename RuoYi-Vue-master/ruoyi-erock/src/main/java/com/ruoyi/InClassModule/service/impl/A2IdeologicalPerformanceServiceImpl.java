@@ -26,13 +26,13 @@ public class A2IdeologicalPerformanceServiceImpl implements IA2IdeologicalPerfor
     /**
      * 查询A2  思政教育 思政现
      *
-     * @param ipId A2  思政教育 思政现主键
+     * @param crId A2  思政教育 思政现主键
      * @return A2  思政教育 思政现
      */
     @Override
-    public A2IdeologicalPerformance selectA2IdeologicalPerformanceByIpId(Long ipId)
+    public List<A2IdeologicalPerformance> selectA2IdeologicalPerformanceByIpId(Long crId)
     {
-        return (A2IdeologicalPerformance)selectUser.selectStudent(a2IdeologicalPerformanceMapper.selectA2IdeologicalPerformanceByIpId(ipId));
+        return selectUser.selectStudent(a2IdeologicalPerformanceMapper.selectA2IdeologicalPerformanceByIpId(crId));
     }
 
     /**

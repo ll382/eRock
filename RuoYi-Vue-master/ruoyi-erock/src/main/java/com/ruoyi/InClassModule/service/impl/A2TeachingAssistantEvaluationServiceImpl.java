@@ -27,13 +27,13 @@ public class A2TeachingAssistantEvaluationServiceImpl implements IA2TeachingAssi
     /**
      * 查询A2 合作学习 教师评价
      *
-     * @param taeId A2 合作学习 教师评价主键
+     * @param crId A2 合作学习 教师评价主键
      * @return A2 合作学习 教师评价
      */
     @Override
-    public A2TeachingAssistantEvaluation selectA2TeachingAssistantEvaluationByTaeId(Long taeId)
+    public List<A2TeachingAssistantEvaluation> selectA2TeachingAssistantEvaluationByTaeId(Long crId)
     {
-        return (A2TeachingAssistantEvaluation)selectUser.selectTeacher(a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationByTaeId(taeId));
+        return selectUser.selectTeacher(a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationByTaeId(crId));
     }
 
     /**
