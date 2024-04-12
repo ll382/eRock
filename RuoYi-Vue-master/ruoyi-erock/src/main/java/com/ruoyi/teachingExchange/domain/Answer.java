@@ -26,7 +26,7 @@ public class Answer extends BaseEntity
 
     /** 学生学号 */
     @Excel(name = "学生学号")
-    private String stuId;
+    private Long stuId;
 
     /** 学生姓名 */
     @Excel(name = "学生姓名")
@@ -71,12 +71,13 @@ public class Answer extends BaseEntity
     {
         return taskId;
     }
-    public void setStuId(String stuId)
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
-    public String getStuId()
+    public Long getStuId()
     {
         return stuId;
     }

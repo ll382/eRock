@@ -8,7 +8,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 /**
  * A2 合作学习 助教评价
 对象 a2_teaching_assistant
- * 
+ *
  * @author heye
  * @date 2024-04-11
  */
@@ -21,7 +21,7 @@ public class A2TeachingAssistant extends BaseEntity
 
     /** 学生学号 */
     @Excel(name = "学生学号")
-    private String stuId;
+    private Long stuId;
 
     /** 课堂ID */
     @Excel(name = "课堂ID")
@@ -35,48 +35,49 @@ public class A2TeachingAssistant extends BaseEntity
     @Excel(name = "评价者")
     private Long taStu;
 
-    public void setTaId(Long taId) 
+    public void setTaId(Long taId)
     {
         this.taId = taId;
     }
 
-    public Long getTaId() 
+    public Long getTaId()
     {
         return taId;
     }
-    public void setStuId(String stuId) 
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
-    public String getStuId() 
+    public Long getStuId()
     {
         return stuId;
     }
-    public void setCrId(Long crId) 
+    public void setCrId(Long crId)
     {
         this.crId = crId;
     }
 
-    public Long getCrId() 
+    public Long getCrId()
     {
         return crId;
     }
-    public void setTaType(String taType) 
+    public void setTaType(String taType)
     {
         this.taType = taType;
     }
 
-    public String getTaType() 
+    public String getTaType()
     {
         return taType;
     }
-    public void setTaStu(Long taStu) 
+    public void setTaStu(Long taStu)
     {
         this.taStu = taStu;
     }
 
-    public Long getTaStu() 
+    public Long getTaStu()
     {
         return taStu;
     }

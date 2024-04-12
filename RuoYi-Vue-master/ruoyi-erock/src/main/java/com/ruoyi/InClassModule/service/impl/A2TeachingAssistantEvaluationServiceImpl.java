@@ -33,7 +33,7 @@ public class A2TeachingAssistantEvaluationServiceImpl implements IA2TeachingAssi
     @Override
     public A2TeachingAssistantEvaluation selectA2TeachingAssistantEvaluationByTaeId(Long taeId)
     {
-        return a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationByTaeId(taeId);
+        return (A2TeachingAssistantEvaluation)selectUser.selectTeacher(a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationByTaeId(taeId));
     }
 
     /**
@@ -45,7 +45,7 @@ public class A2TeachingAssistantEvaluationServiceImpl implements IA2TeachingAssi
     @Override
     public List<A2TeachingAssistantEvaluation> selectA2TeachingAssistantEvaluationList(A2TeachingAssistantEvaluation a2TeachingAssistantEvaluation)
     {
-        return a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationList(a2TeachingAssistantEvaluation);
+        return selectUser.selectTeacher(a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationList(a2TeachingAssistantEvaluation));
     }
 
     /**

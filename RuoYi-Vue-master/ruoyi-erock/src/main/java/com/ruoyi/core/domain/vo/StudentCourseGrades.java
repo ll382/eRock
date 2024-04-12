@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * PC段首页对象 student_course_grades
- * 
+ *
  * @author ljy
  * @date 2024-03-22
  */
@@ -74,6 +74,7 @@ public class StudentCourseGrades extends BaseEntity
 
     public void setStuId(Long stuId) {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
     public void setStuName(String stuName)
@@ -81,7 +82,7 @@ public class StudentCourseGrades extends BaseEntity
         this.stuName = stuName;
     }
 
-    public String getStuName() 
+    public String getStuName()
     {
         return stuName;
     }
@@ -90,25 +91,25 @@ public class StudentCourseGrades extends BaseEntity
         this.className = className;
     }
 
-    public String getClassName() 
+    public String getClassName()
     {
         return className;
     }
-    public void setTeaName(String teaName) 
+    public void setTeaName(String teaName)
     {
         this.teaName = teaName;
     }
 
-    public String getTeaName() 
+    public String getTeaName()
     {
         return teaName;
     }
-    public void setMsDribble(BigDecimal msDribble) 
+    public void setMsDribble(BigDecimal msDribble)
     {
         this.msDribble = msDribble;
     }
 
-    public BigDecimal getMsDribble() 
+    public BigDecimal getMsDribble()
     {
         return msDribble;
     }
@@ -130,12 +131,12 @@ public class StudentCourseGrades extends BaseEntity
     {
         return crDate;
     }
-    public void setCrMain(String crMain) 
+    public void setCrMain(String crMain)
     {
         this.crMain = crMain;
     }
 
-    public String getCrMain() 
+    public String getCrMain()
     {
         return crMain;
     }

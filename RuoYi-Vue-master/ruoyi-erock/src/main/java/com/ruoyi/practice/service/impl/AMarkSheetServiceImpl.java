@@ -40,7 +40,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public AMarkSheet selectAMarkSheetByMsId(Long msId)
     {
-        return selectUser.selectStudent(aMarkSheetMapper.selectAMarkSheetByMsId(msId));
+        return (AMarkSheet) selectUser.selectStudent(aMarkSheetMapper.selectAMarkSheetByMsId(msId));
     }
 
     /**

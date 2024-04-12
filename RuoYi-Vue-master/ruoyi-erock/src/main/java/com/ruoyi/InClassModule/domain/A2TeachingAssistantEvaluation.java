@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * A2 合作学习 教师评价对象 a2_teaching_assistant_evaluation
- * 
+ *
  * @author heye
  * @date 2024-04-11
  */
@@ -20,7 +20,7 @@ public class A2TeachingAssistantEvaluation extends BaseEntity
 
     /** 老师工号 */
     @Excel(name = "老师工号")
-    private String teaId;
+    private Long teaId;
 
     /** 小组ID */
     @Excel(name = "小组ID")
@@ -34,48 +34,49 @@ public class A2TeachingAssistantEvaluation extends BaseEntity
     @Excel(name = "评价类型")
     private String taeType;
 
-    public void setTaeId(Long taeId) 
+    public void setTaeId(Long taeId)
     {
         this.taeId = taeId;
     }
 
-    public Long getTaeId() 
+    public Long getTaeId()
     {
         return taeId;
     }
-    public void setTeaId(String teaId) 
+    public void setTeaId(Long teaId)
     {
         this.teaId = teaId;
+        super.setTeaId(teaId);
     }
 
-    public String getTeaId() 
+    public Long getTeaId()
     {
         return teaId;
     }
-    public void setGgId(Long ggId) 
+    public void setGgId(Long ggId)
     {
         this.ggId = ggId;
     }
 
-    public Long getGgId() 
+    public Long getGgId()
     {
         return ggId;
     }
-    public void setCrId(Long crId) 
+    public void setCrId(Long crId)
     {
         this.crId = crId;
     }
 
-    public Long getCrId() 
+    public Long getCrId()
     {
         return crId;
     }
-    public void setTaeType(String taeType) 
+    public void setTaeType(String taeType)
     {
         this.taeType = taeType;
     }
 
-    public String getTaeType() 
+    public String getTaeType()
     {
         return taeType;
     }

@@ -22,7 +22,7 @@ public class A1Viewed extends BaseEntity
 
     /** 学生学号 */
     @Excel(name = "学生学号")
-    private String stuId;
+    private Long stuId;
 
     /** 教学资源ID */
     @Excel(name = "教学资源ID")
@@ -58,12 +58,13 @@ public class A1Viewed extends BaseEntity
     {
         return viewId;
     }
-    public void setStuId(String stuId)
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
-    public String getStuId()
+    public Long getStuId()
     {
         return stuId;
     }

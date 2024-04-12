@@ -44,11 +44,22 @@ public class BaseEntity implements Serializable
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, Object> params;
 
+    /** 用户ID */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Excel(name = "学生ID")
+    private Long stuId;
+    /** 用户ID */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Excel(name = "教师ID")
+    private Long teaId;
+
     /** 教师类 */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @Excel(name = "教师类")
     private SelectUserVo teacher;
 
     /** 学生类 */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @Excel(name = "学生类")
     private SelectUserVo student;
 
@@ -110,6 +121,22 @@ public class BaseEntity implements Serializable
     public void setRemark(String remark)
     {
         this.remark = remark;
+    }
+
+    public Long getStuId() {
+        return stuId;
+    }
+
+    public void setStuId(Long stuId) {
+        this.stuId = stuId;
+    }
+
+    public Long getTeaId() {
+        return teaId;
+    }
+
+    public void setTeaId(Long teaId) {
+        this.teaId = teaId;
     }
 
     public SelectUserVo getTeacher() {

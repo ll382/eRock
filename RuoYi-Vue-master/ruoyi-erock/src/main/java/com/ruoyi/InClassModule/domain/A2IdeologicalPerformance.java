@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * A2  思政教育 思政现对象 a2_ideological_performance
- * 
+ *
  * @author heye
  * @date 2024-04-11
  */
@@ -20,7 +20,7 @@ public class A2IdeologicalPerformance extends BaseEntity
 
     /** 学生学号 */
     @Excel(name = "学生学号")
-    private String stuId;
+    private Long stuId;
 
     /** 课堂ID */
     @Excel(name = "课堂ID")
@@ -30,39 +30,40 @@ public class A2IdeologicalPerformance extends BaseEntity
     @Excel(name = "思政表现类型")
     private String ipType;
 
-    public void setIpId(Long ipId) 
+    public void setIpId(Long ipId)
     {
         this.ipId = ipId;
     }
 
-    public Long getIpId() 
+    public Long getIpId()
     {
         return ipId;
     }
-    public void setStuId(String stuId) 
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
-    public String getStuId() 
+    public Long getStuId()
     {
         return stuId;
     }
-    public void setCrId(Long crId) 
+    public void setCrId(Long crId)
     {
         this.crId = crId;
     }
 
-    public Long getCrId() 
+    public Long getCrId()
     {
         return crId;
     }
-    public void setIpType(String ipType) 
+    public void setIpType(String ipType)
     {
         this.ipType = ipType;
     }
 
-    public String getIpType() 
+    public String getIpType()
     {
         return ipType;
     }

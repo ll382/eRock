@@ -79,6 +79,7 @@ public class AExerciseTask extends BaseEntity
 
     public void setTeaId(Long teaId) {
         this.teaId = teaId;
+        super.setTeaId(teaId);
     }
 
     public void setEnumId(Long enumId)

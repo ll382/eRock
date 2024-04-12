@@ -24,7 +24,7 @@ public class TeachingTable extends BaseEntity
 
     /** 老师工号 */
     @Excel(name = "老师工号")
-    private String teaId;
+    private Long teaId;
 
     /** 资源url */
     @Excel(name = "资源url")
@@ -66,12 +66,13 @@ public class TeachingTable extends BaseEntity
     {
         return teachingId;
     }
-    public void setTeaId(String teaId)
+    public void setTeaId(Long teaId)
     {
         this.teaId = teaId;
+        super.setTeaId(teaId);
     }
 
-    public String getTeaId()
+    public Long getTeaId()
     {
         return teaId;
     }

@@ -3,10 +3,12 @@ package com.ruoyi.practice.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.core.service.SelectUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +58,17 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
     {
         List<AExerciseTask> aExerciseTasks = aExerciseTaskMapper.selectAExerciseTaskList(aExerciseTask);
 
-        return selectUser.selectTeacher(aExerciseTasks);
+        //		转换成父类Entity并传回
+        List<BaseEntity> baseEntities = selectUser.selectTeacher((aExerciseTasks).stream()
+                .map(aExerciseTaskes -> (BaseEntity) aExerciseTaskes)
+                .collect(Collectors.toList())
+        );
+        System.out.println(baseEntities);
+//		转换成子类并传回
+
+        return baseEntities.stream()
+                .map(aExerciseTaskes -> (AExerciseTask) aExerciseTaskes)
+                .collect(Collectors.toList());
     }
 
     /**

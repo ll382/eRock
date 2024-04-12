@@ -93,6 +93,7 @@ public class AMarkSheet extends BaseEntity
     public void setStuId(Long stuId)
     {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
     public Long getStuId()
@@ -102,6 +103,7 @@ public class AMarkSheet extends BaseEntity
     public void setTeaId(Long teaId)
     {
         this.teaId = teaId;
+        super.setTeaId(teaId);
     }
 
     public Long getTeaId()
