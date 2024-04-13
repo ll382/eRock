@@ -40,7 +40,7 @@
     <select id="selectStudent" parameterType="list" resultMap="studentImgRequst" >
         <include refid="studentRequst" />
         <where>
-            s.stu_id IN
+            s.stu_id NOT IN
             <foreach item="item" collection="list" open="(" separator="," close=")">
                 #{item}
             </foreach>
@@ -50,7 +50,7 @@
     <select id="selectTeacher" parameterType="list" resultMap="teacherImgRequst" >
         <include refid="teacherRequst" />
         <where>
-            t.tea_id IN
+            t.tea_id NOT IN
             <foreach item="item" collection="list" open="(" separator="," close=")">
                 #{item}
             </foreach>
