@@ -56,6 +56,7 @@ public class A2TeachingAssistantEvaluation extends BaseEntity
     public void setGgId(Long ggId)
     {
         this.ggId = ggId;
+        super.setGgId(ggId);
     }
 
     public Long getGgId()
@@ -64,7 +65,7 @@ public class A2TeachingAssistantEvaluation extends BaseEntity
     }
     public void setCrId(Long crId)
     {
-        this.crId = crId; 
+        this.crId = crId;
     }
 
     public Long getCrId()

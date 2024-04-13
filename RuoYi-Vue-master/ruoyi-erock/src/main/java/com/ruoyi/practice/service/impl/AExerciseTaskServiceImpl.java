@@ -56,19 +56,7 @@ public class AExerciseTaskServiceImpl implements IAExerciseTaskService
     @Override
     public List<AExerciseTask> selectAExerciseTaskList(AExerciseTask aExerciseTask)
     {
-        List<AExerciseTask> aExerciseTasks = aExerciseTaskMapper.selectAExerciseTaskList(aExerciseTask);
-
-        //		转换成父类Entity并传回
-        List<BaseEntity> baseEntities = selectUser.selectTeacher((aExerciseTasks).stream()
-                .map(aExerciseTaskes -> (BaseEntity) aExerciseTaskes)
-                .collect(Collectors.toList())
-        );
-        System.out.println(baseEntities);
-//		转换成子类并传回
-
-        return baseEntities.stream()
-                .map(aExerciseTaskes -> (AExerciseTask) aExerciseTaskes)
-                .collect(Collectors.toList());
+        return selectUser.selectTeacher(aExerciseTaskMapper.selectAExerciseTaskList(aExerciseTask));
     }
 
     /**

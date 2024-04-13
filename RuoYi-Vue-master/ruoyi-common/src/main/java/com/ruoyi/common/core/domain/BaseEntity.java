@@ -63,6 +63,11 @@ public class BaseEntity implements Serializable
     @Excel(name = "学生类")
     private SelectUserVo student;
 
+    /** 小组ID */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Excel(name = "小组ID")
+    private Long ggId;
+
     public String getSearchValue()
     {
         return searchValue;
@@ -137,6 +142,14 @@ public class BaseEntity implements Serializable
 
     public void setTeaId(Long teaId) {
         this.teaId = teaId;
+    }
+
+    public Long getGgId() {
+        return ggId;
+    }
+
+    public void setGgId(Long ggId) {
+        this.ggId = ggId;
     }
 
     public SelectUserVo getTeacher() {

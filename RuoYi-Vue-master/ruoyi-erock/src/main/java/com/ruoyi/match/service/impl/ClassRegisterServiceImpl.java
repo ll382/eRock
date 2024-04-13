@@ -47,13 +47,7 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	@Override
 	public ClassRegister selectAmodeClassRegisterByCrId(Long crId) {
 		ClassRegister classRegister = amodeClassRegisterMapper.selectAmodeClassRegisterByCrId(crId);
-
-//		转换成父类Entity并传回
-		List<BaseEntity> baseEntities = selectUser.selectTeacher(classRegister.getaExerciseTaskList());
-//		转换成子类并传回
-		classRegister.setaExerciseTaskList(baseEntities.stream()
-						.map(aExerciseTask -> (AExerciseTask) aExerciseTask)
-						.collect(Collectors.toList())
+		classRegister.setaExerciseTaskList(selectUser.selectTeacher(classRegister.getaExerciseTaskList())
 		);
 		return classRegister;
 	}

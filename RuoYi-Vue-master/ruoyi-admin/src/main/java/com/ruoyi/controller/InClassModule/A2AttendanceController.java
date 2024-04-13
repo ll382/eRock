@@ -2,6 +2,8 @@ package com.ruoyi.controller.InClassModule;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.core.service.SelectUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,6 +38,9 @@ public class A2AttendanceController extends BaseController
 {
     @Autowired
     private IA2AttendanceService a2AttendanceService;
+
+    @Autowired
+    private SelectUser selectUser;
 
     /**
      * 查询A2 课堂表现classRegistercr         列表
@@ -73,7 +78,7 @@ public class A2AttendanceController extends BaseController
     public AjaxResult getInfo(@PathVariable("crId") Long crId)
     {
         startPage();
-        return success(a2AttendanceService.selectA2AttendanceByAaId(crId));
+        return success(selectUser.selectUndoneStudent(a2AttendanceService.selectA2AttendanceByAaId(crId)));
     }
 
     /**
