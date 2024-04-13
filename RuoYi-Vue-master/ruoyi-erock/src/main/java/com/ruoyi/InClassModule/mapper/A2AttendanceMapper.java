@@ -2,6 +2,7 @@ package com.ruoyi.InClassModule.mapper;
 
 import java.util.List;
 import com.ruoyi.InClassModule.domain.A2Attendance;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * A2 课堂表现classRegistercr         Mapper接口
@@ -17,7 +18,7 @@ public interface A2AttendanceMapper
      * @param crId A2 课堂表现classRegistercr         主键
      * @return A2 课堂表现classRegistercr
      */
-    public List<A2Attendance> selectA2AttendanceByAaId(Long crId);
+    public List<A2Attendance> selectA2AttendanceByAaId(@Param("crId") Long crId,@Param("enumId") Long enumId);
 
     /**
      * 查询A2 课堂表现classRegistercr         列表

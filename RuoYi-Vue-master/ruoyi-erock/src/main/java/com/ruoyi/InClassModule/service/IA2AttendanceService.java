@@ -17,7 +17,7 @@ public interface IA2AttendanceService
      * @param aaId A2 课堂表现classRegistercr         主键
      * @return A2 课堂表现classRegistercr
      */
-    public List<A2Attendance> selectA2AttendanceByAaId(Long aaId);
+    public List<A2Attendance> selectA2AttendanceByAaId(Long aaId, Long enumId);
 
     /**
      * 查询A2 课堂表现classRegistercr         列表

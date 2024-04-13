@@ -66,7 +66,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
             if (group.getGgId() != null)num.add(group.getGgId());
         });
 //        不为空则查出本组对应未交小组
-        if (!num.isEmpty()) sgroups = selectUserMapper.selectGroup(num);
+        sgroups = selectUserMapper.selectGroup(num);
         map.put("doneGroup",groupList);
         map.put("undoneGroup",sgroups);
         return map;
@@ -85,7 +85,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
             if (stu.getStuId() != null)num.add(stu.getStuId());
         });
 //        不为空则查出本组对应未交小组
-        if (!num.isEmpty()) undoneStu = selectUserMapper.selectStudent(num);
+        undoneStu = selectUserMapper.selectStudent(num);
         map.put("doneStudents",stuList);
         map.put("undoneStudents",undoneStu);
         return map;

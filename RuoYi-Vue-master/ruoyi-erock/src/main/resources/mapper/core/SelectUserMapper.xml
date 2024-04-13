@@ -40,30 +40,36 @@
     <select id="selectStudent" parameterType="list" resultMap="studentImgRequst" >
         <include refid="studentRequst" />
         <where>
-            s.stu_id NOT IN
-            <foreach item="item" collection="list" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+            <if test="list != null and list.size() > 0">
+                s.stu_id NOT IN
+                <foreach item="item" collection="list" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
 
     <select id="selectTeacher" parameterType="list" resultMap="teacherImgRequst" >
         <include refid="teacherRequst" />
         <where>
-            t.tea_id NOT IN
-            <foreach item="item" collection="list" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+            <if test="list != null and list.size() > 0">
+                t.tea_id NOT IN
+                <foreach item="item" collection="list" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
 
     <select id="selectGroup" parameterType="java.util.List" resultMap="StuGroupResult" >
         <include refid="groupRequst" />
         <where>
-            gg_id NOT IN
-            <foreach item="item" collection="ggId" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+            <if test="ggId != null and ggId.size() > 0">
+                gg_id NOT IN
+                <foreach item="item" collection="ggId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
 </mapper>

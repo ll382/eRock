@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectA2AttendanceByAaId" parameterType="Long" resultMap="A2AttendanceResult">
         <include refid="selectA2AttendanceVo"/>
-        where cr_id = #{crId}
+        where cr_id = #{crId} AND aa_type = #{enumId}
     </select>
 
     <insert id="insertA2Attendance" parameterType="A2Attendance" useGeneratedKeys="true" keyProperty="aaId">

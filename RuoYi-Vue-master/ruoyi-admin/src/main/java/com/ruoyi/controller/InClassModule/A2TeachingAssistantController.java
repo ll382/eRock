@@ -39,7 +39,8 @@ public class A2TeachingAssistantController extends BaseController
     @Autowired
     private IA2TeachingAssistantService a2TeachingAssistantService;
 
-
+    @Autowired
+    private SelectUser selectUser;
 
     /**
      * 查询A2 合作学习 助教评价列表
@@ -77,7 +78,7 @@ public class A2TeachingAssistantController extends BaseController
     public AjaxResult getInfo(@PathVariable("crId") Long crId)
     {
         startPage();
-        return success(a2TeachingAssistantService.selectA2TeachingAssistantByTaId(crId));
+        return success(selectUser.selectUndoneStudent(a2TeachingAssistantService.selectA2TeachingAssistantByTaId(crId)));
     }
 
     /**

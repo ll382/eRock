@@ -2,6 +2,8 @@ package com.ruoyi.controller.InClassModule;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.core.service.SelectUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +39,8 @@ public class A2IdeologicalPerformanceController extends BaseController
     @Autowired
     private IA2IdeologicalPerformanceService a2IdeologicalPerformanceService;
 
+    @Autowired
+    private SelectUser selectUser;
     /**
      * 查询A2  思政教育 思政现列表
      */
@@ -73,7 +77,7 @@ public class A2IdeologicalPerformanceController extends BaseController
     public AjaxResult getInfo(@PathVariable("crId") Long crId)
     {
         startPage();
-        return success(a2IdeologicalPerformanceService.selectA2IdeologicalPerformanceByIpId(crId));
+        return success(selectUser.selectUndoneStudent(a2IdeologicalPerformanceService.selectA2IdeologicalPerformanceByIpId(crId)));
     }
 
     /**

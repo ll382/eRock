@@ -30,9 +30,9 @@ public class A2AttendanceServiceImpl implements IA2AttendanceService
      * @return A2 课堂表现classRegistercr
      */
     @Override
-    public List<A2Attendance> selectA2AttendanceByAaId(Long crId)
+    public List<A2Attendance> selectA2AttendanceByAaId(Long crId, Long enumId)
     {
-        return selectUser.selectStudent(a2AttendanceMapper.selectA2AttendanceByAaId(crId));
+        return selectUser.selectStudent(a2AttendanceMapper.selectA2AttendanceByAaId(crId, enumId));
     }
 
     /**
