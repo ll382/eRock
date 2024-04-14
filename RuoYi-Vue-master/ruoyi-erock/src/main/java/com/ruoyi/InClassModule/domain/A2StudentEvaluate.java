@@ -34,10 +34,6 @@ public class A2StudentEvaluate extends BaseEntity
     @Excel(name = "评价类型")
     private String eeType;
 
-    /** 参评学生学号 */
-    @Excel(name = "参评学生学号")
-    private String peId;
-
     public void setSeId(Long seId)
     {
         this.seId = seId;
@@ -49,7 +45,7 @@ public class A2StudentEvaluate extends BaseEntity
     }
     public void setCrId(Long crId)
     {
-        this.crId = crId; 
+        this.crId = crId;
     }
 
     public Long getCrId()
@@ -84,15 +80,6 @@ public class A2StudentEvaluate extends BaseEntity
     {
         return eeType;
     }
-    public void setPeId(String peId)
-    {
-        this.peId = peId;
-    }
-
-    public String getPeId()
-    {
-        return peId;
-    }
 
     @Override
     public String toString() {
@@ -102,7 +89,6 @@ public class A2StudentEvaluate extends BaseEntity
             .append("stuId", getStuId())
             .append("esId", getEsId())
             .append("eeType", getEeType())
-            .append("peId", getPeId())
             .toString();
     }
 }
