@@ -5,18 +5,14 @@
 <!-- namespace等于mapper接口类的全限定名,这样实现对应 -->
 <mapper namespace="com.ruoyi.core.mapper.SelectUserMapper">
 <!--    学生映射-->
-    <resultMap id="studentImgRequst" type="aMarkSheet" autoMapping="true">
-        <association property="student" javaType="selectUserVo">
+    <resultMap id="studentImgRequst" type="selectUserVo" autoMapping="true">
             <result column="stuName" property="name"/>
             <result column="stuImg" property="img"/>
-        </association>
     </resultMap>
 <!--    老师映射-->
-    <resultMap id="teacherImgRequst" type="AExerciseTask" autoMapping="true">
-        <association property="teacher" javaType="selectUserVo">
+    <resultMap id="teacherImgRequst" type="selectUserVo" autoMapping="true">
             <result column="teaName" property="name"/>
             <result column="teaImg" property="img"/>
-        </association>
     </resultMap>
 <!--    小组映射-->
     <resultMap type="StuGroup" id="StuGroupResult">
