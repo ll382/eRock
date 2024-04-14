@@ -8,7 +8,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * A2 A3 体能成绩对象 a2_a3_physica_score
- * 
+ *
  * @author heye
  * @date 2024-04-14
  */
@@ -35,48 +35,49 @@ public class A2A3PhysicaScore extends BaseEntity
     @Excel(name = "速度")
     private BigDecimal physSpeed2;
 
-    public void setPhysId(Long physId) 
+    public void setPhysId(Long physId)
     {
         this.physId = physId;
     }
 
-    public Long getPhysId() 
+    public Long getPhysId()
     {
         return physId;
     }
-    public void setStuId(Long stuId) 
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
-    public Long getStuId() 
+    public Long getStuId()
     {
         return stuId;
     }
-    public void setPhyId(Long phyId) 
+    public void setPhyId(Long phyId)
     {
         this.phyId = phyId;
     }
 
-    public Long getPhyId() 
+    public Long getPhyId()
     {
         return phyId;
     }
-    public void setPhysStamina2(BigDecimal physStamina2) 
+    public void setPhysStamina2(BigDecimal physStamina2)
     {
         this.physStamina2 = physStamina2;
     }
 
-    public BigDecimal getPhysStamina2() 
+    public BigDecimal getPhysStamina2()
     {
         return physStamina2;
     }
-    public void setPhysSpeed2(BigDecimal physSpeed2) 
+    public void setPhysSpeed2(BigDecimal physSpeed2)
     {
         this.physSpeed2 = physSpeed2;
     }
 
-    public BigDecimal getPhysSpeed2() 
+    public BigDecimal getPhysSpeed2()
     {
         return physSpeed2;
     }

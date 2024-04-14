@@ -1,12 +1,10 @@
-package com.ruoyi.core.domain;
-
-import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.core.domain.BaseEntity;
-import com.ruoyi.common.core.domain.entity.SelectUserVo;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+package com.ruoyi.common.core.domain.entity;
 
 import java.util.List;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 小组对象 stu_group
@@ -14,7 +12,7 @@ import java.util.List;
  * @author heye
  * @date 2024-03-15
  */
-public class StuGroup extends BaseEntity
+public class Group extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +28,7 @@ public class StuGroup extends BaseEntity
     private Long stuGroupLeader;
 
     /** 学生信息 */
-    private List<Student> studentList;
+    private List<SelectUserVo> studentList;
 
     public void setGgId(Long ggId)
     {
@@ -61,12 +59,12 @@ public class StuGroup extends BaseEntity
         return stuGroupLeader;
     }
 
-    public List<Student> getStudentList()
+    public List<SelectUserVo> getStudentList()
     {
         return studentList;
     }
 
-    public void setStudentList(List<Student> studentList)
+    public void setStudentList(List<SelectUserVo> studentList)
     {
         this.studentList = studentList;
     }

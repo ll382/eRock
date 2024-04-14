@@ -1,11 +1,15 @@
 package com.ruoyi.controller.InClassModule;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.core.service.SelectUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -116,4 +120,9 @@ public class A2AttendanceController extends BaseController
     {
         return toAjax(a2AttendanceService.deleteA2AttendanceByAaIds(aaIds));
     }
+
+//    定时执行学生考勤、表现
+
+
+
 }

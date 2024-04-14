@@ -1,5 +1,6 @@
 package com.ruoyi.common.core.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ruoyi.common.annotation.Excel;
 
 /**
@@ -8,6 +9,14 @@ import com.ruoyi.common.annotation.Excel;
  * @Date 2024/4/10
  */
 public class SelectUserVo {
+//    角色判断
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String role;
+
+    /** 学生ID */
+    @Excel(name = "学生ID")
+    private Long Id;
+
     /** 学生姓名 */
     @Excel(name = "学生姓名")
     private String Name;
@@ -15,6 +24,22 @@ public class SelectUserVo {
     /** 学生图片 */
     @Excel(name = "学生图片")
     private String Img;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
 
     public String getName() {
         return Name;

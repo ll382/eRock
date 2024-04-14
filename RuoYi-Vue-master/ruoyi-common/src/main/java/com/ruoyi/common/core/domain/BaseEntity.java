@@ -3,11 +3,13 @@ package com.ruoyi.common.core.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.entity.Group;
 import com.ruoyi.common.core.domain.entity.SelectUserVo;
 
 /**
@@ -67,6 +69,16 @@ public class BaseEntity implements Serializable
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Excel(name = "小组ID")
     private Long ggId;
+
+    /** 小组信息 */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Excel(name = "小组信息")
+    private Group group;
+
+    /** 小组成员 */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Excel(name = "小组成员")
+    private List<SelectUserVo> students;
 
     public String getSearchValue()
     {
@@ -166,6 +178,22 @@ public class BaseEntity implements Serializable
 
     public void setStudent(SelectUserVo student) {
         this.student = student;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public List<SelectUserVo> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<SelectUserVo> students) {
+        this.students = students;
     }
 
     public Map<String, Object> getParams()

@@ -5,17 +5,25 @@
 <!-- namespace等于mapper接口类的全限定名,这样实现对应 -->
 <mapper namespace="com.ruoyi.core.mapper.SelectUserMapper">
 <!--    学生映射-->
-    <resultMap id="studentImgRequst" type="selectUserVo" autoMapping="true">
+    <resultMap id="studentImgRequst" type="BaseEntity" autoMapping="true">
+            <result column="stuId" property="stuId"/>
+        <association property="student" javaType="selectUserVo">
+            <result column="stuId" property="id"/>
             <result column="stuName" property="name"/>
             <result column="stuImg" property="img"/>
+        </association>
     </resultMap>
 <!--    老师映射-->
-    <resultMap id="teacherImgRequst" type="selectUserVo" autoMapping="true">
+    <resultMap id="teacherImgRequst" type="BaseEntity" autoMapping="true">
+            <result column="teaId" property="teaId"/>
+        <association property="teacher" javaType="selectUserVo">
+            <result column="teaId" property="id"/>
             <result column="teaName" property="name"/>
             <result column="teaImg" property="img"/>
+        </association>
     </resultMap>
 <!--    小组映射-->
-    <resultMap type="StuGroup" id="StuGroupResult">
+    <resultMap type="Group" id="StuGroupResult">
         <result property="ggId"    column="gg_id"    />
         <result property="ggName"    column="gg_name"    />
         <result property="stuGroupLeader"    column="stu_group_leader"    />
@@ -53,6 +61,15 @@
                 <foreach item="item" collection="list" open="(" separator="," close=")">
                     #{item}
                 </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectInGroupStudent" resultMap="studentImgRequst">
+        <include refid="studentRequst" />
+        <where>
+            <if test="ggId != null">
+                s.gg_id = #{ggId}
             </if>
         </where>
     </select>

@@ -74,10 +74,10 @@ public class A2A3PhysicaScoreController extends BaseController
      */
     @ApiOperation("获取A2 A3 体能成绩详细信息")
     @PreAuthorize("@ss.hasPermi('staminaScore:score:query')")
-    @GetMapping(value = "/{physId}")
-    public AjaxResult getInfo(@PathVariable("physId") Long physId)
+    @GetMapping(value = "/{phyId}")
+    public AjaxResult getInfo(@PathVariable("phyId") Long phyId)
     {
-        return success(a2A3PhysicaScoreService.selectA2A3PhysicaScoreByPhysId(physId));
+        return success(selectUser.selectUndoneStudent(a2A3PhysicaScoreService.selectA2A3PhysicaScoreByPhysId(phyId)));
     }
 
     /**

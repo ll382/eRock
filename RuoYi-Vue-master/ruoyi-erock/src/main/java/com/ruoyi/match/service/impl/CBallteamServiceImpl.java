@@ -2,11 +2,9 @@ package com.ruoyi.match.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.core.domain.StuGroup;
-import com.ruoyi.core.domain.Student;
+import com.ruoyi.common.core.domain.entity.Group;
 import com.ruoyi.match.domain.CBallteam;
 import com.ruoyi.match.domain.CPersonnelSheet;
-import com.ruoyi.match.domain.CompetitionRecord;
 import com.ruoyi.match.mapper.CBallteamMapper;
 import com.ruoyi.match.service.ICBallteamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 球队参赛Service业务层处理
@@ -146,10 +143,10 @@ public class CBallteamServiceImpl implements ICBallteamService {
 	@Transactional
 	@Override
 	public int insertStuGroup(HashMap<String, Object> map) {
-		StuGroup stuGroup = new StuGroup();
-		stuGroup.setGgName(String.valueOf(map.get("ggName")));
+		Group group = new Group();
+		group.setGgName(String.valueOf(map.get("ggName")));
 		CBallteam cBallteam = JSON.parseObject(JSON.toJSONString(map), CBallteam.class);
-		cBallteamMapper.insertStuGroup(stuGroup);
+		cBallteamMapper.insertStuGroup(group);
 		int rows = cBallteamMapper.insertCBallteam(cBallteam);
 		insertCPersonnelSheet(cBallteam);
 		return rows;

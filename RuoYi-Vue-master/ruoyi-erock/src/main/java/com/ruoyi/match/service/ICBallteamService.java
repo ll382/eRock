@@ -1,12 +1,9 @@
 package com.ruoyi.match.service;
 
-import com.ruoyi.core.domain.StuGroup;
-import com.ruoyi.core.domain.Student;
 import com.ruoyi.match.domain.CBallteam;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 球队参赛Service接口
@@ -22,7 +19,7 @@ public interface ICBallteamService {
 	 * @return 球队参赛
 	 */
 	public CBallteam selectCBallteamByBalId(Long balId);
-	
+
 	/**
 	 * 查询球队参赛列表
 	 *
@@ -30,7 +27,7 @@ public interface ICBallteamService {
 	 * @return 球队参赛集合
 	 */
 	public List<CBallteam> selectCBallteamList(CBallteam cBallteam);
-	
+
 	/**
 	 * 新增球队参赛
 	 *
@@ -38,7 +35,7 @@ public interface ICBallteamService {
 	 * @return 结果
 	 */
 	public int insertCBallteam(CBallteam cBallteam);
-	
+
 	/**
 	 * 修改球队参赛
 	 *
@@ -46,7 +43,7 @@ public interface ICBallteamService {
 	 * @return 结果
 	 */
 	public int updateCBallteam(CBallteam cBallteam);
-	
+
 	/**
 	 * 批量删除球队参赛
 	 *
@@ -54,7 +51,7 @@ public interface ICBallteamService {
 	 * @return 结果
 	 */
 	public int deleteCBallteamByBalIds(Long[] balIds);
-	
+
 	/**
 	 * 删除球队参赛信息
 	 *
@@ -62,8 +59,8 @@ public interface ICBallteamService {
 	 * @return 结果
 	 */
 	public int deleteCBallteamByBalId(Long balId);
-	
-	
+
+
 	/**
 	 * 获取比赛小组信息
 	 *

@@ -33,7 +33,7 @@ public class A2TeachingAssistantEvaluationServiceImpl implements IA2TeachingAssi
     @Override
     public List<A2TeachingAssistantEvaluation> selectA2TeachingAssistantEvaluationByTaeId(Long crId)
     {
-        return selectUser.selectTeacher(a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationByTaeId(crId));
+        return selectUser.selectInGroupStudent(selectUser.selectTeacher(a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationByTaeId(crId)));
     }
 
     /**

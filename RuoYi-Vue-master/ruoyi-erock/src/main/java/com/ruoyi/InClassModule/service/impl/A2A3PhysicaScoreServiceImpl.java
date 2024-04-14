@@ -27,13 +27,13 @@ public class A2A3PhysicaScoreServiceImpl implements IA2A3PhysicaScoreService
     /**
      * 查询A2 A3 体能成绩
      *
-     * @param physId A2 A3 体能成绩主键
+     * @param phyId A2 A3 体能成绩主键
      * @return A2 A3 体能成绩
      */
     @Override
-    public A2A3PhysicaScore selectA2A3PhysicaScoreByPhysId(Long physId)
+    public List<A2A3PhysicaScore> selectA2A3PhysicaScoreByPhysId(Long phyId)
     {
-        return a2A3PhysicaScoreMapper.selectA2A3PhysicaScoreByPhysId(physId);
+        return a2A3PhysicaScoreMapper.selectA2A3PhysicaScoreByPhysId(phyId);
     }
 
     /**

@@ -46,7 +46,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     /**
      * 查询未提交名单
      *
-     * @param List<Student> 练习、测试评分表
+     * @param etId 练习、测试评分表
      * @return 练习、测试评分表
      */
     @Override

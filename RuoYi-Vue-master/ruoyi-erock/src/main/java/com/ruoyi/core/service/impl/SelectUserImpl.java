@@ -2,12 +2,9 @@ package com.ruoyi.core.service.impl;
 
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SelectUserVo;
-import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.common.core.domain.entity.Group;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
-import com.ruoyi.practice.domain.AExerciseTask;
-import com.ruoyi.practice.domain.AMarkSheet;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +22,13 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Autowired
     SelectUserMapper selectUserMapper;
 
+    @Autowired
+    SelectUser selectUser;
+
     @Override
     public List<T> selectStudent(List<T> stuList){
         stuList.forEach(student -> {
-            student.setStudent(selectUserMapper.selectStudentbyOne(student.getStuId())); // 将当前 student 设置到对应的 AMarkSheet 中
+            student.setStudent(selectUserMapper.selectStudentbyOne(student.getStuId()));
         });
         return stuList;
     }
@@ -53,6 +53,27 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     }
 
     @Override
+    public T selectInGroupStudent(T GroupStudent) {
+        GroupStudent.setStudents(selectUserMapper.selectInGroupStudent(GroupStudent.getGgId()));
+        return GroupStudent;
+    }
+
+    @Override
+    public List<T> selectInGroupStudent(List<T> GroupStudent) {
+//        GroupStudent.forEach(gstu -> {
+//            gstu.setStudents(selectUserMapper.selectInGroupStudent(gstu.getGgId()));
+//        });
+        GroupStudent.forEach(group -> {
+//            查询已交小组名称
+            group.setGroup(selectUserMapper.selectGroupbyOne(group.getGgId()));
+//            查询小组内学生
+            group.setStudents(selectUserMapper.selectInGroupStudent(group.getGgId()));
+        });
+        return GroupStudent;
+    }
+
+
+    @Override
     public HashMap<String, Object> selectGroup(List<T> groupList) {
 
 //        controller层数据定义
@@ -60,13 +81,16 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 //        所有小组id集合
         List<Long> num = new ArrayList<>();
 //        未交小组集合
-        List<StuGroup> sgroups = new ArrayList<>();
-
+        List<Group> sgroups = new ArrayList<>();
+//      查询已交小组ID
         groupList.forEach(group -> {
             if (group.getGgId() != null)num.add(group.getGgId());
         });
 //        不为空则查出本组对应未交小组
         sgroups = selectUserMapper.selectGroup(num);
+        sgroups.forEach(gstu -> {
+            gstu.setStudents(selectUserMapper.selectInGroupStudent(gstu.getGgId()));
+        });
         map.put("doneGroup",groupList);
         map.put("undoneGroup",sgroups);
         return map;

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.InClassModule.mapper.A2A3PhysicaScoreMapper">
-    
+
     <resultMap type="A2A3PhysicaScore" id="A2A3PhysicaScoreResult">
         <result property="physId"    column="phys_id"    />
         <result property="stuId"    column="stu_id"    />
@@ -18,19 +18,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectA2A3PhysicaScoreList" parameterType="A2A3PhysicaScore" resultMap="A2A3PhysicaScoreResult">
         <include refid="selectA2A3PhysicaScoreVo"/>
-        <where>  
+        <where>
             <if test="stuId != null "> and stu_id = #{stuId}</if>
             <if test="phyId != null "> and phy_id = #{phyId}</if>
             <if test="physStamina2 != null "> and phys_stamina2 = #{physStamina2}</if>
             <if test="physSpeed2 != null "> and phys_speed2 = #{physSpeed2}</if>
         </where>
     </select>
-    
+
     <select id="selectA2A3PhysicaScoreByPhysId" parameterType="Long" resultMap="A2A3PhysicaScoreResult">
         <include refid="selectA2A3PhysicaScoreVo"/>
-        where phys_id = #{physId}
+        where phy_id = #{phyId}
     </select>
-        
+
     <insert id="insertA2A3PhysicaScore" parameterType="A2A3PhysicaScore" useGeneratedKeys="true" keyProperty="physId">
         insert into a2_a3_physica_score
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteA2A3PhysicaScoreByPhysIds" parameterType="String">
-        delete from a2_a3_physica_score where phys_id in 
+        delete from a2_a3_physica_score where phys_id in
         <foreach item="physId" collection="array" open="(" separator="," close=")">
             #{physId}
         </foreach>
