@@ -35,7 +35,6 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     }
     @Override
     public T selectStudent(T student) {
-        if (student != null)
             student.setStudent(selectUserMapper.selectStudentbyOne(student.getStuId()));
         return student;
     }
@@ -50,7 +49,6 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Override
     public T selectTeacher(T teacher) {
-        if (teacher != null)
             teacher.setTeacher(selectUserMapper.selectTeacherbyOne(teacher.getTeaId()));
         return teacher;
     }

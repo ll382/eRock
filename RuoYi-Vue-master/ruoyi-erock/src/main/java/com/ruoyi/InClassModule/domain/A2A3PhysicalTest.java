@@ -25,10 +25,6 @@ public class A2A3PhysicalTest extends BaseEntity
     @Excel(name = "老师工号")
     private Long teaId;
 
-    /** 枚举ID */
-    @Excel(name = "枚举ID")
-    private Long enumId;
-
     /** 课堂ID */
     @Excel(name = "课堂ID")
     private Long crId;
@@ -72,15 +68,6 @@ public class A2A3PhysicalTest extends BaseEntity
     public Long getTeaId()
     {
         return teaId;
-    }
-    public void setEnumId(Long enumId)
-    {
-        this.enumId = enumId;
-    }
-
-    public Long getEnumId()
-    {
-        return enumId;
     }
 
     public Long getCrId() {
@@ -143,7 +130,6 @@ public class A2A3PhysicalTest extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("phyId", getPhyId())
             .append("teaId", getTeaId())
-            .append("enumId", getEnumId())
             .append("phyName", getPhyName())
             .append("phyDescript", getPhyDescript())
             .append("phyTime", getPhyTime())

@@ -19,6 +19,7 @@ public interface IA2A3PhysicalTestService
      */
     public A2A3PhysicalTest selectA2A3PhysicalTestByPhyId(Long crId);
 
+
     /**
      * 查询A2 A3体能测试列表
      *

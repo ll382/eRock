@@ -44,8 +44,6 @@ public class ClassRegisterController extends BaseController {
 	@Autowired
 	private IClassRegisterService classRegisterService;
 
-
-
 	/**
 	 * 查询课堂记录列表
 	 */
@@ -68,6 +66,7 @@ public class ClassRegisterController extends BaseController {
 	public AjaxResult deleteAmodeClassRegister(@PathVariable Long crIds) {
 		return toAjax(classRegisterService.deleteAmodeClassRegister(crIds));
 	}
+
 
 	//   --------------------分界线-----------------------
 

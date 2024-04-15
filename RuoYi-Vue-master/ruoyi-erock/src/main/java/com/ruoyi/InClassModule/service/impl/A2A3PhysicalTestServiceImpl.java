@@ -45,7 +45,6 @@ public class A2A3PhysicalTestServiceImpl implements IA2A3PhysicalTestService
 //        查外部老师并直接返回内容
         return (A2A3PhysicalTest) selectUser.selectTeacher(physical);
     }
-
     /**
      * 查询A2 A3体能测试列表
      *

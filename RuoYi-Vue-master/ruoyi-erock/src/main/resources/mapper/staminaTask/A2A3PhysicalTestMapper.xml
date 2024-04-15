@@ -7,7 +7,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="A2A3PhysicalTest" id="A2A3PhysicalTestResult">
         <result property="phyId"    column="phy_id"    />
         <result property="teaId"    column="tea_id"    />
-        <result property="enumId"    column="enum_id"    />
         <result property="phyName"    column="phy_name"    />
         <result property="phyDescript"    column="phy_descript"    />
         <result property="phyTime"    column="phy_time"    />
@@ -27,14 +26,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectA2A3PhysicalTestVo">
-        select phy_id, tea_id, enum_id, phy_name, phy_descript, phy_time, phy_end_time from a2_a3_physical_test
+        select phy_id, tea_id, phy_name, phy_descript, phy_time, phy_end_time from a2_a3_physical_test
     </sql>
 
     <select id="selectA2A3PhysicalTestList" parameterType="A2A3PhysicalTest" resultMap="A2A3PhysicalTestResult">
         <include refid="selectA2A3PhysicalTestVo"/>
         <where>
             <if test="teaId != null "> and tea_id = #{teaId}</if>
-            <if test="enumId != null "> and enum_id = #{enumId}</if>
             <if test="phyName != null  and phyName != ''"> and phy_name like concat('%', #{phyName}, '%')</if>
             <if test="phyDescript != null  and phyDescript != ''"> and phy_descript = #{phyDescript}</if>
             <if test="phyTime != null "> and phy_time = #{phyTime}</if>
@@ -43,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectA2A3PhysicalTestByPhyId" parameterType="Long" resultMap="A2A3PhysicalTestA2A3PhysicaScoreResult">
-        select a.phy_id, a.tea_id, a.enum_id, a.phy_name, a.phy_descript, a.phy_time, a.phy_end_time,
+        select a.phy_id, a.tea_id, a.phy_name, a.phy_descript, a.phy_time, a.phy_end_time,
  b.phys_id as sub_phys_id, b.stu_id as sub_stu_id, b.phy_id as sub_phy_id, b.phys_stamina2 as sub_phys_stamina2, b.phys_speed2 as sub_phys_speed2
         from a2_a3_physical_test a
         left join a2_a3_physica_score b on b.phy_id = a.phy_id
@@ -54,7 +52,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into a2_a3_physical_test
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="teaId != null">tea_id,</if>
-            <if test="enumId != null">enum_id,</if>
             <if test="phyName != null">phy_name,</if>
             <if test="phyDescript != null">phy_descript,</if>
             <if test="phyTime != null">phy_time,</if>
@@ -63,7 +60,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="teaId != null">#{teaId},</if>
-            <if test="enumId != null">#{enumId},</if>
             <if test="phyName != null">#{phyName},</if>
             <if test="phyDescript != null">#{phyDescript},</if>
             <if test="phyTime != null">#{phyTime},</if>
@@ -76,7 +72,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update a2_a3_physical_test
         <trim prefix="SET" suffixOverrides=",">
             <if test="teaId != null">tea_id = #{teaId},</if>
-            <if test="enumId != null">enum_id = #{enumId},</if>
             <if test="phyName != null">phy_name = #{phyName},</if>
             <if test="phyDescript != null">phy_descript = #{phyDescript},</if>
             <if test="phyTime != null">phy_time = #{phyTime},</if>
