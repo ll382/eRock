@@ -55,41 +55,22 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Override
     public T selectInGroupStudent(T GroupStudent) {
-        List<SelectUserVo> list = selectUserMapper.selectInGroupStudent(GroupStudent.getGgId());
-        list.forEach(gro -> {
-            if (gro.getId() != null)
-                if (gro.getId().equals(GroupStudent.getGroup().getStuGroupLeader())) {
-                    gro.setRole("组长");
-                } else {
-                    gro.setRole("组员");
-                }
-        });
-        GroupStudent.getGroup().setStudentList(list);
+        // 查询组内成员，并判断是否是组长
+        this.setGroup(GroupStudent);
+
         return GroupStudent;
     }
 
     @Override
-    public List<T> selectInGroupStudent(List<T> GroupStudent) {
+    public List<T> selectInGroupStudent(List<T> GroupStudent ) {
         GroupStudent.forEach(group -> {
             // 查询已交小组名称
             group.setGroup(selectUserMapper.selectGroupbyOne(group.getGgId()));
-            // 查询小组内学生
-            List<SelectUserVo> list = selectUserMapper.selectInGroupStudent(group.getGgId());
-//            循环查到组长
-            list.forEach(gro -> {
-                if (gro.getId() != null)
-                    if (gro.getId().equals(group.getGroup().getStuGroupLeader())) {
-                        gro.setRole("组长");
-                    } else {
-                        gro.setRole("组员");
-                    }
-            });
-            group.getGroup().setStudentList(list);
+            // 查询组内成员，并判断是否是组长
+            this.setGroup(group);
         });
         return GroupStudent;
     }
-
-
 
     @Override
     public HashMap<String, Object> selectGroup(List<T> groupList) {
@@ -106,12 +87,14 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         });
 //        不为空则查出本组对应未交小组
         sgroups = selectUserMapper.selectGroup(num);
+//        相信后人的智慧
         sgroups.forEach(gstu -> {
             gstu.setStudentList(selectUserMapper.selectInGroupStudent(gstu.getGgId()));
             gstu.getStudentList().forEach(gro -> {
                 if (gro.getId() != null)
                     if (gro.getId().equals(gstu.getStuGroupLeader())) {
                         gro.setRole("组长");
+                        gstu.setStuGroupLeaderName(gro.getName());
                     } else {
                         gro.setRole("组员");
                     }
@@ -140,6 +123,29 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         map.put("undoneStudents",undoneStu);
         return map;
     }
+
+//    小组学生查询工具方法
+    private void setGroup(BaseEntity GroupStudent) {
+        List<SelectUserVo> list = selectUserMapper.selectInGroupStudent(GroupStudent.getGgId());
+//        遍历小组成员
+        list.forEach(gro -> {
+//            如果学生id不为空的话，判断小组id是否是组长id
+            if (gro.getId() != null)
+                if (gro.getId().equals(GroupStudent.getGroup().getStuGroupLeader())) {
+//                    是则给其赋值组长
+                    gro.setRole("组长");
+//                    给最外层赋值组长名
+                    GroupStudent.getGroup().setStuGroupLeaderName(gro.getName());
+                } else {
+//                    否则给其赋值组员
+                    gro.setRole("组员");
+                }
+        });
+//        将组员组长以及外层的小组赋值给传入数据
+        GroupStudent.getGroup().setStudentList(list);
+    }
+
+
 
 
 }
