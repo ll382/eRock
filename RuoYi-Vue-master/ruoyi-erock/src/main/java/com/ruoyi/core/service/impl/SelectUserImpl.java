@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Description
@@ -54,23 +55,40 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Override
     public T selectInGroupStudent(T GroupStudent) {
-        GroupStudent.setStudents(selectUserMapper.selectInGroupStudent(GroupStudent.getGgId()));
+        List<SelectUserVo> list = selectUserMapper.selectInGroupStudent(GroupStudent.getGgId());
+        list.forEach(gro -> {
+            if (gro.getId() != null)
+                if (gro.getId().equals(GroupStudent.getGroup().getStuGroupLeader())) {
+                    gro.setRole("组长");
+                } else {
+                    gro.setRole("组员");
+                }
+        });
+        GroupStudent.getGroup().setStudentList(list);
         return GroupStudent;
     }
 
     @Override
     public List<T> selectInGroupStudent(List<T> GroupStudent) {
-//        GroupStudent.forEach(gstu -> {
-//            gstu.setStudents(selectUserMapper.selectInGroupStudent(gstu.getGgId()));
-//        });
         GroupStudent.forEach(group -> {
-//            查询已交小组名称
+            // 查询已交小组名称
             group.setGroup(selectUserMapper.selectGroupbyOne(group.getGgId()));
-//            查询小组内学生
-            group.setStudents(selectUserMapper.selectInGroupStudent(group.getGgId()));
+            // 查询小组内学生
+            List<SelectUserVo> list = selectUserMapper.selectInGroupStudent(group.getGgId());
+//            循环查到组长
+            list.forEach(gro -> {
+                if (gro.getId() != null)
+                    if (gro.getId().equals(group.getGroup().getStuGroupLeader())) {
+                        gro.setRole("组长");
+                    } else {
+                        gro.setRole("组员");
+                    }
+            });
+            group.getGroup().setStudentList(list);
         });
         return GroupStudent;
     }
+
 
 
     @Override
@@ -81,7 +99,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 //        所有小组id集合
         List<Long> num = new ArrayList<>();
 //        未交小组集合
-        List<Group> sgroups = new ArrayList<>();
+        List<Group> sgroups;
 //      查询已交小组ID
         groupList.forEach(group -> {
             if (group.getGgId() != null)num.add(group.getGgId());
@@ -89,7 +107,15 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 //        不为空则查出本组对应未交小组
         sgroups = selectUserMapper.selectGroup(num);
         sgroups.forEach(gstu -> {
-            gstu.setStudents(selectUserMapper.selectInGroupStudent(gstu.getGgId()));
+            gstu.setStudentList(selectUserMapper.selectInGroupStudent(gstu.getGgId()));
+            gstu.getStudentList().forEach(gro -> {
+                if (gro.getId() != null)
+                    if (gro.getId().equals(gstu.getStuGroupLeader())) {
+                        gro.setRole("组长");
+                    } else {
+                        gro.setRole("组员");
+                    }
+            });
         });
         map.put("doneGroup",groupList);
         map.put("undoneGroup",sgroups);

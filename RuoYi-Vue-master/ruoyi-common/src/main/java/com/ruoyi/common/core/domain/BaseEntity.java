@@ -75,11 +75,6 @@ public class BaseEntity implements Serializable
     @Excel(name = "小组信息")
     private Group group;
 
-    /** 小组成员 */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @Excel(name = "小组成员")
-    private List<SelectUserVo> students;
-
     public String getSearchValue()
     {
         return searchValue;
@@ -186,14 +181,6 @@ public class BaseEntity implements Serializable
 
     public void setGroup(Group group) {
         this.group = group;
-    }
-
-    public List<SelectUserVo> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<SelectUserVo> students) {
-        this.students = students;
     }
 
     public Map<String, Object> getParams()

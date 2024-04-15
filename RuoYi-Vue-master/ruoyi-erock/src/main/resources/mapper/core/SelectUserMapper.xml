@@ -5,13 +5,10 @@
 <!-- namespace等于mapper接口类的全限定名,这样实现对应 -->
 <mapper namespace="com.ruoyi.core.mapper.SelectUserMapper">
 <!--    学生映射-->
-    <resultMap id="studentImgRequst" type="BaseEntity" autoMapping="true">
-            <result column="stuId" property="stuId"/>
-        <association property="student" javaType="selectUserVo">
+    <resultMap id="studentImgRequst" type="selectUserVo" autoMapping="true">
             <result column="stuId" property="id"/>
             <result column="stuName" property="name"/>
             <result column="stuImg" property="img"/>
-        </association>
     </resultMap>
 <!--    老师映射-->
     <resultMap id="teacherImgRequst" type="BaseEntity" autoMapping="true">
