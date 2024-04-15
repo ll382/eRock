@@ -112,7 +112,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 //        所有小组id集合
         List<Long> num = new ArrayList<>();
 //        未交小组集合
-        List<SelectUserVo> undoneStu = new ArrayList<>();
+        List<SelectUserVo> undoneStu;
 
         stuList.forEach(stu -> {
             if (stu.getStuId() != null)num.add(stu.getStuId());
@@ -124,7 +124,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         return map;
     }
 
-//    小组学生查询工具方法
+//    小组学生查询工具方法 要求，有ggid的Entity继承类
     private void setGroup(BaseEntity GroupStudent) {
         List<SelectUserVo> list = selectUserMapper.selectInGroupStudent(GroupStudent.getGgId());
 //        遍历小组成员
