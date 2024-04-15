@@ -47,8 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  b.phys_id as sub_phys_id, b.stu_id as sub_stu_id, b.phy_id as sub_phy_id, b.phys_stamina2 as sub_phys_stamina2, b.phys_speed2 as sub_phys_speed2
         from a2_a3_physical_test a
         left join a2_a3_physica_score b on b.phy_id = a.phy_id
-        where a.enum_id = #{enumId}
-        <if test="crId != null "> and cr_id = #{crId}</if>
+        where cr_id = #{crId}
     </select>
 
     <insert id="insertA2A3PhysicalTest" parameterType="A2A3PhysicalTest" useGeneratedKeys="true" keyProperty="phyId">

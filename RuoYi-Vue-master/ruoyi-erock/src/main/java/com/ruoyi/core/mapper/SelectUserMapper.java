@@ -16,9 +16,9 @@ import java.util.List;
 public interface SelectUserMapper {
 
 //    单查头像
-    @Select("Select e.avatar as img,s.stu_name as name from student s left JOIN sys_user e ON e.user_id = s.user_id where s.stu_id = #{stuId}")
+    @Select("Select s.stu_id as id , e.avatar as img,s.stu_name as name from student s left JOIN sys_user e ON e.user_id = s.user_id where s.stu_id = #{stuId}")
     SelectUserVo selectStudentbyOne(Long stuId);
-    @Select("Select e.avatar as img,t.tea_name as name from teacher t left JOIN sys_user e ON e.user_id = t.user_id where t.tea_id = #{teaId}")
+    @Select("Select t.tea_id as id , e.avatar as img,t.tea_name as name from teacher t left JOIN sys_user e ON e.user_id = t.user_id where t.tea_id = #{teaId}")
     SelectUserVo selectTeacherbyOne(Long teaId);
 //    查小组内所有学生
     List<SelectUserVo> selectInGroupStudent(Long ggId);

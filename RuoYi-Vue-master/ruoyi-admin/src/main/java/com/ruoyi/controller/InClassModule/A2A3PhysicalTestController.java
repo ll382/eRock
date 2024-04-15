@@ -74,11 +74,11 @@ public class A2A3PhysicalTestController extends BaseController
      */
     @ApiOperation("获取A2 A3体能测试详细信息")
     @PreAuthorize("@ss.hasPermi('staminaTask:test:query')")
-    @GetMapping(value = "/{crId}/{enumId}")
-    public AjaxResult getInfo(@PathVariable("enumId") Long enumId, @PathVariable("crId") Long crId)
+    @GetMapping(value = "/{crId}")
+    public AjaxResult getInfo(@PathVariable("crId") Long crId)
     {
         startPage();
-        return success(a2A3PhysicalTestService.selectA2A3PhysicalTestByPhyId(enumId,crId));
+        return success(a2A3PhysicalTestService.selectA2A3PhysicalTestByPhyId(crId));
     }
 
     /**

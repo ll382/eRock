@@ -33,7 +33,7 @@ public class A2A3PhysicaScoreServiceImpl implements IA2A3PhysicaScoreService
     @Override
     public List<A2A3PhysicaScore> selectA2A3PhysicaScoreByPhysId(Long phyId)
     {
-        return a2A3PhysicaScoreMapper.selectA2A3PhysicaScoreByPhysId(phyId);
+        return selectUser.selectStudent(a2A3PhysicaScoreMapper.selectA2A3PhysicaScoreByPhysId(phyId));
     }
 
     /**

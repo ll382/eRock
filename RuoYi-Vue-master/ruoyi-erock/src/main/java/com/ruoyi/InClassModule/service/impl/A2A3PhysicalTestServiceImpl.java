@@ -32,14 +32,14 @@ public class A2A3PhysicalTestServiceImpl implements IA2A3PhysicalTestService
     /**
      * 查询A2 A3体能测试
      *
-     * @param enumId A2 A3体能测试主键
+     * @param crId A2 A3体能测试主键
      * @return A2 A3体能测试
      */
     @Override
-    public A2A3PhysicalTest selectA2A3PhysicalTestByPhyId(Long enumId,Long crId)
+    public A2A3PhysicalTest selectA2A3PhysicalTestByPhyId(Long crId)
     {
 //        查询基础数据
-        A2A3PhysicalTest physical = a2A3PhysicalTestMapper.selectA2A3PhysicalTestByPhyId(enumId,crId);
+        A2A3PhysicalTest physical = a2A3PhysicalTestMapper.selectA2A3PhysicalTestByPhyId(crId);
 //        查内部学生
         physical.setA2A3PhysicaScoreList(selectUser.selectStudent(physical.getA2A3PhysicaScoreList()));
 //        查外部老师并直接返回内容

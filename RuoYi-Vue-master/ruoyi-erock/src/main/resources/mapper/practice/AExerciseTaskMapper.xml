@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.practice.mapper.AExerciseTaskMapper">
-    
+
     <resultMap type="AExerciseTask" id="AExerciseTaskResult">
         <result property="etId"    column="et_id"    />
         <result property="crId"    column="cr_id"    />
@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAExerciseTaskList" parameterType="AExerciseTask" resultMap="AExerciseTaskResult">
         <include refid="selectAExerciseTaskVo"/>
-        <where>  
+        <where>
             <if test="crId != null "> and cr_id = #{crId}</if>
             <if test="teaId != null  and teaId != ''"> and tea_id = #{teaId}</if>
             <if test="enumId != null "> and enum_id = #{enumId}</if>
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="etEndTime != null "> and et_end_time = #{etEndTime}</if>
         </where>
     </select>
-    
+
     <select id="selectAExerciseTaskByEtId" parameterType="Long" resultMap="AExerciseTaskAMarkSheetResult">
         select a.et_id, a.cr_id, a.tea_id, a.enum_id, a.et_name, a.et_description, a.et_create_time, a.et_end_time,
  b.ms_id as sub_ms_id, b.et_id as sub_et_id, b.stu_id as sub_stu_id, b.tea_id as sub_tea_id, b.ms_time as sub_ms_time, b.ms_dribble as sub_ms_dribble, b.ms_shooting as sub_ms_shooting, b.ms_score as sub_ms_score, b.ms_1 as sub_ms_1, b.ms_2 as sub_ms_2, b.ms_3 as sub_ms_3, b.ms_class as sub_ms_class, b.ms_img as sub_ms_img
@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join a_mark_sheet b on b.et_id = a.et_id
         where a.et_id = #{etId}
     </select>
-        
+
     <insert id="insertAExerciseTask" parameterType="AExerciseTask" useGeneratedKeys="true" keyProperty="etId">
         insert into a_exercise_task
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -101,14 +101,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAExerciseTaskByEtIds" parameterType="String">
-        delete from a_exercise_task where et_id in 
+        delete from a_exercise_task where et_id in
         <foreach item="etId" collection="array" open="(" separator="," close=")">
             #{etId}
         </foreach>
     </delete>
-    
+
     <delete id="deleteAMarkSheetByEtIds" parameterType="String">
-        delete from a_mark_sheet where et_id in 
+        delete from a_mark_sheet where et_id in
         <foreach item="etId" collection="array" open="(" separator="," close=")">
             #{etId}
         </foreach>

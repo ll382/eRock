@@ -14,10 +14,10 @@ public interface IA2A3PhysicalTestService
     /**
      * 查询A2 A3体能测试
      *
-     * @param enumId A2 A3体能测试主键
+     * @param crId A2 A3体能测试主键
      * @return A2 A3体能测试
      */
-    public A2A3PhysicalTest selectA2A3PhysicalTestByPhyId(Long enumId, Long crId);
+    public A2A3PhysicalTest selectA2A3PhysicalTestByPhyId(Long crId);
 
     /**
      * 查询A2 A3体能测试列表
