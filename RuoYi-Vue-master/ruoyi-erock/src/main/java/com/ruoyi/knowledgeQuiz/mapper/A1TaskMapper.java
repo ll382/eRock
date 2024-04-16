@@ -33,9 +33,6 @@ public interface A1TaskMapper
 //    sql视图
     @Select("SELECT a.task_id AS taskId, a.tea_id AS teaId, a.task_datetime AS taskDatetime, a.task_title AS taskTitle, a.task_content AS taskContent, a.task_num AS taskNum, (SELECT COUNT(*) FROM student WHERE stu_id NOT IN (SELECT stu_id FROM a1_answer WHERE task_id = a.task_id)) AS unpaid,(SELECT COUNT(*) FROM student WHERE stu_id IN (SELECT stu_id FROM a1_answer WHERE task_id = a.task_id)) AS submitted FROM a1_task a")
     public List<A1Task> selectTaskList(A1Task a1Task);
-//    视图
-//    @Select("SELECT * FROM student_answer_view")
-//    public List<A1Task> selectTaskList(A1Task a1Task);
     @Select("Select s.stu_id as stuId, e.avatar as stuImg,s.stu_name as stuName from student s left JOIN sys_user e ON e.user_id = s.user_id where s.stu_id NOT IN (SELECT stu_id FROM a1_answer WHERE task_id = #{taskId})")
     public List<Student> selectStudentList(Long taskId);
 

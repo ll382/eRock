@@ -2,6 +2,8 @@ package com.ruoyi.controller.afterClassModel;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.core.service.SelectUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +39,8 @@ public class A3WeeklyTrainingController extends BaseController
     @Autowired
     private IA3WeeklyTrainingService a3WeeklyTrainingService;
 
+    @Autowired
+    SelectUser selectUser;
     /**
      * 查询A3 学生周训资源列表
      */
@@ -69,10 +73,10 @@ public class A3WeeklyTrainingController extends BaseController
      */
     @ApiOperation("获取A3 学生周训资源详细信息")
     @PreAuthorize("@ss.hasPermi('resource:training:query')")
-    @GetMapping(value = "/{stuId}")
-    public AjaxResult getInfo(@PathVariable("stuId") Long stuId)
+    @GetMapping(value = "/{phtrId}")
+    public AjaxResult getInfo(@PathVariable("phtrId") Long phtrId)
     {
-        return success(a3WeeklyTrainingService.selectA3WeeklyTrainingByWetrId(stuId));
+        return success(selectUser.selectFrequency(a3WeeklyTrainingService.selectA3WeeklyTrainingByWetrId(phtrId),phtrId));
     }
 
     /**

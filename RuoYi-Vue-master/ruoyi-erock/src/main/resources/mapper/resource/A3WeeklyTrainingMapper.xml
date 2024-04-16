@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectA3WeeklyTrainingByWetrId" parameterType="Long" resultMap="A3WeeklyTrainingResult">
         <include refid="selectA3WeeklyTrainingVo"/>
-        where stu_id = #{stuId}
+        where phtr_id = #{phtrId}
     </select>
 
     <insert id="insertA3WeeklyTraining" parameterType="A3WeeklyTraining">

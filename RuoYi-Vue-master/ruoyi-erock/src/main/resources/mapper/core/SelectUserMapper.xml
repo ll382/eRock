@@ -9,6 +9,7 @@
             <result column="stuId" property="id"/>
             <result column="stuName" property="name"/>
             <result column="stuImg" property="img"/>
+            <result column="doneIndex" property="doneIndex" />
     </resultMap>
 <!--    老师映射-->
     <resultMap id="teacherImgRequst" type="BaseEntity" autoMapping="true">
@@ -38,7 +39,19 @@
         select gg_id, gg_name, stu_group_leader from stu_group
     </sql>
 
-    <select id="selectStudent" parameterType="list" resultMap="studentImgRequst" >
+    <select id="selectStudents" parameterType="list" resultMap="studentImgRequst" >
+        <include refid="studentRequst" />
+        <where>
+            <if test="list != null and list.size() > 0">
+                s.stu_id IN
+                <foreach item="item" collection="list" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUndoneStudents" parameterType="list" resultMap="studentImgRequst" >
         <include refid="studentRequst" />
         <where>
             <if test="list != null and list.size() > 0">
@@ -50,7 +63,7 @@
         </where>
     </select>
 
-    <select id="selectTeacher" parameterType="list" resultMap="teacherImgRequst" >
+    <select id="selectUndoneTeacher" parameterType="list" resultMap="teacherImgRequst" >
         <include refid="teacherRequst" />
         <where>
             <if test="list != null and list.size() > 0">
@@ -59,6 +72,48 @@
                     #{item}
                 </foreach>
             </if>
+        </where>
+    </select>
+
+    <select id="selectTeachers" parameterType="list" resultMap="teacherImgRequst" resultType="com.ruoyi.common.core.domain.entity.SelectUserVo">
+        <include refid="teacherRequst" />
+        <where>
+            <if test="list != null and list.size() > 0">
+                t.tea_id IN
+                <foreach item="item" collection="list" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUsertFrequency" parameterType="selectUserVo" resultMap="studentImgRequst">
+        Select s.stu_id as stuId, e.avatar as stuImg, s.stu_name as stuName,
+        (SELECT COUNT(*) FROM a3_weekly_training WHERE stu_id = stuId) as doneIndex
+        from student s left JOIN sys_user e ON e.user_id = s.user_id
+        <where>
+            <if test="list != null and list.size() > 0">
+                s.stu_id IN
+                <foreach item="item" collection="list" open="(" separator="," close=")">
+                    #{item.Id}
+                </foreach>
+            </if>
+            ORDER BY doneIndex desc
+        </where>
+    </select>
+
+    <select id="selectUsertFrequencyByRtId" parameterType="selectUserVo" resultMap="studentImgRequst">
+        Select s.stu_id as stuId, e.avatar as stuImg, s.stu_name as stuName,
+        (SELECT COUNT(*) FROM a3_weekly_training WHERE stu_id = stuId AND phtr_id = #{phtrId}) as doneIndex
+        from student s left JOIN sys_user e ON e.user_id = s.user_id
+        <where>
+            <if test="list != null and list.size() > 0">
+                s.stu_id IN
+                <foreach item="item" collection="list" open="(" separator="," close=")">
+                    #{item.id}
+                </foreach>
+            </if>
+            ORDER BY doneIndex desc
         </where>
     </select>
 
@@ -82,4 +137,5 @@
             </if>
         </where>
     </select>
+
 </mapper>

@@ -18,7 +18,14 @@ public interface SelectUser<T extends BaseEntity>  {
     public T selectTeacher(T teacher);
     public T selectInGroupStudent(T GroupStudent);
     public List<T> selectInGroupStudent(List<T> GroupStudent);
+
+    //    必须得要在学生类被赋予之前使用本接口，否则会有索引异常
+
+
 //    Controller工具接口
+    public HashMap<String, Object> selectFrequency(List<T> groupStudent,Long rtId);
+    //    区别上面，下面是不分任务的查看学生提交资源次数
+    public HashMap<String, Object> selectFrequency(List<T> groupStudent);
     public HashMap selectGroup(List<T> groupList);
     public HashMap selectUndoneStudent(List<T> stuList);
 

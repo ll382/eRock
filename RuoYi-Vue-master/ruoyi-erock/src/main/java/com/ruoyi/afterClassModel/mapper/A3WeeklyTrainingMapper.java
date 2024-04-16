@@ -14,10 +14,10 @@ public interface A3WeeklyTrainingMapper
     /**
      * 查询A3 学生周训资源
      *
-     * @param stuId A3 学生周训资源主键
+     * @param phtrId A3 学生周训资源主键
      * @return A3 学生周训资源
      */
-    public List<A3WeeklyTraining> selectA3WeeklyTrainingByWetrId(Long stuId);
+    public List<A3WeeklyTraining> selectA3WeeklyTrainingByWetrId(Long phtrId);
 
     /**
      * 查询A3 学生周训资源列表

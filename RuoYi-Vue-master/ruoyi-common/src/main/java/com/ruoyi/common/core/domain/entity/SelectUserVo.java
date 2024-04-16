@@ -25,6 +25,11 @@ public class SelectUserVo {
     @Excel(name = "学生图片")
     private String Img;
 
+    /** 提交数量 */
+    @Excel(name = "提交数量")
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long doneIndex;
+
     public String getRole() {
         return role;
     }
@@ -57,11 +62,22 @@ public class SelectUserVo {
         Img = img;
     }
 
+    public Long getDoneIndex() {
+        return doneIndex;
+    }
+
+    public void setDoneIndex(Long doneIndex) {
+        this.doneIndex = doneIndex;
+    }
+
     @Override
     public String toString() {
         return "SelectUserVo{" +
-                "Name='" + Name + '\'' +
+                "role='" + role + '\'' +
+                ", Id=" + Id +
+                ", Name='" + Name + '\'' +
                 ", Img='" + Img + '\'' +
+                ", doneIndex='" + doneIndex + '\'' +
                 '}';
     }
 }

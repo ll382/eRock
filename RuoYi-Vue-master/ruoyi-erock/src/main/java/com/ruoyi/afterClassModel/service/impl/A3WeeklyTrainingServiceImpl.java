@@ -1,5 +1,6 @@
 package com.ruoyi.afterClassModel.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.core.service.SelectUser;
@@ -26,13 +27,13 @@ public class A3WeeklyTrainingServiceImpl implements IA3WeeklyTrainingService
     /**
      * 查询A3 学生周训资源
      *
-     * @param stuId A3 学生周训资源主键
+     * @param phtrId A3 学生周训资源主键
      * @return A3 学生周训资源
      */
     @Override
-    public List<A3WeeklyTraining> selectA3WeeklyTrainingByWetrId(Long stuId)
+    public List<A3WeeklyTraining> selectA3WeeklyTrainingByWetrId(Long phtrId)
     {
-        return selectUser.selectStudent(a3WeeklyTrainingMapper.selectA3WeeklyTrainingByWetrId(stuId));
+        return a3WeeklyTrainingMapper.selectA3WeeklyTrainingByWetrId(phtrId);
     }
 
     /**
@@ -44,7 +45,7 @@ public class A3WeeklyTrainingServiceImpl implements IA3WeeklyTrainingService
     @Override
     public List<A3WeeklyTraining> selectA3WeeklyTrainingList(A3WeeklyTraining a3WeeklyTraining)
     {
-        return a3WeeklyTrainingMapper.selectA3WeeklyTrainingList(a3WeeklyTraining);
+        return selectUser.selectStudent(a3WeeklyTrainingMapper.selectA3WeeklyTrainingList(a3WeeklyTraining));
     }
 
     /**
@@ -56,6 +57,7 @@ public class A3WeeklyTrainingServiceImpl implements IA3WeeklyTrainingService
     @Override
     public int insertA3WeeklyTraining(A3WeeklyTraining a3WeeklyTraining)
     {
+        a3WeeklyTraining.setWetrTime(new Date());
         return a3WeeklyTrainingMapper.insertA3WeeklyTraining(a3WeeklyTraining);
     }
 

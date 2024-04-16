@@ -21,7 +21,7 @@ import java.util.Objects;
 @Service
 public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Autowired
-    SelectUserMapper selectUserMapper;
+    SelectUserMapper    selectUserMapper;
 
     @Autowired
     SelectUser selectUser;
@@ -40,11 +40,20 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     }
 
     @Override
-    public List<T> selectTeacher(List<T> teaList) {
-        teaList.forEach(teacher -> {
+    public List<T> selectTeacher(List<T> teachers) {
+        teachers.forEach(teacher -> {
             teacher.setTeacher(selectUserMapper.selectTeacherbyOne(teacher.getTeaId()));
         });
-        return teaList;
+//        ArrayList<Long> teaIdList = new ArrayList<>();
+//        teachers.forEach(teacher -> {
+//            teaIdList.add(teacher.getTeaId());
+//            teacher.setTeacher(selectUserMapper.selectTeacherbyOne(teacher.getTeaId()));
+//        });
+//        List<SelectUserVo> tealist = selectUserMapper.selectTeachers(teaIdList);
+//        for (int i = 0; i < teachers.size(); i++){
+//            teachers.get(i).setTeacher(tealist.get(i));
+//        }
+        return teachers;
     }
 
     @Override
@@ -71,6 +80,58 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         });
         return GroupStudent;
     }
+
+//    查清已做未
+    @Override
+    public HashMap<String, Object> selectFrequency(List<T> users , Long phtrId){
+//        返回类型
+        HashMap<String, Object> map = new HashMap<>();
+//        查学生id
+        List<Long> vo = new ArrayList<>();
+        users.forEach(user -> {
+            vo.add(user.getStuId());
+        });
+//        通过学生id获取对应的做了和没做的名单
+        List<SelectUserVo> undoneStudents = selectUserMapper.selectUndoneStudents(vo);
+        List<SelectUserVo> doneStudents = selectUserMapper.selectStudents(vo);
+//        通过对应做了和没做的名单引申出它的次数
+        List<SelectUserVo> undoneStudentslist = undoneStudents;
+        List<SelectUserVo> doneStudentslist = selectUserMapper.selectUsertFrequencyByRtId(doneStudents,phtrId);
+        if (undoneStudents.size() > 0) {
+            undoneStudentslist = selectUserMapper.selectUsertFrequencyByRtId(undoneStudents,phtrId);
+        }
+//        放到返回类型中
+        map.put("phtrId",String.valueOf(phtrId));
+        map.put("doneStudents",doneStudentslist);
+        map.put("undoneStudents",undoneStudentslist);
+
+        return map;
+    }
+    @Override
+    public HashMap<String, Object> selectFrequency(List<T> users){
+//        返回类型
+        HashMap<String, Object> map = new HashMap<>();
+//        查学生id
+        List<Long> vo = new ArrayList<>();
+        users.forEach(user -> {
+            vo.add(user.getStuId());
+        });
+//        通过学生id获取对应的做了和没做的名单
+        List<SelectUserVo> undoneStudents = selectUserMapper.selectUndoneStudents(vo);
+        List<SelectUserVo> doneStudents = selectUserMapper.selectStudents(vo);
+//        通过对应做了和没做的名单引申出它的次数
+        List<SelectUserVo> undoneStudentslist = undoneStudents;
+        List<SelectUserVo> doneStudentslist = selectUserMapper.selectUsertFrequency(doneStudents);
+        if (undoneStudents.size() > 0) {
+            undoneStudentslist = selectUserMapper.selectUsertFrequency(undoneStudents);
+        }
+//        放到返回类型中
+        map.put("doneStudents",doneStudentslist);
+        map.put("undoneStudents",undoneStudentslist);
+
+        return map;
+    }
+
 
     @Override
     public HashMap<String, Object> selectGroup(List<T> groupList) {
@@ -118,7 +179,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
             if (stu.getStuId() != null)num.add(stu.getStuId());
         });
 //        不为空则查出本组对应未交小组
-        undoneStu = selectUserMapper.selectStudent(num);
+        undoneStu = selectUserMapper.selectUndoneStudents(num);
         map.put("doneStudents",stuList);
         map.put("undoneStudents",undoneStu);
         return map;

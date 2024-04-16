@@ -20,14 +20,19 @@ public interface SelectUserMapper {
     SelectUserVo selectStudentbyOne(Long stuId);
     @Select("Select t.tea_id as id , e.avatar as img,t.tea_name as name from teacher t left JOIN sys_user e ON e.user_id = t.user_id where t.tea_id = #{teaId}")
     SelectUserVo selectTeacherbyOne(Long teaId);
+    List<SelectUserVo> selectTeachers(List<Long> teaId);
 //    查小组内所有学生
     List<SelectUserVo> selectInGroupStudent(Long ggId);
 //    返回未在list中的学生
-    List<SelectUserVo> selectStudent(List<Long> stuList);
-    List<SelectUserVo> selectTeacher(List<SelectUserVo> teaList);
+    List<SelectUserVo> selectStudents(List<Long> stuList);
+    List<SelectUserVo> selectUndoneStudents(List<Long> stuList);
+    List<SelectUserVo> selectUndoneTeacher(List<SelectUserVo> teaList);
 //    小组查询
     @Select("select gg_id as ggId , gg_name as ggName, stu_group_leader as stuGroupLeader  from stu_group where gg_id = #{ggId}")
     Group selectGroupbyOne(Long ggId);
+
+    List<SelectUserVo> selectUsertFrequency(@Param("list") List<SelectUserVo> list);
+    List<SelectUserVo> selectUsertFrequencyByRtId(@Param("list") List<SelectUserVo> list ,@Param("phtrId") Long phtrId);
 //    返回未在list中的所有小组
     List<Group> selectGroup(@Param("ggId") List<Long> ggId);
 }

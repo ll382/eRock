@@ -1,9 +1,12 @@
 package com.ruoyi.afterClassModel.service.impl;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.core.service.SelectUser;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -64,10 +67,19 @@ public class A3PhysicalTrainingServiceImpl implements IA3PhysicalTrainingService
     @Override
     public int insertA3PhysicalTraining(A3PhysicalTraining a3PhysicalTraining)
     {
+        // 获取当前时间
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+        a3PhysicalTraining.setPhtrStartTime(currentDate);
+        // 将当前时间加七天
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        Date futureDate = calendar.getTime();
+        a3PhysicalTraining.setPhtrEndTime(futureDate);
         int rows = a3PhysicalTrainingMapper.insertA3PhysicalTraining(a3PhysicalTraining);
         insertA3WeeklyTraining(a3PhysicalTraining);
         return rows;
     }
+
 
     /**
      * 修改A3 体能训练周
