@@ -1,5 +1,6 @@
 package com.ruoyi.core.service.impl;
 
+import com.ruoyi.afterClassModel.domain.A3PhysicalTraining;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SelectUserVo;
 import com.ruoyi.common.core.domain.entity.Group;
@@ -8,10 +9,7 @@ import com.ruoyi.core.mapper.SelectUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @Description
@@ -44,15 +42,6 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         teachers.forEach(teacher -> {
             teacher.setTeacher(selectUserMapper.selectTeacherbyOne(teacher.getTeaId()));
         });
-//        ArrayList<Long> teaIdList = new ArrayList<>();
-//        teachers.forEach(teacher -> {
-//            teaIdList.add(teacher.getTeaId());
-//            teacher.setTeacher(selectUserMapper.selectTeacherbyOne(teacher.getTeaId()));
-//        });
-//        List<SelectUserVo> tealist = selectUserMapper.selectTeachers(teaIdList);
-//        for (int i = 0; i < teachers.size(); i++){
-//            teachers.get(i).setTeacher(tealist.get(i));
-//        }
         return teachers;
     }
 
@@ -91,20 +80,22 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         users.forEach(user -> {
             vo.add(user.getStuId());
         });
-//        通过学生id获取对应的做了和没做的名单
-        List<SelectUserVo> undoneStudents = selectUserMapper.selectUndoneStudents(vo);
+//        通过学生id获取对应的没做的名单  users数据为空的后果就是全查
+//        为空不查
         List<SelectUserVo> doneStudents = selectUserMapper.selectStudents(vo);
-//        通过对应做了和没做的名单引申出它的次数
-        List<SelectUserVo> undoneStudentslist = undoneStudents;
-        List<SelectUserVo> doneStudentslist = selectUserMapper.selectUsertFrequencyByRtId(doneStudents,phtrId);
-        if (undoneStudents.size() > 0) {
-            undoneStudentslist = selectUserMapper.selectUsertFrequencyByRtId(undoneStudents,phtrId);
-        }
+//        为空全查
+        List<SelectUserVo> undoneStudents = selectUserMapper.selectUndoneStudents(vo);
+//        通过名单查出所有做了和没做的学生列表
+        List<SelectUserVo> doneStudentslist = selectUserMapper.selectUserFrequencyByRtId(doneStudents,phtrId);
+        List<SelectUserVo> undoneStudentslist = selectUserMapper.selectUserFrequencyByRtId(undoneStudents,phtrId);
 //        放到返回类型中
+        A3PhysicalTraining a3PhysicalTraining = selectUserMapper.selectStudentFrequency(phtrId);
+        a3PhysicalTraining.setTeacher(selectUserMapper.selectTeacherbyOne(a3PhysicalTraining.getTeaId()));
+
+        map.put("teaTask",a3PhysicalTraining);
         map.put("phtrId",String.valueOf(phtrId));
         map.put("doneStudents",doneStudentslist);
         map.put("undoneStudents",undoneStudentslist);
-
         return map;
     }
     @Override
@@ -121,9 +112,9 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         List<SelectUserVo> doneStudents = selectUserMapper.selectStudents(vo);
 //        通过对应做了和没做的名单引申出它的次数
         List<SelectUserVo> undoneStudentslist = undoneStudents;
-        List<SelectUserVo> doneStudentslist = selectUserMapper.selectUsertFrequency(doneStudents);
+        List<SelectUserVo> doneStudentslist = selectUserMapper.selectUserFrequency(doneStudents);
         if (undoneStudents.size() > 0) {
-            undoneStudentslist = selectUserMapper.selectUsertFrequency(undoneStudents);
+            undoneStudentslist = selectUserMapper.selectUserFrequency(undoneStudents);
         }
 //        放到返回类型中
         map.put("doneStudents",doneStudentslist);

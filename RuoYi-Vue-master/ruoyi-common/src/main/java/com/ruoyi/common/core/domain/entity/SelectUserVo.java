@@ -27,7 +27,7 @@ public class SelectUserVo {
 
     /** 提交数量 */
     @Excel(name = "提交数量")
-//    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long doneIndex;
 
     public String getRole() {
