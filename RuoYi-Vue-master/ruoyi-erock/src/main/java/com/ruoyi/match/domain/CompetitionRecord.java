@@ -108,7 +108,7 @@ public class CompetitionRecord extends BaseEntity
     }
     public void setCrId(Long crId)
     {
-        this.crId = crId;
+        this.crId = crId; 
     }
 
     public Long getCrId()

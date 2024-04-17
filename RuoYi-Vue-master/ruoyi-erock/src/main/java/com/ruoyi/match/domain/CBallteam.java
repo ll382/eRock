@@ -65,6 +65,7 @@ public class CBallteam extends BaseEntity {
 
 	public void setGgId(Long ggId) {
 		this.ggId = ggId;
+        super.setGgId(ggId);
 	}
 
 	public Long getGgId() {

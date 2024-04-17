@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 球队、社团训练对象 b1_franchise_club
- * 
+ *
  * @author houq
  * @date 2024-03-27
  */
@@ -28,7 +28,7 @@ public class B1FranchiseClub extends BaseEntity
 
     /** 学生学号 */
     @Excel(name = "学生学号")
-    private String stuId;
+    private Long stuId;
 
     /** 训练URL */
     @Excel(name = "训练URL")
@@ -50,66 +50,67 @@ public class B1FranchiseClub extends BaseEntity
     /** B1 资源信息 */
     private List<B1MassSource> b1MassSourceList;
 
-    public void setTcId(Long tcId) 
+    public void setTcId(Long tcId)
     {
         this.tcId = tcId;
     }
 
-    public Long getTcId() 
+    public Long getTcId()
     {
         return tcId;
     }
-    public void setEnumId(Long enumId) 
+    public void setEnumId(Long enumId)
     {
         this.enumId = enumId;
     }
 
-    public Long getEnumId() 
+    public Long getEnumId()
     {
         return enumId;
     }
-    public void setStuId(String stuId) 
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
-    public String getStuId() 
+    public Long getStuId()
     {
         return stuId;
     }
-    public void setTcUrl(String tcUrl) 
+    public void setTcUrl(String tcUrl)
     {
         this.tcUrl = tcUrl;
     }
 
-    public String getTcUrl() 
+    public String getTcUrl()
     {
         return tcUrl;
     }
-    public void setTcTime(Date tcTime) 
+    public void setTcTime(Date tcTime)
     {
         this.tcTime = tcTime;
     }
 
-    public Date getTcTime() 
+    public Date getTcTime()
     {
         return tcTime;
     }
-    public void setTcTitle(String tcTitle) 
+    public void setTcTitle(String tcTitle)
     {
         this.tcTitle = tcTitle;
     }
 
-    public String getTcTitle() 
+    public String getTcTitle()
     {
         return tcTitle;
     }
-    public void setTcPlace(String tcPlace) 
+    public void setTcPlace(String tcPlace)
     {
         this.tcPlace = tcPlace;
     }
 
-    public String getTcPlace() 
+    public String getTcPlace()
     {
         return tcPlace;
     }

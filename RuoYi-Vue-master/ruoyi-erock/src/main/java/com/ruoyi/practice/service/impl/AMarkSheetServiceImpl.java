@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.practice.domain.ABallExam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -39,13 +40,13 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public AMarkSheet selectAMarkSheetByMsId(Long msId)
     {
-        return selectUser.selectStudent(aMarkSheetMapper.selectAMarkSheetByMsId(msId));
+        return (AMarkSheet) selectUser.selectStudent(aMarkSheetMapper.selectAMarkSheetByMsId(msId));
     }
 
     /**
      * 查询未提交名单
      *
-     * @param List<Student> 练习、测试评分表
+     * @param etId 练习、测试评分表
      * @return 练习、测试评分表
      */
     @Override
@@ -77,8 +78,22 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
+//        维护pc数据，将用户的值输入至ballExam表中
+        ABallExam ballExam = new ABallExam();
+
         aMarkSheet.setMsTime(new Date());
         int rows = aMarkSheetMapper.insertAMarkSheet(aMarkSheet);
+
+        ballExam.setMsId(aMarkSheet.getMsId());
+        ballExam.setDriStability(aMarkSheet.getMs2());
+        ballExam.setDriPower(aMarkSheet.getMs1());
+        ballExam.setDriSpeed(aMarkSheet.getMs3());
+        ballExam.setDriAnalysis(aMarkSheet.getMsClass());
+        ballExam.setShoArc(aMarkSheet.getMs3());
+        ballExam.setShoAngle(aMarkSheet.getMs2());
+        ballExam.setShoSpinner(aMarkSheet.getMs1());
+        ballExam.setShoAnalysis(aMarkSheet.getMsClass());
+
         insertAExerciseResource(aMarkSheet);
         return rows;
     }

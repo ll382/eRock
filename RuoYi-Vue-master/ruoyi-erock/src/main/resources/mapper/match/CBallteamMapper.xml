@@ -125,7 +125,7 @@
     </select>
 
     <!-- 新建小组 -->
-    <insert id="insertStuGroup" parameterType="StuGroup" useGeneratedKeys="true" keyProperty="ggId">
+    <insert id="insertStuGroup" parameterType="Group" useGeneratedKeys="true" keyProperty="ggId">
         insert into stu_group
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="ggName != null">gg_name,</if>

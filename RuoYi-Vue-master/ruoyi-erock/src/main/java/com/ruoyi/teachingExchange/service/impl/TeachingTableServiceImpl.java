@@ -2,9 +2,18 @@ package com.ruoyi.teachingExchange.service.impl;
 
 import java.util.*;
 
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.mapper.StudentMapper;
+import com.ruoyi.core.service.impl.SelectUserImpl;
+import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.teachingExchange.domain.A1Viewed;
 import com.ruoyi.teachingExchange.domain.TeachingUnit;
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +36,12 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 {
     @Autowired
     private TeachingTableMapper teachingTableMapper;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private StudentMapper studentMapper;
 
     /**
      * 查询A1 线上学习学生线上观看记录表
@@ -154,15 +169,30 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 
 
     @Override
-    public int updateStudent() {
+    public String updateStudent() {
         int i = 0;
-        List<Student> stuList = teachingTableMapper.selectViewed();
+        int j = 0;
+        List<Student> stuList = studentMapper.selectStudentList(null);
+        SysUser user = new SysUser();
+        user.setAvatar("https://cdn1.d5v.cc/CDN/Project/eRock/tx/2.jpg");
+        user.setStatus("0");
         for (Student a:stuList) {
-            if (teachingTableMapper.updateStudent(a) > 0){
+            List<SysUser> sysUser = sysUserMapper.selectUserByUserNickName(a.getStuName());
+            System.out.println(sysUser.size());
+            if (sysUser.size() != 0){
+                teachingTableMapper.updateStudent(a);
                 i++;
+            }else {
+//                设置用户信息
+                user.setUserId(null);
+                user.setNickName(a.getStuName());
+                user.setUserName(SelectUserImpl.toPinyin(a.getStuName()));
+                user.setPassword("654321");
+                sysUserMapper.insertUser(user);
+                j++;
             }
         }
-        return i;
+        return "操作完成，已更新：" + i + "人，已插入" + j;
     }
 
 

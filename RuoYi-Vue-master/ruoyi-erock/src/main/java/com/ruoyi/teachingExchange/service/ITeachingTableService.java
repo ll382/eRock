@@ -16,7 +16,7 @@ import com.ruoyi.teachingExchange.domain.TeachingUnit;
 public interface ITeachingTableService
 {
 
-    int updateStudent();
+    String updateStudent();
     /**
      * 查询A1 线上学习学生线上观看记录表
      *

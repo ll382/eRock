@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.afterClassModel.mapper.A3PhysicalTrainingMapper">
+    
+    <resultMap type="A3PhysicalTraining" id="A3PhysicalTrainingResult">
+        <result property="phtrId"    column="phtr_id"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="phtrStartTime"    column="phtr_start_time"    />
+        <result property="phtrEndTime"    column="phtr_end_time"    />
+        <result property="phtrName"    column="phtr_name"    />
+        <result property="phtrDescribe"    column="phtr_describe"    />
+    </resultMap>
+
+    <resultMap id="A3PhysicalTrainingA3WeeklyTrainingResult" type="A3PhysicalTraining" extends="A3PhysicalTrainingResult">
+        <collection property="a3WeeklyTrainingList" notNullColumn="sub_wetr_id" javaType="java.util.List" resultMap="A3WeeklyTrainingResult" />
+    </resultMap>
+
+    <resultMap type="A3WeeklyTraining" id="A3WeeklyTrainingResult">
+        <result property="wetrId"    column="sub_wetr_id"    />
+        <result property="phtrId"    column="sub_phtr_id"    />
+        <result property="stuId"    column="sub_stu_id"    />
+        <result property="wetrTime"    column="sub_wetr_time"    />
+        <result property="wetrUrl"    column="sub_wetr_url"    />
+    </resultMap>
+
+    <sql id="selectA3PhysicalTrainingVo">
+        select phtr_id, tea_id, phtr_start_time, phtr_end_time, phtr_name, phtr_describe from a3_physical_training
+    </sql>
+
+    <select id="selectA3PhysicalTrainingList" parameterType="A3PhysicalTraining" resultMap="A3PhysicalTrainingResult">
+        <include refid="selectA3PhysicalTrainingVo"/>
+        <where>  
+            <if test="teaId != null "> and tea_id = #{teaId}</if>
+            <if test="phtrStartTime != null "> and phtr_start_time = #{phtrStartTime}</if>
+            <if test="phtrEndTime != null "> and phtr_end_time = #{phtrEndTime}</if>
+            <if test="phtrName != null  and phtrName != ''"> and phtr_name like concat('%', #{phtrName}, '%')</if>
+            <if test="phtrDescribe != null  and phtrDescribe != ''"> and phtr_describe = #{phtrDescribe}</if>
+        </where>
+    </select>
+    
+    <select id="selectA3PhysicalTrainingByPhtrId" parameterType="Long" resultMap="A3PhysicalTrainingA3WeeklyTrainingResult">
+        select a.phtr_id, a.tea_id, a.phtr_start_time, a.phtr_end_time, a.phtr_name, a.phtr_describe,
+ b.wetr_id as sub_wetr_id, b.phtr_id as sub_phtr_id, b.stu_id as sub_stu_id, b.wetr_time as sub_wetr_time, b.wetr_url as sub_wetr_url
+        from a3_physical_training a
+        left join a3_weekly_training b on b.phtr_id = a.phtr_id
+        where a.phtr_id = #{phtrId}
+    </select>
+        
+    <insert id="insertA3PhysicalTraining" parameterType="A3PhysicalTraining">
+        insert into a3_physical_training
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="phtrId != null">phtr_id,</if>
+            <if test="teaId != null">tea_id,</if>
+            <if test="phtrStartTime != null">phtr_start_time,</if>
+            <if test="phtrEndTime != null">phtr_end_time,</if>
+            <if test="phtrName != null">phtr_name,</if>
+            <if test="phtrDescribe != null">phtr_describe,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="phtrId != null">#{phtrId},</if>
+            <if test="teaId != null">#{teaId},</if>
+            <if test="phtrStartTime != null">#{phtrStartTime},</if>
+            <if test="phtrEndTime != null">#{phtrEndTime},</if>
+            <if test="phtrName != null">#{phtrName},</if>
+            <if test="phtrDescribe != null">#{phtrDescribe},</if>
+         </trim>
+    </insert>
+
+    <update id="updateA3PhysicalTraining" parameterType="A3PhysicalTraining">
+        update a3_physical_training
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teaId != null">tea_id = #{teaId},</if>
+            <if test="phtrStartTime != null">phtr_start_time = #{phtrStartTime},</if>
+            <if test="phtrEndTime != null">phtr_end_time = #{phtrEndTime},</if>
+            <if test="phtrName != null">phtr_name = #{phtrName},</if>
+            <if test="phtrDescribe != null">phtr_describe = #{phtrDescribe},</if>
+        </trim>
+        where phtr_id = #{phtrId}
+    </update>
+
+    <delete id="deleteA3PhysicalTrainingByPhtrId" parameterType="Long">
+        delete from a3_physical_training where phtr_id = #{phtrId}
+    </delete>
+
+    <delete id="deleteA3PhysicalTrainingByPhtrIds" parameterType="String">
+        delete from a3_physical_training where phtr_id in 
+        <foreach item="phtrId" collection="array" open="(" separator="," close=")">
+            #{phtrId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteA3WeeklyTrainingByPhtrIds" parameterType="String">
+        delete from a3_weekly_training where phtr_id in 
+        <foreach item="phtrId" collection="array" open="(" separator="," close=")">
+            #{phtrId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteA3WeeklyTrainingByPhtrId" parameterType="Long">
+        delete from a3_weekly_training where phtr_id = #{phtrId}
+    </delete>
+
+    <insert id="batchA3WeeklyTraining">
+        insert into a3_weekly_training( wetr_id, phtr_id, stu_id, wetr_time, wetr_url) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.wetrId}, #{item.phtrId}, #{item.stuId}, #{item.wetrTime}, #{item.wetrUrl})
+        </foreach>
+    </insert>
+</mapper>

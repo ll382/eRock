@@ -27,6 +27,7 @@ public class StuToTea extends BaseEntity
 
     public void setStuId(Long stuId) {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
     public Long getTeaId() {
@@ -35,6 +36,7 @@ public class StuToTea extends BaseEntity
 
     public void setTeaId(Long teaId) {
         this.teaId = teaId;
+        super.setTeaId(teaId);
     }
 
     @Override

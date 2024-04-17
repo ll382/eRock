@@ -8,7 +8,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 老师对象 teacher
- * 
+ *
  * @author heye
  * @date 2024-03-17
  */
@@ -30,30 +30,31 @@ public class Teacher extends BaseEntity
     /** 多个学生对多个老师信息 */
     private List<StuToTea> stuToTeaList;
 
-    public void setTeaId(Long teaId) 
+    public void setTeaId(Long teaId)
     {
         this.teaId = teaId;
+        super.setTeaId(teaId);
     }
 
-    public Long getTeaId() 
+    public Long getTeaId()
     {
         return teaId;
     }
-    public void setTeaName(String teaName) 
+    public void setTeaName(String teaName)
     {
         this.teaName = teaName;
     }
 
-    public String getTeaName() 
+    public String getTeaName()
     {
         return teaName;
     }
-    public void setTeaPassword(String teaPassword) 
+    public void setTeaPassword(String teaPassword)
     {
         this.teaPassword = teaPassword;
     }
 
-    public String getTeaPassword() 
+    public String getTeaPassword()
     {
         return teaPassword;
     }

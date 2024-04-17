@@ -3,7 +3,6 @@ package com.ruoyi.practice.domain;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ruoyi.core.domain.vo.SelectUserVo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -52,10 +51,6 @@ public class AExerciseTask extends BaseEntity
     @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date etEndTime;
 
-    /** 教师类 */
-    @Excel(name = "教师类")
-    private SelectUserVo teacher;
-
     /** 练习、测试评分表信息 */
     private List<AMarkSheet> aMarkSheetList;
 
@@ -70,7 +65,7 @@ public class AExerciseTask extends BaseEntity
     }
     public void setCrId(Long crId)
     {
-        this.crId = crId;
+        this.crId = crId; 
     }
 
     public Long getCrId()
@@ -84,6 +79,7 @@ public class AExerciseTask extends BaseEntity
 
     public void setTeaId(Long teaId) {
         this.teaId = teaId;
+        super.setTeaId(teaId);
     }
 
     public void setEnumId(Long enumId)
@@ -130,14 +126,6 @@ public class AExerciseTask extends BaseEntity
     public Date getEtEndTime()
     {
         return etEndTime;
-    }
-
-    public SelectUserVo getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(SelectUserVo teacher) {
-        this.teacher = teacher;
     }
 
     public List<AMarkSheet> getAMarkSheetList()

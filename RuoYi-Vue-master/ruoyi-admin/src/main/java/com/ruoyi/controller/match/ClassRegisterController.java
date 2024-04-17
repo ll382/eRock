@@ -44,8 +44,6 @@ public class ClassRegisterController extends BaseController {
 	@Autowired
 	private IClassRegisterService classRegisterService;
 
-
-
 	/**
 	 * 查询课堂记录列表
 	 */
@@ -57,6 +55,18 @@ public class ClassRegisterController extends BaseController {
 		ClassRegister list = classRegisterService.selectAmodeClassRegisterByCrId(crId);
 		return AjaxResult.success(list);
 	}
+
+	/**
+	 * 删除课堂记录
+	 */
+	@ApiOperation("删除课堂以及A子表记录")
+	@PreAuthorize("@ss.hasPermi('match:register:remove')")
+	@Log(title = "课堂记录", businessType = BusinessType.DELETE)
+	@DeleteMapping("/unitA/{crIds}")
+	public AjaxResult deleteAmodeClassRegister(@PathVariable Long crIds) {
+		return toAjax(classRegisterService.deleteAmodeClassRegister(crIds));
+	}
+
 
 	//   --------------------分界线-----------------------
 

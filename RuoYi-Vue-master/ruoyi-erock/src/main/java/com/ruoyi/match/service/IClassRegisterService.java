@@ -53,6 +53,8 @@ public interface IClassRegisterService
      */
     public int deleteClassRegisterByCrIds(Long[] crIds);
 
+    public int deleteAmodeClassRegister(Long crIds);
+
     /**
      * 删除课堂记录信息
      *

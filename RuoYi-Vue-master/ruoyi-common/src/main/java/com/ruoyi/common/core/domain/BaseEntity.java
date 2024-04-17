@@ -3,14 +3,18 @@ package com.ruoyi.common.core.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.entity.Group;
+import com.ruoyi.common.core.domain.entity.SelectUserVo;
 
 /**
  * Entity基类
- * 
+ *
  * @author ruoyi
  */
 public class BaseEntity implements Serializable
@@ -41,6 +45,35 @@ public class BaseEntity implements Serializable
     /** 请求参数 */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, Object> params;
+
+    /** 用户ID */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Excel(name = "学生ID")
+    private Long stuId;
+    /** 用户ID */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Excel(name = "教师ID")
+    private Long teaId;
+
+    /** 教师类 */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Excel(name = "教师类")
+    private SelectUserVo teacher;
+
+    /** 学生类 */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Excel(name = "学生类")
+    private SelectUserVo student;
+
+    /** 小组ID */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Excel(name = "小组ID")
+    private Long ggId;
+
+    /** 小组信息 */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Excel(name = "小组信息")
+    private Group group;
 
     public String getSearchValue()
     {
@@ -100,6 +133,54 @@ public class BaseEntity implements Serializable
     public void setRemark(String remark)
     {
         this.remark = remark;
+    }
+
+    public Long getStuId() {
+        return stuId;
+    }
+
+    public void setStuId(Long stuId) {
+        this.stuId = stuId;
+    }
+
+    public Long getTeaId() {
+        return teaId;
+    }
+
+    public void setTeaId(Long teaId) {
+        this.teaId = teaId;
+    }
+
+    public Long getGgId() {
+        return ggId;
+    }
+
+    public void setGgId(Long ggId) {
+        this.ggId = ggId;
+    }
+
+    public SelectUserVo getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(SelectUserVo teacher) {
+        this.teacher = teacher;
+    }
+
+    public SelectUserVo getStudent() {
+        return student;
+    }
+
+    public void setStudent(SelectUserVo student) {
+        this.student = student;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public Map<String, Object> getParams()
