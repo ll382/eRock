@@ -122,4 +122,15 @@ public class CBallteamController extends BaseController {
 	public AjaxResult addStuGroup(@RequestBody HashMap<String, Object> map) {
 		return toAjax(cBallteamService.insertStuGroup(map));
 	}
+
+	/**
+	 * 批量修改球队参赛
+	 */
+	@ApiOperation("修改球队参赛")
+	@PreAuthorize("@ss.hasPermi('match:ballteam:edits')")
+	@Log(title = "球队参赛", businessType = BusinessType.UPDATE)
+	@PutMapping("/edits")
+	public AjaxResult edits(@RequestBody List<CBallteam> cBallteamList) {
+		return toAjax(cBallteamService.updateCBallteams(cBallteamList));
+	}
 }

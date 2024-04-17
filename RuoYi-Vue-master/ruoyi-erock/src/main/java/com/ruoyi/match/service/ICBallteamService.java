@@ -76,4 +76,12 @@ public interface ICBallteamService {
 	 * @return 结果
 	 */
 	public int insertStuGroup(HashMap<String, Object> map);
+
+	/**
+	 * 批量修改球队参赛
+	 *
+	 * @param cBallteamList
+	 * @return
+	 */
+	public int updateCBallteams(List<CBallteam> cBallteamList);
 }

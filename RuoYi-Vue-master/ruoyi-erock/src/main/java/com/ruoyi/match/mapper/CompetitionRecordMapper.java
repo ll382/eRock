@@ -2,8 +2,10 @@ package com.ruoyi.match.mapper;
 
 import java.util.HashMap;
 import java.util.List;
+
 import com.ruoyi.match.domain.CompetitionRecord;
 import com.ruoyi.match.domain.CBallteam;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * C 比赛记录Mapper接口
@@ -11,8 +13,7 @@ import com.ruoyi.match.domain.CBallteam;
  * @author houq
  * @date 2024-04-08
  */
-public interface CompetitionRecordMapper
-{
+public interface CompetitionRecordMapper {
 	/**
 	 * 查询C 比赛记录
 	 *
@@ -85,7 +86,7 @@ public interface CompetitionRecordMapper
 	 * @return 结果
 	 */
 	public int deleteCBallteamByCcRId(Long ccRId);
-	
+
 	/**
 	 * 获取比赛记录记录
 	 *
@@ -93,4 +94,32 @@ public interface CompetitionRecordMapper
 	 * @return
 	 */
 	public List<HashMap<String, String>> selectGameRecord(String speci);
+
+	/**
+	 * 获取课外赛学生信息
+	 *
+	 * @return
+	 */
+	public List<HashMap<String, String>> findCBallteamKw();
+
+	/**
+	 * 获取课外赛信息
+	 *
+	 * @return
+	 */
+	public List<HashMap<String, Object>> findRecordKwByStuId(Long stuId);
+
+	/**
+	 * 根据学号和比赛id获取学生信息
+	 *
+	 * @return
+	 */
+	public HashMap<String, Object> findRecordKwByStuIdAndCcrId(HashMap<String, String> map);
+
+	/**
+	 * 审核学生上传的资料
+	 *
+	 * @return
+	 */
+	public Integer updateAudit(HashMap<String, String> map);
 }

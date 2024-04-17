@@ -136,4 +136,14 @@
             <if test="stuGroupLeader != null">#{stuGroupLeader},</if>
         </trim>
     </insert>
+
+    <!-- 删除小组 -->
+    <delete id="deleteStuGroupByGgId" parameterType="Long">
+	    DELETE
+	    FROM stu_group
+	    WHERE gg_id = (SELECT DISTINCT cb.gg_id
+	                   FROM c_personnel_sheet cps
+		                        JOIN c_ballteam cb ON cps.bal_id = cb.bal_id
+	                   WHERE cps.bal_id = #{balId})
+    </delete>
 </mapper>
