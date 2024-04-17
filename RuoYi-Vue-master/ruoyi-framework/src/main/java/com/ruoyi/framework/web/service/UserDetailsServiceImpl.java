@@ -56,20 +56,23 @@ public class UserDetailsServiceImpl implements UserDetailsService
             throw new ServiceException(MessageUtils.message("user.blocked"));
         }
 
-//        判断哪个用户端登录  role判断
+// 获取用户角色ID，可能为null
+        Long roleId = user.getRoleId();
+
         if ("0".equals(LoginBody.loginStatus))
         {
-//            判断用老师端登录的是不是老师
-            if (101 == user.getRoleId()) {
+            // 判断用老师端登录的是不是老师
+            if (roleId != null && 101 == roleId.longValue()) {
                 log.info("登录用户为学生：{} 登录错误，请移步至学生端.", username);
-                throw new BaseException("不存在该老师账号："+username);
+                throw new BaseException("不存在该老师账号：" + username);
             }
-        }else if ("1".equals(LoginBody.loginStatus))
+        }
+        else if ("1".equals(LoginBody.loginStatus))
         {
-//            判断用学生端登录的是不是学生
-            if (100 == user.getRoleId()) {
+            // 判断用学生端登录的是不是学生
+            if (roleId != null && 100 == roleId.longValue()) {
                 log.info("登录用户为老师：{} 登录错误，请移步至老师端.", username);
-                throw new BaseException("不存在该学生账号："+username);
+                throw new BaseException("不存在该学生账号：" + username);
             }
         }
 

@@ -6,7 +6,9 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.mapper.StudentMapper;
 import com.ruoyi.core.service.impl.SelectUserImpl;
+import com.ruoyi.system.domain.SysUserRole;
 import com.ruoyi.system.mapper.SysUserMapper;
+import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.teachingExchange.domain.A1Viewed;
 import com.ruoyi.teachingExchange.domain.TeachingUnit;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -42,6 +44,9 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 查询A1 线上学习学生线上观看记录表
@@ -176,11 +181,16 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         SysUser user = new SysUser();
         user.setAvatar("https://cdn1.d5v.cc/CDN/Project/eRock/tx/2.jpg");
         user.setStatus("0");
+        user.setRoleId(101L);
         for (Student a:stuList) {
+
             List<SysUser> sysUser = sysUserMapper.selectUserByUserNickName(a.getStuName());
-            System.out.println(sysUser.size());
+            Student student = new Student();
             if (sysUser.size() != 0){
-                teachingTableMapper.updateStudent(a);
+                System.out.println(sysUser.size());
+                student.setStuName(sysUser.get(0).getNickName());
+                student.setStuId(sysUser.get(0).getUserId());
+                teachingTableMapper.updateStudent(student);
                 i++;
             }else {
 //                设置用户信息
@@ -188,7 +198,16 @@ public class TeachingTableServiceImpl implements ITeachingTableService
                 user.setNickName(a.getStuName());
                 user.setUserName(SelectUserImpl.toPinyin(a.getStuName()));
                 user.setPassword("654321");
+                SysUserRole sur = new SysUserRole();
                 sysUserMapper.insertUser(user);
+//                设置用户权限
+                sur.setUserId(user.getUserId());
+                sur.setRoleId(user.getRoleId());
+                sysUserRoleMapper.batchUserOneRole(sur);
+//                更新学生表
+                student.setStuName(user.getNickName());
+                student.setStuId(user.getUserId());
+                teachingTableMapper.updateStudent(student);
                 j++;
             }
         }
