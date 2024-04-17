@@ -1,10 +1,12 @@
 package com.ruoyi.match.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+
+import java.util.stream.Collectors;
+
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.match.domain.CBallteam;
@@ -19,8 +21,7 @@ import com.ruoyi.match.service.ICompetitionRecordService;
  * @date 2024-04-08
  */
 @Service
-public class CompetitionRecordServiceImpl implements ICompetitionRecordService
-{
+public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 	@Autowired
 	private CompetitionRecordMapper competitionRecordMapper;
 
@@ -31,8 +32,7 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService
 	 * @return C 比赛记录
 	 */
 	@Override
-	public CompetitionRecord selectCompetitionRecordByCcRId(Long ccRId)
-	{
+	public CompetitionRecord selectCompetitionRecordByCcRId(Long ccRId) {
 		return competitionRecordMapper.selectCompetitionRecordByCcRId(ccRId);
 	}
 
@@ -43,8 +43,7 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService
 	 * @return C 比赛记录
 	 */
 	@Override
-	public List<CompetitionRecord> selectCompetitionRecordList(CompetitionRecord competitionRecord)
-	{
+	public List<CompetitionRecord> selectCompetitionRecordList(CompetitionRecord competitionRecord) {
 		return competitionRecordMapper.selectCompetitionRecordList(competitionRecord);
 	}
 
@@ -56,8 +55,7 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService
 	 */
 	@Transactional
 	@Override
-	public int insertCompetitionRecord(CompetitionRecord competitionRecord)
-	{
+	public int insertCompetitionRecord(CompetitionRecord competitionRecord) {
 		int rows = competitionRecordMapper.insertCompetitionRecord(competitionRecord);
 		insertCBallteam(competitionRecord);
 		return rows;
@@ -71,8 +69,7 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService
 	 */
 	@Transactional
 	@Override
-	public int updateCompetitionRecord(CompetitionRecord competitionRecord)
-	{
+	public int updateCompetitionRecord(CompetitionRecord competitionRecord) {
 		competitionRecordMapper.deleteCBallteamByCcRId(competitionRecord.getCcRId());
 		insertCBallteam(competitionRecord);
 		return competitionRecordMapper.updateCompetitionRecord(competitionRecord);
@@ -86,8 +83,7 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService
 	 */
 	@Transactional
 	@Override
-	public int deleteCompetitionRecordByCcRIds(Long[] ccRIds)
-	{
+	public int deleteCompetitionRecordByCcRIds(Long[] ccRIds) {
 		competitionRecordMapper.deleteCBallteamByCcRIds(ccRIds);
 		return competitionRecordMapper.deleteCompetitionRecordByCcRIds(ccRIds);
 	}
@@ -100,8 +96,7 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService
 	 */
 	@Transactional
 	@Override
-	public int deleteCompetitionRecordByCcRId(Long ccRId)
-	{
+	public int deleteCompetitionRecordByCcRId(Long ccRId) {
 		competitionRecordMapper.deleteCBallteamByCcRId(ccRId);
 		return competitionRecordMapper.deleteCompetitionRecordByCcRId(ccRId);
 	}
@@ -111,25 +106,21 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService
 	 *
 	 * @param competitionRecord C 比赛记录对象
 	 */
-	public void insertCBallteam(CompetitionRecord competitionRecord)
-	{
+	public void insertCBallteam(CompetitionRecord competitionRecord) {
 		List<CBallteam> cBallteamList = competitionRecord.getCBallteamList();
 		Long ccRId = competitionRecord.getCcRId();
-		if (StringUtils.isNotNull(cBallteamList))
-		{
+		if (StringUtils.isNotNull(cBallteamList)) {
 			List<CBallteam> list = new ArrayList<CBallteam>();
-			for (CBallteam cBallteam : cBallteamList)
-			{
+			for (CBallteam cBallteam : cBallteamList) {
 				cBallteam.setCcRId(ccRId);
 				list.add(cBallteam);
 			}
-			if (list.size() > 0)
-			{
+			if (list.size() > 0) {
 				competitionRecordMapper.batchCBallteam(list);
 			}
 		}
 	}
-	
+
 	/**
 	 * 获取比赛记录记录
 	 *
@@ -141,4 +132,70 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService
 		return competitionRecordMapper.selectGameRecord(speci);
 	}
 
+
+	/**
+	 * 获取课外赛学生信息
+	 *
+	 * @return
+	 */
+	@Override
+	public List<HashMap<String, String>> findCBallteamKw() {
+		return competitionRecordMapper.findCBallteamKw();
+	}
+
+	/**
+	 * 获取课外赛信息
+	 *
+	 * @return
+	 */
+	@Override
+	public Map<String, List<HashMap<String, Object>>> findRecordKwByStuId(Long stuId) {
+		List<HashMap<String, Object>> maps = competitionRecordMapper.findRecordKwByStuId(stuId);
+		return maps.stream()
+				.collect(Collectors.groupingBy(map -> (Integer) map.get("ps_audit") == 2 ? "yes" : "no"));
+	}
+
+	/**
+	 * 根据学号和比赛id获取学生信息
+	 *
+	 * @return
+	 */
+	@Override
+	public HashMap<String, Object> findRecordKwByStuIdAndCcrId(HashMap<String, String> map) {
+		HashMap<String, Object> StuIdAndCcrIdMap = competitionRecordMapper.findRecordKwByStuIdAndCcrId(map);
+
+		String[] studentKeys = {"stu_id", "stu_name", "job_name", "ps_num"};
+		String[] studentInfoKeys = {"id", "name", "role", "score"};
+
+		HashMap<String, Object> stuInfo = new HashMap<>();
+		for (int i = 0; i < studentKeys.length; i++) {
+			stuInfo.put(studentInfoKeys[i], StuIdAndCcrIdMap.get(studentKeys[i]));
+			StuIdAndCcrIdMap.remove(studentKeys[i]);
+		}
+		StuIdAndCcrIdMap.put("teammates", stuInfo);
+
+		String url = (String) StuIdAndCcrIdMap.get("ps_urls");
+		if (url != null) {
+			List<HashMap<String, String>> urlList = Arrays.stream(url.split("; "))
+					.map(u -> {
+						HashMap<String, String> urlMap = new HashMap<>();
+						urlMap.put("url", u);
+						return urlMap;
+					})
+					.collect(Collectors.toList());
+			StuIdAndCcrIdMap.put("ps_urls", urlList);
+		}
+		return StuIdAndCcrIdMap;
+	}
+
+	/**
+	 * 审核学生上传的资料
+	 *
+	 * @param map
+	 * @return
+	 */
+	@Override
+	public Integer updateAudit(HashMap<String, String> map) {
+		return competitionRecordMapper.updateAudit(map);
+	}
 }

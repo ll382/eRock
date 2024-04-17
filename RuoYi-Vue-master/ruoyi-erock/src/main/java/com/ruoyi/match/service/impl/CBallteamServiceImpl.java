@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 球队参赛Service业务层处理
@@ -88,6 +85,7 @@ public class CBallteamServiceImpl implements ICBallteamService {
 	@Transactional
 	@Override
 	public int deleteCBallteamByBalIds(Long[] balIds) {
+		cBallteamMapper.deleteStuGroupByGgId(balIds[0]);
 		cBallteamMapper.deleteCPersonnelSheetByBalIds(balIds);
 		return cBallteamMapper.deleteCBallteamByBalIds(balIds);
 	}
@@ -150,8 +148,21 @@ public class CBallteamServiceImpl implements ICBallteamService {
 		stuGroup.setGgName(String.valueOf(map.get("ggName")));
 		CBallteam cBallteam = JSON.parseObject(JSON.toJSONString(map), CBallteam.class);
 		cBallteamMapper.insertStuGroup(stuGroup);
+		cBallteam.setGgId(cBallteamMapper.getNewSTuGroup());
 		int rows = cBallteamMapper.insertCBallteam(cBallteam);
 		insertCPersonnelSheet(cBallteam);
 		return rows;
+	}
+
+	/**
+	 * 批量修改球队参赛
+	 *
+	 * @param cBallteamList
+	 * @return
+	 */
+	@Override
+	public int updateCBallteams(List<CBallteam> cBallteamList) {
+		cBallteamList.forEach(this::updateCBallteam);
+		return 1;
 	}
 }

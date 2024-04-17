@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dModularity.mapper.D2CertificateMapper">
+    
+    <resultMap type="D2Certificate" id="D2CertificateResult">
+        <result property="certificateId"    column="certificate_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="certificateName"    column="certificate_name"    />
+        <result property="audit"    column="audit"    />
+        <result property="uploadTime"    column="upload_time"    />
+    </resultMap>
+
+    <resultMap id="D2CertificateD2ResourceResult" type="D2Certificate" extends="D2CertificateResult">
+        <collection property="d2ResourceList" notNullColumn="sub_resource_id" javaType="java.util.List" resultMap="D2ResourceResult" />
+    </resultMap>
+
+    <resultMap type="D2Resource" id="D2ResourceResult">
+        <result property="resourceId"    column="sub_resource_id"    />
+        <result property="certificateId"    column="sub_certificate_id"    />
+        <result property="resourceUrl"    column="sub_resource_url"    />
+    </resultMap>
+
+    <sql id="selectD2CertificateVo">
+        select certificate_id, stu_id, tea_id, certificate_name, audit, upload_time from d2_certificate
+    </sql>
+
+    <select id="selectD2CertificateList" parameterType="D2Certificate" resultMap="D2CertificateResult">
+        <include refid="selectD2CertificateVo"/>
+        <where>  
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="teaId != null  and teaId != ''"> and tea_id = #{teaId}</if>
+            <if test="certificateName != null  and certificateName != ''"> and certificate_name like concat('%', #{certificateName}, '%')</if>
+            <if test="audit != null "> and audit = #{audit}</if>
+            <if test="uploadTime != null "> and upload_time = #{uploadTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectD2CertificateByCertificateId" parameterType="Long" resultMap="D2CertificateD2ResourceResult">
+        select a.certificate_id, a.stu_id, a.tea_id, a.certificate_name, a.audit, a.upload_time,
+ b.resource_id as sub_resource_id, b.certificate_id as sub_certificate_id, b.resource_url as sub_resource_url
+        from d2_certificate a
+        left join d2_resource b on b.certificate_id = a.certificate_id
+        where a.certificate_id = #{certificateId}
+    </select>
+        
+    <insert id="insertD2Certificate" parameterType="D2Certificate" useGeneratedKeys="true" keyProperty="certificateId">
+        insert into d2_certificate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">stu_id,</if>
+            <if test="teaId != null">tea_id,</if>
+            <if test="certificateName != null">certificate_name,</if>
+            <if test="audit != null">audit,</if>
+            <if test="uploadTime != null">upload_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">#{stuId},</if>
+            <if test="teaId != null">#{teaId},</if>
+            <if test="certificateName != null">#{certificateName},</if>
+            <if test="audit != null">#{audit},</if>
+            <if test="uploadTime != null">#{uploadTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateD2Certificate" parameterType="D2Certificate">
+        update d2_certificate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="teaId != null">tea_id = #{teaId},</if>
+            <if test="certificateName != null">certificate_name = #{certificateName},</if>
+            <if test="audit != null">audit = #{audit},</if>
+            <if test="uploadTime != null">upload_time = #{uploadTime},</if>
+        </trim>
+        where certificate_id = #{certificateId}
+    </update>
+
+    <delete id="deleteD2CertificateByCertificateId" parameterType="Long">
+        delete from d2_certificate where certificate_id = #{certificateId}
+    </delete>
+
+    <delete id="deleteD2CertificateByCertificateIds" parameterType="String">
+        delete from d2_certificate where certificate_id in 
+        <foreach item="certificateId" collection="array" open="(" separator="," close=")">
+            #{certificateId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteD2ResourceByCertificateIds" parameterType="String">
+        delete from d2_resource where certificate_id in 
+        <foreach item="certificateId" collection="array" open="(" separator="," close=")">
+            #{certificateId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteD2ResourceByCertificateId" parameterType="Long">
+        delete from d2_resource where certificate_id = #{certificateId}
+    </delete>
+
+    <insert id="batchD2Resource">
+        insert into d2_resource( resource_id, certificate_id, resource_url) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.resourceId}, #{item.certificateId}, #{item.resourceUrl})
+        </foreach>
+    </insert>
+</mapper>
