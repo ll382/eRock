@@ -178,16 +178,15 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         int i = 0;
         int j = 0;
         List<Student> stuList = studentMapper.selectStudentList(null);
+//        创建对象，设置初始内容，默认头像，账号状态，角色
         SysUser user = new SysUser();
         user.setAvatar("https://cdn1.d5v.cc/CDN/Project/eRock/tx/2.jpg");
         user.setStatus("0");
         user.setRoleId(101L);
         for (Student a:stuList) {
-
             List<SysUser> sysUser = sysUserMapper.selectUserByUserNickName(a.getStuName());
             Student student = new Student();
             if (sysUser.size() != 0){
-                System.out.println(sysUser.size());
                 student.setStuName(sysUser.get(0).getNickName());
                 student.setStuId(sysUser.get(0).getUserId());
                 teachingTableMapper.updateStudent(student);
