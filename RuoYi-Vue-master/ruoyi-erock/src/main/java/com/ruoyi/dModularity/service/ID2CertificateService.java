@@ -1,6 +1,9 @@
 package com.ruoyi.dModularity.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.dModularity.domain.D2Certificate;
 
 /**
@@ -58,4 +61,19 @@ public interface ID2CertificateService
      * @return 结果
      */
     public int deleteD2CertificateByCertificateId(Long certificateId);
+
+    /**
+     * D2学生名单列表
+     *
+     * @return 结果
+     */
+    public Map<String, List<HashMap<String, Object>>> selectD2CertificateAudit(Integer enumId);
+
+    /**
+     * D2查询学生上传资料信息
+     *
+     * @param map 学生id 审核状态
+     * @return 结果
+     */
+    public List<HashMap<String, Object>> selectD2CertificateAuditByStuId(HashMap<String, Object> map);
 }
