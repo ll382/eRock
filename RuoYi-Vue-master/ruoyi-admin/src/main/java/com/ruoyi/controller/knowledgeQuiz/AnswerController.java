@@ -3,8 +3,7 @@ package com.ruoyi.controller.knowledgeQuiz;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
-import com.github.pagehelper.PageInfo;
-import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.teachingExchange.domain.Answer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +20,6 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.teachingExchange.domain.Answer;
 import com.ruoyi.knowledgeQuiz.service.IAnswerService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -29,8 +27,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 /**
  * A1 知识测试 学生成绩Controller
  *
- * @author ljy
- * @date 2024-03-20
+ * @author heye
+ * @date 2024-04-18
  */
 @Api(tags = {"A1 知识测试 学生成绩"})
 @RestController
@@ -48,7 +46,6 @@ public class AnswerController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(Answer answer)
     {
-
         startPage();
         List<Answer> list = answerService.selectAnswerList(answer);
         return getDataTable(list);

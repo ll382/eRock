@@ -1,6 +1,7 @@
 package com.ruoyi.framework.web.service;
 
 import com.ruoyi.common.exception.base.BaseException;
+import com.ruoyi.core.service.SelectUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class UserDetailsServiceImpl implements UserDetailsService
     @Autowired
     private SysPermissionService permissionService;
 
+    @Autowired
+    private SelectUser selectUser;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
@@ -61,6 +65,9 @@ public class UserDetailsServiceImpl implements UserDetailsService
 
         if ("0".equals(LoginBody.loginStatus))
         {
+            Long aLong = selectUser.selectTeacherTeaId(user.getUserId());
+            user.seteRockId(aLong);
+
             // 判断用老师端登录的是不是老师
             if (roleId != null && 101 == roleId.longValue()) {
                 log.info("登录用户为学生：{} 登录错误，请移步至学生端.", username);
@@ -69,6 +76,9 @@ public class UserDetailsServiceImpl implements UserDetailsService
         }
         else if ("1".equals(LoginBody.loginStatus))
         {
+            Long aLong = selectUser.selectStudentStuId(user.getUserId());
+            user.seteRockId(aLong);
+
             // 判断用学生端登录的是不是学生
             if (roleId != null && 100 == roleId.longValue()) {
                 log.info("登录用户为老师：{} 登录错误，请移步至老师端.", username);

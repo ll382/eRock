@@ -95,6 +95,18 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         return GroupStudent;
     }
 
+//    将userId变为studentId
+    @Override
+    public Long selectStudentStuId(Long userId) {
+        return selectUserMapper.selectStudentStuId(userId);
+    }
+
+    //    将userId变为techaerId
+    @Override
+    public Long selectTeacherTeaId(Long userId) {
+        return selectUserMapper.selectTeacherTeaId(userId);
+    }
+
 //    查清已做未
     @Override
     public HashMap<String, Object> selectFrequency(List<T> users , Long phtrId){

@@ -25,6 +25,10 @@ public class SysUser extends BaseEntity
 
     /** 用户ID */
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
+    private Long eRockId = 114514L;
+
+    /** 用户ID */
+    @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
 
     /** 部门ID */
@@ -141,6 +145,14 @@ public class SysUser extends BaseEntity
     public void setNickName(String nickName)
     {
         this.nickName = nickName;
+    }
+
+    public Long geteRockId() {
+        return eRockId;
+    }
+
+    public void seteRockId(Long eRockId) {
+        this.eRockId = eRockId;
     }
 
     @Xss(message = "用户账号不能包含脚本字符")
