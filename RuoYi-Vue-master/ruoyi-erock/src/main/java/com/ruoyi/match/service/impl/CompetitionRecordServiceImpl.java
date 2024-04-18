@@ -162,19 +162,22 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 	 */
 	@Override
 	public HashMap<String, Object> findRecordKwByStuIdAndCcrId(HashMap<String, String> map) {
-		HashMap<String, Object> StuIdAndCcrIdMap = competitionRecordMapper.findRecordKwByStuIdAndCcrId(map);
+		HashMap<String, Object> stuIdAndCcrIdMap = competitionRecordMapper.findRecordKwByStuIdAndCcrId(map);
+		if (stuIdAndCcrIdMap == null) {
+			return null;
+		}
 
 		String[] studentKeys = {"stu_id", "stu_name", "job_name", "ps_num"};
 		String[] studentInfoKeys = {"id", "name", "role", "score"};
 
 		HashMap<String, Object> stuInfo = new HashMap<>();
 		for (int i = 0; i < studentKeys.length; i++) {
-			stuInfo.put(studentInfoKeys[i], StuIdAndCcrIdMap.get(studentKeys[i]));
-			StuIdAndCcrIdMap.remove(studentKeys[i]);
+			stuInfo.put(studentInfoKeys[i], stuIdAndCcrIdMap.get(studentKeys[i]));
+			stuIdAndCcrIdMap.remove(studentKeys[i]);
 		}
-		StuIdAndCcrIdMap.put("teammates", stuInfo);
+		stuIdAndCcrIdMap.put("teammates", stuInfo);
 
-		String url = (String) StuIdAndCcrIdMap.get("ps_urls");
+		String url = (String) stuIdAndCcrIdMap.get("ps_urls");
 		if (url != null) {
 			List<HashMap<String, String>> urlList = Arrays.stream(url.split("; "))
 					.map(u -> {
@@ -183,9 +186,9 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 						return urlMap;
 					})
 					.collect(Collectors.toList());
-			StuIdAndCcrIdMap.put("ps_urls", urlList);
+			stuIdAndCcrIdMap.put("ps_urls", urlList);
 		}
-		return StuIdAndCcrIdMap;
+		return stuIdAndCcrIdMap;
 	}
 
 	/**

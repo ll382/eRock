@@ -36,7 +36,7 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	@Autowired
 	private SelectUser selectUser;
 	@Autowired
-	private IAMarkSheetService	aMarkSheetService;
+	private IAMarkSheetService aMarkSheetService;
 
 	/**
 	 * 查询课堂记录
@@ -51,6 +51,7 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 		);
 		return classRegister;
 	}
+
 	/**
 	 * 删除A模块课堂记录
 	 *
@@ -189,6 +190,7 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 		classRegister.setCrMain((String) map.get("name"));
 		classRegister.setCrDuration(BigDecimal.valueOf(40));
 		classRegister.setClassId(Long.valueOf((Integer) ((HashMap) map.get("class")).get("classId")));
+		classRegister.setEnumId(6L);
 
 		// 比赛记录
 		CompetitionRecord competitionRecord = new CompetitionRecord();
@@ -198,11 +200,11 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 		competitionRecord.setCcRName((String) map.get("name"));
 		competitionRecord.setCcRAudit(0L);
 
-		// ClassRegister classRegister = JSON.parseObject(JSON.toJSONString(map), ClassRegister.class);
-		// CompetitionRecord competitionRecord = JSON.parseObject(JSON.toJSONString(map), CompetitionRecord.class);
-
 		classRegister.setCompetitionRecordList(Collections.singletonList(competitionRecord));
-		return insertClassRegister(classRegister);
+
+		int rows = classRegisterMapper.insertClassRegister(classRegister);
+		insertCompetitionRecord(classRegister);
+		return rows;
 	}
 
 	/**
