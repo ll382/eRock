@@ -19,6 +19,11 @@ public interface SelectUser<T extends BaseEntity>  {
     public T selectInGroupStudent(T GroupStudent);
     public List<T> selectInGroupStudent(List<T> GroupStudent);
 
+    public Long selectStudentStuId(Long userId);
+
+    public Long selectTeacherTeaId(Long userId);
+
+
     //    必须得要在学生类被赋予之前使用本接口，否则会有索引异常
 
 

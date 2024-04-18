@@ -17,6 +17,14 @@ import java.util.List;
  */
 public interface SelectUserMapper {
 
+//    通过userId查询学生Id
+    @Select("Select s.stu_id as id from student s where s.user_id = #{userId}")
+    Long selectStudentStuId(Long userId);
+
+//    通过userId查询老师Id
+    @Select("Select s.tea_id as id from teacher s where s.user_id = #{userId}")
+    Long selectTeacherTeaId(Long userId);
+
 //    单查头像
     @Select("Select s.stu_id as id , e.avatar as img,s.stu_name as name from student s left JOIN sys_user e ON e.user_id = s.user_id where s.stu_id = #{stuId}")
     SelectUserVo selectStudentbyOne(Long stuId);

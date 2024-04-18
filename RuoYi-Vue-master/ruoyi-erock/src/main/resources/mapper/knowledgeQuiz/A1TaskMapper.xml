@@ -53,6 +53,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where a.task_id = #{taskId}
     </select>
 
+    <select id="selectDoneA1TaskListByStuId" resultMap="A1TaskResult">
+        <include refid="selectA1TaskVo"/>
+        <where>
+            <choose>
+                <when test="list != null and list.size > 0">
+                    task_id IN
+                    <foreach collection="list" index="index" open="(" close=")" item="i" separator="," >
+                        #{i}
+                    </foreach>
+                </when>
+                <otherwise>
+                    false
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
     <insert id="insertA1Task" parameterType="A1Task" useGeneratedKeys="true" keyProperty="taskId">
         insert into a1_task
         <trim prefix="(" suffix=")" suffixOverrides=",">

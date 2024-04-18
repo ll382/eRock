@@ -1,8 +1,11 @@
 package com.ruoyi.knowledgeQuiz.service.impl;
 
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
 
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,9 @@ public class A1TaskServiceImpl implements IA1TaskService
 {
     @Autowired
     private A1TaskMapper a1TaskMapper;
+
+    @Autowired
+    private SelectUser selectUser;
 
     /**
      * 查询A1 知识测试任务
@@ -51,6 +57,25 @@ public class A1TaskServiceImpl implements IA1TaskService
         a1Task.setUnpaidList(a1TaskMapper.selectStudentList(a1Task.getTaskId()));
 //        返回内容
         return a1Task;
+    }
+
+    /**
+     * 查询A1 知识测试任务
+     *
+     * @param stuId A1 知识测试任务学生外键
+     * @return A1 知识测试任务
+     */
+    @Override
+    public HashMap<String, Object> selectA1TaskByStuId(Long stuId)
+    {
+        List<Long> stulist = a1TaskMapper.selectStuListById(stuId);
+        List<A1Task> unDone = a1TaskMapper.selectUndoneA1TaskListByStuId(stuId);
+        List<A1Task> done = a1TaskMapper.selectDoneA1TaskListByStuId(stulist);
+        HashMap<String, Object> stuTask = new HashMap<>();
+        stuTask.put("done",done);
+        stuTask.put("unDone",unDone);
+//        返回内容
+        return stuTask;
     }
 
     /**

@@ -36,6 +36,16 @@ public interface A1TaskMapper
     @Select("Select s.stu_id as stuId, e.avatar as stuImg,s.stu_name as stuName from student s left JOIN sys_user e ON e.user_id = s.user_id where s.stu_id NOT IN (SELECT stu_id FROM a1_answer WHERE task_id = #{taskId})")
     public List<Student> selectStudentList(Long taskId);
 
+//    查询学生 start
+    public List<A1Task> selectDoneA1TaskListByStuId(List<Long> stuId);
+//    查学生做过的任务
+    @Select("select t.task_id from a1_task t LEFT JOIN a1_answer a ON a.task_id = t.task_id WHERE a.stu_id = #{stuId}")
+    public List<Long> selectStuListById(Long stuId);
+//    查学生没做过的任务
+    @Select("select t.task_id as taskId, t.tea_id as teaId , t.task_datetime as taskDateTime , t.task_title as taskTitle , t.task_content as taskContent , t.task_num as taskNum from a1_task t WHERE t.task_id NOT IN (select t.task_id from a1_task t LEFT JOIN a1_answer a ON a.task_id = t.task_id WHERE a.stu_id = #{stuId})")
+    public List<A1Task> selectUndoneA1TaskListByStuId(Long stuId);
+
+//    查询学生 end
     @Select("SELECT stu_id as stuId,stu_name as stuName,user_id as userId FROM student WHERE stu_id IN (SELECT stu_id FROM a1_answer WHERE task_id = #{taskId})")
 
     public List<Student> selectFinishStudentList(Long taskId);

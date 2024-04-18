@@ -1,7 +1,10 @@
 package com.ruoyi.teachingExchange.domain;
 
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.knowledgeQuiz.domain.A1Answered;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -44,6 +47,10 @@ public class Answer extends BaseEntity
     @Excel(name = "二次计算分数")
     private Double ansScore;
 
+    /** 学生答题数组 */
+    @Excel(name = "学生答题数组")
+    private List<A1Answered> a1AnsweredList;
+
     /** 时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -80,6 +87,14 @@ public class Answer extends BaseEntity
     public Long getStuId()
     {
         return stuId;
+    }
+
+    public List<A1Answered> getA1AnsweredList() {
+        return a1AnsweredList;
+    }
+
+    public void setA1AnsweredList(List<A1Answered> a1AnsweredList) {
+        this.a1AnsweredList = a1AnsweredList;
     }
 
     public String getStuName() {

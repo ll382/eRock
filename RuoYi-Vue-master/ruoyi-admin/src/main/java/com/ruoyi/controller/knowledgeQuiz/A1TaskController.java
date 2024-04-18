@@ -69,11 +69,23 @@ public class A1TaskController extends BaseController
      */
     @ApiOperation("获取A1 知识测试任务详细信息")
     @PreAuthorize("@ss.hasPermi('knowledgeQuiz:task:query')")
+    @GetMapping(value = "stu/{stuId}")
+    public AjaxResult getStuExam(@PathVariable("stuId") Long stuId)
+    {
+        return success(a1TaskService.selectA1TaskByStuId(stuId));
+    }
+
+    /**
+     * 获取A1 知识测试任务详细信息
+     */
+    @ApiOperation("获取A1 知识测试任务详细信息")
+    @PreAuthorize("@ss.hasPermi('knowledgeQuiz:task:query')")
     @GetMapping(value = "/{taskId}")
     public AjaxResult getInfo(@PathVariable("taskId") Long taskId)
     {
         return success(a1TaskService.selectA1TaskByTaskId(taskId));
     }
+
 
     /**
      * 新增A1 知识测试任务
@@ -105,7 +117,7 @@ public class A1TaskController extends BaseController
     @ApiOperation("删除A1 知识测试任务")
     @PreAuthorize("@ss.hasPermi('knowledgeQuiz:task:remove')")
     @Log(title = "A1 知识测试任务", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{taskIds}")
+    @DeleteMapping("/{taskIds}")
     public AjaxResult remove(@PathVariable Long[] taskIds)
     {
         return toAjax(a1TaskService.deleteA1TaskByTaskIds(taskIds));
