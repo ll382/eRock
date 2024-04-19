@@ -1,11 +1,15 @@
 package com.ruoyi.knowledgeQuiz.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.teachingExchange.domain.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.knowledgeQuiz.domain.A1Answered;
@@ -23,6 +27,9 @@ public class AnswerServiceImpl implements IAnswerService
 {
     @Autowired
     private AnswerMapper answerMapper;
+
+    @Autowired
+    private SelectUser selectUser;
 
     /**
      * 查询A1 知识测试 学生成绩
@@ -58,6 +65,7 @@ public class AnswerServiceImpl implements IAnswerService
     @Override
     public int insertAnswer(Answer answer)
     {
+        answer.setAnsTime(new Date());
         int rows = answerMapper.insertAnswer(answer);
         insertA1Answered(answer);
         return rows;
@@ -75,6 +83,10 @@ public class AnswerServiceImpl implements IAnswerService
     {
         answerMapper.deleteA1AnsweredByAnsId(answer.getAnsId());
         insertA1Answered(answer);
+        answer.setAnsResponse(0L);
+        answer.setAnsApos(0L);
+        answer.setAnsResponse((long) answer.getA1AnsweredList().size());
+        answer.setAnsApos(answerMapper.selectCorrect(answer.getA1AnsweredList()));
         return answerMapper.updateAnswer(answer);
     }
 

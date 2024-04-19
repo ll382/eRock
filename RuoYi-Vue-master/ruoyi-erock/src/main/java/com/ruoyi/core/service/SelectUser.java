@@ -1,6 +1,7 @@
 package com.ruoyi.core.service;
 
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.knowledgeQuiz.domain.A1Task;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 public interface SelectUser<T extends BaseEntity>  {
 //    Service工具接口
     public List<T> selectStudent(List<T> stuList);
+    public A1Task calculateScore(A1Task stuList);
     public T selectStudent(T student);
     public List<T> selectTeacher(List<T> teaList);
     public T selectTeacher(T teacher);
