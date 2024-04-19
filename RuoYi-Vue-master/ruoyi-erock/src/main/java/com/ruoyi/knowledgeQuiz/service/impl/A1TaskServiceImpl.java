@@ -45,16 +45,7 @@ public class A1TaskServiceImpl implements IA1TaskService
 //        获取未处理过的学生成绩单
         startPage();
         A1Task a1Task = a1TaskMapper.selectA1TaskByTaskId(taskId);
-//        计算每道题平均百分制占分
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMaximumFractionDigits(2);
-        Double tNum = Double.parseDouble(nf.format(100.0 / a1Task.getTaskNum()));
-//        为每位同学计算对应的分数
-        a1Task.getAnswerList().forEach(obj -> {
-            obj.setAnsScore(tNum * obj.getAnsApos());
-        });
-        startPage();
-        a1Task.setUnpaidList(a1TaskMapper.selectStudentList(a1Task.getTaskId()));
+        a1Task.setUnpaidList(a1TaskMapper.selectStudentList(selectUser.calculateScore(a1Task).getTaskId()));
 //        返回内容
         return a1Task;
     }
@@ -85,7 +76,7 @@ public class A1TaskServiceImpl implements IA1TaskService
      * @return A1 知识测试任务
      */
     @Override
-    public List<A1Task> selectA1TaskList(A1Task a1Task)
+    public List<A1Task> selectTaskList(A1Task a1Task)
     {
 //        获取基础知识测试任务数据
         List<A1Task> a1Tasks = a1TaskMapper.selectTaskList(a1Task);
@@ -97,6 +88,13 @@ public class A1TaskServiceImpl implements IA1TaskService
 //            task.setSubmitted(a1TaskMapper.selectFinishStudentList(task.getTaskId()));
 //        });
         return a1Tasks;
+    }
+
+    @Override
+    public List<A1Task> selectA1TaskList(A1Task a1Task)
+    {
+//        获取基础知识测试任务数据
+        return a1TaskMapper.selectA1TaskList(a1Task);
     }
 
     /**

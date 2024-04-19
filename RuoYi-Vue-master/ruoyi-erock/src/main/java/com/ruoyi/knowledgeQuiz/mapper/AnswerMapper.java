@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.knowledgeQuiz.domain.A1Answered;
 import com.ruoyi.teachingExchange.domain.Answer;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * A1 知识测试 学生成绩Mapper接口
@@ -20,6 +21,8 @@ public interface AnswerMapper
      * @return A1 知识测试 学生成绩
      */
     public Answer selectAnswerByAnsId(Long ansId);
+
+    public  Long selectCorrect(@Param("item") List<A1Answered> item);
 
     /**
      * 查询A1 知识测试 学生成绩列表

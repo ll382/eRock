@@ -6,6 +6,7 @@ import com.ruoyi.common.core.domain.entity.SelectUserVo;
 import com.ruoyi.common.core.domain.entity.Group;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
+import com.ruoyi.knowledgeQuiz.domain.A1Task;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -14,6 +15,7 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -55,6 +57,19 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
             student.setStudent(selectUserMapper.selectStudentbyOne(student.getStuId()));
         });
         return stuList;
+    }
+
+    @Override
+    public A1Task calculateScore(A1Task a1Task){
+        //        计算每道题平均百分制占分
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
+        Double tNum = Double.parseDouble(nf.format(100.0 / a1Task.getTaskNum()));
+//        为每位同学计算对应的分数
+        a1Task.getAnswerList().forEach(obj -> {
+            obj.setAnsScore(tNum * obj.getAnsApos());
+        });
+        return a1Task;
     }
     @Override
     public T selectStudent(T student) {

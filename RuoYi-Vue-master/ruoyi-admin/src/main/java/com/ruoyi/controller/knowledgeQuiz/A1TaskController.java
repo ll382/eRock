@@ -46,7 +46,7 @@ public class A1TaskController extends BaseController
     public TableDataInfo list(A1Task a1Task)
     {
         startPage();
-        List<A1Task> list = a1TaskService.selectA1TaskList(a1Task);
+        List<A1Task> list = a1TaskService.selectTaskList(a1Task);
         return getDataTable(list);
     }
 
@@ -59,7 +59,7 @@ public class A1TaskController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, A1Task a1Task)
     {
-        List<A1Task> list = a1TaskService.selectA1TaskList(a1Task);
+        List<A1Task> list = a1TaskService.selectTaskList(a1Task);
         ExcelUtil<A1Task> util = new ExcelUtil<A1Task>(A1Task.class);
         util.exportExcel(response, list, "A1 知识测试任务数据");
     }

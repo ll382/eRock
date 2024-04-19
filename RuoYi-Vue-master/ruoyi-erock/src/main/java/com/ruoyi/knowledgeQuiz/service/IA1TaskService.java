@@ -29,6 +29,8 @@ public interface IA1TaskService
      * @param a1Task A1 知识测试任务
      * @return A1 知识测试任务集合
      */
+    public List<A1Task> selectTaskList(A1Task a1Task);
+
     public List<A1Task> selectA1TaskList(A1Task a1Task);
 
     /**
