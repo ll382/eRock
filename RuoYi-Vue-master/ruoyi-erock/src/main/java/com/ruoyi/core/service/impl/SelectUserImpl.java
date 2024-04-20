@@ -31,6 +31,24 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Autowired
     SelectUser selectUser;
 
+//    随机数组
+    public static LinkedHashSet<Integer> generateRandomNumbers(int n, int max) {
+        if (n > max) {
+            throw new IllegalArgumentException("n must be less than or equal to max");
+        }
+
+        LinkedHashSet<Integer> set = new LinkedHashSet<>();
+        Random random = new Random();
+
+        while (set.size() < n) {
+            int num = random.nextInt(max) + 1;
+            set.add(num);
+        }
+
+        return set;
+    }
+
+//    拼音工具
     public static String toPinyin(String chinese){
         String pinyinStr = "";
         char[] newChar = chinese.toCharArray();
