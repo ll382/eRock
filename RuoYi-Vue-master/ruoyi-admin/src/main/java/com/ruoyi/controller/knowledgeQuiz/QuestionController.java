@@ -23,7 +23,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * A1 知识测试 问Controller
- * 
+ *
  * @author ljy
  * @date 2024-03-18
  */
@@ -43,6 +43,17 @@ public class QuestionController extends BaseController
     {
         startPage();
         List<Question> list = questionService.selectQuestionList(question);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询A1 知识测试 问列表
+     */
+    @PreAuthorize("@ss.hasPermi('knowledgeQuiz:question:list')")
+    @GetMapping("/Tasklist/{question}")
+    public TableDataInfo Tasklis(@PathVariable("question") Long question)
+    {
+        List<Question> list = questionService.selectQuestionByQqIdList(question);
         return getDataTable(list);
     }
 

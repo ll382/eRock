@@ -1,9 +1,11 @@
 package com.ruoyi.knowledgeQuiz.service.impl;
 
-import java.util.List;
+import java.util.*;
+
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.knowledgeQuiz.domain.Result;
@@ -11,21 +13,23 @@ import com.ruoyi.knowledgeQuiz.mapper.QuestionMapper;
 import com.ruoyi.knowledgeQuiz.domain.Question;
 import com.ruoyi.knowledgeQuiz.service.IQuestionService;
 
+import static com.ruoyi.core.service.impl.SelectUserImpl.generateRandomNumbers;
+
 /**
  * A1 知识测试 问Service业务层处理
- * 
+ *
  * @author ljy
  * @date 2024-03-18
  */
 @Service
-public class QuestionServiceImpl implements IQuestionService 
+public class QuestionServiceImpl implements IQuestionService
 {
     @Autowired
     private QuestionMapper questionMapper;
 
     /**
      * 查询A1 知识测试 问
-     * 
+     *
      * @param qqId A1 知识测试 问主键
      * @return A1 知识测试 问
      */
@@ -35,9 +39,25 @@ public class QuestionServiceImpl implements IQuestionService
         return questionMapper.selectQuestionByQqId(qqId);
     }
 
+    @Override
+    public List<Question> selectQuestionByQqIdList(Long num) {
+//        获得所有题库id
+        List<Integer> byMax = questionMapper.selectQuestionByMax();
+//        查出随机于其数组的所有索引随机数
+        LinkedHashSet<Integer> set = generateRandomNumbers(Math.toIntExact(num), byMax.size() - 1);
+//        建立随机结果数组
+        List<Integer> taskIdList = new ArrayList<>();
+//        根据随机索引数查题库
+        set.forEach(lset -> {
+            taskIdList.add(byMax.get(lset));
+        });
+//        通过随即结果数组查询对应的详细结果
+        return questionMapper.selectQuestionByList(taskIdList);
+    }
+
     /**
      * 查询A1 知识测试 问列表
-     * 
+     *
      * @param question A1 知识测试 问
      * @return A1 知识测试 问
      */
@@ -49,7 +69,7 @@ public class QuestionServiceImpl implements IQuestionService
 
     /**
      * 新增A1 知识测试 问
-     * 
+     *
      * @param question A1 知识测试 问
      * @return 结果
      */
@@ -64,7 +84,7 @@ public class QuestionServiceImpl implements IQuestionService
 
     /**
      * 修改A1 知识测试 问
-     * 
+     *
      * @param question A1 知识测试 问
      * @return 结果
      */
@@ -79,7 +99,7 @@ public class QuestionServiceImpl implements IQuestionService
 
     /**
      * 批量删除A1 知识测试 问
-     * 
+     *
      * @param qqIds 需要删除的A1 知识测试 问主键
      * @return 结果
      */
@@ -93,7 +113,7 @@ public class QuestionServiceImpl implements IQuestionService
 
     /**
      * 删除A1 知识测试 问信息
-     * 
+     *
      * @param qqId A1 知识测试 问主键
      * @return 结果
      */
@@ -107,7 +127,7 @@ public class QuestionServiceImpl implements IQuestionService
 
     /**
      * 新增A1 知识测试 答信息
-     * 
+     *
      * @param question A1 知识测试 问对象
      */
     public void insertResult(Question question)
