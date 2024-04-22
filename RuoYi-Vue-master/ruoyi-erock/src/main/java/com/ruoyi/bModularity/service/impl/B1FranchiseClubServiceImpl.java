@@ -2,9 +2,11 @@ package com.ruoyi.bModularity.service.impl;
 
 import com.ruoyi.bModularity.domain.B1FranchiseClub;
 import com.ruoyi.bModularity.domain.B1MassSource;
+import com.ruoyi.bModularity.domain.B1Student;
 import com.ruoyi.bModularity.mapper.B1FranchiseClubMapper;
 import com.ruoyi.bModularity.service.IB1FranchiseClubService;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.core.service.SelectUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +25,10 @@ import java.util.List;
 public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 	@Autowired
 	private B1FranchiseClubMapper b1FranchiseClubMapper;
-	
+
+	@Autowired
+	private SelectUser selectUser;
+
 	/**
 	 * 查询球队、社团训练
 	 *
@@ -34,7 +39,7 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 	public B1FranchiseClub selectB1FranchiseClubByTcId(Long tcId) {
 		return b1FranchiseClubMapper.selectB1FranchiseClubByTcId(tcId);
 	}
-	
+
 	/**
 	 * 查询球队、社团训练列表
 	 *
@@ -45,7 +50,7 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 	public List<B1FranchiseClub> selectB1FranchiseClubList(B1FranchiseClub b1FranchiseClub) {
 		return b1FranchiseClubMapper.selectB1FranchiseClubList(b1FranchiseClub);
 	}
-	
+
 	/**
 	 * 新增球队、社团训练
 	 *
@@ -59,7 +64,7 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 		insertB1MassSource(b1FranchiseClub);
 		return rows;
 	}
-	
+
 	/**
 	 * 修改球队、社团训练
 	 *
@@ -73,7 +78,7 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 		insertB1MassSource(b1FranchiseClub);
 		return b1FranchiseClubMapper.updateB1FranchiseClub(b1FranchiseClub);
 	}
-	
+
 	/**
 	 * 批量删除球队、社团训练
 	 *
@@ -86,7 +91,7 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 		b1FranchiseClubMapper.deleteB1MassSourceByTcIds(tcIds);
 		return b1FranchiseClubMapper.deleteB1FranchiseClubByTcIds(tcIds);
 	}
-	
+
 	/**
 	 * 删除球队、社团训练信息
 	 *
@@ -99,7 +104,7 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 		b1FranchiseClubMapper.deleteB1MassSourceByTcId(tcId);
 		return b1FranchiseClubMapper.deleteB1FranchiseClubByTcId(tcId);
 	}
-	
+
 	/**
 	 * 新增B1 资源信息
 	 *
@@ -119,20 +124,20 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 			}
 		}
 	}
-	
+
 	/**
 	 * 获取学生信息第一页
 	 *
 	 * @return 结果
 	 */
 	@Override
-	public List<HashMap<String, String>> selectB1Student() {
-		return b1FranchiseClubMapper.selectB1Student();
+	public List<B1Student> selectB1Student() {
+		return selectUser.selectStudent(b1FranchiseClubMapper.selectB1Student());
 	}
-	
-	
+
 	/**
 	 * 获取学生本周训练记录
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -140,7 +145,7 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 	public B1FranchiseClub getStudentThisWeekFranchise(Long id) {
 		return b1FranchiseClubMapper.getStudentThisWeekFranchise(id);
 	}
-	
+
 	/**
 	 * 获取学生本周的训练分数
 	 *

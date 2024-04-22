@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,16 +34,18 @@ public class D2CertificateController extends BaseController {
 	@Autowired
 	private ID2CertificateService d2CertificateService;
 
+	@Autowired
+	private SelectUser selectUser;
+
 	/**
 	 * 查询D2 证书表列表
 	 */
 	@ApiOperation("查询D2 证书表列表")
 	@PreAuthorize("@ss.hasPermi('dModularity:certificate:list')")
 	@GetMapping("/list")
-	public TableDataInfo list(D2Certificate d2Certificate) {
+	public AjaxResult list(D2Certificate d2Certificate) {
 		startPage();
-		List<D2Certificate> list = d2CertificateService.selectD2CertificateList(d2Certificate);
-		return getDataTable(list);
+		return success(selectUser.selectUndoneStudent(d2CertificateService.selectD2CertificateList(d2Certificate)));
 	}
 
 	/**
@@ -106,8 +110,8 @@ public class D2CertificateController extends BaseController {
 	@ApiOperation("D2学生名单列表")
 	@PreAuthorize("@ss.hasPermi('dModularity:certificate:auditList')")
 	@GetMapping("/auditList")
-	public Map<String, List<HashMap<String, Object>>> auditList(Integer enumId) {
-		return d2CertificateService.selectD2CertificateAudit(enumId);
+	public AjaxResult auditList(Integer enumId) {
+		return success(d2CertificateService.selectD2CertificateAudit(enumId));
 	}
 
 	/**
@@ -116,7 +120,7 @@ public class D2CertificateController extends BaseController {
 	@ApiOperation("D2查询学生上传资料信息")
 	@PreAuthorize("@ss.hasPermi('dModularity:certificate:auditByStuId')")
 	@GetMapping("/auditByStuId")
-	public List<HashMap<String, Object>> auditByStuId(@RequestParam HashMap<String, Object> map) {
-		return d2CertificateService.selectD2CertificateAuditByStuId(map);
+	public AjaxResult auditByStuId(@RequestParam HashMap<String, Object> map) {
+		return success(d2CertificateService.selectD2CertificateAuditByStuId(map));
 	}
 }

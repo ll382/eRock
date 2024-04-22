@@ -1,6 +1,7 @@
 package com.ruoyi.dModularity.mapper;
 
 import com.ruoyi.dModularity.domain.D2Certificate;
+import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
 import com.ruoyi.dModularity.domain.D2Resource;
 
 import java.util.HashMap;
@@ -91,7 +92,7 @@ public interface D2CertificateMapper {
 	 *
 	 * @return
 	 */
-	public List<HashMap<String, Object>> selectD2CertificateAudit(Integer enumId);
+	public List<D2CertificateAuditByStuId> selectD2CertificateAudit(Integer enumId);
 
 	/**
 	 * D2查询学生上传资料信息

@@ -1,10 +1,10 @@
 package com.ruoyi.dModularity.service.impl;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 
+import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +30,9 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	@Autowired
 	private D2CertificateMapper d2CertificateMapper;
 
+	@Autowired
+	private SelectUser selectUser;
+
 	/**
 	 * 查询D2 证书表
 	 *
@@ -49,7 +52,7 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	 */
 	@Override
 	public List<D2Certificate> selectD2CertificateList(D2Certificate d2Certificate) {
-		return d2CertificateMapper.selectD2CertificateList(d2Certificate);
+		return selectUser.selectStudent(d2CertificateMapper.selectD2CertificateList(d2Certificate));
 	}
 
 	/**
@@ -132,17 +135,11 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	 * @return
 	 */
 	@Override
-	public Map<String, List<HashMap<String, Object>>> selectD2CertificateAudit(Integer enumId) {
-		List<HashMap<String, Object>> auditList = d2CertificateMapper.selectD2CertificateAudit(enumId);
+	public Map<String, List<D2CertificateAuditByStuId>> selectD2CertificateAudit(Integer enumId) {
+		List<D2CertificateAuditByStuId> auditList = selectUser.selectStudent(d2CertificateMapper.selectD2CertificateAudit(enumId));
 
-		Map<Boolean, List<HashMap<String, Object>>> groupedAudit = auditList.stream()
-				.collect(Collectors.partitioningBy(audit -> "1".equals(audit.get("audit").toString())));
-
-		Map<String, List<HashMap<String, Object>>> result = new HashMap<>();
-		result.put("yes", groupedAudit.get(true));
-		result.put("no", groupedAudit.get(false));
-
-		return result;
+		return auditList.stream()
+				.collect(Collectors.groupingBy(audit -> audit.getAudit() == 1 ? "yes" : "no"));
 	}
 
 	/**
