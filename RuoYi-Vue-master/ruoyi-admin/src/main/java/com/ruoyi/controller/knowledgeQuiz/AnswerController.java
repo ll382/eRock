@@ -85,7 +85,7 @@ public class AnswerController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Answer answer)
     {
-        return toAjax(answerService.insertAnswer(answer));
+        return success(answerService.insertAnswer(answer));
     }
 
     /**

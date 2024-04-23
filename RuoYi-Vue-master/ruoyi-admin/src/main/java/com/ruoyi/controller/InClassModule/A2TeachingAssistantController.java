@@ -1,8 +1,16 @@
 package com.ruoyi.controller.InClassModule;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.InClassModule.domain.A2StudentEvaluate;
+import com.ruoyi.InClassModule.domain.A2TeachingAssistantEvaluation;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.service.IStuGroupService;
+import com.ruoyi.core.service.IStudentService;
 import com.ruoyi.core.service.SelectUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +48,12 @@ public class A2TeachingAssistantController extends BaseController
     private IA2TeachingAssistantService a2TeachingAssistantService;
 
     @Autowired
+    private IStudentService studentService;
+
+    @Autowired
+    private IStuGroupService stuGroupService;
+
+    @Autowired
     private SelectUser selectUser;
 
     /**
@@ -70,6 +84,36 @@ public class A2TeachingAssistantController extends BaseController
     }
 
     /**
+     * 合作学习 助教评价小组列表
+     */
+    @ApiOperation("合作学习 助教评价小组列表")
+    @PreAuthorize("@ss.hasPermi('practice:sheet:list')")
+    @GetMapping("/list/group")
+    public AjaxResult groupList(A2TeachingAssistant a2TeachingAssistant)
+    {
+        Student student = studentService.selectStudentByStuId(a2TeachingAssistant.getStuId());
+        StuGroup stuGroup = stuGroupService.selectStuGroupByGgId(student.getGgId());
+
+
+//        判断是否是组长
+        if (student.getStuId().equals(stuGroup.getStuGroupLeader())){
+//            通过小组查到所有本组学生
+            List<Student> students = studentService.selectStudentList(new Student(student.getGgId()));
+//            定义一个列表存储下面学生数据
+            List<A2TeachingAssistant> list = new ArrayList<>();
+            students.forEach(stu -> {
+                A2TeachingAssistant aMarkSheet1 = a2TeachingAssistant;
+                aMarkSheet1.setStuId(stu.getStuId());
+                list.add(a2TeachingAssistantService.selectA2TeachingAssistantList(aMarkSheet1).get(0));
+            });
+//            发送数据
+            return success(selectUser.selectUndoneGroup(list,student.getGgId()));
+        }
+        List<A2TeachingAssistant> list = a2TeachingAssistantService.selectA2TeachingAssistantList(a2TeachingAssistant);
+        return success(list);
+    }
+
+    /**
      * 获取A2 合作学习 助教评价详细信息
      */
     @ApiOperation("获取A2 合作学习 助教评价 详细信息")
@@ -90,6 +134,15 @@ public class A2TeachingAssistantController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody A2TeachingAssistant a2TeachingAssistant)
     {
+        A2TeachingAssistant as = new A2TeachingAssistant();
+//        判断评价学生以及评价学生者和评价课程是否相同
+        as.setStuId(a2TeachingAssistant.getStuId());
+        as.setTaStu(a2TeachingAssistant.getTaStu());
+        as.setCrId(a2TeachingAssistant.getCrId());
+//        相同直接返回警告
+        if (StringUtils.isNotEmpty(a2TeachingAssistantService.selectA2TeachingAssistantList(as))){
+            return AjaxResult.warn("你已经提交过了，请勿重复提交");
+        }
         return toAjax(a2TeachingAssistantService.insertA2TeachingAssistant(a2TeachingAssistant));
     }
 

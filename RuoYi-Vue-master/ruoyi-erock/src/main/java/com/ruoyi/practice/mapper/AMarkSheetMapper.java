@@ -52,6 +52,9 @@ public interface AMarkSheetMapper
     @Options(useGeneratedKeys = true, keyProperty = "msId")
     public int insertAMarkSheet(AMarkSheet aMarkSheet);
 
+    @Select("SELECT cr.enum_id FROM a_mark_sheet ms LEFT JOIN a_exercise_task et ON ms.et_id = et.et_id LEFT JOIN class_register cr ON et.cr_id = cr.cr_id WHERE ms_id = #{aMarkSheet}")
+    public String selectCriteria(Long aMarkSheet);
+
     /**
      * 修改练习、测试评分表
      *

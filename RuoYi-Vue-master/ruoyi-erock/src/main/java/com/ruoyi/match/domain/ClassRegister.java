@@ -54,9 +54,16 @@ public class ClassRegister extends BaseEntity
     /** C 比赛记录信息 */
     private List<CompetitionRecord> competitionRecordList;
 
+    public ClassRegister() {
+    }
+
+    public ClassRegister(Long crId) {
+        this.crId = crId;
+    }
+
     public void setCrId(Long crId)
     {
-        this.crId = crId; 
+        this.crId = crId;
     }
 
     public Long getCrId()

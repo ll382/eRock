@@ -7,6 +7,7 @@ import java.util.*;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.util.DateUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +21,22 @@ import com.ruoyi.core.service.IStudentService;
 
 /**
  * 学生Service业务层处理
- * 
+ *
  * @author heye
  * @date 2024-03-17
  */
 @Service
-public class StudentServiceImpl implements IStudentService 
+public class StudentServiceImpl implements IStudentService
 {
     @Autowired
     private StudentMapper studentMapper;
 
+    @Autowired
+    private SelectUser selectUser;
+
     /**
      * 查询学生
-     * 
+     *
      * @param stuId 学生主键
      * @return 学生
      */
@@ -44,14 +48,15 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 查询学生列表
-     * 
+     *
      * @param student 学生
      * @return 学生
      */
     @Override
     public List<Student> selectStudentList(Student student)
     {
-        return studentMapper.selectStudentList(student);
+
+        return selectUser.selectStudent(studentMapper.selectStudentList(student));
     }
 
     /**
@@ -145,7 +150,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 新增学生
-     * 
+     *
      * @param student 学生
      * @return 结果
      */
@@ -160,7 +165,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 修改学生
-     * 
+     *
      * @param student 学生
      * @return 结果
      */
@@ -175,7 +180,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 批量删除学生
-     * 
+     *
      * @param stuIds 需要删除的学生主键
      * @return 结果
      */
@@ -189,7 +194,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 删除学生信息
-     * 
+     *
      * @param stuId 学生主键
      * @return 结果
      */
@@ -203,7 +208,7 @@ public class StudentServiceImpl implements IStudentService
 
     /**
      * 新增多个学生对多个老师信息
-     * 
+     *
      * @param student 学生对象
      */
     public void insertStuToTea(Student student)

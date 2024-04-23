@@ -42,6 +42,13 @@ public class Student extends BaseEntity
     /** 多个学生对多个老师信息 */
     private List<StuToTea> stuToTeaList;
 
+    public Student(Long ggId) {
+        this.ggId = ggId;
+    }
+
+    public Student() {
+    }
+
     public void setStuId(Long stuId)
     {
         this.stuId = stuId;

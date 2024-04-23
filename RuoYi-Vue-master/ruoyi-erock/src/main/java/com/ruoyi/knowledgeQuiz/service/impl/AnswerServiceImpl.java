@@ -68,7 +68,7 @@ public class AnswerServiceImpl implements IAnswerService
         answer.setAnsTime(new Date());
         int rows = answerMapper.insertAnswer(answer);
         insertA1Answered(answer);
-        return rows;
+        return Math.toIntExact(answer.getAnsId());
     }
 
     /**

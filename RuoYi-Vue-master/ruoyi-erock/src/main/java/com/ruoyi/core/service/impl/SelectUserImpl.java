@@ -4,6 +4,10 @@ import com.ruoyi.afterClassModel.domain.A3PhysicalTraining;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SelectUserVo;
 import com.ruoyi.common.core.domain.entity.Group;
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.service.IStuGroupService;
+import com.ruoyi.core.service.IStudentService;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
@@ -27,6 +31,12 @@ import java.util.*;
 public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Autowired
     SelectUserMapper    selectUserMapper;
+
+    @Autowired
+    IStudentService studentService;
+
+    @Autowired
+    IStuGroupService stuGroupService;
 
     @Autowired
     SelectUser selectUser;
@@ -89,6 +99,8 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         });
         return a1Task;
     }
+
+
     @Override
     public T selectStudent(T student) {
             student.setStudent(selectUserMapper.selectStudentbyOne(student.getStuId()));
@@ -140,7 +152,19 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         return selectUserMapper.selectTeacherTeaId(userId);
     }
 
-//    查清已做未
+    @Override
+    public HashMap<String, Object> selectUndoneGroup(List<T> stuList,Long ggId) {
+        List<Long> idList = new ArrayList<>();
+        stuList.forEach(id -> {
+            idList.add(id.getStuId());
+        });
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("doneStudets",stuList);
+        map.put("unDoneStudets",selectUserMapper.selectUndoneGroup(idList,ggId));
+        return map;
+    }
+
+    //    查清已做未
     @Override
     public HashMap<String, Object> selectFrequency(List<T> users , Long phtrId){
 //        返回类型

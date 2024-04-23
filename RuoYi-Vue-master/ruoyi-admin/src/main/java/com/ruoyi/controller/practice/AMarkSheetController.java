@@ -1,7 +1,15 @@
 package com.ruoyi.controller.practice;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.service.IStuGroupService;
+import com.ruoyi.core.service.IStudentService;
+import com.ruoyi.framework.web.domain.server.Sys;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,7 +44,6 @@ public class AMarkSheetController extends BaseController
 {
     @Autowired
     private IAMarkSheetService aMarkSheetService;
-
     /**
      * 查询练习、测试评分表列表未完成
      */
@@ -49,6 +56,7 @@ public class AMarkSheetController extends BaseController
         List<AMarkSheet> list = aMarkSheetService.selectAMarkSheetList(aMarkSheet);
         return getDataTable(list);
     }
+
 
     /**
      * 导出练习、测试评分表列表
@@ -95,7 +103,7 @@ public class AMarkSheetController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody AMarkSheet aMarkSheet)
     {
-        return toAjax(aMarkSheetService.insertAMarkSheet(aMarkSheet));
+        return success(aMarkSheetService.insertAMarkSheet(aMarkSheet));
     }
 
     /**
@@ -116,7 +124,7 @@ public class AMarkSheetController extends BaseController
     @ApiOperation("删除练习、测试评分表")
     @PreAuthorize("@ss.hasPermi('practice:sheet:remove')")
     @Log(title = "练习、测试评分表", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{msIds}")
+    @DeleteMapping("/{msIds}")
     public AjaxResult remove(@PathVariable Long[] msIds)
     {
         return toAjax(aMarkSheetService.deleteAMarkSheetByMsIds(msIds));

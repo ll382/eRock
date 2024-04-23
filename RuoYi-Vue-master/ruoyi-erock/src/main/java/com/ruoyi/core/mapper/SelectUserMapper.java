@@ -38,6 +38,7 @@ public interface SelectUserMapper {
 //    返回未在list中的学生
     List<SelectUserVo> selectStudents(List<Long> stuList);
     List<SelectUserVo> selectUndoneStudents(List<Long> stuList);
+    List<SelectUserVo> selectUndoneGroup(@Param("stuList")List<Long> stuList,@Param("ggId") Long ggId);
     List<SelectUserVo> selectUndoneTeacher(List<SelectUserVo> teaList);
 //    小组查询
     @Select("select gg_id as ggId , gg_name as ggName, stu_group_leader as stuGroupLeader  from stu_group where gg_id = #{ggId}")
@@ -51,4 +52,5 @@ public interface SelectUserMapper {
 
 //    返回未在list中的所有小组
     List<Group> selectGroup(@Param("ggId") List<Long> ggId);
+
 }

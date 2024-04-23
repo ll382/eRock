@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 练习资源表对象 a_exercise_resource
- * 
+ *
  * @author houq
  * @date 2024-04-09
  */
@@ -33,39 +33,40 @@ public class AExerciseResource extends BaseEntity
     @Excel(name = "练习视频/图片")
     private String erSource;
 
-    public void setErId(Long erId) 
+    public void setErId(Long erId)
     {
         this.erId = erId;
     }
 
-    public Long getErId() 
+    public Long getErId()
     {
         return erId;
     }
-    public void setMsId(Long msId) 
+    public void setMsId(Long msId)
     {
         this.msId = msId;
     }
 
-    public Long getMsId() 
+    public Long getMsId()
     {
         return msId;
     }
-    public void setErTime(Date erTime) 
+    public void setErTime(Date erTime)
     {
         this.erTime = erTime;
     }
 
-    public Date getErTime() 
+    public Date getErTime()
     {
         return erTime;
     }
-    public void setErSource(String erSource) 
+
+    public void setErSource(String erSource)
     {
         this.erSource = erSource;
     }
 
-    public String getErSource() 
+    public String getErSource()
     {
         return erSource;
     }

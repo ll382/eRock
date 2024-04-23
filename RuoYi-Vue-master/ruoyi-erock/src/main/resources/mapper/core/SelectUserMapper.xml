@@ -74,6 +74,23 @@
         </where>
     </select>
 
+    <select id="selectUndoneGroup" resultMap="studentImgRequst" >
+        <include refid="studentRequst" />
+        <where>
+            <choose>
+                <when test="stuList != null and stuList.size() > 0">
+                    s.gg_Id = #{ggId} AND s.stu_id NOT IN
+                    <foreach item="item" collection="stuList" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </when>
+                <otherwise>
+                    s.gg_Id = #{ggId}
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
     <select id="selectUndoneTeacher" parameterType="list" resultMap="teacherImgRequst" >
         <include refid="teacherRequst" />
         <choose>

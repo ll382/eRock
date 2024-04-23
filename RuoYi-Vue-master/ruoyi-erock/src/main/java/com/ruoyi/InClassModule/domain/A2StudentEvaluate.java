@@ -28,11 +28,18 @@ public class A2StudentEvaluate extends BaseEntity
 
     /** 被评学生学号 */
     @Excel(name = "被评学生学号")
-    private String esId;
+    private Long esId;
 
     /** 评价类型 */
     @Excel(name = "评价类型")
     private String eeType;
+
+    public A2StudentEvaluate() {
+    }
+
+    public A2StudentEvaluate(Long stuId) {
+        this.stuId = stuId;
+    }
 
     public void setSeId(Long seId)
     {
@@ -62,12 +69,12 @@ public class A2StudentEvaluate extends BaseEntity
     {
         return stuId;
     }
-    public void setEsId(String esId)
+    public void setEsId(Long esId)
     {
         this.esId = esId;
     }
 
-    public String getEsId()
+    public Long getEsId()
     {
         return esId;
     }

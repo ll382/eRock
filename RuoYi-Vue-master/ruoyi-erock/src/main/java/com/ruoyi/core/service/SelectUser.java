@@ -35,5 +35,6 @@ public interface SelectUser<T extends BaseEntity>  {
     public HashMap<String, Object> selectFrequency(List<T> groupStudent);
     public HashMap selectGroup(List<T> groupList);
     public HashMap selectUndoneStudent(List<T> stuList);
+    public HashMap<String,Object> selectUndoneGroup(List<T> stuList,Long ggId);
 
 }

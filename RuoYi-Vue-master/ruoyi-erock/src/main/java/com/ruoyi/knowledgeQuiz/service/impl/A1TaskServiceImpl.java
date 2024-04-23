@@ -80,13 +80,9 @@ public class A1TaskServiceImpl implements IA1TaskService
     {
 //        获取基础知识测试任务数据
         List<A1Task> a1Tasks = a1TaskMapper.selectTaskList(a1Task);
-////        查找当前任务学生提交情况
-//        a1Tasks.forEach(task -> {
-////            查看未交名单
-//            task.setUnpaid(a1TaskMapper.selectStudentList(task.getTaskId()));
-////            查看已交名单
-//            task.setSubmitted(a1TaskMapper.selectFinishStudentList(task.getTaskId()));
-//        });
+        a1Tasks.forEach(task -> {
+            selectUser.calculateScore(task);
+        });
         return a1Tasks;
     }
 

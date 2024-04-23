@@ -3,42 +3,42 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.practice.mapper.AExerciseResourceMapper">
-    
+
     <resultMap type="AExerciseResource" id="AExerciseResourceResult">
         <result property="erId"    column="er_id"    />
         <result property="msId"    column="ms_id"    />
-        <result property="erPicture"    column="er_picture"    />
+        <result property="erSource"    column="er_source"    />
         <result property="erTime"    column="er_time"    />
     </resultMap>
 
     <sql id="selectAExerciseResourceVo">
-        select er_id, ms_id, er_picture, er_time from a_exercise_resource
+        select er_id, ms_id, er_source, er_time from a_exercise_resource
     </sql>
 
     <select id="selectAExerciseResourceList" parameterType="AExerciseResource" resultMap="AExerciseResourceResult">
         <include refid="selectAExerciseResourceVo"/>
-        <where>  
+        <where>
             <if test="msId != null "> and ms_id = #{msId}</if>
-            <if test="erPicture != null  and erPicture != ''"> and er_picture = #{erPicture}</if>
+            <if test="erSource != null  and erSource != ''"> and er_source = #{erSource}</if>
             <if test="erTime != null "> and er_time = #{erTime}</if>
         </where>
     </select>
-    
+
     <select id="selectAExerciseResourceByErId" parameterType="Long" resultMap="AExerciseResourceResult">
         <include refid="selectAExerciseResourceVo"/>
         where er_id = #{erId}
     </select>
-        
+
     <insert id="insertAExerciseResource" parameterType="AExerciseResource" useGeneratedKeys="true" keyProperty="erId">
         insert into a_exercise_resource
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="msId != null">ms_id,</if>
-            <if test="erPicture != null">er_picture,</if>
+            <if test="erSource != null">er_source,</if>
             <if test="erTime != null">er_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="msId != null">#{msId},</if>
-            <if test="erPicture != null">#{erPicture},</if>
+            <if test="erSource != null">#{erSource},</if>
             <if test="erTime != null">#{erTime},</if>
          </trim>
     </insert>
@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update a_exercise_resource
         <trim prefix="SET" suffixOverrides=",">
             <if test="msId != null">ms_id = #{msId},</if>
-            <if test="erPicture != null">er_picture = #{erPicture},</if>
+            <if test="erSource != null">er_source = #{erSource},</if>
             <if test="erTime != null">er_time = #{erTime},</if>
         </trim>
         where er_id = #{erId}
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAExerciseResourceByErIds" parameterType="String">
-        delete from a_exercise_resource where er_id in 
+        delete from a_exercise_resource where er_id in
         <foreach item="erId" collection="array" open="(" separator="," close=")">
             #{erId}
         </foreach>

@@ -26,20 +26,25 @@ public class BaseEntity implements Serializable
     private String searchValue;
 
     /** 创建者 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String createBy;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date createTime;
 
     /** 更新者 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String updateBy;
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date updateTime;
 
     /** 备注 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String remark;
 
     /** 请求参数 */
