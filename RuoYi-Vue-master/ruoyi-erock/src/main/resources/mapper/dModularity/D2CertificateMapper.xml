@@ -26,13 +26,14 @@
 	</resultMap>
 
 	<sql id="selectD2CertificateVo">
-		SELECT certificate_id, stu_id, tea_id, certificate_name, audit, upload_time
+		SELECT certificate_id, stu_id, tea_id, certificate_name, audit, upload_time, enum_id
 		FROM d2_certificate
 	</sql>
 
 	<select id="selectD2CertificateList" parameterType="D2Certificate" resultMap="D2CertificateResult">
 		<include refid="selectD2CertificateVo"/>
 		<where>
+			<if test="certificateId != null and certificateId != ''">and certificate_id = #{certificateId}</if>
 			<if test="stuId != null  and stuId != ''">and stu_id = #{stuId}</if>
 			<if test="teaId != null  and teaId != ''">and tea_id = #{teaId}</if>
 			<if test="certificateName != null  and certificateName != ''">and certificate_name like concat('%',
@@ -124,12 +125,10 @@
 	<!-- D2学生名单列表 -->
 	<select id="selectD2CertificateAudit" resultMap="D2CertificateAuditByStuId">
 		SELECT dc.stu_id,
-# 		s.stu_name,
 		dc.audit,
 		COUNT(dr.resource_url) AS urlnum
 		FROM d2_certificate dc
 		JOIN d2_resource dr ON dc.certificate_id = dr.certificate_id
-# 		JOIN student s ON dc.stu_id = s.stu_id
 		<where>
 			<if test="enumId == null">AND dc.enum_id = 29</if>
 			<if test="enumId != null">AND dc.enum_id = 30</if>

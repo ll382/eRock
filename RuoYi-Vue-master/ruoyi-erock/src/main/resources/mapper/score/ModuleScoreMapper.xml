@@ -1,66 +1,80 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.score.mapper.ModuleScoreMapper">
-    
-    <resultMap type="ModuleScore" id="ModuleScoreResult">
-        <result property="modId"    column="mod_id"    />
-        <result property="tsId"    column="ts_id"    />
-        <result property="enumId"    column="enum_id"    />
-        <result property="avsScore"    column="avs_score"    />
-    </resultMap>
 
-    <sql id="selectModuleScoreVo">
-        select mod_id, ts_id, enum_id, avs_score from module_score
-    </sql>
+	<resultMap type="ModuleScore" id="ModuleScoreResult">
+		<result property="modId" column="mod_id"/>
+		<result property="tsId" column="ts_id"/>
+		<result property="enumId" column="enum_id"/>
+		<result property="avsScore" column="avs_score"/>
+	</resultMap>
 
-    <select id="selectModuleScoreList" parameterType="ModuleScore" resultMap="ModuleScoreResult">
-        <include refid="selectModuleScoreVo"/>
-        <where>  
-            <if test="tsId != null "> and ts_id = #{tsId}</if>
-            <if test="enumId != null "> and enum_id = #{enumId}</if>
-            <if test="avsScore != null "> and avs_score = #{avsScore}</if>
-        </where>
-    </select>
-    
-    <select id="selectModuleScoreByModId" parameterType="Long" resultMap="ModuleScoreResult">
-        <include refid="selectModuleScoreVo"/>
-        where mod_id = #{modId}
-    </select>
-        
-    <insert id="insertModuleScore" parameterType="ModuleScore" useGeneratedKeys="true" keyProperty="modId">
-        insert into module_score
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="tsId != null">ts_id,</if>
-            <if test="enumId != null">enum_id,</if>
-            <if test="avsScore != null">avs_score,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="tsId != null">#{tsId},</if>
-            <if test="enumId != null">#{enumId},</if>
-            <if test="avsScore != null">#{avsScore},</if>
-         </trim>
-    </insert>
+	<sql id="selectModuleScoreVo">
+		SELECT mod_id, ts_id, enum_id, avs_score
+		FROM module_score
+	</sql>
 
-    <update id="updateModuleScore" parameterType="ModuleScore">
-        update module_score
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="tsId != null">ts_id = #{tsId},</if>
-            <if test="enumId != null">enum_id = #{enumId},</if>
-            <if test="avsScore != null">avs_score = #{avsScore},</if>
-        </trim>
-        where mod_id = #{modId}
-    </update>
+	<select id="selectModuleScoreList" parameterType="ModuleScore" resultMap="ModuleScoreResult">
+		<include refid="selectModuleScoreVo"/>
+		<where>
+			<if test="tsId != null ">and ts_id = #{tsId}</if>
+			<if test="enumId != null ">and enum_id = #{enumId}</if>
+			<if test="avsScore != null ">and avs_score = #{avsScore}</if>
+		</where>
+	</select>
 
-    <delete id="deleteModuleScoreByModId" parameterType="Long">
-        delete from module_score where mod_id = #{modId}
-    </delete>
+	<select id="selectModuleScoreByModId" parameterType="Long" resultMap="ModuleScoreResult">
+		<include refid="selectModuleScoreVo"/>
+		where mod_id = #{modId}
+	</select>
 
-    <delete id="deleteModuleScoreByModIds" parameterType="String">
-        delete from module_score where mod_id in 
-        <foreach item="modId" collection="array" open="(" separator="," close=")">
-            #{modId}
-        </foreach>
-    </delete>
+	<insert id="insertModuleScore" parameterType="ModuleScore" useGeneratedKeys="true" keyProperty="modId">
+		insert into module_score
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="tsId != null">ts_id,</if>
+			<if test="enumId != null">enum_id,</if>
+			<if test="avsScore != null">avs_score,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="tsId != null">#{tsId},</if>
+			<if test="enumId != null">#{enumId},</if>
+			<if test="avsScore != null">#{avsScore},</if>
+		</trim>
+	</insert>
+
+	<update id="updateModuleScore" parameterType="ModuleScore">
+		update module_score
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="tsId != null">ts_id = #{tsId},</if>
+			<if test="enumId != null">enum_id = #{enumId},</if>
+			<if test="avsScore != null">avs_score = #{avsScore},</if>
+		</trim>
+		where mod_id = #{modId}
+	</update>
+
+	<delete id="deleteModuleScoreByModId" parameterType="Long">
+		DELETE
+		FROM module_score
+		WHERE mod_id = #{modId}
+	</delete>
+
+	<delete id="deleteModuleScoreByModIds" parameterType="String">
+		delete from module_score where mod_id in
+		<foreach item="modId" collection="array" open="(" separator="," close=")">
+			#{modId}
+		</foreach>
+	</delete>
+
+	<!-- 查询学生是否有指定模块的成绩 -->
+	<select id="selectStudentByStuIdAndEnumId" resultMap="ModuleScoreResult" parameterType="ModuleAndTotal">
+		SELECT ms.*
+		FROM total_score ts
+		JOIN module_score ms ON ms.ts_id = ts.ts_id
+		<where>
+			<if test="stuId != null">AND ts.stu_id = #{stuId}</if>
+			<if test="enumId != null">AND ms.enum_id = #{enumId}</if>
+		</where>
+	</select>
 </mapper>

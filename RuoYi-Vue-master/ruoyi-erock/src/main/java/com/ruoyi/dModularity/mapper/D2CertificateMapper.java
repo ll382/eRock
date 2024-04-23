@@ -1,9 +1,12 @@
 package com.ruoyi.dModularity.mapper;
 
+import com.ruoyi.core.domain.Semester;
 import com.ruoyi.dModularity.domain.D2Certificate;
 import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
 import com.ruoyi.dModularity.domain.D2Resource;
+import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -101,4 +104,8 @@ public interface D2CertificateMapper {
 	 * @return
 	 */
 	public List<HashMap<String, Object>> selectD2CertificateAuditByStuId(HashMap<String, Object> map);
+
+	// 获取学期id
+	@Select("SELECT semester_id AS semesterId, start_date AS startDate , finish_date AS finishDate FROM semester WHERE #{date} BETWEEN start_date AND finish_date")
+	public Semester selectDate(Date date);
 }
