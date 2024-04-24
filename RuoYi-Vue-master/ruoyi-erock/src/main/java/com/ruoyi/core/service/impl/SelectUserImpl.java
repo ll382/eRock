@@ -4,6 +4,7 @@ import com.ruoyi.afterClassModel.domain.A3PhysicalTraining;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SelectUserVo;
 import com.ruoyi.common.core.domain.entity.Group;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.core.domain.StuGroup;
 import com.ruoyi.core.domain.Student;
@@ -13,6 +14,10 @@ import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
 import com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper;
+import com.ruoyi.score.domain.ModuleScore;
+import com.ruoyi.score.domain.TotalScore;
+import com.ruoyi.score.mapper.ModuleScoreMapper;
+import com.ruoyi.score.mapper.TotalScoreMapper;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -41,6 +46,12 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Autowired
     IStuGroupService stuGroupService;
+
+    @Autowired
+    private TotalScoreMapper totalScoreMapper;
+
+    @Autowired
+    private ModuleScoreMapper moduleScoreMapper;
 
     @Autowired
     SelectUser selectUser;
@@ -299,8 +310,44 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 //        将组员组长以及外层的小组赋值给传入数据
         GroupStudent.getGroup().setStudentList(list);
     }
-    public static Double standardDeviation(List<BigDecimal> msScore,int scale){
+
+
+//         通过学期和学号返回总分表数据 如果   有则返回id  没有创建并返回id
+    public Long judgeInformation(TotalScore totalScore){
+//        查找总成绩列表
+        List<TotalScore> totalScores = totalScoreMapper.selectTotalScoreList(totalScore);
+//        判断数据库是否有数据
+        if (StringUtils.isNotEmpty(totalScores)) {
+//            如果有直接返回
+            return totalScores.get(0).getTsId();
+        }else {
+//            新插入数据默认成绩为零
+            totalScore.setEpScore(BigDecimal.valueOf(0));
+//            插入内容
+            totalScoreMapper.insertTotalScore(totalScore);
+            return totalScore.getTsId();
+        }
+    }
+
+//         通过学期和学号返回模块表数据 如果   有则返回id  没有创建并返回id
+    public ModuleScore judgeModuleScore(ModuleScore moduleScore){
+//        查找总成绩列表
+        List<ModuleScore> moduleScores = moduleScoreMapper.selectModuleScoreList(moduleScore);
+
+        if (StringUtils.isNotEmpty(moduleScores)) {
+//            修改查到目标Id内容
+            moduleScore.setModId(moduleScores.get(0).getModId());
+            moduleScoreMapper.updateModuleScore(moduleScore);
+            return moduleScore;
+        }else {
+//            插入内容
+            moduleScoreMapper.insertModuleScore(moduleScore);
+            return moduleScore;
+        }
+    }
+
 //            TODO：标准差的计算
+    public static Double standardDeviation(List<BigDecimal> msScore,int scale){
 //            开根号下的(Σ(Xi - Xba)²)/n-1
 
 //            精确位数,所有除数都得弄好小数处理,否则遇到无线循环小数会抛ArithmeticException错误

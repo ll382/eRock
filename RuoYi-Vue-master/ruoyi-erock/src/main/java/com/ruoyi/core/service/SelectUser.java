@@ -3,6 +3,8 @@ package com.ruoyi.core.service;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
+import com.ruoyi.score.domain.ModuleScore;
+import com.ruoyi.score.domain.TotalScore;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
@@ -30,6 +32,9 @@ public interface SelectUser<T extends BaseEntity>  {
 
     public Semester selectDate(Date date);
 
+    public Long judgeInformation(TotalScore totalScore);
+
+    public ModuleScore judgeModuleScore(ModuleScore moduleScore);
 
     //    必须得要在学生类被赋予之前使用本接口，否则会有索引异常
 
