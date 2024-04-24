@@ -6,9 +6,7 @@ import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
 import com.ruoyi.dModularity.domain.D2Resource;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * D2 证书表Mapper接口

@@ -1,15 +1,19 @@
 package com.ruoyi.dModularity.service.impl;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.core.util.DateUtil;
 import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
 import com.ruoyi.score.domain.ModuleAndTotal;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
 import com.ruoyi.score.mapper.ModuleScoreMapper;
 import com.ruoyi.score.mapper.TotalScoreMapper;
+import com.ruoyi.score.service.ITotalScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +47,9 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 
 	@Autowired
 	private TotalScoreMapper totalScoreMapper;
+
+	@Autowired
+	private ITotalScoreService totalScoreService;
 
 	/**
 	 * 查询D2 证书表
@@ -99,7 +106,7 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 			moduleAndTotal.setStuId(dc.getStuId());  // 学号
 			moduleAndTotal.setEnumId(dc.getEnumId());  // 枚举id
 			moduleAndTotal.setAvsScore(getScoreByCertificateName(dc.getCertificateName()));    // 模块成绩
-			moduleAndTotal.setSemesterId(d2CertificateMapper.selectDate(new Date()).getSemesterId());   // 学期id
+			moduleAndTotal.setSemesterId(d2CertificateMapper.selectDate(DateUtil.StringConvertDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))).getSemesterId());   // 学期id
 			// 修改模块分数
 			updateModuleScore(moduleAndTotal);
 		}
@@ -225,8 +232,7 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 			return totalScore;
 		} else {
 			TotalScore existingTotalScore = totalScoreList.get(0);
-			existingTotalScore.setEpScore(existingTotalScore.getEpScore().add(avsScore));
-			totalScoreMapper.updateTotalScore(existingTotalScore);
+			totalScoreService.addingTotalScore(existingTotalScore.getTsId(), avsScore);
 			return existingTotalScore;
 		}
 	}
