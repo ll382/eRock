@@ -3,6 +3,7 @@ package com.ruoyi.controller.practice;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.core.domain.StuGroup;
@@ -34,8 +35,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 /**
  * 练习、测试评分表Controller
  *
- * @author houq
- * @date 2024-04-09
+ * @author ljy
+ * @date 2024-04-11
  */
 @Api(tags = {"练习、测试评分表"})
 @RestController
@@ -44,6 +45,7 @@ public class AMarkSheetController extends BaseController
 {
     @Autowired
     private IAMarkSheetService aMarkSheetService;
+
     /**
      * 查询练习、测试评分表列表未完成
      */
@@ -91,6 +93,12 @@ public class AMarkSheetController extends BaseController
     public AjaxResult getInfo(@PathVariable("msId") Long msId)
     {
         return success(aMarkSheetService.selectAMarkSheetByMsId(msId));
+    }
+
+    @GetMapping("/{msId}/{enumId}")
+    public AjaxResult getAMarkSheetByMsIdAndEnumId(@PathVariable("msId") Integer msId,@PathVariable("enumId") Integer enumId)
+    {
+        return success(aMarkSheetService.selectAMarkSheetByMsIdAndEnumId(msId, enumId));
     }
 
     /**

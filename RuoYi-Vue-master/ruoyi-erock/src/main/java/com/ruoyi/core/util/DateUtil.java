@@ -21,13 +21,13 @@ public  class DateUtil {
         String s = format.split(" ")[1].split(":")[0];
         int i = Integer.parseInt(s);
         if (i < 10){
-            return "一二节课";
+            return "一二节";
         }else if (i < 12){
-            return "三四节课";
+            return "三四节";
         }else if (i < 16){
-            return "五六节课";
+            return "五六节";
         }else {
-            return "七八节课";
+            return "七八节";
         }
 
     }

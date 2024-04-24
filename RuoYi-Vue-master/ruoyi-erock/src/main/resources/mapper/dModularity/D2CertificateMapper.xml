@@ -26,13 +26,14 @@
 	</resultMap>
 
 	<sql id="selectD2CertificateVo">
-		SELECT certificate_id, stu_id, tea_id, certificate_name, audit, upload_time
+		SELECT certificate_id, stu_id, tea_id, certificate_name, audit, upload_time, enum_id
 		FROM d2_certificate
 	</sql>
 
 	<select id="selectD2CertificateList" parameterType="D2Certificate" resultMap="D2CertificateResult">
 		<include refid="selectD2CertificateVo"/>
 		<where>
+			<if test="certificateId != null and certificateId != ''">and certificate_id = #{certificateId}</if>
 			<if test="stuId != null  and stuId != ''">and stu_id = #{stuId}</if>
 			<if test="teaId != null  and teaId != ''">and tea_id = #{teaId}</if>
 			<if test="certificateName != null  and certificateName != ''">and certificate_name like concat('%',
@@ -122,14 +123,12 @@
 	</insert>
 
 	<!-- D2学生名单列表 -->
-	<select id="selectD2CertificateAudit" resultType="HashMap">
+	<select id="selectD2CertificateAudit" resultMap="D2CertificateAuditByStuId">
 		SELECT dc.stu_id,
-		s.stu_name,
 		dc.audit,
 		COUNT(dr.resource_url) AS urlnum
 		FROM d2_certificate dc
 		JOIN d2_resource dr ON dc.certificate_id = dr.certificate_id
-		JOIN student s ON dc.stu_id = s.stu_id
 		<where>
 			<if test="enumId == null">AND dc.enum_id = 29</if>
 			<if test="enumId != null">AND dc.enum_id = 30</if>
@@ -137,6 +136,15 @@
 		GROUP BY dc.stu_id, dc.audit
 	</select>
 
+	<resultMap id="D2CertificateAuditByStuId" type="D2CertificateAuditByStuId">
+		<result property="stuId" column="stu_id"/>
+		<result property="teaId" column="tea_id"/>
+		<result property="certificateId" column="certificate_id"/>
+		<result property="uploadTime" column="upload_time"/>
+		<result property="audit" column="audit"/>
+		<result property="certificateName" column="certificate_name"/>
+		<result property="resourceUrl" column="resource_url"/>
+	</resultMap>
 	<!-- D2查询学生上传资料信息 -->
 	<select id="selectD2CertificateAuditByStuId" resultType="HashMap" parameterType="HashMap">
 		SELECT dc.certificate_id, dc.audit, s.stu_name, t.tea_name, dc.certificate_name, dc.upload_time, dr.resource_url
@@ -144,7 +152,7 @@
 			     JOIN d2_certificate dc ON dr.certificate_id = dc.certificate_id
 			     JOIN student s ON dc.stu_id = s.stu_id
 			     JOIN teacher t ON dc.tea_id = t.tea_id
-		WHERE dc.stu_id = #{stu_id}
+		WHERE dc.stu_id = #{stuId}
 		  AND dc.audit = #{audit}
 	</select>
 </mapper>

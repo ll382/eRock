@@ -7,16 +7,16 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 投篮运球表对象 a_ball_exam
+ * A 运球a_mark_sheetms_id对象 a_ball_exam
  * 
- * @author houq
- * @date 2024-04-09
+ * @author ljy
+ * @date 2024-04-11
  */
 public class ABallExam extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 测试ID */
+    /** 运球ID */
     private Long beId;
 
     /** 评分ID */
@@ -55,7 +55,15 @@ public class ABallExam extends BaseEntity
     @Excel(name = "评价")
     private String shoAnalysis;
 
-    public void setBeId(Long beId) 
+    /** 运球分数 */
+    @Excel(name = "运球分数")
+    private BigDecimal msDribble;
+
+    /** 投篮分数 */
+    @Excel(name = "投篮分数")
+    private BigDecimal msShooting;
+
+    public void setBeId(Long beId)
     {
         this.beId = beId;
     }
@@ -146,6 +154,22 @@ public class ABallExam extends BaseEntity
         return shoAnalysis;
     }
 
+    public BigDecimal getMsDribble() {
+        return msDribble;
+    }
+
+    public void setMsDribble(BigDecimal msDribble) {
+        this.msDribble = msDribble;
+    }
+
+    public BigDecimal getMsShooting() {
+        return msShooting;
+    }
+
+    public void setMsShooting(BigDecimal msShooting) {
+        this.msShooting = msShooting;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -159,6 +183,8 @@ public class ABallExam extends BaseEntity
             .append("shoSpinner", getShoSpinner())
             .append("shoAngle", getShoAngle())
             .append("shoAnalysis", getShoAnalysis())
+            .append("msDribble",getMsDribble())
+            .append("msShooting",getMsShooting())
             .toString();
     }
 }

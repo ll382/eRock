@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.practice.mapper.AMarkSheetMapper">
-
+    
     <resultMap type="AMarkSheet" id="AMarkSheetResult">
         <result property="msId"    column="ms_id"    />
         <result property="etId"    column="et_id"    />
@@ -20,24 +20,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="msImg"    column="ms_img"    />
     </resultMap>
 
-    <resultMap id="AMarkSheetAExerciseResourceResult" type="AMarkSheet" extends="AMarkSheetResult">
-        <collection property="aExerciseResourceList" notNullColumn="sub_er_id" javaType="java.util.List" resultMap="AExerciseResourceResult" />
-    </resultMap>
-
-    <resultMap type="AExerciseResource" id="AExerciseResourceResult">
-        <result property="erId"    column="sub_er_id"    />
-        <result property="msId"    column="sub_ms_id"    />
-        <result property="erTime"    column="sub_er_time"    />
-        <result property="erSource"    column="sub_er_source"    />
-    </resultMap>
-
     <sql id="selectAMarkSheetVo">
         select ms_id, et_id, stu_id, tea_id, ms_time, ms_dribble, ms_shooting, ms_score, ms_1, ms_2, ms_3, ms_class, ms_img from a_mark_sheet
     </sql>
 
     <select id="selectAMarkSheetList" parameterType="AMarkSheet" resultMap="AMarkSheetResult">
         <include refid="selectAMarkSheetVo"/>
-        <where>
+        <where>  
             <if test="etId != null "> and et_id = #{etId}</if>
             <if test="stuId != null "> and stu_id = #{stuId}</if>
             <if test="teaId != null "> and tea_id = #{teaId}</if>
@@ -53,13 +42,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by ms_time asc
     </select>
-
-    <select id="selectAMarkSheetByMsId" parameterType="Long" resultMap="AMarkSheetAExerciseResourceResult">
-        select a.ms_id, a.et_id, a.stu_id, a.tea_id, a.ms_time, a.ms_dribble, a.ms_shooting, a.ms_score, a.ms_1, a.ms_2, a.ms_3, a.ms_class, a.ms_img,
- b.er_id as sub_er_id, b.ms_id as sub_ms_id, b.er_time as sub_er_time, b.er_source as sub_er_source
-        from a_mark_sheet a
-        left join a_exercise_resource b on b.ms_id = a.ms_id
-        where a.ms_id = #{msId}
+    
+    <select id="selectAMarkSheetByMsId" parameterType="Long" resultMap="AMarkSheetResult">
+        <include refid="selectAMarkSheetVo"/>
+        where ms_id = #{msId}
     </select>
     <select id="selectEveroneMsScore" resultType="double">
         SELECT
@@ -82,6 +68,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </select>
 
+    <select id="selectAMarkSheetByMsIdAndEnumId">
+        SELECT
+            t.ms_id,
+            t.enum_id,
+            t.ms_class,
+            t.er_source,
+            CASE
+                WHEN t.enum_id = 16 AND t.min_val = t.ms_1 THEN '1'
+                WHEN t.enum_id = 16 AND t.min_val = t.ms_2 THEN '2'
+                WHEN t.enum_id = 16 AND t.min_val = t.ms_3 THEN '3'
+                WHEN t.enum_id = 15 AND t.min_val = t.ms_1 THEN '4'
+                WHEN t.enum_id = 15 AND t.min_val = t.ms_2 THEN '5'
+                WHEN t.enum_id = 15 AND t.min_val = t.ms_3 THEN '6'
+                END pc_id
+        FROM (
+                 SELECT
+                     a_mark_sheet.ms_id,
+                     class_register.enum_id,
+                     ms_1,
+                     ms_2,
+                     ms_3,
+                     ms_class,
+                     er_source,
+                     LEAST(ms_1, ms_2, ms_3) AS min_val
+                 FROM
+                     a_mark_sheet
+                         LEFT JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+                         LEFT JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+                         LEFT JOIN a_exercise_resource ON a_mark_sheet.ms_id = a_exercise_resource.ms_id
+                 WHERE
+                     a_mark_sheet.ms_id = #{msId}
+                   AND a_exercise_task.enum_id = #{enumId}
+             ) t;
+    </select>
+
+    <select id="selectAPageThreeByPcId">
+        SELECT content_video,content_video2,cv1,cv2 from a_page_three WHERE pc_id = #{pcId}
+    </select>
+        
     <insert id="insertAMarkSheet" parameterType="AMarkSheet" useGeneratedKeys="true" keyProperty="msId">
         insert into a_mark_sheet
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -138,27 +163,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAMarkSheetByMsIds" parameterType="String">
-        delete from a_mark_sheet where ms_id in
+        delete from a_mark_sheet where ms_id in 
         <foreach item="msId" collection="array" open="(" separator="," close=")">
             #{msId}
         </foreach>
     </delete>
-
-    <delete id="deleteAExerciseResourceByMsIds" parameterType="String">
-        delete from a_exercise_resource where ms_id in
-        <foreach item="msId" collection="array" open="(" separator="," close=")">
-            #{msId}
-        </foreach>
-    </delete>
-
-    <delete id="deleteAExerciseResourceByMsId" parameterType="Long">
-        delete from a_exercise_resource where ms_id = #{msId}
-    </delete>
-
-    <insert id="batchAExerciseResource">
-        insert into a_exercise_resource( er_id, ms_id, er_time, er_source) values
-		<foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.erId}, #{item.msId}, #{item.erTime}, #{item.erSource})
-        </foreach>
-    </insert>
 </mapper>

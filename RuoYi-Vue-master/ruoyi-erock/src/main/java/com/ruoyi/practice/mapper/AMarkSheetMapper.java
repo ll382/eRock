@@ -3,20 +3,22 @@ package com.ruoyi.practice.mapper;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.match.domain.ClassRegister;
 import com.ruoyi.practice.domain.ABallExam;
 import com.ruoyi.practice.domain.AExerciseTask;
 import com.ruoyi.practice.domain.AMarkSheet;
+import org.apache.ibatis.annotations.Param;
 import com.ruoyi.practice.domain.AExerciseResource;
 import org.apache.ibatis.annotations.*;
 
 /**
  * 练习、测试评分表Mapper接口
  *
- * @author houq
- * @date 2024-04-09
+ * @author ljy
+ * @date 2024-04-11
  */
 public interface AMarkSheetMapper
 {
@@ -45,14 +47,22 @@ public interface AMarkSheetMapper
     /**
      * 查询未提交名单
      *
-     * @param etId 练习、测试评分表
+     * @param aMarkSheet 练习、测试评分表
      * @return 练习、测试评分表集合
      */
+    public List<Map<String,Object>> selectAMarkSheetByMsIdAndEnumId(@Param("msId") Integer msId,@Param("enumId") Integer enumId);
+
     @Select("Select s.stu_id as stuId, e.avatar as stuImg,s.stu_name as stuName from student s left JOIN sys_user e ON e.user_id = s.user_id where s.stu_id NOT IN (SELECT stu_id FROM a_mark_sheet WHERE et_id = #{etId})")
     public List<Student> selectAMarkSheet(Long etId);
 
     /**
-     * 新增练习、测试评分表
+     * 查询内容视频
+     * @param pcId pcId
+     * @return
+     */
+    public Map<String,Object> selectAPageThreeByPcId(Integer pcId);
+    /**
+     * 新增 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      *
      * @param aMarkSheet 练习、测试评分表
      * @return 结果

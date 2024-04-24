@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.dModularity.domain.D2Certificate;
+import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
 
 /**
  * D2 证书表Service接口
@@ -67,7 +68,7 @@ public interface ID2CertificateService
      *
      * @return 结果
      */
-    public Map<String, List<HashMap<String, Object>>> selectD2CertificateAudit(Integer enumId);
+    public Map<String, List<D2CertificateAuditByStuId>> selectD2CertificateAudit(Integer enumId);
 
     /**
      * D2查询学生上传资料信息

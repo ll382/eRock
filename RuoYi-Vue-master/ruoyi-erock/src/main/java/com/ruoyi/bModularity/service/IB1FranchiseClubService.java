@@ -1,6 +1,7 @@
 package com.ruoyi.bModularity.service;
 
 import com.ruoyi.bModularity.domain.B1FranchiseClub;
+import com.ruoyi.bModularity.domain.B1Student;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +66,7 @@ public interface IB1FranchiseClubService {
 	 *
 	 * @return 结果
 	 */
-	public List<HashMap<String, String>> selectB1Student();
+	public List<B1Student> selectB1Student();
 	
 	
 	/**

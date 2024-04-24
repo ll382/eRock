@@ -184,8 +184,10 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 	@Transactional
 	@Override
 	public int insertClassRegisterKn(HashMap<String, Object> map) {
+		Date date = map.get("dateTime") == null ? new Date() : parseDate((String) map.get("dateTime"));
+
 		ClassRegister classRegister = new ClassRegister();
-		classRegister.setSemesterId(1L);
+		classRegister.setSemesterId(classRegisterMapper.selectSemesterIdByDate(date));    // 学期id
 		classRegister.setCrDate(parseDate((String) map.get("dateTime")));
 		classRegister.setCrMain((String) map.get("name"));
 		classRegister.setCrDuration(BigDecimal.valueOf(40));

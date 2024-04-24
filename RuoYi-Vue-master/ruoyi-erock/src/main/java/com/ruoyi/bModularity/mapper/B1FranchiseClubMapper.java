@@ -2,6 +2,7 @@ package com.ruoyi.bModularity.mapper;
 
 import com.ruoyi.bModularity.domain.B1FranchiseClub;
 import com.ruoyi.bModularity.domain.B1MassSource;
+import com.ruoyi.bModularity.domain.B1Student;
 
 import java.util.HashMap;
 import java.util.List;
@@ -91,7 +92,7 @@ public interface B1FranchiseClubMapper {
 	 *
 	 * @return 结果
 	 */
-	public List<HashMap<String, String>> selectB1Student();
+	public List<B1Student> selectB1Student();
 	
 	/**
 	 * 获取学生本周训练记录

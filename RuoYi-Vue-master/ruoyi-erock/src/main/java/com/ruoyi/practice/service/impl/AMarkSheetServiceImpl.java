@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
+import com.ruoyi.core.domain.vo.StudentCourseGrades;
 import com.ruoyi.core.domain.Grade;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.core.domain.Student;
@@ -19,6 +20,10 @@ import com.ruoyi.practice.mapper.AmodeClassRegisterMapper;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import com.ruoyi.common.utils.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import com.ruoyi.practice.domain.AExerciseResource;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.practice.domain.AExerciseResource;
@@ -29,8 +34,8 @@ import com.ruoyi.practice.service.IAMarkSheetService;
 /**
  * 练习、测试评分表Service业务层处理
  *
- * @author houq
- * @date 2024-04-09
+ * @author ljy
+ * @date 2024-04-11
  */
 @Service
 public class AMarkSheetServiceImpl implements IAMarkSheetService
@@ -152,7 +157,52 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public List<AMarkSheet> selectAMarkSheetList(AMarkSheet aMarkSheet)
     {
-        return aMarkSheetMapper.selectAMarkSheetList(aMarkSheet);
+        return selectUser.selectStudent(aMarkSheetMapper.selectAMarkSheetList(aMarkSheet));
+    }
+
+    /**
+     * 查询PC端第三页面
+     * @param msId 评分Id
+     * @param enumId 枚举Id
+     * @return
+     */
+    public Map<String, Object> selectAMarkSheetByMsIdAndEnumId(Integer msId,Integer enumId){
+        List<Map<String, Object>> maps = aMarkSheetMapper.selectAMarkSheetByMsIdAndEnumId(msId, enumId);
+        ArrayList<String> mp4List = new ArrayList<>();
+        ArrayList<String> jspList = new ArrayList<>();
+        Map<String, Object> data = null;
+        Boolean mp4 = false;
+        for (Map<String, Object> msp:maps){
+            if (data==null){
+                data = msp;
+            }
+            String erSource = (String) msp.get("er_source");
+            if (erSource.endsWith(".mp4")){
+                mp4List.add(erSource);
+                mp4 = true;
+            }
+            jspList.add(erSource);
+
+        }
+        if (mp4){
+            if (mp4List.size() != 0){
+                data.put("mp4", mp4List.get(0));
+            }
+            if (jspList.size() != 0){
+                data.put("jsp", jspList.get(0));
+            }
+        }else {
+            if (jspList.size()==1){
+                data.put("jsp", jspList.get(0));
+            }else {
+                data.put("mp4", jspList.get(1));
+                data.put("jsp", jspList.get(0));
+            }
+        }
+
+        Map<String, Object> pageThreeMap = aMarkSheetMapper.selectAPageThreeByPcId(Integer.parseInt((String) data.get("pc_id")));
+        data.putAll(pageThreeMap);
+        return data;
     }
 
     /**
@@ -235,7 +285,6 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
         aMarkSheetMapper.deleteAExerciseResourceByMsIds(msIds);
         return aMarkSheetMapper.deleteAMarkSheetByMsIds(msIds);
     }
-
 
     /**
      * 删除练习、测试评分表信息

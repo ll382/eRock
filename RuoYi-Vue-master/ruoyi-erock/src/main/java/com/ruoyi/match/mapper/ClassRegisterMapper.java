@@ -6,6 +6,7 @@ import java.util.List;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.match.domain.ClassRegister;
 import com.ruoyi.match.domain.CompetitionRecord;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -14,8 +15,7 @@ import org.apache.ibatis.annotations.Select;
  * @author houq
  * @date 2024-04-08
  */
-public interface ClassRegisterMapper
-{
+public interface ClassRegisterMapper {
     /**
      * 查询课堂记录
      *
@@ -40,13 +40,14 @@ public interface ClassRegisterMapper
      */
     public int insertClassRegister(ClassRegister classRegister);
 
-    /**
-     * 修改课堂记录
-     *
-     * @param classRegister 课堂记录
-     * @return 结果
-     */
-    public int updateClassRegister(ClassRegister classRegister);
+
+	/**
+	 * 修改课堂记录
+	 *
+	 * @param classRegister 课堂记录
+	 * @return 结果
+	 */
+	public int updateClassRegister(ClassRegister classRegister);
 
     /**
      * 删除课堂记录
@@ -81,11 +82,20 @@ public interface ClassRegisterMapper
     public int batchCompetitionRecord(List<CompetitionRecord> competitionRecordList);
 
 
-    /**
-     * 通过课堂记录主键删除C 比赛记录信息
-     *
-     * @param crId 课堂记录ID
-     * @return 结果
-     */
-    public int deleteCompetitionRecordByCrId(Long crId);
+	/**
+	 * 通过课堂记录主键删除C 比赛记录信息
+	 *
+	 * @param crId 课堂记录ID
+	 * @return 结果
+	 */
+	public int deleteCompetitionRecordByCrId(Long crId);
+
+	/**
+	 * 通过日期获取学期id
+	 *
+	 * @param date 创建时间
+	 * @return 学期id
+	 */
+	@Select("SELECT semester_id FROM semester WHERE #{date} BETWEEN start_date AND finish_date")
+	public Long selectSemesterIdByDate(@Param("date") Date date);
 }
