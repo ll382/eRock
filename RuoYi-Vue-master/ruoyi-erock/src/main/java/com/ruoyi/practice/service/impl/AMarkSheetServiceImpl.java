@@ -1,39 +1,26 @@
 package com.ruoyi.practice.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.*;
-
-import com.ruoyi.core.domain.vo.StudentCourseGrades;
-import com.ruoyi.core.domain.Grade;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.core.domain.Student;
-import com.ruoyi.core.mapper.GradeMapper;
 import com.ruoyi.core.mapper.StudentMapper;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.service.impl.SelectUserImpl;
-import com.ruoyi.match.domain.ClassRegister;
 import com.ruoyi.practice.domain.ABallExam;
-import com.ruoyi.practice.domain.AExerciseTask;
-import com.ruoyi.practice.mapper.AExerciseTaskMapper;
-import com.ruoyi.practice.mapper.AmodeClassRegisterMapper;
+import com.ruoyi.practice.domain.AExerciseResource;
+import com.ruoyi.practice.domain.AMarkSheet;
+import com.ruoyi.practice.mapper.ABallExamMapper;
+import com.ruoyi.practice.mapper.AMarkSheetMapper;
+import com.ruoyi.practice.service.IAMarkSheetService;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
-import com.ruoyi.score.mapper.ModuleScoreMapper;
-import com.ruoyi.score.mapper.TotalScoreMapper;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
-import com.ruoyi.practice.domain.AExerciseResource;
-import com.ruoyi.common.utils.StringUtils;
-import org.springframework.transaction.annotation.Transactional;
-import com.ruoyi.practice.domain.AExerciseResource;
-import com.ruoyi.practice.mapper.AMarkSheetMapper;
-import com.ruoyi.practice.domain.AMarkSheet;
-import com.ruoyi.practice.service.IAMarkSheetService;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * 练习、测试评分表Service业务层处理
@@ -52,6 +39,9 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private ABallExamMapper aBallExamMapper;
 
     static List enumList = new ArrayList<>();
     static List main = new ArrayList();
@@ -213,6 +203,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
+//      TODO：如果上传技能测试则触发一次D1模块总分计算；通过一系列公式进行计算
 
 //        查找学期
         Semester semester = selectUser.selectDate(new Date());
@@ -224,7 +215,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
 //        算投篮分（15枚举）
         BigDecimal basketScore = progressists.get(0).multiply(BigDecimal.valueOf(0.5));
-//        算运球分（15枚举）
+//        算运球分（16枚举）
         BigDecimal dribbleScore = progressists.get(0).multiply(BigDecimal.valueOf(0.5));
 //        查找学期和学号
         TotalScore totalScore = new TotalScore();
@@ -245,8 +236,10 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 //        System.out.println("D模块分数：");
 //        System.out.println(score);
 
-//        维护pc数据，将用户的值输入至ballExam表中
-        ABallExam ballExam = new ABallExam();
+//        ————————————————————————END————————————————————————
+
+
+//        TODO:插入技能测试数据
 
         aMarkSheet.setMsTime(new Date());
 
@@ -268,6 +261,11 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
         String s = aMarkSheet.getMs1().compareTo(aMarkSheet.getMs2()) == -1 ? (aMarkSheet.getMs1().compareTo(aMarkSheet.getMs3()) == -1 ? enumList.get(0)+"最小" + aMarkSheet.getMs1() + "分，" + main.get(0) : enumList.get(2)+"最小" + aMarkSheet.getMs3() + "分，" + main.get(2)) : (aMarkSheet.getMs2().compareTo(aMarkSheet.getMs3()) == -1 ? enumList.get(1)+"最小" + aMarkSheet.getMs2() + "分，" + main.get(1) : enumList.get(2)+"最小" + aMarkSheet.getMs3() + "分，" + main.get(2));
         aMarkSheet.setMsClass("义眼丁真，鉴定为：" + s);
         int rows = aMarkSheetMapper.insertAMarkSheet(aMarkSheet);
+
+//        TODO：维护PC端数据
+//        维护pc数据，将用户的值输入至ballExam表中
+        ABallExam ballExam = new ABallExam();
+
 //        查找ballExam内容
         ballExam.setMsId(aMarkSheet.getMsId());
         ballExam.setDriStability(aMarkSheet.getMs2());
@@ -278,6 +276,9 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
         ballExam.setShoAngle(aMarkSheet.getMs2());
         ballExam.setShoSpinner(aMarkSheet.getMs1());
         ballExam.setShoAnalysis(aMarkSheet.getMsClass());
+        aBallExamMapper.insertABallExam(ballExam);
+
+//        ————————————————————————END————————————————————————
 
         insertAExerciseResource(aMarkSheet);
         return Math.toIntExact(aMarkSheet.getMsId());
