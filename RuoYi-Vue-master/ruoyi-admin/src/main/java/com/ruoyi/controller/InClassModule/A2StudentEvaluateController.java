@@ -1,9 +1,18 @@
 package com.ruoyi.controller.InClassModule;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.InClassModule.domain.A2TeachingAssistant;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.service.IStuGroupService;
+import com.ruoyi.core.service.IStudentService;
 import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.practice.domain.AMarkSheet;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +49,12 @@ public class A2StudentEvaluateController extends BaseController
     private IA2StudentEvaluateService a2StudentEvaluateService;
 
     @Autowired
+    private IStudentService studentService;
+
+    @Autowired
+    private IStuGroupService stuGroupService;
+
+    @Autowired
     private SelectUser selectUser;
 
     /**
@@ -53,6 +68,38 @@ public class A2StudentEvaluateController extends BaseController
         startPage();
         List<A2StudentEvaluate> list = a2StudentEvaluateService.selectA2StudentEvaluateList(a2StudentEvaluate);
         return getDataTable(list);
+    }
+
+    /**
+     * 查询练习、测试评分表列表未完成
+     */
+    @ApiOperation("查询小组互评评分表列表")
+    @PreAuthorize("@ss.hasPermi('practice:sheet:list')")
+    @GetMapping("/list/group")
+    public AjaxResult groupList(A2StudentEvaluate a2StudentEvaluate)
+    {
+        Student student = studentService.selectStudentByStuId(a2StudentEvaluate.getEsId());
+//            通过小组查到所有本组学生
+        List<Student> students = studentService.selectStudentList(new Student(student.getGgId()));
+//            定义一个列表存储下面学生数据
+        List<A2StudentEvaluate> list = new ArrayList<>();
+//        将本组学生循环
+        students.forEach(stu -> {
+//            查询每个学生是否有值
+            a2StudentEvaluate.setStuId(stu.getStuId());
+            List<A2StudentEvaluate> list1 = a2StudentEvaluateService.selectA2StudentEvaluateList(a2StudentEvaluate);
+            if (!StringUtils.isEmpty(list1)){
+                list.add(list1.get(0));
+            }
+        });
+        A2StudentEvaluate evaluate = new A2StudentEvaluate(a2StudentEvaluate.getEsId());
+//        设置默认排除其本人
+        list.add((A2StudentEvaluate) selectUser.selectStudent(evaluate));
+        HashMap hashMap = selectUser.selectUndoneGroup(list, student.getGgId());
+        hashMap.put("group",selectUser.selectInGroupStudent(student).getGroup());
+
+//            发送数据
+        return success(hashMap);
     }
 
     /**
@@ -90,6 +137,16 @@ public class A2StudentEvaluateController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody A2StudentEvaluate a2StudentEvaluate)
     {
+        A2StudentEvaluate as = new A2StudentEvaluate();
+//        判断评价学生以及评价学生者和评价课程是否相同
+        as.setStuId(a2StudentEvaluate.getStuId());
+        as.setEsId(a2StudentEvaluate.getEsId());
+        as.setCrId(a2StudentEvaluate.getCrId());
+//        相同直接返回警告
+        if (StringUtils.isNotEmpty(a2StudentEvaluateService.selectA2StudentEvaluateList(as))){
+            return AjaxResult.warn("你已经提交过了，请勿重复提交");
+        }
+//        不相同直接插入
         return toAjax(a2StudentEvaluateService.insertA2StudentEvaluate(a2StudentEvaluate));
     }
 
@@ -111,7 +168,7 @@ public class A2StudentEvaluateController extends BaseController
     @ApiOperation("删除A2 合作学习 学生互评")
     @PreAuthorize("@ss.hasPermi('peerRevision:evaluate:remove')")
     @Log(title = "A2 合作学习 学生互评", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{seIds}")
+    @DeleteMapping("/{seIds}")
     public AjaxResult remove(@PathVariable Long[] seIds)
     {
         return toAjax(a2StudentEvaluateService.deleteA2StudentEvaluateBySeIds(seIds));

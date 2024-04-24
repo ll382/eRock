@@ -50,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="etCreateTime != null "> and et_create_time = #{etCreateTime}</if>
             <if test="etEndTime != null "> and et_end_time = #{etEndTime}</if>
         </where>
+        order by et_create_time asc
     </select>
 
     <select id="selectAExerciseTaskByEtId" parameterType="Long" resultMap="AExerciseTaskAMarkSheetResult">

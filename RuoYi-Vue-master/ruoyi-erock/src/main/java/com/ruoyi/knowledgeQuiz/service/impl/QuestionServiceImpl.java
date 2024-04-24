@@ -2,6 +2,7 @@ package com.ruoyi.knowledgeQuiz.service.impl;
 
 import java.util.*;
 
+import com.ruoyi.core.service.SelectUser;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

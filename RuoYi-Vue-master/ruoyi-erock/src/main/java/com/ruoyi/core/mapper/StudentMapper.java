@@ -53,7 +53,7 @@ public interface StudentMapper
      * @param crDate  日期
      * @return 所有学生成绩信息
      */
-    public List<Map<String,Object>> selectStudentAchievementList(@Param("stuId") Long stuId, @Param("crDate") Date crDate);
+    public List<Map<String,Object>> selectStudentAchievementList(@Param("stuId") Long stuId, @Param("crDate") Date crDate, @Param("score") String score);
 
     /**
      * 根据学生ID查询去重日期
@@ -61,7 +61,7 @@ public interface StudentMapper
      * @param enumId  枚举ID
      * @return 去重日期
      */
-    public List<Map<String,Object>> selectDeduplicationCrDateByStuIdAndEnumIdList(@Param("stuId") Long stuId, @Param("enumId") Integer enumId);
+    public List<Map<String,Object>> selectDeduplicationCrDateByStuIdAndEnumIdList(@Param("stuId") Long stuId, @Param("enumId") Integer enumId,@Param("hour") String hour);
 
     /**
      *  根据学生ID查询当天的所有成绩次数
@@ -77,7 +77,7 @@ public interface StudentMapper
      * @param stuId 学生ID
      * @return 学生的所有成绩
      */
-    public List<Map<String,Object>> selectStudentAchievementByStuId(@Param("stuId") Long stuId);
+    public List<Map<String,Object>> selectStudentAchievementByStuId(@Param("stuId") Long stuId, @Param("crDate") String crDate,@Param("score") String score);
     /**
      * 新增学生
      * 

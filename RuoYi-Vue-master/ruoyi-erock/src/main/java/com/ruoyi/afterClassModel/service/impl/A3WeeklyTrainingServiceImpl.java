@@ -1,9 +1,11 @@
 package com.ruoyi.afterClassModel.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.core.service.SelectUser;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.afterClassModel.mapper.A3WeeklyTrainingMapper;
@@ -57,8 +59,31 @@ public class A3WeeklyTrainingServiceImpl implements IA3WeeklyTrainingService
     @Override
     public int insertA3WeeklyTraining(A3WeeklyTraining a3WeeklyTraining)
     {
+        A3WeeklyTraining a = new A3WeeklyTraining();
+        a.setStuId(a3WeeklyTraining.getStuId());
+        a.setPhtrId(a3WeeklyTraining.getPhtrId());
+        List<A3WeeklyTraining> a3WeeklyTrainings = a3WeeklyTrainingMapper.selectA3WeeklyTrainingList(a);
         a3WeeklyTraining.setWetrTime(new Date());
-        return a3WeeklyTrainingMapper.insertA3WeeklyTraining(a3WeeklyTraining);
+        for (A3WeeklyTraining time : a3WeeklyTrainings) {
+            long l = a3WeeklyTraining.getWetrTime().getTime() - time.getWetrTime().getTime();
+            if (l < 86400) {
+                return 0;
+            }
+        };
+        if (a3WeeklyTrainings.size() <= 3){
+            return a3WeeklyTrainingMapper.insertA3WeeklyTraining(a3WeeklyTraining);
+        } else {
+            return -1;
+        }
+
+    }
+
+    @Test
+    public void i () {
+        SimpleDateFormat date = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
+        Long date1 = (new Date()).getTime();
+        String timeStamp = date.format(new Date());
+        System.out.println("Current Time Stamp: " + date1);
     }
 
     /**

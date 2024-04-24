@@ -1,5 +1,7 @@
 package com.ruoyi.InClassModule.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ruoyi.match.domain.ClassRegister;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -35,6 +37,11 @@ public class A2TeachingAssistant extends BaseEntity
     @Excel(name = "评价者")
     private Long taStu;
 
+    /** 课堂信息 */
+    @Excel(name = "课堂信息")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ClassRegister classInfo;
+
     public void setTaId(Long taId)
     {
         this.taId = taId;
@@ -56,7 +63,7 @@ public class A2TeachingAssistant extends BaseEntity
     }
     public void setCrId(Long crId)
     {
-        this.crId = crId; 
+        this.crId = crId;
     }
 
     public Long getCrId()
@@ -82,6 +89,14 @@ public class A2TeachingAssistant extends BaseEntity
         return taStu;
     }
 
+    public ClassRegister getClassInfo() {
+        return classInfo;
+    }
+
+    public void setClassInfo(ClassRegister classInfo) {
+        this.classInfo = classInfo;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -89,7 +104,8 @@ public class A2TeachingAssistant extends BaseEntity
             .append("stuId", getStuId())
             .append("crId", getCrId())
             .append("taType", getTaType())
-            .append("taStu", getTaStu())
+                .append("taStu", getTaStu())
+                .append("classInfo", getClassInfo())
             .toString();
     }
 }

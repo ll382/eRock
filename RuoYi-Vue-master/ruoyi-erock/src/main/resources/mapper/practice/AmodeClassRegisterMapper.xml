@@ -43,6 +43,7 @@
             <if test="classId != null "> and class_id = #{classId}</if>
             <if test="enumId != null "> and enum_id = #{enumId}</if>
         </where>
+        order by cr_date asc
     </select>
 
     <select id="selectAmodeClassRegisterByCrId" parameterType="Long" resultMap="AmodeClassRegisterAExerciseTaskResult">

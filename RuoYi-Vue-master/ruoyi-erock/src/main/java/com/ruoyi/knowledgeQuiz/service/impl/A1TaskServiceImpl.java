@@ -62,6 +62,10 @@ public class A1TaskServiceImpl implements IA1TaskService
         List<Long> stulist = a1TaskMapper.selectStuListById(stuId);
         List<A1Task> unDone = a1TaskMapper.selectUndoneA1TaskListByStuId(stuId);
         List<A1Task> done = a1TaskMapper.selectDoneA1TaskListByStuId(stulist);
+        done.forEach(doe -> {
+            A1Task a1Task = selectUser.calculateScore(a1TaskMapper.selectTaskByStuId(doe.getTaskId(), stuId));
+            doe.setAnswerList(a1Task.getAnswerList());
+        });
         HashMap<String, Object> stuTask = new HashMap<>();
         stuTask.put("done",done);
         stuTask.put("unDone",unDone);
@@ -80,13 +84,9 @@ public class A1TaskServiceImpl implements IA1TaskService
     {
 //        获取基础知识测试任务数据
         List<A1Task> a1Tasks = a1TaskMapper.selectTaskList(a1Task);
-////        查找当前任务学生提交情况
-//        a1Tasks.forEach(task -> {
-////            查看未交名单
-//            task.setUnpaid(a1TaskMapper.selectStudentList(task.getTaskId()));
-////            查看已交名单
-//            task.setSubmitted(a1TaskMapper.selectFinishStudentList(task.getTaskId()));
-//        });
+        a1Tasks.forEach(task -> {
+            selectUser.calculateScore(task);
+        });
         return a1Tasks;
     }
 

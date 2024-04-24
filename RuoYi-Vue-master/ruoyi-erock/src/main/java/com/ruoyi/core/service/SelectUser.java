@@ -1,8 +1,11 @@
 package com.ruoyi.core.service;
 
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.core.domain.Semester;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
+import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +28,8 @@ public interface SelectUser<T extends BaseEntity>  {
 
     public Long selectTeacherTeaId(Long userId);
 
+    public Semester selectDate(Date date);
+
 
     //    必须得要在学生类被赋予之前使用本接口，否则会有索引异常
 
@@ -35,5 +40,6 @@ public interface SelectUser<T extends BaseEntity>  {
     public HashMap<String, Object> selectFrequency(List<T> groupStudent);
     public HashMap selectGroup(List<T> groupList);
     public HashMap selectUndoneStudent(List<T> stuList);
+    public HashMap<String,Object> selectUndoneGroup(List<T> stuList,Long ggId);
 
 }

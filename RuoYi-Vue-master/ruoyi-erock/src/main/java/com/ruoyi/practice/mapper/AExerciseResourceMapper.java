@@ -5,15 +5,15 @@ import com.ruoyi.practice.domain.AExerciseResource;
 
 /**
  * 练习资源表Mapper接口
- * 
+ *
  * @author houq
  * @date 2024-03-19
  */
-public interface AExerciseResourceMapper 
+public interface AExerciseResourceMapper
 {
     /**
      * 查询练习资源表
-     * 
+     *
      * @param erId 练习资源表主键
      * @return 练习资源表
      */
@@ -21,7 +21,7 @@ public interface AExerciseResourceMapper
 
     /**
      * 查询练习资源表列表
-     * 
+     *
      * @param aExerciseResource 练习资源表
      * @return 练习资源表集合
      */
@@ -29,7 +29,7 @@ public interface AExerciseResourceMapper
 
     /**
      * 新增练习资源表
-     * 
+     *
      * @param aExerciseResource 练习资源表
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface AExerciseResourceMapper
 
     /**
      * 修改练习资源表
-     * 
+     *
      * @param aExerciseResource 练习资源表
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface AExerciseResourceMapper
 
     /**
      * 删除练习资源表
-     * 
+     *
      * @param erId 练习资源表主键
      * @return 结果
      */
@@ -53,7 +53,7 @@ public interface AExerciseResourceMapper
 
     /**
      * 批量删除练习资源表
-     * 
+     *
      * @param erIds 需要删除的数据主键集合
      * @return 结果
      */

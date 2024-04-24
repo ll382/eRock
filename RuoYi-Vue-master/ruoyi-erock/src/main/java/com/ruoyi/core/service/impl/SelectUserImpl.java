@@ -4,9 +4,15 @@ import com.ruoyi.afterClassModel.domain.A3PhysicalTraining;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SelectUserVo;
 import com.ruoyi.common.core.domain.entity.Group;
+import com.ruoyi.core.domain.Semester;
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.service.IStuGroupService;
+import com.ruoyi.core.service.IStudentService;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
+import com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -15,6 +21,8 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -27,6 +35,12 @@ import java.util.*;
 public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Autowired
     SelectUserMapper    selectUserMapper;
+
+    @Autowired
+    IStudentService studentService;
+
+    @Autowired
+    IStuGroupService stuGroupService;
 
     @Autowired
     SelectUser selectUser;
@@ -79,7 +93,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Override
     public A1Task calculateScore(A1Task a1Task){
-        //        计算每道题平均百分制占分
+//        计算每道题平均百分制占分
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(2);
         Double tNum = Double.parseDouble(nf.format(100.0 / a1Task.getTaskNum()));
@@ -89,6 +103,8 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         });
         return a1Task;
     }
+
+
     @Override
     public T selectStudent(T student) {
             student.setStudent(selectUserMapper.selectStudentbyOne(student.getStuId()));
@@ -112,7 +128,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Override
     public T selectInGroupStudent(T GroupStudent) {
         // 查询组内成员，并判断是否是组长
-        this.setGroup(GroupStudent);
+        GroupStudent.setGroup(selectUserMapper.selectGroupbyOne(GroupStudent.getGgId()));
 
         return GroupStudent;
     }
@@ -140,7 +156,24 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         return selectUserMapper.selectTeacherTeaId(userId);
     }
 
-//    查清已做未
+    @Override
+    public Semester selectDate(Date date) {
+        return selectUserMapper.selectDate(date);
+    }
+
+    @Override
+    public HashMap<String, Object> selectUndoneGroup(List<T> stuList,Long ggId) {
+        List<Long> idList = new ArrayList<>();
+        stuList.forEach(id -> {
+            idList.add(id.getStuId());
+        });
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("doneStudets",stuList);
+        map.put("unDoneStudets",selectUserMapper.selectUndoneGroup(idList,ggId));
+        return map;
+    }
+
+    //    查清已做未
     @Override
     public HashMap<String, Object> selectFrequency(List<T> users , Long phtrId){
 //        返回类型
@@ -266,8 +299,42 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 //        将组员组长以及外层的小组赋值给传入数据
         GroupStudent.getGroup().setStudentList(list);
     }
+    public static Double standardDeviation(List<BigDecimal> msScore,int scale){
+//            TODO：标准差的计算
+//            开根号下的(Σ(Xi - Xba)²)/n-1
 
+//            精确位数,所有除数都得弄好小数处理,否则遇到无线循环小数会抛ArithmeticException错误
 
+//            数组个数
+        int size = msScore.size();
+//          算出平均值
+        BigDecimal stuScore = BigDecimal.ZERO;
+        for (BigDecimal score : msScore) {
+            stuScore = stuScore.add(score);
+        }
+//            平均值得出
+        BigDecimal average = stuScore.divide(BigDecimal.valueOf(size), scale, RoundingMode.HALF_UP);
+//            求和
+        BigDecimal summation = BigDecimal.ZERO;
+        for (BigDecimal score : msScore) {
+//                成绩的平方
+            summation = summation.add(score.subtract(average).pow(2));
+
+        }
+
+//            方差的得出
+        BigDecimal variance = summation.divide(BigDecimal.valueOf(size - 1), scale, RoundingMode.HALF_UP);
+//            标准差的得出
+        double std = Math.sqrt(variance.doubleValue());
+
+//        测试代码
+//        msScore.forEach(System.out::println);
+//        System.out.println("--------------------");
+//        System.out.println(variance);
+//        System.out.println("--------------------");
+//        System.out.println(std);
+        return std;
+    }
 
 
 }

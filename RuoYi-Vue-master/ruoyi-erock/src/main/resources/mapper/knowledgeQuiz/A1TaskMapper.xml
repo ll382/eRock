@@ -53,6 +53,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where a.task_id = #{taskId}
     </select>
 
+    <select id="selectTaskByStuId" parameterType="Long" resultMap="A1TaskAnswerResult">
+        select a.task_id, a.tea_id, a.task_datetime, a.task_title, a.task_content, a.task_num,e.avatar,
+               b.ans_id as sub_ans_id, b.task_id as sub_task_id, b.stu_id as sub_stu_id, b.ans_response as sub_ans_response, b.ans_apos as sub_ans_apos, b.ans_time as sub_ans_time,
+               s.stu_name as sub_stu_name
+        from a1_task a
+                 left join a1_answer b on b.task_id = a.task_id
+                 right join student s on s.stu_id = b.stu_id
+                 left JOIN sys_user e ON e.user_id = s.user_id
+        where a.task_id = #{taskId} AND s.stu_id = #{stuId}
+    </select>
+
     <select id="selectDoneA1TaskListByStuId" resultMap="A1TaskResult">
         <include refid="selectA1TaskVo"/>
         <where>

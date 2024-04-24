@@ -3,6 +3,8 @@ package com.ruoyi.InClassModule.service.impl;
 import java.util.List;
 
 import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.match.domain.ClassRegister;
+import com.ruoyi.match.service.IClassRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.InClassModule.mapper.A2TeachingAssistantMapper;
@@ -23,6 +25,8 @@ public class A2TeachingAssistantServiceImpl implements IA2TeachingAssistantServi
     private A2TeachingAssistantMapper a2TeachingAssistantMapper;
     @Autowired
     private SelectUser selectUser;
+    @Autowired
+    private IClassRegisterService classRegisterService;
 
     /**
      * 查询A2 合作学习 助教评价
@@ -51,7 +55,14 @@ public class A2TeachingAssistantServiceImpl implements IA2TeachingAssistantServi
     @Override
     public List<A2TeachingAssistant> selectA2TeachingAssistantList(A2TeachingAssistant a2TeachingAssistant)
     {
-        return selectUser.selectStudent(a2TeachingAssistantMapper.selectA2TeachingAssistantList(a2TeachingAssistant));
+        List<A2TeachingAssistant> list = a2TeachingAssistantMapper.selectA2TeachingAssistantList(a2TeachingAssistant);
+        list.forEach(l -> {
+            List<ClassRegister> classRegisters = classRegisterService.selectClassRegisterList(new ClassRegister(l.getCrId()));
+            if (classRegisters.size() > 0) {
+                l.setClassInfo(classRegisters.get(0));
+            }
+        });
+        return selectUser.selectStudent(list);
     }
 
     /**

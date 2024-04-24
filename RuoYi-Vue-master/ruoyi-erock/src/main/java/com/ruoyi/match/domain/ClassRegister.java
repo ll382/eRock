@@ -28,8 +28,8 @@ public class ClassRegister extends BaseEntity
     private Long semesterId;
 
     /** 开课时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "开课时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "开课时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date crDate;
 
     /** 课题内容 */
@@ -54,9 +54,16 @@ public class ClassRegister extends BaseEntity
     /** C 比赛记录信息 */
     private List<CompetitionRecord> competitionRecordList;
 
+    public ClassRegister() {
+    }
+
+    public ClassRegister(Long crId) {
+        this.crId = crId;
+    }
+
     public void setCrId(Long crId)
     {
-        this.crId = crId; 
+        this.crId = crId;
     }
 
     public Long getCrId()

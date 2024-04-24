@@ -3,7 +3,11 @@ package com.ruoyi.practice.domain;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
@@ -34,7 +38,7 @@ public class AMarkSheet extends BaseEntity
 
     /** 评分时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "评分时间", width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
+    @Excel(name = "评分时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date msTime;
 
     /** 运球分数 */
@@ -71,6 +75,13 @@ public class AMarkSheet extends BaseEntity
 
     /** 练习资源表信息 */
     private List<AExerciseResource> aExerciseResourceList;
+
+    public AMarkSheet() {
+    }
+
+    public AMarkSheet(Long stuId) {
+        this.stuId = stuId;
+    }
 
     public void setMsId(Long msId)
     {
@@ -212,21 +223,21 @@ public class AMarkSheet extends BaseEntity
 
     @Override
     public String toString() {
-        return "AMarkSheet{" +
-                "msId=" + msId +
-                ", etId=" + etId +
-                ", stuId=" + stuId +
-                ", teaId=" + teaId +
-                ", msTime=" + msTime +
-                ", msDribble=" + msDribble +
-                ", msShooting=" + msShooting +
-                ", msScore=" + msScore +
-                ", ms1=" + ms1 +
-                ", ms2=" + ms2 +
-                ", ms3=" + ms3 +
-                ", msClass='" + msClass + '\'' +
-                ", msImg='" + msImg + '\'' +
-                ", aExerciseResourceList=" + aExerciseResourceList +
-                '}';
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("msId", getMsId())
+            .append("etId", getEtId())
+            .append("stuId", getStuId())
+            .append("teaId", getTeaId())
+            .append("msTime", getMsTime())
+            .append("msDribble", getMsDribble())
+            .append("msShooting", getMsShooting())
+            .append("msScore", getMsScore())
+            .append("ms1", getMs1())
+            .append("ms2", getMs2())
+            .append("ms3", getMs3())
+            .append("msClass", getMsClass())
+            .append("msImg", getMsImg())
+            .append("aExerciseResourceList",getAExerciseResourceList())
+            .toString();
     }
 }

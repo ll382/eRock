@@ -1,5 +1,6 @@
 package com.ruoyi.knowledgeQuiz.service.impl;
 
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class AnswerServiceImpl implements IAnswerService
         answer.setAnsTime(new Date());
         int rows = answerMapper.insertAnswer(answer);
         insertA1Answered(answer);
-        return rows;
+        return Math.toIntExact(answer.getAnsId());
     }
 
     /**

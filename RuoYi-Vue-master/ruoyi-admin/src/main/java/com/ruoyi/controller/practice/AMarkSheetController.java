@@ -1,7 +1,16 @@
 package com.ruoyi.controller.practice;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.service.IStuGroupService;
+import com.ruoyi.core.service.IStudentService;
+import com.ruoyi.framework.web.domain.server.Sys;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,8 +35,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 /**
  * 练习、测试评分表Controller
  *
- * @author houq
- * @date 2024-04-09
+ * @author ljy
+ * @date 2024-04-11
  */
 @Api(tags = {"练习、测试评分表"})
 @RestController
@@ -86,6 +95,12 @@ public class AMarkSheetController extends BaseController
         return success(aMarkSheetService.selectAMarkSheetByMsId(msId));
     }
 
+    @GetMapping("/{msId}/{enumId}")
+    public AjaxResult getAMarkSheetByMsIdAndEnumId(@PathVariable("msId") Integer msId,@PathVariable("enumId") Integer enumId)
+    {
+        return success(aMarkSheetService.selectAMarkSheetByMsIdAndEnumId(msId, enumId));
+    }
+
     /**
      * 新增练习、测试评分表
      */
@@ -95,7 +110,11 @@ public class AMarkSheetController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody AMarkSheet aMarkSheet)
     {
-        return toAjax(aMarkSheetService.insertAMarkSheet(aMarkSheet));
+        int i = aMarkSheetService.insertAMarkSheet(aMarkSheet);
+        if (i < 0) {
+            return warn("本次任务已提交，请不要重复提交内容");
+        }
+        return success(i);
     }
 
     /**
@@ -116,7 +135,7 @@ public class AMarkSheetController extends BaseController
     @ApiOperation("删除练习、测试评分表")
     @PreAuthorize("@ss.hasPermi('practice:sheet:remove')")
     @Log(title = "练习、测试评分表", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{msIds}")
+    @DeleteMapping("/{msIds}")
     public AjaxResult remove(@PathVariable Long[] msIds)
     {
         return toAjax(aMarkSheetService.deleteAMarkSheetByMsIds(msIds));

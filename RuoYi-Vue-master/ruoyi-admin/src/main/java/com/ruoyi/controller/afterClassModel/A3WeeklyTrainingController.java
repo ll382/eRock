@@ -88,7 +88,13 @@ public class A3WeeklyTrainingController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody A3WeeklyTraining a3WeeklyTraining)
     {
-        return toAjax(a3WeeklyTrainingService.insertA3WeeklyTraining(a3WeeklyTraining));
+        int i = a3WeeklyTrainingService.insertA3WeeklyTraining(a3WeeklyTraining);
+        if (i < 0) {
+            return warn("本周打卡成功，请下周再试");
+        } else if (i == 0) {
+            return warn("打卡间隔不足一天，请明天再试");
+        }
+        return toAjax(i);
     }
 
     /**
@@ -109,7 +115,7 @@ public class A3WeeklyTrainingController extends BaseController
     @ApiOperation("删除A3 学生周训资源")
     @PreAuthorize("@ss.hasPermi('resource:training:remove')")
     @Log(title = "A3 学生周训资源", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{wetrIds}")
+    @DeleteMapping("/{wetrIds}")
     public AjaxResult remove(@PathVariable Long[] wetrIds)
     {
         return toAjax(a3WeeklyTrainingService.deleteA3WeeklyTrainingByWetrIds(wetrIds));

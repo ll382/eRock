@@ -35,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClassRegisterList" parameterType="ClassRegister" resultMap="ClassRegisterResult">
         <include refid="selectClassRegisterVo"/>
         <where>
+            <if test="crId != null "> and cr_id = #{crId}</if>
             <if test="semesterId != null "> and semester_id = #{semesterId}</if>
             <if test="crDate != null "> and cr_date = #{crDate}</if>
             <if test="crMain != null  and crMain != ''"> and cr_main = #{crMain}</if>

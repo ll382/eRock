@@ -73,15 +73,15 @@ public class StudentController extends BaseController
     }
 
     /**
+     * PC端首页
      * 根据班级和日期查询所有学生成绩信息等
      */
     @ApiOperation("根据班级和日期查询所有学生成绩信息等")
-    @PreAuthorize("@ss.hasPermi('core:StudentCourseGrades:list')")
-    @GetMapping("/getStudentCourseGradeslist")
-    public TableDataInfo getStudentCourseGradesList()
+    @GetMapping("/getStudentCourseGradeslist/{score}")
+    public TableDataInfo getStudentCourseGradesList(@PathVariable("score") String score)
     {
         startPage();
-        List<StudentCourseGrades> studentCourseGradesList = studentService.selectStudentCourseGradesList();
+        List<StudentCourseGrades> studentCourseGradesList = studentService.selectStudentCourseGradesList(score);
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(HttpStatus.SUCCESS);
         rspData.setMsg("查询成功");
@@ -91,22 +91,28 @@ public class StudentController extends BaseController
     }
 
     /**
+     * PC端二页面柱状图
      * 根据学生ID查询当天的所有成绩次数
      */
     @ApiOperation("根据班级和日期查询所有学生成绩信息等")
-    @PreAuthorize("@ss.hasPermi('core:StudentCourseGrades:list')")
-    @GetMapping("/getDeduplicationCrDateList/{stuId}/{enumId}")
-    public TableDataInfo getDeduplicationCrDateList(@PathVariable("stuId") Long stuId, @PathVariable("enumId") Integer enumId){
+    @GetMapping("/getDeduplicationCrDateList/{stuId}/{enumId}/{hour}")
+    public TableDataInfo getDeduplicationCrDateList(@PathVariable("stuId") Long stuId, @PathVariable("enumId") Integer enumId,@PathVariable("hour") String hour){
         startPage();
-        List<Map<String, List>> maps = studentService.selectDeduplicationCrDateByStuNameAndEnumIdList(stuId, enumId);
+        List<Map<String, List>> maps = studentService.selectDeduplicationCrDateByStuNameAndEnumIdList(stuId, enumId, hour);
         return getDataTable(maps);
     }
 
+    /**
+     * PC端二页面折线图
+     * @param stuId 学生ID
+     * @param crDate 上课日期
+     * @param score 投篮或运球字段
+     * @return
+     */
     @ApiOperation("根据学生ID查询成绩")
-    @PreAuthorize("@ss.hasPermi('core:StudentAchievement:list')")
-    @GetMapping("/getStudentAchievementByStuId/{stuId}")
-    public TableDataInfo getStudentAchievementByStuId(@PathVariable("stuId") Long stuId){
-        List<HashMap<String, List>> list = studentService.selectStudentAchievementByStuId(stuId);
+    @GetMapping("/getStudentAchievementByStuId/{stuId}/{crDate}/{score}")
+    public TableDataInfo getStudentAchievementByStuId(@PathVariable("stuId") Long stuId,@PathVariable("crDate")String crDate, @PathVariable("score")String score){
+        List<List> list = studentService.selectStudentAchievementByStuId(stuId,crDate,score);
         return getDataTable(list);
     }
 

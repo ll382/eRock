@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
 import com.ruoyi.teachingExchange.domain.Answer;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -22,6 +23,7 @@ public interface A1TaskMapper
      * @return A1 知识测试任务
      */
     public A1Task selectA1TaskByTaskId(Long taskId);
+    public A1Task selectTaskByStuId(@Param("taskId") Long taskId , @Param("stuId") Long stuId);
 
     /**
      * 查询A1 知识测试任务列表
