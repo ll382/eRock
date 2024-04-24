@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.service.IStudentService;
+import com.ruoyi.practice.mapper.AExerciseResourceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.practice.mapper.AExerciseResourceMapper;
 import com.ruoyi.practice.domain.AExerciseResource;
 import com.ruoyi.practice.service.IAExerciseResourceService;
 

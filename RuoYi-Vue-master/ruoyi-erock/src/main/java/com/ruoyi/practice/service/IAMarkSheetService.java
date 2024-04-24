@@ -3,7 +3,10 @@ package com.ruoyi.practice.service;
 import java.util.List;
 import java.util.Map;
 
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.core.domain.Student;
 import com.ruoyi.practice.domain.AMarkSheet;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算Service接口
@@ -11,7 +14,7 @@ import com.ruoyi.practice.domain.AMarkSheet;
  * @author ljy
  * @date 2024-04-11
  */
-public interface IAMarkSheetService 
+public interface IAMarkSheetService
 {
     /**
      * 查询 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
@@ -29,6 +32,8 @@ public interface IAMarkSheetService
      */
     public List<AMarkSheet> selectAMarkSheetList(AMarkSheet aMarkSheet);
 
+    public List<Student> selectAMarkSheetList(@PathVariable("etId") Long etId);
+
     /**
      * 查询PC端第三页面
      * @param msId 评分Id
@@ -44,6 +49,8 @@ public interface IAMarkSheetService
      * @return 结果
      */
     public int insertAMarkSheet(AMarkSheet aMarkSheet);
+
+
 
     /**
      * 修改 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
