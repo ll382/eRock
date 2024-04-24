@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.InClassModule.mapper.A2A3PhysicaScoreMapper">
+
+    <resultMap type="A2A3PhysicaScore" id="A2A3PhysicaScoreResult">
+        <result property="physId"    column="phys_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="phyId"    column="phy_id"    />
+        <result property="physStamina2"    column="phys_stamina2"    />
+        <result property="physSpeed2"    column="phys_speed2"    />
+    </resultMap>
+
+    <sql id="selectA2A3PhysicaScoreVo">
+        select phys_id, stu_id, phy_id, phys_stamina2, phys_speed2 from a2_a3_physica_score
+    </sql>
+
+    <select id="selectA2A3PhysicaScoreList" parameterType="A2A3PhysicaScore" resultMap="A2A3PhysicaScoreResult">
+        <include refid="selectA2A3PhysicaScoreVo"/>
+        <where>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="phyId != null "> and phy_id = #{phyId}</if>
+            <if test="physStamina2 != null "> and phys_stamina2 = #{physStamina2}</if>
+            <if test="physSpeed2 != null "> and phys_speed2 = #{physSpeed2}</if>
+        </where>
+    </select>
+
+    <select id="selectA2A3PhysicaScoreByPhysId" parameterType="Long" resultMap="A2A3PhysicaScoreResult">
+        <include refid="selectA2A3PhysicaScoreVo"/>
+        where phy_id = #{phyId}
+    </select>
+
+    <insert id="insertA2A3PhysicaScore" parameterType="A2A3PhysicaScore" useGeneratedKeys="true" keyProperty="physId">
+        insert into a2_a3_physica_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">stu_id,</if>
+            <if test="phyId != null">phy_id,</if>
+            <if test="physStamina2 != null">phys_stamina2,</if>
+            <if test="physSpeed2 != null">phys_speed2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">#{stuId},</if>
+            <if test="phyId != null">#{phyId},</if>
+            <if test="physStamina2 != null">#{physStamina2},</if>
+            <if test="physSpeed2 != null">#{physSpeed2},</if>
+         </trim>
+    </insert>
+
+    <update id="updateA2A3PhysicaScore" parameterType="A2A3PhysicaScore">
+        update a2_a3_physica_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="phyId != null">phy_id = #{phyId},</if>
+            <if test="physStamina2 != null">phys_stamina2 = #{physStamina2},</if>
+            <if test="physSpeed2 != null">phys_speed2 = #{physSpeed2},</if>
+        </trim>
+        where phys_id = #{physId}
+    </update>
+
+    <delete id="deleteA2A3PhysicaScoreByPhysId" parameterType="Long">
+        delete from a2_a3_physica_score where phys_id = #{physId}
+    </delete>
+
+    <delete id="deleteA2A3PhysicaScoreByPhysIds" parameterType="String">
+        delete from a2_a3_physica_score where phys_id in
+        <foreach item="physId" collection="array" open="(" separator="," close=")">
+            #{physId}
+        </foreach>
+    </delete>
+</mapper>

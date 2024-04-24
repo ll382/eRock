@@ -10,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  *  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算对象 a_mark_sheet
- * 
+ *
  * @author ljy
  * @date 2024-04-11
  */
@@ -88,25 +88,25 @@ public class AMarkSheet extends BaseEntity
     {
         return etId;
     }
-    public void setStuId(Long stuId) 
+    public void setStuId(Long stuId)
     {
         this.stuId = stuId;
     }
 
-    public Long getStuId() 
+    public Long getStuId()
     {
         return stuId;
     }
-    public void setTeaId(Long teaId) 
+    public void setTeaId(Long teaId)
     {
         this.teaId = teaId;
     }
 
-    public Long getTeaId() 
+    public Long getTeaId()
     {
         return teaId;
     }
-    public void setMsTime(Date msTime) 
+    public void setMsTime(Date msTime)
     {
         this.msTime = msTime;
     }
@@ -133,57 +133,57 @@ public class AMarkSheet extends BaseEntity
     {
         return msShooting;
     }
-    public void setMsScore(BigDecimal msScore) 
+    public void setMsScore(BigDecimal msScore)
     {
         this.msScore = msScore;
     }
 
-    public BigDecimal getMsScore() 
+    public BigDecimal getMsScore()
     {
         return msScore;
     }
-    public void setMs1(BigDecimal ms1) 
+    public void setMs1(BigDecimal ms1)
     {
         this.ms1 = ms1;
     }
 
-    public BigDecimal getMs1() 
+    public BigDecimal getMs1()
     {
         return ms1;
     }
-    public void setMs2(BigDecimal ms2) 
+    public void setMs2(BigDecimal ms2)
     {
         this.ms2 = ms2;
     }
 
-    public BigDecimal getMs2() 
+    public BigDecimal getMs2()
     {
         return ms2;
     }
-    public void setMs3(BigDecimal ms3) 
+    public void setMs3(BigDecimal ms3)
     {
         this.ms3 = ms3;
     }
 
-    public BigDecimal getMs3() 
+    public BigDecimal getMs3()
     {
         return ms3;
     }
-    public void setMsClass(String msClass) 
+    public void setMsClass(String msClass)
     {
         this.msClass = msClass;
     }
 
-    public String getMsClass() 
+    public String getMsClass()
     {
         return msClass;
     }
-    public void setMsImg(String msImg) 
+    public void setMsImg(String msImg)
     {
         this.msImg = msImg;
     }
 
-    public String getMsImg() 
+    public String getMsImg()
     {
         return msImg;
     }

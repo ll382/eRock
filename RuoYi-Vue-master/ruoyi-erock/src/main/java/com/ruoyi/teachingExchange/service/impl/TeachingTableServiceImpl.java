@@ -1,16 +1,24 @@
 package com.ruoyi.teachingExchange.service.impl;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.mapper.StudentMapper;
+import com.ruoyi.core.service.impl.SelectUserImpl;
+import com.ruoyi.system.domain.SysUserRole;
+import com.ruoyi.system.mapper.SysUserMapper;
+import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.teachingExchange.domain.A1Viewed;
 import com.ruoyi.teachingExchange.domain.TeachingUnit;
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.teachingExchange.domain.A1Communication;
@@ -30,6 +38,15 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 {
     @Autowired
     private TeachingTableMapper teachingTableMapper;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private StudentMapper studentMapper;
+
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 查询A1 线上学习学生线上观看记录表
@@ -58,9 +75,9 @@ public class TeachingTableServiceImpl implements ITeachingTableService
             return comm;
         }else {
 //            循环遍历里面list主贴内容
-            for (A1Communication com: comm.getA1CommunicationList()) {
+            for (A1Communication com : comm.getA1CommunicationList()) {
 //                如果主贴ID为空则跳过本次循环
-                if (com.getComId() == null){
+                if (com.getComId() == null) {
                     continue;
                 }
 //                递归遍历主贴内所有子帖内容，带出所有排好序的子帖
@@ -72,7 +89,7 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         }
     }
 
-//    递归方法
+//    评论递归方法
     public List<A1Communication> recursion(List<A1Communication> InComm) {
 //        申明一个用于存储历史查询对象的空数组
         List<A1Communication> OutCom = new ArrayList<>();
@@ -118,8 +135,6 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 //}
     /**
      * 查询A1 id查观看记录
-     *
-     * @param teachingId A1 线上学习学生线上观看记录表主键
      * @return A1 线上学习学生线上观看记录表
      */
     @Override
@@ -137,19 +152,65 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int insertTeachingViewTable(A1Viewed a1Viewed)
     {
+        a1Viewed.setViewedAt(new Date());
         return teachingTableMapper.insertTeachingViewedTable(a1Viewed);
     }
 
     @Override
-    public int updateStudent() {
+    public int updateTeachingViewedTable(A1Viewed a1Viewed)
+    {
+        a1Viewed.setViewedAt(new Date());
+        return teachingTableMapper.updateTeachingViewedTable(a1Viewed);
+    }
+
+
+
+    @Override
+    public int deleteViewedTeachingId(Long id)
+    {
+        return teachingTableMapper.deleteViewedTeachingId(id);
+    }
+
+
+
+    @Override
+    public String updateStudent() {
         int i = 0;
-        List<Student> stuList = teachingTableMapper.selectViewed();
+        int j = 0;
+        List<Student> stuList = studentMapper.selectStudentList(null);
+//        创建对象，设置初始内容，默认头像，账号状态，角色
+        SysUser user = new SysUser();
+        user.setAvatar("https://cdn1.d5v.cc/CDN/Project/eRock/tx/2.jpg");
+        user.setStatus("0");
+        user.setRoleId(101L);
         for (Student a:stuList) {
-            if (teachingTableMapper.updateStudent(a) > 0){
+            List<SysUser> sysUser = sysUserMapper.selectUserByUserNickName(a.getStuName());
+            Student student = new Student();
+            if (sysUser.size() != 0){
+                student.setStuName(sysUser.get(0).getNickName());
+                student.setStuId(sysUser.get(0).getUserId());
+                teachingTableMapper.updateStudent(student);
                 i++;
+            }else {
+//                设置用户信息
+                user.setUserId(null);
+                user.setNickName(a.getStuName());
+                user.setUserName(SelectUserImpl.toPinyin(a.getStuName()));
+                user.setPassword("654321");
+                SysUserRole sur = new SysUserRole();
+                sysUserMapper.insertUser(user);
+//                设置用户权限
+                sur.setUserId(user.getUserId());
+                sur.setRoleId(user.getRoleId());
+                sysUserRoleMapper.batchUserOneRole(sur);
+//                更新学生表
+                student.setStuName(user.getNickName());
+                student.setStuId(user.getUserId());
+                teachingTableMapper.updateStudent(student);
+                j++;
             }
         }
-        return i;
+        return "操作完成，已更新：" + i + "人，已插入" + j;
     }
 
 
@@ -191,8 +252,10 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int updateTeachingTable(TeachingTable teachingTable)
     {
-        teachingTableMapper.deleteA1CommunicationByTeachingId(teachingTable.getTeachingId());
-        insertA1Communication(teachingTable);
+//        不需要更新评论等底下内容,直接注释
+//        teachingTableMapper.deleteA1CommunicationByTeachingId(teachingTable.getTeachingId());
+//        insertA1Communication(teachingTable);
+//        返回更新内容
         return teachingTableMapper.updateTeachingTable(teachingTable);
     }
 
@@ -220,6 +283,7 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int deleteTeachingTableByTeachingId(Long teachingId)
     {
+        teachingTableMapper.deleteViewedTeachingId(teachingId);
         teachingTableMapper.deleteA1CommunicationByTeachingId(teachingId);
         return teachingTableMapper.deleteTeachingTableByTeachingId(teachingId);
     }

@@ -21,7 +21,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"   column="create_time"  />
         <result property="updateBy"     column="update_by"    />
         <result property="updateTime"   column="update_time"  />
-        <result property="remark"       column="remark"       />
+		<result property="remark"       column="remark"       />
+		<result property="roleId"       column="role_id"       />
         <association property="dept"    javaType="SysDept"         resultMap="deptResult" />
         <collection  property="roles"   javaType="java.util.List"  resultMap="RoleResult" />
     </resultMap>
@@ -122,6 +123,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectUserByUserName" parameterType="String" resultMap="SysUserResult">
 	    <include refid="selectUserVo"/>
 		where u.user_name = #{userName} and u.del_flag = '0'
+	</select>
+
+	<select id="selectUserByUserNickName" parameterType="String" resultMap="SysUserResult">
+		<include refid="selectUserVo"/>
+		where u.nick_name = #{userName} and u.del_flag = '0'
 	</select>
 
 	<select id="selectUserById" parameterType="Long" resultMap="SysUserResult">

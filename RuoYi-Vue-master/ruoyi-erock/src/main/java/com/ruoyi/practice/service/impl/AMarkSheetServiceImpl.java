@@ -15,7 +15,7 @@ import com.ruoyi.practice.service.IAMarkSheetService;
 
 /**
  *  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算Service业务层处理
- * 
+ *
  * @author ljy
  * @date 2024-04-11
  */
@@ -27,7 +27,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
     /**
      * 查询 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
-     * 
+     *
      * @param msId  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
      * @return  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      */
@@ -39,7 +39,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
     /**
      * 查询 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算列表
-     * 
+     *
      * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * @return  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      */
@@ -96,7 +96,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
     /**
      * 新增 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
-     * 
+     *
      * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * @return 结果
      */
@@ -108,7 +108,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
     /**
      * 修改 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
-     * 
+     *
      * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * @return 结果
      */
@@ -120,7 +120,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
     /**
      * 批量删除 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
-     * 
+     *
      * @param msIds 需要删除的 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
      * @return 结果
      */
@@ -132,7 +132,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
     /**
      * 删除 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算信息
-     * 
+     *
      * @param msId  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
      * @return 结果
      */

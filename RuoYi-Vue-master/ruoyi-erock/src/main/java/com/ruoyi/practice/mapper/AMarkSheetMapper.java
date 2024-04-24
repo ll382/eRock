@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  *  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算Mapper接口
- * 
+ *
  * @author ljy
  * @date 2024-04-11
  */
@@ -16,7 +16,7 @@ public interface AMarkSheetMapper
 {
     /**
      * 查询 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
-     * 
+     *
      * @param msId  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
      * @return  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      */
@@ -24,7 +24,7 @@ public interface AMarkSheetMapper
 
     /**
      * 查询 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算列表
-     * 
+     *
      * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * @return  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算集合
      */
@@ -46,7 +46,7 @@ public interface AMarkSheetMapper
     public Map<String,Object> selectAPageThreeByPcId(Integer pcId);
     /**
      * 新增 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
-     * 
+     *
      * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * @return 结果
      */
@@ -54,7 +54,7 @@ public interface AMarkSheetMapper
 
     /**
      * 修改 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
-     * 
+     *
      * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * @return 结果
      */
@@ -62,7 +62,7 @@ public interface AMarkSheetMapper
 
     /**
      * 删除 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
-     * 
+     *
      * @param msId  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
      * @return 结果
      */

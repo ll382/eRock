@@ -73,6 +73,7 @@ public class CPersonnelSheet extends BaseEntity
     public void setStuId(Long stuId)
     {
         this.stuId = stuId;
+        super.setStuId(stuId);
     }
 
     public Long getStuId()

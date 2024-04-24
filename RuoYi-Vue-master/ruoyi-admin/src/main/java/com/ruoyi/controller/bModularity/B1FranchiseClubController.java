@@ -1,6 +1,7 @@
 package com.ruoyi.controller.bModularity;
 
 import com.ruoyi.bModularity.domain.B1FranchiseClub;
+import com.ruoyi.bModularity.domain.B1Student;
 import com.ruoyi.bModularity.service.IB1FranchiseClubService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -108,7 +109,7 @@ public class B1FranchiseClubController extends BaseController {
 	@GetMapping("/studentList")
 	public TableDataInfo studentList() {
 		startPage();
-		List<HashMap<String, String>> list = b1FranchiseClubService.selectB1Student();
+		List<B1Student> list = b1FranchiseClubService.selectB1Student();
 		return getDataTable(list);
 	}
 	

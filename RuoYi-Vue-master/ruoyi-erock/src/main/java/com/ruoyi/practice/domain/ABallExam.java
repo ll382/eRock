@@ -63,7 +63,7 @@ public class ABallExam extends BaseEntity
     @Excel(name = "投篮分数")
     private BigDecimal msShooting;
 
-    public void setBeId(Long beId) 
+    public void setBeId(Long beId)
     {
         this.beId = beId;
     }

@@ -1,55 +1,56 @@
 package com.ruoyi.match.service.impl;
 
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.match.domain.CBallteam;
-import com.ruoyi.match.domain.CompetitionRecord;
-import com.ruoyi.match.mapper.CompetitionRecordMapper;
-import com.ruoyi.match.service.ICompetitionRecordService;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.stream.Collectors;
+
+import com.ruoyi.common.utils.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import com.ruoyi.match.domain.CBallteam;
+import com.ruoyi.match.mapper.CompetitionRecordMapper;
+import com.ruoyi.match.domain.CompetitionRecord;
+import com.ruoyi.match.service.ICompetitionRecordService;
 
 /**
- * 比赛记录Service业务层处理
+ * C 比赛记录Service业务层处理
  *
- * @author heye
- * @date 2024-03-18
+ * @author houq
+ * @date 2024-04-08
  */
 @Service
 public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 	@Autowired
 	private CompetitionRecordMapper competitionRecordMapper;
-	
+
 	/**
-	 * 查询比赛记录
+	 * 查询C 比赛记录
 	 *
-	 * @param ccRId 比赛记录主键
-	 * @return 比赛记录
+	 * @param ccRId C 比赛记录主键
+	 * @return C 比赛记录
 	 */
 	@Override
 	public CompetitionRecord selectCompetitionRecordByCcRId(Long ccRId) {
 		return competitionRecordMapper.selectCompetitionRecordByCcRId(ccRId);
 	}
-	
+
 	/**
-	 * 查询比赛记录列表
+	 * 查询C 比赛记录列表
 	 *
-	 * @param competitionRecord 比赛记录
-	 * @return 比赛记录
+	 * @param competitionRecord C 比赛记录
+	 * @return C 比赛记录
 	 */
 	@Override
 	public List<CompetitionRecord> selectCompetitionRecordList(CompetitionRecord competitionRecord) {
 		return competitionRecordMapper.selectCompetitionRecordList(competitionRecord);
 	}
-	
+
 	/**
-	 * 新增比赛记录
+	 * 新增C 比赛记录
 	 *
-	 * @param competitionRecord 比赛记录
+	 * @param competitionRecord C 比赛记录
 	 * @return 结果
 	 */
 	@Transactional
@@ -59,11 +60,11 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 		insertCBallteam(competitionRecord);
 		return rows;
 	}
-	
+
 	/**
-	 * 修改比赛记录
+	 * 修改C 比赛记录
 	 *
-	 * @param competitionRecord 比赛记录
+	 * @param competitionRecord C 比赛记录
 	 * @return 结果
 	 */
 	@Transactional
@@ -73,11 +74,11 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 		insertCBallteam(competitionRecord);
 		return competitionRecordMapper.updateCompetitionRecord(competitionRecord);
 	}
-	
+
 	/**
-	 * 批量删除比赛记录
+	 * 批量删除C 比赛记录
 	 *
-	 * @param ccRIds 需要删除的比赛记录主键
+	 * @param ccRIds 需要删除的C 比赛记录主键
 	 * @return 结果
 	 */
 	@Transactional
@@ -86,11 +87,11 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 		competitionRecordMapper.deleteCBallteamByCcRIds(ccRIds);
 		return competitionRecordMapper.deleteCompetitionRecordByCcRIds(ccRIds);
 	}
-	
+
 	/**
-	 * 删除比赛记录信息
+	 * 删除C 比赛记录信息
 	 *
-	 * @param ccRId 比赛记录主键
+	 * @param ccRId C 比赛记录主键
 	 * @return 结果
 	 */
 	@Transactional
@@ -99,11 +100,11 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 		competitionRecordMapper.deleteCBallteamByCcRId(ccRId);
 		return competitionRecordMapper.deleteCompetitionRecordByCcRId(ccRId);
 	}
-	
+
 	/**
 	 * 新增球队参赛信息
 	 *
-	 * @param competitionRecord 比赛记录对象
+	 * @param competitionRecord C 比赛记录对象
 	 */
 	public void insertCBallteam(CompetitionRecord competitionRecord) {
 		List<CBallteam> cBallteamList = competitionRecord.getCBallteamList();
@@ -119,7 +120,7 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 			}
 		}
 	}
-	
+
 	/**
 	 * 获取比赛记录记录
 	 *
@@ -131,4 +132,73 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 		return competitionRecordMapper.selectGameRecord(speci);
 	}
 
+
+	/**
+	 * 获取课外赛学生信息
+	 *
+	 * @return
+	 */
+	@Override
+	public List<HashMap<String, String>> findCBallteamKw() {
+		return competitionRecordMapper.findCBallteamKw();
+	}
+
+	/**
+	 * 获取课外赛信息
+	 *
+	 * @return
+	 */
+	@Override
+	public Map<String, List<HashMap<String, Object>>> findRecordKwByStuId(Long stuId) {
+		List<HashMap<String, Object>> maps = competitionRecordMapper.findRecordKwByStuId(stuId);
+		return maps.stream()
+				.collect(Collectors.groupingBy(map -> (Integer) map.get("ps_audit") == 2 ? "yes" : "no"));
+	}
+
+	/**
+	 * 根据学号和比赛id获取学生信息
+	 *
+	 * @return
+	 */
+	@Override
+	public HashMap<String, Object> findRecordKwByStuIdAndCcrId(HashMap<String, String> map) {
+		HashMap<String, Object> stuIdAndCcrIdMap = competitionRecordMapper.findRecordKwByStuIdAndCcrId(map);
+		if (stuIdAndCcrIdMap == null) {
+			return null;
+		}
+
+		String[] studentKeys = {"stu_id", "stu_name", "job_name", "ps_num"};
+		String[] studentInfoKeys = {"id", "name", "role", "score"};
+
+		HashMap<String, Object> stuInfo = new HashMap<>();
+		for (int i = 0; i < studentKeys.length; i++) {
+			stuInfo.put(studentInfoKeys[i], stuIdAndCcrIdMap.get(studentKeys[i]));
+			stuIdAndCcrIdMap.remove(studentKeys[i]);
+		}
+		stuIdAndCcrIdMap.put("teammates", stuInfo);
+
+		String url = (String) stuIdAndCcrIdMap.get("ps_urls");
+		if (url != null) {
+			List<HashMap<String, String>> urlList = Arrays.stream(url.split("; "))
+					.map(u -> {
+						HashMap<String, String> urlMap = new HashMap<>();
+						urlMap.put("url", u);
+						return urlMap;
+					})
+					.collect(Collectors.toList());
+			stuIdAndCcrIdMap.put("ps_urls", urlList);
+		}
+		return stuIdAndCcrIdMap;
+	}
+
+	/**
+	 * 审核学生上传的资料
+	 *
+	 * @param map
+	 * @return
+	 */
+	@Override
+	public Integer updateAudit(HashMap<String, String> map) {
+		return competitionRecordMapper.updateAudit(map);
+	}
 }

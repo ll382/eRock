@@ -131,4 +131,8 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 	public List<CPersonnelSheet> findPersonnelShellByBalId(Long balId) {
 		return cPersonnelSheetMapper.findPersonnelShellByBalId(balId);
 	}
+
+	public void calculateScores(){
+
+	}
 }

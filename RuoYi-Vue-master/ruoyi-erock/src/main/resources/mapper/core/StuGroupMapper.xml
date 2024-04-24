@@ -4,13 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.core.mapper.StuGroupMapper">
 
-    <resultMap type="StuGroup" id="StuGroupResult">
+    <resultMap type="Group" id="StuGroupResult">
         <result property="ggId"    column="gg_id"    />
         <result property="ggName"    column="gg_name"    />
         <result property="stuGroupLeader"    column="stu_group_leader"    />
     </resultMap>
 
-    <resultMap id="StuGroupStudentResult" type="StuGroup" extends="StuGroupResult">
+    <resultMap id="StuGroupStudentResult" type="Group" extends="StuGroupResult">
         <collection property="studentList" notNullColumn="sub_stu_id" javaType="java.util.List" resultMap="StudentResult" />
     </resultMap>
 
@@ -26,7 +26,7 @@
         select gg_id, gg_name, stu_group_leader from stu_group
     </sql>
 
-    <select id="selectStuGroupList" parameterType="StuGroup" resultMap="StuGroupResult">
+    <select id="selectStuGroupList" parameterType="Group" resultMap="StuGroupResult">
         <include refid="selectStuGroupVo"/>
         <where>
             <if test="ggName != null  and ggName != ''"> and gg_name like concat('%', #{ggName}, '%')</if>
@@ -42,7 +42,7 @@
         where a.gg_id = #{ggId}
     </select>
 
-    <insert id="insertStuGroup" parameterType="StuGroup" useGeneratedKeys="true" keyProperty="ggId">
+    <insert id="insertStuGroup" parameterType="Group" useGeneratedKeys="true" keyProperty="ggId">
         insert into stu_group
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="ggName != null">gg_name,</if>
@@ -54,7 +54,7 @@
         </trim>
     </insert>
 
-    <update id="updateStuGroup" parameterType="StuGroup">
+    <update id="updateStuGroup" parameterType="Group">
         update stu_group
         <trim prefix="SET" suffixOverrides=",">
             <if test="ggName != null">gg_name = #{ggName},</if>
@@ -74,7 +74,7 @@
         </foreach>
     </delete>
 
-    <delete id="deleteStudentByGgIds" parameterType="String">
+    <delete id="deleteStudentByStuIds" parameterType="String">
         delete from student where gg_id in
         <foreach item="ggId" collection="array" open="(" separator="," close=")">
             #{ggId}

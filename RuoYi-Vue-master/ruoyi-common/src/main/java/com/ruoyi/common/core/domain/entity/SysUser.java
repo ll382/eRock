@@ -3,6 +3,8 @@ package com.ruoyi.common.core.domain.entity;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -14,12 +16,16 @@ import com.ruoyi.common.xss.Xss;
 
 /**
  * 用户对象 sys_user
- * 
+ *
  * @author ruoyi
  */
 public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    /** 用户ID */
+    @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
+    private Long eRockId = 114514L;
 
     /** 用户ID */
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
@@ -139,6 +145,14 @@ public class SysUser extends BaseEntity
     public void setNickName(String nickName)
     {
         this.nickName = nickName;
+    }
+
+    public Long geteRockId() {
+        return eRockId;
+    }
+
+    public void seteRockId(Long eRockId) {
+        this.eRockId = eRockId;
     }
 
     @Xss(message = "用户账号不能包含脚本字符")

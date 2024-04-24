@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.InClassModule.mapper.A2TeachingAssistantEvaluationMapper">
+
+    <resultMap type="A2TeachingAssistantEvaluation" id="A2TeachingAssistantEvaluationResult">
+        <result property="taeId"    column="tae_id"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="ggId"    column="gg_id"    />
+        <result property="crId"    column="cr_id"    />
+        <result property="taeType"    column="tae_type"    />
+    </resultMap>
+
+    <sql id="selectA2TeachingAssistantEvaluationVo">
+        select tae_id, tea_id, gg_id, cr_id, tae_type from a2_teaching_assistant_evaluation
+    </sql>
+
+    <select id="selectA2TeachingAssistantEvaluationList" parameterType="A2TeachingAssistantEvaluation" resultMap="A2TeachingAssistantEvaluationResult">
+        <include refid="selectA2TeachingAssistantEvaluationVo"/>
+        <where>
+            <if test="teaId != null  and teaId != ''"> and tea_id = #{teaId}</if>
+            <if test="ggId != null "> and gg_id = #{ggId}</if>
+            <if test="crId != null "> and cr_id = #{crId}</if>
+            <if test="taeType != null  and taeType != ''"> and tae_type = #{taeType}</if>
+        </where>
+    </select>
+
+    <select id="selectA2TeachingAssistantEvaluationByTaeId" parameterType="Long" resultMap="A2TeachingAssistantEvaluationResult">
+        <include refid="selectA2TeachingAssistantEvaluationVo"/>
+        where cr_id = #{crId}
+    </select>
+
+    <insert id="insertA2TeachingAssistantEvaluation" parameterType="A2TeachingAssistantEvaluation" useGeneratedKeys="true" keyProperty="taeId">
+        insert into a2_teaching_assistant_evaluation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teaId != null">tea_id,</if>
+            <if test="ggId != null">gg_id,</if>
+            <if test="crId != null">cr_id,</if>
+            <if test="taeType != null">tae_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teaId != null">#{teaId},</if>
+            <if test="ggId != null">#{ggId},</if>
+            <if test="crId != null">#{crId},</if>
+            <if test="taeType != null">#{taeType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateA2TeachingAssistantEvaluation" parameterType="A2TeachingAssistantEvaluation">
+        update a2_teaching_assistant_evaluation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teaId != null">tea_id = #{teaId},</if>
+            <if test="ggId != null">gg_id = #{ggId},</if>
+            <if test="crId != null">cr_id = #{crId},</if>
+            <if test="taeType != null">tae_type = #{taeType},</if>
+        </trim>
+        where tae_id = #{taeId}
+    </update>
+
+    <delete id="deleteA2TeachingAssistantEvaluationByTaeId" parameterType="Long">
+        delete from a2_teaching_assistant_evaluation where tae_id = #{taeId}
+    </delete>
+
+    <delete id="deleteA2TeachingAssistantEvaluationByTaeIds" parameterType="String">
+        delete from a2_teaching_assistant_evaluation where tae_id in
+        <foreach item="taeId" collection="array" open="(" separator="," close=")">
+            #{taeId}
+        </foreach>
+    </delete>
+</mapper>

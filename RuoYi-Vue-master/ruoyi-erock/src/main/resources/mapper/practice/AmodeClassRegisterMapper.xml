@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.practice.mapper.AmodeClassRegisterMapper">
+
+    <resultMap type="ClassRegister" id="AmodeClassRegisterResult">
+        <result property="crId"    column="cr_id"    />
+        <result property="semesterId"    column="semester_id"    />
+        <result property="crDate"    column="cr_date"    />
+        <result property="crMain"    column="cr_main"    />
+        <result property="crDuration"    column="cr_duration"    />
+        <result property="classId"    column="class_id"    />
+        <result property="enumId"    column="enum_id"    />
+    </resultMap>
+
+    <resultMap id="AmodeClassRegisterAExerciseTaskResult" type="ClassRegister" extends="AmodeClassRegisterResult">
+        <collection property="aExerciseTaskList" notNullColumn="sub_et_id" javaType="java.util.List" resultMap="AExerciseTaskResult" />
+    </resultMap>
+
+    <resultMap type="AExerciseTask" id="AExerciseTaskResult">
+        <result property="etId"    column="sub_et_id"    />
+        <result property="crId"    column="sub_cr_id"    />
+        <result property="teaId"    column="sub_tea_id"    />
+        <result property="enumId"    column="sub_enum_id"    />
+        <result property="etName"    column="sub_et_name"    />
+        <result property="etDescription"    column="sub_et_description"    />
+        <result property="etCreateTime"    column="sub_et_create_time"    />
+        <result property="etEndTime"    column="sub_et_end_time"    />
+    </resultMap>
+
+    <sql id="selectAmodeClassRegisterVo">
+        select cr_id, semester_id, cr_date, cr_main, cr_duration, class_id, enum_id from class_register
+    </sql>
+
+    <select id="selectAmodeClassRegisterList" parameterType="ClassRegister" resultMap="AmodeClassRegisterResult">
+        <include refid="selectAmodeClassRegisterVo"/>
+        <where>
+            <if test="semesterId != null "> and semester_id = #{semesterId}</if>
+            <if test="crDate != null "> and cr_date = #{crDate}</if>
+            <if test="crMain != null  and crMain != ''"> and cr_main = #{crMain}</if>
+            <if test="crDuration != null "> and cr_duration = #{crDuration}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="enumId != null "> and enum_id = #{enumId}</if>
+        </where>
+    </select>
+
+    <select id="selectAmodeClassRegisterByCrId" parameterType="Long" resultMap="AmodeClassRegisterAExerciseTaskResult">
+        select a.cr_id, a.semester_id, a.cr_date, a.cr_main, a.cr_duration, a.class_id, a.enum_id,
+               b.et_id as sub_et_id, b.cr_id as sub_cr_id, b.tea_id as sub_tea_id, b.enum_id as sub_enum_id, b.et_name as sub_et_name, b.et_description as sub_et_description, b.et_create_time as sub_et_create_time, b.et_end_time as sub_et_end_time
+        from class_register a
+                 left join a_exercise_task b on b.cr_id = a.cr_id
+        where a.cr_id = #{crId}
+    </select>
+
+    <insert id="insertAmodeClassRegister" parameterType="ClassRegister" useGeneratedKeys="true" keyProperty="crId">
+        insert into class_register
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="semesterId != null">semester_id,</if>
+            <if test="crDate != null">cr_date,</if>
+            <if test="crMain != null">cr_main,</if>
+            <if test="crDuration != null">cr_duration,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="enumId != null">enum_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="semesterId != null">#{semesterId},</if>
+            <if test="crDate != null">#{crDate},</if>
+            <if test="crMain != null">#{crMain},</if>
+            <if test="crDuration != null">#{crDuration},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="enumId != null">#{enumId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAmodeClassRegister" parameterType="ClassRegister">
+        update class_register
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="semesterId != null">semester_id = #{semesterId},</if>
+            <if test="crDate != null">cr_date = #{crDate},</if>
+            <if test="crMain != null">cr_main = #{crMain},</if>
+            <if test="crDuration != null">cr_duration = #{crDuration},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="enumId != null">enum_id = #{enumId},</if>
+        </trim>
+        where cr_id = #{crId}
+    </update>
+
+    <delete id="deleteAmodeClassRegisterByCrId" parameterType="Long">
+        delete from class_register where cr_id = #{crId}
+    </delete>
+
+    <delete id="deleteAmodeClassRegisterByCrIds" parameterType="String">
+        delete from class_register where cr_id in
+        <foreach item="crId" collection="array" open="(" separator="," close=")">
+            #{crId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAExerciseTaskByCrIds" parameterType="String">
+        delete from a_exercise_task where cr_id in
+        <foreach item="crId" collection="array" open="(" separator="," close=")">
+            #{crId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAExerciseTaskByCrId" parameterType="Long">
+        delete from a_exercise_task where cr_id = #{crId}
+    </delete>
+
+    <insert id="batchAExerciseTask">
+        insert into a_exercise_task( et_id, cr_id, tea_id, enum_id, et_name, et_description, et_create_time, et_end_time) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.etId}, #{item.crId}, #{item.teaId}, #{item.enumId}, #{item.etName}, #{item.etDescription}, #{item.etCreateTime}, #{item.etEndTime})
+        </foreach>
+    </insert>
+</mapper>

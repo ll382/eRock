@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.score.mapper.TotalScoreMapper">
+    
+    <resultMap type="TotalScore" id="TotalScoreResult">
+        <result property="tsId"    column="ts_id"    />
+        <result property="semesterId"    column="semester_id"    />
+        <result property="epScore"    column="ep_score"    />
+        <result property="stuId"    column="stu_id"    />
+    </resultMap>
+
+    <sql id="selectTotalScoreVo">
+        select ts_id, semester_id, ep_score, stu_id from total_score
+    </sql>
+
+    <select id="selectTotalScoreList" parameterType="TotalScore" resultMap="TotalScoreResult">
+        <include refid="selectTotalScoreVo"/>
+        <where>  
+            <if test="semesterId != null "> and semester_id = #{semesterId}</if>
+            <if test="epScore != null "> and ep_score = #{epScore}</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTotalScoreByTsId" parameterType="Long" resultMap="TotalScoreResult">
+        <include refid="selectTotalScoreVo"/>
+        where ts_id = #{tsId}
+    </select>
+        
+    <insert id="insertTotalScore" parameterType="TotalScore" useGeneratedKeys="true" keyProperty="tsId">
+        insert into total_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="semesterId != null">semester_id,</if>
+            <if test="epScore != null">ep_score,</if>
+            <if test="stuId != null">stu_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="semesterId != null">#{semesterId},</if>
+            <if test="epScore != null">#{epScore},</if>
+            <if test="stuId != null">#{stuId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTotalScore" parameterType="TotalScore">
+        update total_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="semesterId != null">semester_id = #{semesterId},</if>
+            <if test="epScore != null">ep_score = #{epScore},</if>
+            <if test="stuId != null">stu_id = #{stuId},</if>
+        </trim>
+        where ts_id = #{tsId}
+    </update>
+
+    <delete id="deleteTotalScoreByTsId" parameterType="Long">
+        delete from total_score where ts_id = #{tsId}
+    </delete>
+
+    <delete id="deleteTotalScoreByTsIds" parameterType="String">
+        delete from total_score where ts_id in 
+        <foreach item="tsId" collection="array" open="(" separator="," close=")">
+            #{tsId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,19 +1,20 @@
 package com.ruoyi.knowledgeQuiz.service;
 
+import com.ruoyi.teachingExchange.domain.Answer;
+
 import java.util.List;
-import com.ruoyi.knowledgeQuiz.domain.Answer;
 
 /**
  * A1 知识测试 学生成绩Service接口
- * 
- * @author ljy
- * @date 2024-03-20
+ *
+ * @author heye
+ * @date 2024-04-18
  */
-public interface IAnswerService 
+public interface IAnswerService
 {
     /**
      * 查询A1 知识测试 学生成绩
-     * 
+     *
      * @param ansId A1 知识测试 学生成绩主键
      * @return A1 知识测试 学生成绩
      */
@@ -21,7 +22,7 @@ public interface IAnswerService
 
     /**
      * 查询A1 知识测试 学生成绩列表
-     * 
+     *
      * @param answer A1 知识测试 学生成绩
      * @return A1 知识测试 学生成绩集合
      */
@@ -29,7 +30,7 @@ public interface IAnswerService
 
     /**
      * 新增A1 知识测试 学生成绩
-     * 
+     *
      * @param answer A1 知识测试 学生成绩
      * @return 结果
      */
@@ -37,7 +38,7 @@ public interface IAnswerService
 
     /**
      * 修改A1 知识测试 学生成绩
-     * 
+     *
      * @param answer A1 知识测试 学生成绩
      * @return 结果
      */
@@ -45,7 +46,7 @@ public interface IAnswerService
 
     /**
      * 批量删除A1 知识测试 学生成绩
-     * 
+     *
      * @param ansIds 需要删除的A1 知识测试 学生成绩主键集合
      * @return 结果
      */
@@ -53,7 +54,7 @@ public interface IAnswerService
 
     /**
      * 删除A1 知识测试 学生成绩信息
-     * 
+     *
      * @param ansId A1 知识测试 学生成绩主键
      * @return 结果
      */

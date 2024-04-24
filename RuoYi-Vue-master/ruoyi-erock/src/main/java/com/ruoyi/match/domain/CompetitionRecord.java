@@ -9,16 +9,16 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 比赛记录对象 c_competition_record
+ * C 比赛记录对象 c_competition_record
  *
- * @author heye
- * @date 2024-03-18
+ * @author houq
+ * @date 2024-04-08
  */
 public class CompetitionRecord extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 比赛ID */
+    /** 记录ID */
     private Long ccRId;
 
     /** 枚举ID */
@@ -38,13 +38,21 @@ public class CompetitionRecord extends BaseEntity
     @Excel(name = "比赛名称")
     private String ccRName;
 
-    @Excel(name = "小组名称")
-    private String ggName;
+    /** 审核状态
+     0：未提交
+     1：未审核
+     2：已审核 */
+    @Excel(name = "审核状态 0：未提交 1：未审核 2：已审核")
+            private Long ccRAudit;
 
-    /** 球队参赛信息 */
-    private List<CBallteam> cBallteamList;
+            /** 课堂ID */
+            @Excel(name = "课堂ID")
+            private Long crId;
 
-    public void setCcRId(Long ccRId)
+            /** 球队参赛信息 */
+            private List<CBallteam> cBallteamList;
+
+            public void setCcRId(Long ccRId)
     {
         this.ccRId = ccRId;
     }
@@ -89,6 +97,24 @@ public class CompetitionRecord extends BaseEntity
     {
         return ccRName;
     }
+    public void setCcRAudit(Long ccRAudit)
+    {
+        this.ccRAudit = ccRAudit;
+    }
+
+    public Long getCcRAudit()
+    {
+        return ccRAudit;
+    }
+    public void setCrId(Long crId)
+    {
+        this.crId = crId; 
+    }
+
+    public Long getCrId()
+    {
+        return crId;
+    }
 
     public List<CBallteam> getCBallteamList()
     {
@@ -100,32 +126,17 @@ public class CompetitionRecord extends BaseEntity
         this.cBallteamList = cBallteamList;
     }
 
-    public String getGgName() {
-        return ggName;
-    }
-
-    public void setGgName(String ggName) {
-        this.ggName = ggName;
-    }
-
-    public List<CBallteam> getcBallteamList() {
-        return cBallteamList;
-    }
-
-    public void setcBallteamList(List<CBallteam> cBallteamList) {
-        this.cBallteamList = cBallteamList;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("ccRId", getCcRId())
-            .append("enumId", getEnumId())
-            .append("ccRTime", getCcRTime())
-            .append("ccRSpeci", getCcRSpeci())
-            .append("ccRName", getCcRName())
-            .append("cBallteamList", getCBallteamList())
-            .append("ggName", getGgName())
+                .append("ccRId", getCcRId())
+                .append("enumId", getEnumId())
+                .append("ccRTime", getCcRTime())
+                .append("ccRSpeci", getCcRSpeci())
+                .append("ccRName", getCcRName())
+                .append("ccRAudit", getCcRAudit())
+                .append("crId", getCrId())
+                .append("cBallteamList", getCBallteamList())
                 .toString();
     }
 }
