@@ -58,13 +58,17 @@ public class StudentServiceImpl implements IStudentService
      * 根据班级和日期查询所有学生成绩信息等
      * @return 所有学生成绩信息等
      */
-    public List<StudentCourseGrades> selectStudentCourseGradesList() {
-
-        List<StudentCourseGrades> gradesList = studentMapper.selectDeduplicationStudentAchievementList("北汽2301班", "2024-03-15 08:00:00");
+    public List<StudentCourseGrades> selectStudentCourseGradesList(String score) {
+        List<StudentCourseGrades> gradesList;
+        if (score.equals("ms_dribble")){
+            gradesList = studentMapper.selectDeduplicationStudentAchievementList("北汽2301班", "2024-03-15 14:00:00");
+        }else {
+            gradesList = studentMapper.selectDeduplicationStudentAchievementList("北汽2301班", "2024-03-15 08:00:00");
+        }
         List<StudentCourseGrades> newStudentCourseGradesList = new ArrayList<>();
         for (StudentCourseGrades studentCourseGrades : gradesList) {
             //这里添加查询时间，将学生信息+成绩信息查出来
-            List<Map<String, Object>> students = studentMapper.selectStudentAchievementList(studentCourseGrades.getStuId(), studentCourseGrades.getCrDate());
+            List<Map<String, Object>> students = studentMapper.selectStudentAchievementList(studentCourseGrades.getStuId(), studentCourseGrades.getCrDate(),score);
             Map<String, StudentCourseGrades> temp = new HashMap<>();
             for (Map<String, Object> studentMap : students) {
                 Long stu_id = (Long) studentMap.get("stu_id");
@@ -72,7 +76,7 @@ public class StudentServiceImpl implements IStudentService
                 if (studentCourseGrades1 == null) {
                     studentCourseGrades1 = new StudentCourseGrades();
                     List<BigDecimal> scores = new ArrayList<>();
-                    scores.add(new BigDecimal(String.valueOf((BigDecimal) studentMap.get("ms_shooting"))));
+                    scores.add(new BigDecimal(String.valueOf((BigDecimal) studentMap.get(score))));
                     studentCourseGrades1.setScore(scores);
                     //设置学生信息
                     studentCourseGrades1.setStuId(stu_id);
@@ -80,17 +84,26 @@ public class StudentServiceImpl implements IStudentService
                     studentCourseGrades1.setTeaName((String) studentMap.get("tea_name"));
                     studentCourseGrades1.setClassName((String) studentMap.get("class_name"));
                     studentCourseGrades1.setCrDate(DateUtil.LocalDateTimeConvertDate((LocalDateTime) studentMap.get("cr_date")));
+                    if ((int)studentMap.get("enum_id")==15){
+                        studentCourseGrades1.setCrMain("投篮");
+                    }else {
+                        studentCourseGrades1.setCrMain("运球");
+                    }
 
-                    studentCourseGrades1.setCrMain((String) studentMap.get("cr_main"));
                     //处理时间信息
                     String cr_date = DateUtil.getTime(DateUtil.LocalDateTimeConvertDate((LocalDateTime) studentMap.get("cr_date")));
                     studentCourseGrades1.setWhichClass(cr_date);
-                    studentCourseGrades1.setTime("上午");
+                    if (score.equals("ms_dribble")){
+                        studentCourseGrades1.setTime("下午");
+                    }else {
+                        studentCourseGrades1.setTime("上午");
+                    }
+
 
                     temp.put(String.valueOf(stu_id), studentCourseGrades1);
                     continue;
                 }
-                studentCourseGrades1.getScore().add((BigDecimal) studentMap.get("ms_shooting"));
+                studentCourseGrades1.getScore().add((BigDecimal) studentMap.get(score));
             }
 
             StudentCourseGrades studentCourseGrades1 = temp.get(String.valueOf(studentCourseGrades.getStuId()));
@@ -105,15 +118,17 @@ public class StudentServiceImpl implements IStudentService
      * @param enumId 枚举ID
      * @return
      */
-    public List<Map<String,List>> selectDeduplicationCrDateByStuNameAndEnumIdList(Long stuId, Integer enumId){
+    public List<Map<String,List>> selectDeduplicationCrDateByStuNameAndEnumIdList(Long stuId, Integer enumId, String hour){
         ArrayList<Map<String,List>> mapList = new ArrayList<>();
         Map<String, List> stringListMap = new HashMap<>();
         ArrayList<String> crDateList = new ArrayList<>();
         List<Integer> practiceFrequencyList = new ArrayList<>();
         ArrayList<String> whichClassList = new ArrayList<>();
-        List<Map<String, Object>> maps = studentMapper.selectDeduplicationCrDateByStuIdAndEnumIdList(stuId, enumId);
+        ArrayList<Integer> msIdList = new ArrayList<>();
+        List<Map<String, Object>> maps = studentMapper.selectDeduplicationCrDateByStuIdAndEnumIdList(stuId, enumId, hour);
         for (Map<String, Object> map : maps){
             List<Map<String, Object>> cr_date = studentMapper.selectCrDateByStuIdAndEnumIdAndCrDateList(stuId, enumId, DateUtil.LocalDateTimeConvertDate((LocalDateTime) map.get("cr_date")));
+            msIdList.add((Integer) cr_date.get(0).get("ms_id"));
             crDateList.add(DateUtil.DateConvertString(DateUtil.LocalDateTimeConvertDate((LocalDateTime) map.get("cr_date"))));
             practiceFrequencyList.add(cr_date.size());
             whichClassList.add((String) map.get("type"));
@@ -121,6 +136,7 @@ public class StudentServiceImpl implements IStudentService
         stringListMap.put("whichClass",whichClassList);
         stringListMap.put("xAxis",crDateList);
         stringListMap.put("series",practiceFrequencyList);
+        stringListMap.put("msId",msIdList);
         mapList.add(stringListMap);
         return mapList;
     }
@@ -130,16 +146,17 @@ public class StudentServiceImpl implements IStudentService
      * @param stuId 学生ID
      * @return 学生的所有成绩
      */
-    public List<HashMap<String, List>> selectStudentAchievementByStuId(Long stuId){
-        ArrayList<HashMap<String, List>> list = new ArrayList<>();
-        HashMap<String, List> HashMap = new HashMap<>();
-        ArrayList<BigDecimal> msShootingList = new ArrayList<>();
-        List<Map<String, Object>> maps = studentMapper.selectStudentAchievementByStuId(stuId);
+    public List<List> selectStudentAchievementByStuId(Long stuId, String crDate,String score){
+        ArrayList<List> list = new ArrayList<>();
+        List<Map<String, Object>> maps = studentMapper.selectStudentAchievementByStuId(stuId,crDate,score);
+        ArrayList<HashMap<String, Object>> hashMapArrayList = new ArrayList<>();
         for (Map<String, Object> map : maps){
-            msShootingList.add((BigDecimal) map.get("ms_shooting"));
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("ms_shooting",map.get(score));
+            hashMap.put("ms_id",map.get("ms_id"));
+            hashMapArrayList.add(hashMap);
+            list.add(hashMapArrayList);
         }
-        HashMap.put("ms_shooting",msShootingList);
-        list.add(HashMap);
         return list;
     }
 

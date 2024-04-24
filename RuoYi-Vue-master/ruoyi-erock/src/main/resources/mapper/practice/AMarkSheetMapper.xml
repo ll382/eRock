@@ -9,52 +9,81 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="etId"    column="et_id"    />
         <result property="stuId"    column="stu_id"    />
         <result property="teaId"    column="tea_id"    />
-        <result property="msScore"    column="ms_score"    />
         <result property="msTime"    column="ms_time"    />
         <result property="msDribble"    column="ms_dribble"    />
         <result property="msShooting"    column="ms_shooting"    />
-    </resultMap>
-
-    <resultMap id="AMarkSheetABallExamResult" type="AMarkSheet" extends="AMarkSheetResult">
-        <collection property="aBallExamList" notNullColumn="sub_be_id" javaType="java.util.List" resultMap="ABallExamResult" />
-    </resultMap>
-
-    <resultMap type="ABallExam" id="ABallExamResult">
-        <result property="beId"    column="sub_be_id"    />
-        <result property="msId"    column="sub_ms_id"    />
-        <result property="driStability"    column="sub_dri_stability"    />
-        <result property="driPower"    column="sub_dri_power"    />
-        <result property="driSpeed"    column="sub_dri_speed"    />
-        <result property="driAnalysis"    column="sub_dri_analysis"    />
-        <result property="shoArc"    column="sub_sho_arc"    />
-        <result property="shoSpinner"    column="sub_sho_spinner"    />
-        <result property="shoAngle"    column="sub_sho_angle"    />
-        <result property="shoAnalysis"    column="sub_sho_analysis"    />
+        <result property="msScore"    column="ms_score"    />
+        <result property="ms1"    column="ms_1"    />
+        <result property="ms2"    column="ms_2"    />
+        <result property="ms3"    column="ms_3"    />
+        <result property="msClass"    column="ms_class"    />
+        <result property="msImg"    column="ms_img"    />
     </resultMap>
 
     <sql id="selectAMarkSheetVo">
-        select ms_id, et_id, stu_id, tea_id, ms_score, ms_time, ms_dribble, ms_shooting from a_mark_sheet
+        select ms_id, et_id, stu_id, tea_id, ms_time, ms_dribble, ms_shooting, ms_score, ms_1, ms_2, ms_3, ms_class, ms_img from a_mark_sheet
     </sql>
 
     <select id="selectAMarkSheetList" parameterType="AMarkSheet" resultMap="AMarkSheetResult">
         <include refid="selectAMarkSheetVo"/>
         <where>  
             <if test="etId != null "> and et_id = #{etId}</if>
-            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
-            <if test="teaId != null  and teaId != ''"> and tea_id = #{teaId}</if>
-            <if test="msScore != null "> and ms_score = #{msScore}</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="teaId != null "> and tea_id = #{teaId}</if>
             <if test="msTime != null "> and ms_time = #{msTime}</if>
             <if test="msDribble != null "> and ms_dribble = #{msDribble}</if>
             <if test="msShooting != null "> and ms_shooting = #{msShooting}</if>
+            <if test="msScore != null "> and ms_score = #{msScore}</if>
+            <if test="ms1 != null "> and ms_1 = #{ms1}</if>
+            <if test="ms2 != null "> and ms_2 = #{ms2}</if>
+            <if test="ms3 != null "> and ms_3 = #{ms3}</if>
+            <if test="msClass != null  and msClass != ''"> and ms_class = #{msClass}</if>
+            <if test="msImg != null  and msImg != ''"> and ms_img = #{msImg}</if>
         </where>
     </select>
     
-    <select id="selectAMarkSheetByMsId" parameterType="Long" resultMap="AMarkSheetABallExamResult">
-        select a.ms_id, a.et_id, a.stu_id, a.tea_id, a.ms_score, a.ms_time, a.ms_dribble, a.ms_shooting,
- b.be_id as sub_be_id, b.ms_id as sub_ms_id, b.dri_stability as sub_dri_stability, b.dri_power as sub_dri_power, b.dri_speed as sub_dri_speed, b.dri_analysis as sub_dri_analysis, b.sho_arc as sub_sho_arc, b.sho_spinner as sub_sho_spinner, b.sho_angle as sub_sho_angle, b.sho_analysis as sub_sho_analysis
-        from a_mark_sheet a
-        left join a_ball_exam b on b.ms_id = a.ms_id
-        where a.ms_id = #{msId}
+    <select id="selectAMarkSheetByMsId" parameterType="Long" resultMap="AMarkSheetResult">
+        <include refid="selectAMarkSheetVo"/>
+        where ms_id = #{msId}
+    </select>
+
+    <select id="selectAMarkSheetByMsIdAndEnumId">
+        SELECT
+            t.ms_id,
+            t.enum_id,
+            t.ms_class,
+            t.er_source,
+            CASE
+                WHEN t.enum_id = 16 AND t.min_val = t.ms_1 THEN '1'
+                WHEN t.enum_id = 16 AND t.min_val = t.ms_2 THEN '2'
+                WHEN t.enum_id = 16 AND t.min_val = t.ms_3 THEN '3'
+                WHEN t.enum_id = 15 AND t.min_val = t.ms_1 THEN '4'
+                WHEN t.enum_id = 15 AND t.min_val = t.ms_2 THEN '5'
+                WHEN t.enum_id = 15 AND t.min_val = t.ms_3 THEN '6'
+                END pc_id
+        FROM (
+                 SELECT
+                     a_mark_sheet.ms_id,
+                     class_register.enum_id,
+                     ms_1,
+                     ms_2,
+                     ms_3,
+                     ms_class,
+                     er_source,
+                     LEAST(ms_1, ms_2, ms_3) AS min_val
+                 FROM
+                     a_mark_sheet
+                         LEFT JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+                         LEFT JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+                         LEFT JOIN a_exercise_resource ON a_mark_sheet.ms_id = a_exercise_resource.ms_id
+                 WHERE
+                     a_mark_sheet.ms_id = #{msId}
+                   AND a_exercise_task.enum_id = #{enumId}
+             ) t;
+    </select>
+
+    <select id="selectAPageThreeByPcId">
+        SELECT content_video,content_video2,cv1,cv2 from a_page_three WHERE pc_id = #{pcId}
     </select>
         
     <insert id="insertAMarkSheet" parameterType="AMarkSheet" useGeneratedKeys="true" keyProperty="msId">
@@ -63,19 +92,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="etId != null">et_id,</if>
             <if test="stuId != null">stu_id,</if>
             <if test="teaId != null">tea_id,</if>
-            <if test="msScore != null">ms_score,</if>
             <if test="msTime != null">ms_time,</if>
             <if test="msDribble != null">ms_dribble,</if>
             <if test="msShooting != null">ms_shooting,</if>
+            <if test="msScore != null">ms_score,</if>
+            <if test="ms1 != null">ms_1,</if>
+            <if test="ms2 != null">ms_2,</if>
+            <if test="ms3 != null">ms_3,</if>
+            <if test="msClass != null">ms_class,</if>
+            <if test="msImg != null">ms_img,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="etId != null">#{etId},</if>
             <if test="stuId != null">#{stuId},</if>
             <if test="teaId != null">#{teaId},</if>
-            <if test="msScore != null">#{msScore},</if>
             <if test="msTime != null">#{msTime},</if>
             <if test="msDribble != null">#{msDribble},</if>
             <if test="msShooting != null">#{msShooting},</if>
+            <if test="msScore != null">#{msScore},</if>
+            <if test="ms1 != null">#{ms1},</if>
+            <if test="ms2 != null">#{ms2},</if>
+            <if test="ms3 != null">#{ms3},</if>
+            <if test="msClass != null">#{msClass},</if>
+            <if test="msImg != null">#{msImg},</if>
          </trim>
     </insert>
 
@@ -85,10 +124,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="etId != null">et_id = #{etId},</if>
             <if test="stuId != null">stu_id = #{stuId},</if>
             <if test="teaId != null">tea_id = #{teaId},</if>
-            <if test="msScore != null">ms_score = #{msScore},</if>
             <if test="msTime != null">ms_time = #{msTime},</if>
             <if test="msDribble != null">ms_dribble = #{msDribble},</if>
             <if test="msShooting != null">ms_shooting = #{msShooting},</if>
+            <if test="msScore != null">ms_score = #{msScore},</if>
+            <if test="ms1 != null">ms_1 = #{ms1},</if>
+            <if test="ms2 != null">ms_2 = #{ms2},</if>
+            <if test="ms3 != null">ms_3 = #{ms3},</if>
+            <if test="msClass != null">ms_class = #{msClass},</if>
+            <if test="msImg != null">ms_img = #{msImg},</if>
         </trim>
         where ms_id = #{msId}
     </update>
@@ -103,22 +147,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{msId}
         </foreach>
     </delete>
-    
-    <delete id="deleteABallExamByMsIds" parameterType="String">
-        delete from a_ball_exam where ms_id in 
-        <foreach item="msId" collection="array" open="(" separator="," close=")">
-            #{msId}
-        </foreach>
-    </delete>
-
-    <delete id="deleteABallExamByMsId" parameterType="Long">
-        delete from a_ball_exam where ms_id = #{msId}
-    </delete>
-
-    <insert id="batchABallExam">
-        insert into a_ball_exam( be_id, ms_id, dri_stability, dri_power, dri_speed, dri_analysis, sho_arc, sho_spinner, sho_angle, sho_analysis) values
-		<foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.beId}, #{item.msId}, #{item.driStability}, #{item.driPower}, #{item.driSpeed}, #{item.driAnalysis}, #{item.shoArc}, #{item.shoSpinner}, #{item.shoAngle}, #{item.shoAnalysis})
-        </foreach>
-    </insert>
 </mapper>

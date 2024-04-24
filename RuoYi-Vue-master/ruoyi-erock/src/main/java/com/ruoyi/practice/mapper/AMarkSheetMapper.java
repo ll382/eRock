@@ -1,87 +1,78 @@
 package com.ruoyi.practice.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.practice.domain.AMarkSheet;
-import com.ruoyi.practice.domain.ABallExam;
+import org.apache.ibatis.annotations.Param;
 
 /**
- * 练习、测试评分表Mapper接口
+ *  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算Mapper接口
  * 
- * @author houq
- * @date 2024-03-19
+ * @author ljy
+ * @date 2024-04-11
  */
 public interface AMarkSheetMapper 
 {
     /**
-     * 查询练习、测试评分表
+     * 查询 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * 
-     * @param msId 练习、测试评分表主键
-     * @return 练习、测试评分表
+     * @param msId  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
+     * @return  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      */
     public AMarkSheet selectAMarkSheetByMsId(Long msId);
 
     /**
-     * 查询练习、测试评分表列表
+     * 查询 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算列表
      * 
-     * @param aMarkSheet 练习、测试评分表
-     * @return 练习、测试评分表集合
+     * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
+     * @return  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算集合
      */
     public List<AMarkSheet> selectAMarkSheetList(AMarkSheet aMarkSheet);
 
     /**
-     * 新增练习、测试评分表
+     * 查询PC端第三页面
+     * @param msId 评分Id
+     * @param enumId 枚举Id
+     * @return
+     */
+    public List<Map<String,Object>> selectAMarkSheetByMsIdAndEnumId(@Param("msId") Integer msId,@Param("enumId") Integer enumId);
+
+    /**
+     * 查询内容视频
+     * @param pcId pcId
+     * @return
+     */
+    public Map<String,Object> selectAPageThreeByPcId(Integer pcId);
+    /**
+     * 新增 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * 
-     * @param aMarkSheet 练习、测试评分表
+     * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * @return 结果
      */
     public int insertAMarkSheet(AMarkSheet aMarkSheet);
 
     /**
-     * 修改练习、测试评分表
+     * 修改 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * 
-     * @param aMarkSheet 练习、测试评分表
+     * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * @return 结果
      */
     public int updateAMarkSheet(AMarkSheet aMarkSheet);
 
     /**
-     * 删除练习、测试评分表
+     * 删除 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * 
-     * @param msId 练习、测试评分表主键
+     * @param msId  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
      * @return 结果
      */
     public int deleteAMarkSheetByMsId(Long msId);
 
     /**
-     * 批量删除练习、测试评分表
+     * 批量删除 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * 
      * @param msIds 需要删除的数据主键集合
      * @return 结果
      */
     public int deleteAMarkSheetByMsIds(Long[] msIds);
-
-    /**
-     * 批量删除投篮运球表
-     * 
-     * @param msIds 需要删除的数据主键集合
-     * @return 结果
-     */
-    public int deleteABallExamByMsIds(Long[] msIds);
-    
-    /**
-     * 批量新增投篮运球表
-     * 
-     * @param aBallExamList 投篮运球表列表
-     * @return 结果
-     */
-    public int batchABallExam(List<ABallExam> aBallExamList);
-    
-
-    /**
-     * 通过练习、测试评分表主键删除投篮运球表信息
-     * 
-     * @param msId 练习、测试评分表ID
-     * @return 结果
-     */
-    public int deleteABallExamByMsId(Long msId);
 }

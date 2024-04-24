@@ -58,6 +58,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             stu_name, cr_date, enum_id, case
                 WHEN td ="08" THEN "一二节课"
                 WHEN td = "10" THEN "三四节课"
+                WHEN td ="14" THEN "五六节课"
+                WHEN td = "16" THEN "七八节课"
             END type
         FROM (
                  SELECT
@@ -74,14 +76,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                      student.stu_name,
                      class_register.cr_date,
                      a_exercise_task.enum_id
-             ) f WHERE td = "10" or td = "08"
+             ) f WHERE td = #{hour}
     </select>
 
     <select id="selectCrDateByStuIdAndEnumIdAndCrDateList" resultType="map">
         SELECT
             student.stu_name,
             class_register.cr_date,
-            a_exercise_task.enum_id
+            a_exercise_task.enum_id,
+            ms_id
         FROM student
                  JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
                  JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
@@ -121,9 +124,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             student.stu_name,
             teacher.tea_name,
             grade.class_name ,
-            a_mark_sheet.ms_shooting,
+            a_mark_sheet.${score},
             class_register.cr_date,
-            class_register.cr_main
+            class_register.enum_id
         from student
                  JOIN grade on student.class_id = grade.class_id
                  JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
@@ -132,18 +135,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                  JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
         WHERE student.stu_id = #{stuId}
           and class_register.cr_date = #{crDate}
+          and a_exercise_task.enum_id = 2
+        ORDER BY a_mark_sheet.${score}
+          LIMIT 10
     </select>
 
     <select id="selectStudentAchievementByStuId" resultType="map">
         SELECT
             student.stu_name,
             class_register.cr_date,
-            a_mark_sheet.ms_shooting
+            a_mark_sheet.${score},
+            a_mark_sheet.ms_id
         FROM student
                  JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
                  JOIN a_exercise_task on a_mark_sheet.et_id = a_exercise_task.et_id
                  JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
-        WHERE a_exercise_task.enum_id = 2 and student.stu_id = #{stuId} and class_register.cr_date = "2024-03-15 08:00:00" ORDER BY class_register.cr_date
+        WHERE a_exercise_task.enum_id = 2
+          and student.stu_id = #{stuId}
+          and class_register.cr_date = #{crDate}
+          ORDER BY a_mark_sheet.${score}
+          limit 10
     </select>
 
 

@@ -1,21 +1,23 @@
 package com.ruoyi.practice.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import com.ruoyi.practice.domain.ABallExam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import com.ruoyi.common.utils.StringUtils;
-import org.springframework.transaction.annotation.Transactional;
-import com.ruoyi.practice.domain.ABallExam;
 import com.ruoyi.practice.mapper.AMarkSheetMapper;
 import com.ruoyi.practice.domain.AMarkSheet;
 import com.ruoyi.practice.service.IAMarkSheetService;
 
 /**
- * 练习、测试评分表Service业务层处理
+ *  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算Service业务层处理
  * 
- * @author houq
- * @date 2024-03-19
+ * @author ljy
+ * @date 2024-04-11
  */
 @Service
 public class AMarkSheetServiceImpl implements IAMarkSheetService 
@@ -24,10 +26,10 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     private AMarkSheetMapper aMarkSheetMapper;
 
     /**
-     * 查询练习、测试评分表
+     * 查询 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * 
-     * @param msId 练习、测试评分表主键
-     * @return 练习、测试评分表
+     * @param msId  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
+     * @return  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      */
     @Override
     public AMarkSheet selectAMarkSheetByMsId(Long msId)
@@ -36,10 +38,10 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     }
 
     /**
-     * 查询练习、测试评分表列表
+     * 查询 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算列表
      * 
-     * @param aMarkSheet 练习、测试评分表
-     * @return 练习、测试评分表
+     * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
+     * @return  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      */
     @Override
     public List<AMarkSheet> selectAMarkSheetList(AMarkSheet aMarkSheet)
@@ -48,84 +50,95 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     }
 
     /**
-     * 新增练习、测试评分表
-     * 
-     * @param aMarkSheet 练习、测试评分表
-     * @return 结果
+     * 查询PC端第三页面
+     * @param msId 评分Id
+     * @param enumId 枚举Id
+     * @return
      */
-    @Transactional
-    @Override
-    public int insertAMarkSheet(AMarkSheet aMarkSheet)
-    {
-        int rows = aMarkSheetMapper.insertAMarkSheet(aMarkSheet);
-        insertABallExam(aMarkSheet);
-        return rows;
+    public Map<String, Object> selectAMarkSheetByMsIdAndEnumId(Integer msId,Integer enumId){
+        List<Map<String, Object>> maps = aMarkSheetMapper.selectAMarkSheetByMsIdAndEnumId(msId, enumId);
+        ArrayList<String> mp4List = new ArrayList<>();
+        ArrayList<String> jspList = new ArrayList<>();
+        Map<String, Object> data = null;
+        Boolean mp4 = false;
+        for (Map<String, Object> msp:maps){
+            if (data==null){
+                data = msp;
+            }
+            String erSource = (String) msp.get("er_source");
+            if (erSource.endsWith(".mp4")){
+                mp4List.add(erSource);
+                mp4 = true;
+            }
+            jspList.add(erSource);
+
+        }
+        if (mp4){
+            if (mp4List.size() != 0){
+                data.put("mp4", mp4List.get(0));
+            }
+            if (jspList.size() != 0){
+                data.put("jsp", jspList.get(0));
+            }
+        }else {
+            if (jspList.size()==1){
+                data.put("jsp", jspList.get(0));
+            }else {
+                data.put("mp4", jspList.get(1));
+                data.put("jsp", jspList.get(0));
+            }
+        }
+
+        Map<String, Object> pageThreeMap = aMarkSheetMapper.selectAPageThreeByPcId(Integer.parseInt((String) data.get("pc_id")));
+        data.putAll(pageThreeMap);
+        return data;
     }
 
     /**
-     * 修改练习、测试评分表
+     * 新增 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * 
-     * @param aMarkSheet 练习、测试评分表
+     * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * @return 结果
      */
-    @Transactional
+    @Override
+    public int insertAMarkSheet(AMarkSheet aMarkSheet)
+    {
+        return aMarkSheetMapper.insertAMarkSheet(aMarkSheet);
+    }
+
+    /**
+     * 修改 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
+     * 
+     * @param aMarkSheet  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
+     * @return 结果
+     */
     @Override
     public int updateAMarkSheet(AMarkSheet aMarkSheet)
     {
-        aMarkSheetMapper.deleteABallExamByMsId(aMarkSheet.getMsId());
-        insertABallExam(aMarkSheet);
         return aMarkSheetMapper.updateAMarkSheet(aMarkSheet);
     }
 
     /**
-     * 批量删除练习、测试评分表
+     * 批量删除 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      * 
-     * @param msIds 需要删除的练习、测试评分表主键
+     * @param msIds 需要删除的 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
      * @return 结果
      */
-    @Transactional
     @Override
     public int deleteAMarkSheetByMsIds(Long[] msIds)
     {
-        aMarkSheetMapper.deleteABallExamByMsIds(msIds);
         return aMarkSheetMapper.deleteAMarkSheetByMsIds(msIds);
     }
 
     /**
-     * 删除练习、测试评分表信息
+     * 删除 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算信息
      * 
-     * @param msId 练习、测试评分表主键
+     * @param msId  A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算主键
      * @return 结果
      */
-    @Transactional
     @Override
     public int deleteAMarkSheetByMsId(Long msId)
     {
-        aMarkSheetMapper.deleteABallExamByMsId(msId);
         return aMarkSheetMapper.deleteAMarkSheetByMsId(msId);
-    }
-
-    /**
-     * 新增投篮运球表信息
-     * 
-     * @param aMarkSheet 练习、测试评分表对象
-     */
-    public void insertABallExam(AMarkSheet aMarkSheet)
-    {
-        List<ABallExam> aBallExamList = aMarkSheet.getABallExamList();
-        Long msId = aMarkSheet.getMsId();
-        if (StringUtils.isNotNull(aBallExamList))
-        {
-            List<ABallExam> list = new ArrayList<ABallExam>();
-            for (ABallExam aBallExam : aBallExamList)
-            {
-                aBallExam.setMsId(msId);
-                list.add(aBallExam);
-            }
-            if (list.size() > 0)
-            {
-                aMarkSheetMapper.batchABallExam(list);
-            }
-        }
     }
 }
