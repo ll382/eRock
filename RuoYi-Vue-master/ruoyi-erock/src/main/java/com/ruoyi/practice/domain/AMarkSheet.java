@@ -2,6 +2,8 @@ package com.ruoyi.practice.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -69,6 +71,9 @@ public class AMarkSheet extends BaseEntity
     /** erock截图 */
     @Excel(name = "erock截图")
     private String msImg;
+
+    /** 练习资源表信息 */
+    private List<AExerciseResource> aExerciseResourceList;
 
     public void setMsId(Long msId) 
     {
@@ -188,6 +193,16 @@ public class AMarkSheet extends BaseEntity
         return msImg;
     }
 
+    public List<AExerciseResource> getAExerciseResourceList()
+    {
+        return aExerciseResourceList;
+    }
+
+    public void setAExerciseResourceList(List<AExerciseResource> aExerciseResourceList)
+    {
+        this.aExerciseResourceList = aExerciseResourceList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -204,6 +219,7 @@ public class AMarkSheet extends BaseEntity
             .append("ms3", getMs3())
             .append("msClass", getMsClass())
             .append("msImg", getMsImg())
+            .append("aExerciseResourceList",getAExerciseResourceList())
             .toString();
     }
 }
