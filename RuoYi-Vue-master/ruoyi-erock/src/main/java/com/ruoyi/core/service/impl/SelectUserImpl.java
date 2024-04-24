@@ -356,7 +356,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     public static Double standardDeviation(List<BigDecimal> msScore,int scale){
 //            开根号下的(Σ(Xi - Xba)²)/n-1
 
-//            精确位数,所有除数都得弄好小数处理,否则遇到无线循环小数会抛ArithmeticException错误
+//            精确位数,所有除数都得弄好小数处理,否则遇到无限循环小数会抛ArithmeticException错误
 
 //            数组个数
         int size = msScore.size();

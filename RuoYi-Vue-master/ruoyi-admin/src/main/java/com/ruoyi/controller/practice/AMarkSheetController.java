@@ -113,6 +113,8 @@ public class AMarkSheetController extends BaseController
         int i = aMarkSheetService.insertAMarkSheet(aMarkSheet);
         if (i < 0) {
             return warn("本次任务已提交，请不要重复提交内容");
+        }else if (i == 0) {
+            return warn("本学期已结束，请等下次开学后提交");
         }
         return success(i);
     }

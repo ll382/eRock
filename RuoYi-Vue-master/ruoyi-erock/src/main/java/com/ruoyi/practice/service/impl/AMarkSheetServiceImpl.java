@@ -210,6 +210,9 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
 //        进步分计算
         List<BigDecimal> progressists = this.tScore(aMarkSheet,semester);
+        if (StringUtils.isEmpty(progressists)) {
+            return 0;
+        }
 
 //        progressists.forEach(System.out::println);
 
@@ -397,7 +400,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 //            TODO：标准差的计算
 //            开根号下的(Σ(Xi - Xba)?)/n-1
             Double std = SelectUserImpl.standardDeviation(msScore,scale);
-            System.out.println(std);
+//            System.out.println(std);
 
 //            TODO: T分的计算
 //            期初T分
