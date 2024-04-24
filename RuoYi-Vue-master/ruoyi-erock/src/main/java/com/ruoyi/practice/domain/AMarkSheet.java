@@ -34,7 +34,7 @@ public class AMarkSheet extends BaseEntity
 
     /** 评分时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "评分时间", width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
+    @Excel(name = "评分时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date msTime;
 
     /** 运球分数 */
@@ -71,6 +71,13 @@ public class AMarkSheet extends BaseEntity
 
     /** 练习资源表信息 */
     private List<AExerciseResource> aExerciseResourceList;
+
+    public AMarkSheet() {
+    }
+
+    public AMarkSheet(Long stuId) {
+        this.stuId = stuId;
+    }
 
     public void setMsId(Long msId)
     {

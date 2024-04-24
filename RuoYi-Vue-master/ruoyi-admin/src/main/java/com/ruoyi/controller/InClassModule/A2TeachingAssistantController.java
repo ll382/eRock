@@ -102,9 +102,16 @@ public class A2TeachingAssistantController extends BaseController
 //            定义一个列表存储下面学生数据
             List<A2TeachingAssistant> list = new ArrayList<>();
             students.forEach(stu -> {
+//                将传入的所有数据放到此处
                 A2TeachingAssistant aMarkSheet1 = a2TeachingAssistant;
+//                修改一下本组内的学生id
                 aMarkSheet1.setStuId(stu.getStuId());
-                list.add(a2TeachingAssistantService.selectA2TeachingAssistantList(aMarkSheet1).get(0));
+//                查询数据库是否有内容
+                List<A2TeachingAssistant> assistants = a2TeachingAssistantService.selectA2TeachingAssistantList(aMarkSheet1);
+//                有内容则加入数据列表中
+                if (StringUtils.isNotEmpty(assistants)){
+                    list.add(assistants.get(0));
+                }
             });
 //            发送数据
             return success(selectUser.selectUndoneGroup(list,student.getGgId()));

@@ -92,10 +92,14 @@ public class A2StudentEvaluateController extends BaseController
                 list.add(list1.get(0));
             }
         });
+        A2StudentEvaluate evaluate = new A2StudentEvaluate(a2StudentEvaluate.getEsId());
 //        设置默认排除其本人
-        list.add(new A2StudentEvaluate(a2StudentEvaluate.getEsId()));
+        list.add((A2StudentEvaluate) selectUser.selectStudent(evaluate));
+        HashMap hashMap = selectUser.selectUndoneGroup(list, student.getGgId());
+        hashMap.put("group",selectUser.selectInGroupStudent(student).getGroup());
+
 //            发送数据
-        return success(selectUser.selectUndoneGroup(list,student.getGgId()));
+        return success(hashMap);
     }
 
     /**

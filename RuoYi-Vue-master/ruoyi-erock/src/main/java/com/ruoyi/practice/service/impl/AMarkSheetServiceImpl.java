@@ -1,10 +1,15 @@
 package com.ruoyi.practice.service.impl;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.match.domain.ClassRegister;
 import com.ruoyi.practice.domain.ABallExam;
+import com.ruoyi.practice.domain.AExerciseTask;
+import com.ruoyi.practice.mapper.AExerciseTaskMapper;
+import com.ruoyi.practice.mapper.AmodeClassRegisterMapper;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +33,13 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     private AMarkSheetMapper aMarkSheetMapper;
 
     @Autowired
+    private AExerciseTaskMapper aExerciseTaskMapper;
+
+    @Autowired
     private SelectUser selectUser;
+
+    @Autowired
+    private AmodeClassRegisterMapper amodeClassRegisterMapper;
 
     static List enumList = new ArrayList<>();
     static List main = new ArrayList();
@@ -145,11 +156,19 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
+        this.tScore(aMarkSheet);
+
 //        维护pc数据，将用户的值输入至ballExam表中
         ABallExam ballExam = new ABallExam();
 
         aMarkSheet.setMsTime(new Date());
 
+        AMarkSheet aMark = new AMarkSheet();
+        aMark.setStuId(aMarkSheet.getStuId());
+        aMark.setEtId(aMarkSheet.getEtId());
+        if (StringUtils.isNotEmpty(aMarkSheetMapper.selectAMarkSheetList(aMark))){
+            return -1;
+        }
 //        判断如果是运球则将内容换过
         if ("16".equals(aMarkSheetMapper.selectCriteria(aMarkSheet.getMsId()))){
             enumList = Arrays.asList("稳定性","力量","速度");
@@ -243,5 +262,51 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
                 aMarkSheetMapper.batchAExerciseResource(list);
             }
         }
+    }
+    public List<Double> tScore(AMarkSheet aMarkSheet){
+        List<Double> ld = new ArrayList<Double>();
+//        设置投篮运球循环，将两个不同的内容查找出来
+        for (Long i : new Long[]{15L, 16L}) {
+//            查找那节课的内容
+//            List<ClassRegister> classRegister = aMarkSheetMapper.selectClassRegisters(i, aMarkSheet.getStuId());
+
+            List<Long> msScore = aMarkSheetMapper.selectMinMsScore(i, aMarkSheet.getStuId());
+//            数组个数
+            int size = msScore.size();
+//            本学期第一个成绩
+            Long minMsScore = msScore.get(0);
+//            本学期最后一个成绩
+            Long maxMsScore = msScore.get(size - 1);
+//            TODO：标准差的计算
+//            开根号下的Σ(Xi - Xba)²/n-1
+
+//          算出平均值
+            double stuScore = 0;
+            for (Long score : msScore) {
+                stuScore += score;
+            }
+//            平均值得出
+            double average = stuScore / size;
+//            求和
+            double summation = 0;
+            for (Long score : msScore) {
+//                成绩的平方
+                summation += Math.pow((score - average),2);
+
+            }
+//            方差的得出
+            double variance = summation / (size - 1);
+//            标准差的得出
+            double std = Math.sqrt(variance);
+            msScore.forEach(System.out::println);
+            System.out.println("--------------------");
+            System.out.println(variance);
+            System.out.println("--------------------");
+            System.out.println(std);
+
+//            T分查找d1_conversion
+
+        }
+        return ld;
     }
 }

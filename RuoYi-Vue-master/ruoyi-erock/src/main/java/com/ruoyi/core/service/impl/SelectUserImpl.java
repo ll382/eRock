@@ -11,6 +11,7 @@ import com.ruoyi.core.service.IStudentService;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
+import com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -89,7 +90,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Override
     public A1Task calculateScore(A1Task a1Task){
-        //        计算每道题平均百分制占分
+//        计算每道题平均百分制占分
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(2);
         Double tNum = Double.parseDouble(nf.format(100.0 / a1Task.getTaskNum()));
@@ -124,7 +125,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Override
     public T selectInGroupStudent(T GroupStudent) {
         // 查询组内成员，并判断是否是组长
-        this.setGroup(GroupStudent);
+        GroupStudent.setGroup(selectUserMapper.selectGroupbyOne(GroupStudent.getGgId()));
 
         return GroupStudent;
     }

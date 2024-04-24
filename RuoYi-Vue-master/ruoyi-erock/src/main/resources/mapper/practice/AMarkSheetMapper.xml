@@ -51,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="msClass != null  and msClass != ''"> and ms_class = #{msClass}</if>
             <if test="msImg != null  and msImg != ''"> and ms_img = #{msImg}</if>
         </where>
+        order by ms_time asc
     </select>
 
     <select id="selectAMarkSheetByMsId" parameterType="Long" resultMap="AMarkSheetAExerciseResourceResult">

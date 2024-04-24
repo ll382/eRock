@@ -3,11 +3,14 @@ package com.ruoyi.practice.mapper;
 import java.util.List;
 
 import com.ruoyi.core.domain.Student;
+import com.ruoyi.match.domain.ClassRegister;
 import com.ruoyi.practice.domain.ABallExam;
+import com.ruoyi.practice.domain.AExerciseTask;
 import com.ruoyi.practice.domain.AMarkSheet;
 import com.ruoyi.practice.domain.AExerciseResource;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -33,6 +36,12 @@ public interface AMarkSheetMapper
      * @return 练习、测试评分表集合
      */
     public List<AMarkSheet> selectAMarkSheetList(AMarkSheet aMarkSheet);
+
+    @Select("SELECT ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} AND cr.semester_id=#{} ORDER BY ms.ms_time ASC;")
+    public List<Long> selectMinMsScore(@Param("enumId") Long enumId,@Param("stuId") Long stuId);
+
+    @Select("SELECT ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} ORDER BY ms.ms_time ASC;")
+    public List<ClassRegister> selectClassRegisters(@Param("enumId") Long enumId, @Param("stuId") Long stuId);
 
     /**
      * 查询未提交名单

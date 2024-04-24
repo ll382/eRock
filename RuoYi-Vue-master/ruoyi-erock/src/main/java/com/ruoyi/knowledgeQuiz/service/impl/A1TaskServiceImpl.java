@@ -62,6 +62,10 @@ public class A1TaskServiceImpl implements IA1TaskService
         List<Long> stulist = a1TaskMapper.selectStuListById(stuId);
         List<A1Task> unDone = a1TaskMapper.selectUndoneA1TaskListByStuId(stuId);
         List<A1Task> done = a1TaskMapper.selectDoneA1TaskListByStuId(stulist);
+        done.forEach(doe -> {
+            A1Task a1Task = selectUser.calculateScore(a1TaskMapper.selectTaskByStuId(doe.getTaskId(), stuId));
+            doe.setAnswerList(a1Task.getAnswerList());
+        });
         HashMap<String, Object> stuTask = new HashMap<>();
         stuTask.put("done",done);
         stuTask.put("unDone",unDone);

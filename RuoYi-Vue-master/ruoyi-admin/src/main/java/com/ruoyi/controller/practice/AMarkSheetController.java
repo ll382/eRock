@@ -57,7 +57,6 @@ public class AMarkSheetController extends BaseController
         return getDataTable(list);
     }
 
-
     /**
      * 导出练习、测试评分表列表
      */
@@ -103,7 +102,11 @@ public class AMarkSheetController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody AMarkSheet aMarkSheet)
     {
-        return success(aMarkSheetService.insertAMarkSheet(aMarkSheet));
+        int i = aMarkSheetService.insertAMarkSheet(aMarkSheet);
+        if (i < 0) {
+            return warn("本次任务已提交，请不要重复提交内容");
+        }
+        return success(i);
     }
 
     /**
