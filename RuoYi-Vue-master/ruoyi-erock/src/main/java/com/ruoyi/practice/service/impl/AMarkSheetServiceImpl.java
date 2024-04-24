@@ -350,6 +350,10 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
             }
         }
     }
+    /*
+    * @Param aMarkSheet 成绩对象
+    * @Param semester   学期对象
+    * */
     public List<BigDecimal> tScore(AMarkSheet aMarkSheet, Semester semester){
         List<BigDecimal> ld = new ArrayList<BigDecimal>();
 //        设置投篮运球循环，将两个不同的内容查找出来

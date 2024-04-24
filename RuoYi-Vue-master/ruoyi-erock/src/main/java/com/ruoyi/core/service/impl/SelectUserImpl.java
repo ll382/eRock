@@ -313,6 +313,9 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
 
 //         通过学期和学号返回总分表数据 如果   有则返回id  没有创建并返回id
+    /*
+    * @Param totalScore 总成绩列表
+    * */
     public Long judgeInformation(TotalScore totalScore){
 //        查找总成绩列表
         List<TotalScore> totalScores = totalScoreMapper.selectTotalScoreList(totalScore);
@@ -330,6 +333,9 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     }
 
 //         通过学期和学号返回模块表数据 如果   有则返回id  没有创建并返回id
+    /*
+     * @Param moduleScore 模块成绩列表
+     * */
     public ModuleScore judgeModuleScore(ModuleScore moduleScore){
 //        查找总成绩列表
         List<ModuleScore> moduleScores = moduleScoreMapper.selectModuleScoreList(moduleScore);
