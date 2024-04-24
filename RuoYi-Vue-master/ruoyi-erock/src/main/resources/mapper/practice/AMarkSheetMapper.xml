@@ -61,6 +61,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join a_exercise_resource b on b.ms_id = a.ms_id
         where a.ms_id = #{msId}
     </select>
+    <select id="selectEveroneMsScore" resultType="double">
+        SELECT
+        SUM(ms.ms_score)/COUNT(*)
+        FROM class_register as cr
+        JOIN a_exercise_task as et on cr.cr_id=et.cr_id
+        JOIN a_mark_sheet as ms on et.et_id=ms.et_id
+        WHERE et.enum_id=2
+        <if test="enumId != null">
+            AND cr.enum_id=#{enumId}
+        </if>
+        <if test="semesterId != null">
+            AND cr.semester_id=#{semesterId}
+        </if>
+        <if test="classId != null">
+            AND cr.class_id = #{classId}
+        </if>
+        <if test="msTime != null">
+            AND ms.ms_time &lt; #{msTime}
+        </if>
+    </select>
 
     <insert id="insertAMarkSheet" parameterType="AMarkSheet" useGeneratedKeys="true" keyProperty="msId">
         insert into a_mark_sheet

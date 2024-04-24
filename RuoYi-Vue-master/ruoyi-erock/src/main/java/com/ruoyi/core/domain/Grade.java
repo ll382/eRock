@@ -25,7 +25,6 @@ public class Grade extends BaseEntity
 
     /** 学生信息 */
     private List<Student> studentList;
-
     public void setClassId(Long classId)
     {
         this.classId = classId;

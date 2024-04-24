@@ -40,9 +40,6 @@ public interface ClassRegisterMapper
      */
     public int insertClassRegister(ClassRegister classRegister);
 
-    @Select("SELECT semester_id as semesterId, start_date as startDate , finish_date as finishDate FROM semester where #{date} BETWEEN start_date AND finish_date")
-    public Semester selectDate(Date date);
-
     /**
      * 修改课堂记录
      *

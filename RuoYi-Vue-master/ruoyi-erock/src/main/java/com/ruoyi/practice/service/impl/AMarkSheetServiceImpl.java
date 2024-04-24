@@ -1,10 +1,16 @@
 package com.ruoyi.practice.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
+import com.ruoyi.core.domain.Grade;
+import com.ruoyi.core.domain.Semester;
 import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.mapper.GradeMapper;
+import com.ruoyi.core.mapper.StudentMapper;
 import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.core.service.impl.SelectUserImpl;
 import com.ruoyi.match.domain.ClassRegister;
 import com.ruoyi.practice.domain.ABallExam;
 import com.ruoyi.practice.domain.AExerciseTask;
@@ -40,6 +46,9 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
     @Autowired
     private AmodeClassRegisterMapper amodeClassRegisterMapper;
+
+    @Autowired
+    private StudentMapper studentMapper;
 
     static List enumList = new ArrayList<>();
     static List main = new ArrayList();
@@ -156,7 +165,9 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
-//        this.tScore(aMarkSheet);
+//        进步分计算
+        List<Double> progressists = this.tScore(aMarkSheet);
+        progressists.forEach(System.out::println);
 
 //        维护pc数据，将用户的值输入至ballExam表中
         ABallExam ballExam = new ABallExam();
@@ -268,44 +279,72 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 //        设置投篮运球循环，将两个不同的内容查找出来
         for (Long i : new Long[]{15L, 16L}) {
 //            查找那节课的内容
-//            List<ClassRegister> classRegister = aMarkSheetMapper.selectClassRegisters(i, aMarkSheet.getStuId());
 
-            List<Long> msScore = aMarkSheetMapper.selectMinMsScore(i, aMarkSheet.getStuId());
-//            数组个数
-            int size = msScore.size();
+//            查找学期
+            Semester semester = selectUser.selectDate(new Date());
+//            如果找不到学期返回空
+            if (StringUtils.isEmpty(new Semester[]{semester})){
+                return null;
+            }
+//             查到本学期所有的内容
+            List<AMarkSheet> taskSheet = aMarkSheetMapper.selectClassRegisters(i, aMarkSheet.getStuId(),semester.getSemesterId());
+            System.out.println("---------------------");
+            taskSheet.forEach(System.out::println);
+            System.out.println("---------------------");
+//            通过学生id查找班级
+            List<Student> students = studentMapper.selectStudentList(new Student(aMarkSheet.getStuId()));
+//            获取班级学生内容
+            Student student = students.get(0);
+//            本学期第一组成绩
+            AMarkSheet markShe = taskSheet.get(0);
+//            查找期初全部人的成绩取其平均值
+            Double beginSocre = aMarkSheetMapper.selectEveroneMsScore(i, semester.getSemesterId(), student.getClassId(), markShe.getMsTime());
+//            查找期末全部人的成绩取其平均值
+            Double endSocre = aMarkSheetMapper.selectEveroneMsScore(i, semester.getSemesterId(), student.getClassId(), null);
+            System.out.println("期初平均成绩");
+            System.out.println(beginSocre);
+            System.out.println("期末平均成绩");
+            System.out.println(endSocre);
+//            创造成绩数组
+            List<BigDecimal> msScore = new ArrayList<>();
+            for (AMarkSheet markSheet : taskSheet) {
+                msScore.add(markSheet.getMsScore());
+            }
+//          小数后两位
+            int scale = 2;
+
 //            本学期第一个成绩
-            Long minMsScore = msScore.get(0);
+            BigDecimal minMsScore = msScore.get(0);
 //            本学期最后一个成绩
-            Long maxMsScore = msScore.get(size - 1);
+            BigDecimal maxMsScore = msScore.get(msScore.size() - 1);
 //            TODO：标准差的计算
-//            开根号下的Σ(Xi - Xba)²/n-1
-
-//          算出平均值
-            double stuScore = 0;
-            for (Long score : msScore) {
-                stuScore += score;
-            }
-//            平均值得出
-            double average = stuScore / size;
-//            求和
-            double summation = 0;
-            for (Long score : msScore) {
-//                成绩的平方
-                summation += Math.pow((score - average),2);
-
-            }
-//            方差的得出
-            double variance = summation / (size - 1);
-//            标准差的得出
-            double std = Math.sqrt(variance);
-            msScore.forEach(System.out::println);
-            System.out.println("--------------------");
-            System.out.println(variance);
-            System.out.println("--------------------");
+//            开根号下的(Σ(Xi - Xba)²)/n-1
+            Double std = SelectUserImpl.standardDeviation(msScore,scale);
             System.out.println(std);
 
-//            T分查找d1_conversion
-
+//            TODO: T分的计算
+//            期初T分
+            BigDecimal tBeginningScore = minMsScore.subtract(BigDecimal.valueOf(beginSocre)).divide(BigDecimal.valueOf(std),scale,RoundingMode.HALF_UP);
+            System.out.println(tBeginningScore);
+//            期末T分
+            BigDecimal tEndScore = maxMsScore.subtract(BigDecimal.valueOf(endSocre)).divide(BigDecimal.valueOf(std),scale,RoundingMode.HALF_UP);
+            System.out.println(tEndScore);
+//            T分查找d1_conversion进步分
+            Double tBProgressist =0D;
+            Double tEProgressist =0D;
+            BigDecimal integration = BigDecimal.valueOf(20);
+            if(tBeginningScore.compareTo(integration) == 1){
+                tBProgressist = aMarkSheetMapper.selectTScore(tBeginningScore,tBeginningScore.add(BigDecimal.ONE));
+                System.out.println(tBProgressist);
+            }
+            if(tBeginningScore.compareTo(integration) == 1) {
+                tEProgressist = aMarkSheetMapper.selectTScore(tEndScore,tEndScore.add(BigDecimal.ONE));
+                System.out.println(tEProgressist);
+            }
+//            学期前减学期后获得真进步分
+            Double tureProgressist = tEProgressist - tBProgressist;
+            ld.add(tureProgressist);
+            System.out.println(tureProgressist);
         }
         return ld;
     }

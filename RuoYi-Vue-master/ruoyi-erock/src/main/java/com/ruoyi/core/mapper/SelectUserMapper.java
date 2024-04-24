@@ -4,9 +4,11 @@ import com.ruoyi.afterClassModel.domain.A3PhysicalTraining;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SelectUserVo;
 import com.ruoyi.common.core.domain.entity.Group;
+import com.ruoyi.core.domain.Semester;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -30,6 +32,10 @@ public interface SelectUserMapper {
     SelectUserVo selectStudentbyOne(Long stuId);
     @Select("Select t.tea_id as id , e.avatar as img,t.tea_name as name from teacher t left JOIN sys_user e ON e.user_id = t.user_id where t.tea_id = #{teaId}")
     SelectUserVo selectTeacherbyOne(Long teaId);
+
+//    查询学期
+    @Select("SELECT semester_id as semesterId, start_date as startDate , finish_date as finishDate FROM semester where #{date} BETWEEN start_date AND finish_date")
+    public Semester selectDate(Date date);
 
 //    废弃
     List<BaseEntity> selectTeachers(List<Long> teaId);

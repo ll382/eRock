@@ -105,7 +105,7 @@ public class ClassRegisterServiceImpl implements IClassRegisterService {
 //		设置当前实践
 		classRegister.setCrDate(new Date());
 //		用当前时间动态查找学期
-		classRegister.setSemesterId(classRegisterMapper.selectDate(classRegister.getCrDate()).getSemesterId());
+		classRegister.setSemesterId(selectUser.selectDate(classRegister.getCrDate()).getSemesterId());
 //		设置班级id为8的外键
 		classRegister.setClassId(8L);
 //		设置当前课程为40分钟

@@ -1,5 +1,7 @@
 package com.ruoyi.practice.mapper;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.core.domain.Student;
@@ -34,12 +36,12 @@ public interface AMarkSheetMapper
      */
     public List<AMarkSheet> selectAMarkSheetList(AMarkSheet aMarkSheet);
 
-    @Select("SELECT ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} AND cr.semester_id=#{3} ORDER BY ms.ms_time ASC;")
-    public List<Long> selectMinMsScore(@Param("enumId") Long enumId,@Param("stuId") Long stuId);
+    public Double selectEveroneMsScore(@Param("enumId") Long enumId, @Param("semesterId") Long semesterId, @Param("classId") Long classId, @Param("msTime") Date msTime);
+    @Select("SELECT ms.ms_id as msId, ms.ms_time as msTime, ms.et_id as etId , ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} AND cr.semester_id=#{semesterId} ORDER BY ms.ms_time ASC;")
+    public List<AMarkSheet> selectClassRegisters(@Param("enumId") Long enumId, @Param("stuId") Long stuId,@Param("semesterId") Long semesterId);
 
-//    @Select("SELECT ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} ORDER BY ms.ms_time ASC;")
-//    public List<ClassRegister> selectClassRegisters(@Param("enumId") Long enumId, @Param("stuId") Long stuId);
-
+    @Select("SELECT * FROM d1_conversion WHERE con_t_score between #{Tnum1} and #{Tnum2}")
+    public Double selectTScore(@Param("Tnum1") BigDecimal Tnum1,@Param("Tnum2") BigDecimal Tnum2);
     /**
      * 查询未提交名单
      *
