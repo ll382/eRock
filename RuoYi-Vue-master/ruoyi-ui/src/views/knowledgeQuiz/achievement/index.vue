@@ -1,6 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="知识测试任务" prop="taskId">
+        <el-input
+          v-model="queryParams.taskId"
+          placeholder="请输入知识测试任务"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="学生学号" prop="stuId">
         <el-input
           v-model="queryParams.stuId"
@@ -88,9 +96,10 @@
     <el-table v-loading="loading" :data="achievementList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="答题ID" align="center" prop="ansId" />
-      <el-table-column label="学生学号" align="center" prop="stuId"/>
-      <el-table-column label="回答次数" align="center" prop="ansResponse"/>
-      <el-table-column label="正确次数" align="center" prop="ansApos"/>
+      <el-table-column label="知识测试任务" align="center" prop="taskId" />
+      <el-table-column label="学生学号" align="center" prop="stuId" />
+      <el-table-column label="回答次数" align="center" prop="ansResponse" />
+      <el-table-column label="正确次数" align="center" prop="ansApos" />
       <el-table-column label="时间" align="center" prop="ansTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.ansTime, '{y}-{m}-{d}') }}</span>
@@ -115,7 +124,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -127,6 +136,9 @@
     <!-- 添加或修改A1 知识测试 学生成绩对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="知识测试任务" prop="taskId">
+          <el-input v-model="form.taskId" placeholder="请输入知识测试任务" />
+        </el-form-item>
         <el-form-item label="学生学号" prop="stuId">
           <el-input v-model="form.stuId" placeholder="请输入学生学号" />
         </el-form-item>
@@ -144,6 +156,29 @@
             placeholder="请选择时间">
           </el-date-picker>
         </el-form-item>
+        <el-divider content-position="center">A1 知识测试 答题信息</el-divider>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddA1Answered">添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteA1Answered">删除</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="a1AnsweredList" :row-class-name="rowA1AnsweredIndex" @selection-change="handleA1AnsweredSelectionChange" ref="a1Answered">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="题目编号" prop="qqId" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.qqId" placeholder="请输入题目编号" />
+            </template>
+          </el-table-column>
+          <el-table-column label="学生答案" prop="ansedCon" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.ansedCon" placeholder="请输入学生答案" />
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -164,6 +199,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 子表选中数据
+      checkedA1Answered: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -174,6 +211,8 @@ export default {
       total: 0,
       // A1 知识测试 学生成绩表格数据
       achievementList: [],
+      // A1 知识测试 答题表格数据
+      a1AnsweredList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -182,6 +221,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        taskId: null,
         stuId: null,
         ansResponse: null,
         ansApos: null,
@@ -191,6 +231,21 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        taskId: [
+          { required: true, message: "知识测试任务不能为空", trigger: "blur" }
+        ],
+        stuId: [
+          { required: true, message: "学生学号不能为空", trigger: "blur" }
+        ],
+        ansResponse: [
+          { required: true, message: "回答次数不能为空", trigger: "blur" }
+        ],
+        ansApos: [
+          { required: true, message: "正确次数不能为空", trigger: "blur" }
+        ],
+        ansTime: [
+          { required: true, message: "时间不能为空", trigger: "blur" }
+        ]
       }
     };
   },
@@ -216,11 +271,13 @@ export default {
     reset() {
       this.form = {
         ansId: null,
+        taskId: null,
         stuId: null,
         ansResponse: null,
         ansApos: null,
         ansTime: null
       };
+      this.a1AnsweredList = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -251,6 +308,7 @@ export default {
       const ansId = row.ansId || this.ids
       getAchievement(ansId).then(response => {
         this.form = response.data;
+        this.a1AnsweredList = response.data.a1AnsweredList;
         this.open = true;
         this.title = "修改A1 知识测试 学生成绩";
       });
@@ -259,6 +317,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.a1AnsweredList = this.a1AnsweredList;
           if (this.form.ansId != null) {
             updateAchievement(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -284,6 +343,33 @@ export default {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
+    },
+	/** A1 知识测试 答题序号 */
+    rowA1AnsweredIndex({ row, rowIndex }) {
+      row.index = rowIndex + 1;
+    },
+    /** A1 知识测试 答题添加按钮操作 */
+    handleAddA1Answered() {
+      let obj = {};
+      obj.qqId = "";
+      obj.ansedCon = "";
+      this.a1AnsweredList.push(obj);
+    },
+    /** A1 知识测试 答题删除按钮操作 */
+    handleDeleteA1Answered() {
+      if (this.checkedA1Answered.length == 0) {
+        this.$modal.msgError("请先选择要删除的A1 知识测试 答题数据");
+      } else {
+        const a1AnsweredList = this.a1AnsweredList;
+        const checkedA1Answered = this.checkedA1Answered;
+        this.a1AnsweredList = a1AnsweredList.filter(function(item) {
+          return checkedA1Answered.indexOf(item.index) == -1
+        });
+      }
+    },
+    /** 复选框选中数据 */
+    handleA1AnsweredSelectionChange(selection) {
+      this.checkedA1Answered = selection.map(item => item.index)
     },
     /** 导出按钮操作 */
     handleExport() {
