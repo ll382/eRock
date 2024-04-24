@@ -8,10 +8,7 @@ import com.ruoyi.practice.domain.ABallExam;
 import com.ruoyi.practice.domain.AExerciseTask;
 import com.ruoyi.practice.domain.AMarkSheet;
 import com.ruoyi.practice.domain.AExerciseResource;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * 练习、测试评分表Mapper接口
@@ -37,16 +34,16 @@ public interface AMarkSheetMapper
      */
     public List<AMarkSheet> selectAMarkSheetList(AMarkSheet aMarkSheet);
 
-    @Select("SELECT ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} AND cr.semester_id=#{} ORDER BY ms.ms_time ASC;")
+    @Select("SELECT ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} AND cr.semester_id=#{3} ORDER BY ms.ms_time ASC;")
     public List<Long> selectMinMsScore(@Param("enumId") Long enumId,@Param("stuId") Long stuId);
 
-    @Select("SELECT ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} ORDER BY ms.ms_time ASC;")
-    public List<ClassRegister> selectClassRegisters(@Param("enumId") Long enumId, @Param("stuId") Long stuId);
+//    @Select("SELECT ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} ORDER BY ms.ms_time ASC;")
+//    public List<ClassRegister> selectClassRegisters(@Param("enumId") Long enumId, @Param("stuId") Long stuId);
 
     /**
      * 查询未提交名单
      *
-     * @param aMarkSheet 练习、测试评分表
+     * @param etId 练习、测试评分表
      * @return 练习、测试评分表集合
      */
     @Select("Select s.stu_id as stuId, e.avatar as stuImg,s.stu_name as stuName from student s left JOIN sys_user e ON e.user_id = s.user_id where s.stu_id NOT IN (SELECT stu_id FROM a_mark_sheet WHERE et_id = #{etId})")

@@ -156,7 +156,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
-        this.tScore(aMarkSheet);
+//        this.tScore(aMarkSheet);
 
 //        维护pc数据，将用户的值输入至ballExam表中
         ABallExam ballExam = new ABallExam();
