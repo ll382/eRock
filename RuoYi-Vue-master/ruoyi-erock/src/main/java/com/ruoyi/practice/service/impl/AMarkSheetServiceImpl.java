@@ -391,7 +391,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
         for (Long i : new Long[]{15L, 16L}) {
 
 //            如果找不到学期返回空
-            if (StringUtils.isEmpty(new Semester[]{semester})){
+            if (StringUtils.isNull(semester)){
                 return null;
             }
 //             查到本学期所有的内容
