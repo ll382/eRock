@@ -3,10 +3,12 @@ package com.ruoyi.core.service;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
+import com.ruoyi.score.domain.DModelScore;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
 import org.apache.ibatis.annotations.Select;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +33,10 @@ public interface SelectUser<T extends BaseEntity>  {
     public Long selectTeacherTeaId(Long userId);
 
     public Semester selectDate(Date date);
-
+//      插入D模块内容
+    public Long judgeDModel(DModelScore dModelScore);
+//      D模块分数计算
+    public BigDecimal countDModel(Long modscId);
     public Long judgeInformation(TotalScore totalScore);
 
     public ModuleScore judgeModuleScore(ModuleScore moduleScore);

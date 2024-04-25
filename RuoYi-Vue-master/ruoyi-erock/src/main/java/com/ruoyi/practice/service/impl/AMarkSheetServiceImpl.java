@@ -12,6 +12,7 @@ import com.ruoyi.practice.domain.AMarkSheet;
 import com.ruoyi.practice.mapper.ABallExamMapper;
 import com.ruoyi.practice.mapper.AMarkSheetMapper;
 import com.ruoyi.practice.service.IAMarkSheetService;
+import com.ruoyi.score.domain.DModelScore;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -193,9 +195,10 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
         return data;
     }
 
+//      TODO：进步分计算插入 以及 技能测试插入
     /**
      * 新增练习、测试评分表
-     *
+     * 如果上传技能测试则触发一次D1模块总分计算；通过一系列公式进行计算
      * @param aMarkSheet 练习、测试评分表
      * @return 结果
      */
@@ -203,8 +206,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
-//      TODO：如果上传技能测试则触发一次D1模块总分计算；通过一系列公式进行计算
-
+//        TODO：学生数据处理
 //        查找学期
         Semester semester = selectUser.selectDate(new Date());
 
@@ -213,31 +215,57 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
         if (StringUtils.isEmpty(progressists)) {
             return 0;
         }
-
-//        progressists.forEach(System.out::println);
+        System.out.println("进步分");
+        progressists.forEach(System.out::println);
+        System.out.println("-----进步分-----");
 
 //        算投篮分（15枚举）
-        BigDecimal basketScore = progressists.get(0).multiply(BigDecimal.valueOf(0.5));
+        BigDecimal basketScore = progressists.get(0).multiply(BigDecimal.valueOf(0.5)).setScale(2, RoundingMode.DOWN);
 //        算运球分（16枚举）
-        BigDecimal dribbleScore = progressists.get(0).multiply(BigDecimal.valueOf(0.5));
+        BigDecimal dribbleScore = progressists.get(1).multiply(BigDecimal.valueOf(0.5)).setScale(2, RoundingMode.DOWN);
+
+//        ————————————————————————END————————————————————————
+
+//        TODO：查找总成绩表
 //        查找学期和学号
         TotalScore totalScore = new TotalScore();
         totalScore.setSemesterId(semester.getSemesterId());
         totalScore.setStuId(aMarkSheet.getStuId());
 //         判断当前学期和学号是否有数据如果   有则返回id  没有创建并返回id
         Long tsId = selectUser.judgeInformation(totalScore);
+
+//        ————————————————————————END————————————————————————
+
+//        TODO：插入成绩
+        DModelScore dModelScore = new DModelScore();
+//        选择总成绩id
+        dModelScore.setTsId(tsId);
+//        运球进步分
+        dModelScore.setModscDribble(dribbleScore);
+//        投篮进步分
+        dModelScore.setModscShoot(basketScore);
+//        插入总成绩
+        Long dModelId = selectUser.judgeDModel(dModelScore);
+//        获取总成绩的和
+        BigDecimal modValue = selectUser.countDModel(dModelId);
+        System.out.println(modValue);
+
+//        ————————————————————————END————————————————————————
+
+//        TODO：插入成绩
 //        查询当前任务是否有子成绩
         ModuleScore moduleScore = new ModuleScore();
 //        设置总分ID
         moduleScore.setTsId(tsId);
 //        D模块（8A，9B，10C，11D）
         moduleScore.setEnumId(11L);
-        moduleScore.setAvsScore(basketScore.add(dribbleScore));
-//        调用查找方法
+//        将总成绩插入
+        moduleScore.setAvsScore(modValue);
+//        调用插入方法
         ModuleScore score = selectUser.judgeModuleScore(moduleScore);
 //        D1模块结束
-//        System.out.println("D模块分数：");
-//        System.out.println(score);
+        System.out.println("D模块分数：");
+        System.out.println(score);
 
 //        ————————————————————————END————————————————————————
 
@@ -368,9 +396,11 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
             }
 //             查到本学期所有的内容
             List<AMarkSheet> taskSheet = aMarkSheetMapper.selectClassRegisters(i, aMarkSheet.getStuId(),semester.getSemesterId());
-//            System.out.println("---------------------");
-//            taskSheet.forEach(System.out::println);
-//            System.out.println("---------------------");
+
+            System.out.println("----------查到本学期所有的内容-----------");
+            taskSheet.forEach(System.out::println);
+            System.out.println("----------查到本学期所有的内容-----------");
+
 //            通过学生id查找班级
             List<Student> students = studentMapper.selectStudentList(new Student(aMarkSheet.getStuId()));
 //            获取班级学生内容
@@ -381,17 +411,23 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
             Double beginSocre = aMarkSheetMapper.selectEveroneMsScore(i, semester.getSemesterId(), student.getClassId(), markShe.getMsTime());
 //            查找期末全部人的成绩取其平均值
             Double endSocre = aMarkSheetMapper.selectEveroneMsScore(i, semester.getSemesterId(), student.getClassId(), null);
-//            System.out.println("期初平均成绩");
-//            System.out.println(beginSocre);
-//            System.out.println("期末平均成绩");
-//            System.out.println(endSocre);
+
+            System.out.println("期初平均成绩");
+            System.out.println(beginSocre);
+            System.out.println("期末平均成绩");
+            System.out.println(endSocre);
+
 //            创造成绩数组
             List<BigDecimal> msScore = new ArrayList<>();
             for (AMarkSheet markSheet : taskSheet) {
                 msScore.add(markSheet.getMsScore());
             }
-//          小数后两位
-            int scale = 2;
+
+            System.out.println("成绩数组");
+            msScore.forEach(System.out::println);
+
+//          小数后15位
+            int scale = 16;
 
 //            本学期第一个成绩
             BigDecimal minMsScore = msScore.get(0);
@@ -400,31 +436,64 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 //            TODO：标准差的计算
 //            开根号下的(Σ(Xi - Xba)?)/n-1
             Double std = SelectUserImpl.standardDeviation(msScore,scale);
-//            System.out.println(std);
+
+            System.out.println("标准差的计算");
+            System.out.println(std);
 
 //            TODO: T分的计算
 //            期初T分
             BigDecimal tBeginningScore = minMsScore.subtract(BigDecimal.valueOf(beginSocre)).divide(BigDecimal.valueOf(std),scale,RoundingMode.HALF_UP);
-//            System.out.println(tBeginningScore);
+
+            System.out.println("期初个人成绩："+minMsScore);
+            System.out.println("期初班级平均成绩："+beginSocre);
+
+//            根据50+10*f(x)公式得出
+            tBeginningScore = tBeginningScore.multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(50));
+            System.out.println("期初T分计算");
+
+            System.out.println(tBeginningScore);
+
 //            期末T分
             BigDecimal tEndScore = maxMsScore.subtract(BigDecimal.valueOf(endSocre)).divide(BigDecimal.valueOf(std),scale,RoundingMode.HALF_UP);
-//            System.out.println(tEndScore);
+
+//            根据50+10*f(x)公式得出
+            tEndScore = tEndScore.multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(50));
+            System.out.println("期末T分计算");
+            System.out.println(tEndScore);
+
 //            T分查找d1_conversion进步分
             Double tBProgressist =0D;
             Double tEProgressist =0D;
             BigDecimal integration = BigDecimal.valueOf(20);
             if(tBeginningScore.compareTo(integration) == 1){
                 tBProgressist = aMarkSheetMapper.selectTScore(tBeginningScore,tBeginningScore.add(BigDecimal.ONE));
-//                System.out.println(tBProgressist);
+//                为负数的直接赋值为零
+                if (tBProgressist < 0) {
+                    tBProgressist = 0D;
+                }
+
+                System.out.println("T分查找期初进步分");
+                System.out.println(tBProgressist);
+
             }
             if(tBeginningScore.compareTo(integration) == 1) {
                 tEProgressist = aMarkSheetMapper.selectTScore(tEndScore,tEndScore.add(BigDecimal.ONE));
-//                System.out.println(tEProgressist);
+//                为负数的直接赋值为零
+                if (tEProgressist < 0) {
+                    tEProgressist = 0D;
+                }
+
+                System.out.println("T分查找期末进步分");
+                System.out.println(tEProgressist);
+
             }
 //            学期前减学期后获得真进步分
             Double tureProgressist = tEProgressist - tBProgressist;
             ld.add(BigDecimal.valueOf(tureProgressist));
-//            System.out.println(tureProgressist);
+
+            System.out.println("学期前减学期后获得真进步分");
+            System.out.println(tureProgressist);
+
         }
         return ld;
     }

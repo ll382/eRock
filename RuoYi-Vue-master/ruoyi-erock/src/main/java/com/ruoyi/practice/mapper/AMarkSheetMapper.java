@@ -42,7 +42,7 @@ public interface AMarkSheetMapper
     @Select("SELECT ms.ms_id as msId, ms.ms_time as msTime, ms.et_id as etId , ms.ms_score as msScore FROM class_register as cr JOIN a_exercise_task as et on cr.cr_id=et.cr_id JOIN a_mark_sheet as ms on et.et_id=ms.et_id WHERE cr.enum_id=#{enumId} AND et.enum_id=2 AND ms.stu_id = #{stuId} AND cr.semester_id=#{semesterId} ORDER BY ms.ms_time ASC;")
     public List<AMarkSheet> selectClassRegisters(@Param("enumId") Long enumId, @Param("stuId") Long stuId,@Param("semesterId") Long semesterId);
 
-    @Select("SELECT * FROM d1_conversion WHERE con_t_score between #{Tnum1} and #{Tnum2}")
+    @Select("SELECT con_pro_score FROM d1_conversion WHERE con_t_score between #{Tnum1} and #{Tnum2}")
     public Double selectTScore(@Param("Tnum1") BigDecimal Tnum1,@Param("Tnum2") BigDecimal Tnum2);
     /**
      * 查询未提交名单

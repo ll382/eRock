@@ -14,8 +14,10 @@ import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
 import com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper;
+import com.ruoyi.score.domain.DModelScore;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
+import com.ruoyi.score.mapper.DModelScoreMapper;
 import com.ruoyi.score.mapper.ModuleScoreMapper;
 import com.ruoyi.score.mapper.TotalScoreMapper;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -52,6 +54,9 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Autowired
     private ModuleScoreMapper moduleScoreMapper;
+
+    @Autowired
+    private DModelScoreMapper dModelScoreMapper;
 
     @Autowired
     SelectUser selectUser;
@@ -311,8 +316,37 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         GroupStudent.getGroup().setStudentList(list);
     }
 
+    @Override
+    public Long judgeDModel(DModelScore dModelScore){
+//        查询D模块成绩是否有数据
+        List<DModelScore> dModelScores = dModelScoreMapper.selectDModelScoreList(new DModelScore(dModelScore.getTsId()));
+        if(StringUtils.isEmpty(dModelScores)){
+//            没有新建一个
+            dModelScoreMapper.insertDModelScore(dModelScore);
+            return dModelScore.getModscId();
+        }
+//        有直接更改
+        dModelScore.setModscId(dModelScores.get(0).getModscId());
+        dModelScoreMapper.updateDModelScore(dModelScore);
+        return dModelScores.get(0).getModscId();
+    }
 
-//         通过学期和学号返回总分表数据 如果   有则返回id  没有创建并返回id
+    @Override
+    public BigDecimal countDModel(Long modscId) {
+        DModelScore countScore = dModelScoreMapper.selectDModelScoreByModscId(modscId);
+        if (StringUtils.isNotNull(countScore)) {
+//            进步分
+            BigDecimal progressist = countScore.getModscShoot().add(countScore.getModscDribble());
+//            附加分
+            BigDecimal extraPoint = countScore.getModscAdditional();
+            System.out.println("进步分：" + progressist);
+            System.out.println("附加分：" + extraPoint);
+            return progressist.add(extraPoint);
+        }
+        return null;
+    }
+
+    //         通过学期和学号返回总分表数据 如果   有则返回id  没有创建并返回id
     /*
     * @Param totalScore 总成绩列表
     * */
