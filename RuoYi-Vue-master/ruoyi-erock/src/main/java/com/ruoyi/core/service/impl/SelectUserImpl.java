@@ -338,8 +338,11 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
      * */
     public ModuleScore judgeModuleScore(ModuleScore moduleScore){
 //        查找总成绩列表
+        BigDecimal avsScore = moduleScore.getAvsScore();
+//        确保成绩不参与查询
+        moduleScore.setAvsScore(null);
         List<ModuleScore> moduleScores = moduleScoreMapper.selectModuleScoreList(moduleScore);
-
+        moduleScore.setAvsScore(avsScore);
         if (StringUtils.isNotEmpty(moduleScores)) {
 //            修改查到目标Id内容
             moduleScore.setModId(moduleScores.get(0).getModId());
