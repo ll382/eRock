@@ -3,7 +3,9 @@ package com.ruoyi.score.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.score.domain.TotalScore;
+import org.apache.poi.ss.formula.functions.T;
 
 /**
  * 总分Service接口
@@ -63,5 +65,5 @@ public interface ITotalScoreService {
 	/**
 	 * 总分相加
 	 */
-	public int addingTotalScore(Long tsId ,BigDecimal score);
+	public int addingTotalScore(TotalScore totalScore);
 }

@@ -1,13 +1,13 @@
 package com.ruoyi.dModularity.service.impl;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.util.DateUtil;
+import com.ruoyi.dModularity.domain.D2Certificate;
 import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
+import com.ruoyi.dModularity.domain.D2Resource;
+import com.ruoyi.dModularity.mapper.D2CertificateMapper;
+import com.ruoyi.dModularity.service.ID2CertificateService;
 import com.ruoyi.score.domain.ModuleAndTotal;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
@@ -16,17 +16,12 @@ import com.ruoyi.score.mapper.TotalScoreMapper;
 import com.ruoyi.score.service.ITotalScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
-
-import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
-import com.ruoyi.dModularity.domain.D2Resource;
-import com.ruoyi.dModularity.mapper.D2CertificateMapper;
-import com.ruoyi.dModularity.domain.D2Certificate;
-import com.ruoyi.dModularity.service.ID2CertificateService;
 
-import javax.swing.*;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * D2 证书表Service业务层处理
@@ -108,7 +103,7 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 			moduleAndTotal.setAvsScore(getScoreByCertificateName(dc.getCertificateName()));    // 模块成绩
 			moduleAndTotal.setSemesterId(d2CertificateMapper.selectDate(DateUtil.StringConvertDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))).getSemesterId());   // 学期id
 			// 修改模块分数
-			updateModuleScore(moduleAndTotal);
+			// updateModuleScore(moduleAndTotal);
 		}
 
 		return rows;
@@ -206,49 +201,50 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	public void updateModuleScore(ModuleAndTotal moduleAndTotal) {
 		// 声明总分对象
 		TotalScore totalScore = new TotalScore();
-		totalScore.setStuId(moduleAndTotal.getStuId());
-		totalScore.setSemesterId(moduleAndTotal.getSemesterId());
+		totalScore.setStuId(moduleAndTotal.getStuId()); // 学号
+		totalScore.setSemesterId(moduleAndTotal.getSemesterId()); // 学期Id
 
 		// 尝试获取或创建总分对象
-		TotalScore existingTotalScore = getOrCreateTotalScore(totalScore, moduleAndTotal.getAvsScore());
+		// TotalScore existingTotalScore = getOrCreateTotalScore(totalScore, moduleAndTotal.getAvsScore());
 
 		// 声明模块分对象
 		ModuleScore moduleScore = new ModuleScore();
 		moduleScore.setEnumId(moduleAndTotal.getEnumId());
-		moduleScore.setTsId(existingTotalScore.getTsId());
+		// 新建或更新总分返回tsId
+		moduleScore.setTsId(selectUser.judgeInformation(totalScore));
 
 		// 尝试获取或创建模块分对象
-		getOrCreateModuleScore(moduleScore, moduleAndTotal.getAvsScore());
+		// getOrCreateModuleScore(moduleScore, moduleAndTotal.getAvsScore());
 	}
-
-	/**
-	 * 新增和修改总分记录
-	 */
-	private TotalScore getOrCreateTotalScore(TotalScore totalScore, BigDecimal avsScore) {
-		List<TotalScore> totalScoreList = totalScoreMapper.selectTotalScoreList(totalScore);
-		if (totalScoreList.isEmpty()) {
-			totalScore.setEpScore(avsScore);
-			totalScoreMapper.insertTotalScore(totalScore);
-			return totalScore;
-		} else {
-			TotalScore existingTotalScore = totalScoreList.get(0);
-			totalScoreService.addingTotalScore(existingTotalScore.getTsId(), avsScore);
-			return existingTotalScore;
-		}
-	}
-
-	/**
-	 * 新增和修改模块分数记录
-	 */
-	private void getOrCreateModuleScore(ModuleScore moduleScore, BigDecimal avsScore) {
-		List<ModuleScore> moduleScoreList = moduleScoreMapper.selectModuleScoreList(moduleScore);
-		if (moduleScoreList.isEmpty()) {
-			moduleScore.setAvsScore(avsScore);
-			moduleScoreMapper.insertModuleScore(moduleScore);
-		} else {
-			ModuleScore existingModuleScore = moduleScoreList.get(0);
-			existingModuleScore.setAvsScore(existingModuleScore.getAvsScore().add(avsScore));
-			moduleScoreMapper.updateModuleScore(existingModuleScore);
-		}
-	}
+	//
+	// /**
+	//  * 新增和修改总分记录
+	//  */
+	// private TotalScore getOrCreateTotalScore(TotalScore totalScore, BigDecimal avsScore) {
+	// 	List<TotalScore> totalScoreList = totalScoreMapper.selectTotalScoreList(totalScore);
+	// 	if (totalScoreList.isEmpty()) {
+	// 		totalScore.setEpScore(avsScore);
+	// 		totalScoreMapper.insertTotalScore(totalScore);
+	// 		return totalScore;
+	// 	} else {
+	// 		TotalScore existingTotalScore = totalScoreList.get(0);
+	// 		totalScoreService.addingTotalScore(existingTotalScore.getTsId(), avsScore);
+	// 		return existingTotalScore;
+	// 	}
+	// }
+	//
+	// /**
+	//  * 新增和修改模块分数记录
+	//  */
+	// private void getOrCreateModuleScore(ModuleScore moduleScore, BigDecimal avsScore) {
+	// 	List<ModuleScore> moduleScoreList = moduleScoreMapper.selectModuleScoreList(moduleScore);
+	// 	if (moduleScoreList.isEmpty()) {
+	// 		moduleScore.setAvsScore(avsScore);
+	// 		moduleScoreMapper.insertModuleScore(moduleScore);
+	// 	} else {
+	// 		ModuleScore existingModuleScore = moduleScoreList.get(0);
+	// 		existingModuleScore.setAvsScore(existingModuleScore.getAvsScore().add(avsScore));
+	// 		moduleScoreMapper.updateModuleScore(existingModuleScore);
+	// 	}
+	// }
 }

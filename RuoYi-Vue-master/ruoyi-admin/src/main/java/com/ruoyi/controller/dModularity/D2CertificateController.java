@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
+import com.ruoyi.score.domain.TotalScore;
+import com.ruoyi.score.service.ITotalScoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
