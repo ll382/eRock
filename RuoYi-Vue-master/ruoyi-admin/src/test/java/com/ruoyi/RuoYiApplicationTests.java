@@ -34,7 +34,6 @@ class RuoYiApplicationTests {
     @Test
     public void s1() {
 
-
     }
 
     @Test
