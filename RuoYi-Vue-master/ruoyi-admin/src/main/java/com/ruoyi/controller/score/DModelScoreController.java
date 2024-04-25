@@ -1,4 +1,4 @@
-package com.ruoyi.controller.core;
+package com.ruoyi.controller.score;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
