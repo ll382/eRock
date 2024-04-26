@@ -1,24 +1,18 @@
 package com.ruoyi;
 
-import com.ruoyi.dModularity.domain.D2Certificate;
 import com.ruoyi.dModularity.mapper.D2CertificateMapper;
-import com.ruoyi.score.domain.ModuleAndTotal;
-import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
 import com.ruoyi.score.mapper.ModuleScoreMapper;
-import com.ruoyi.score.mapper.TotalScoreMapper;
 import com.ruoyi.score.service.ITotalScoreService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ScoreTest {
