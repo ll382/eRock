@@ -1,6 +1,8 @@
 package com.ruoyi.core.service;
 
+import com.beust.ah.A;
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.core.domain.AModuleScore;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
 import com.ruoyi.score.domain.DModelScore;
@@ -44,7 +46,8 @@ public interface SelectUser<T extends BaseEntity>  {
 //    TODO: 用于增加或修改学生的A模块成绩
 
 //    线上学习      本接口用于修改A模块学生线上学习成绩
-    public int updateStudentAScoreByTeachingTable(BigDecimal number,Long stuId);
+    public int updateStudentAScore(AModuleScore number, Long stuId);
+
 
     //    必须得要在学生类被赋予之前使用本接口，否则会有索引异常
 

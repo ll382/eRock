@@ -3,9 +3,11 @@ package com.ruoyi.controller.knowledgeQuiz;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.teachingExchange.domain.Answer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +39,7 @@ public class AnswerController extends BaseController
 {
     @Autowired
     private IAnswerService answerService;
+
 
     /**
      * 查询A1 知识测试 学生成绩列表
