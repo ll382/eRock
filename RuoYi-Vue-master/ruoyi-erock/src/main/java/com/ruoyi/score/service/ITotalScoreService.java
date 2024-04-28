@@ -8,62 +8,62 @@ import com.ruoyi.score.domain.TotalScore;
 import org.apache.poi.ss.formula.functions.T;
 
 /**
- * 总分Service接口
+ * 鎬诲垎Service鎺ュ彛
  *
  * @author houq
  * @date 2024-04-22
  */
 public interface ITotalScoreService {
 	/**
-	 * 查询总分
+	 * 鏌ヨ鎬诲垎
 	 *
-	 * @param tsId 总分主键
-	 * @return 总分
+	 * @param tsId 鎬诲垎涓婚敭
+	 * @return 鎬诲垎
 	 */
 	public TotalScore selectTotalScoreByTsId(Long tsId);
 
 	/**
-	 * 查询总分列表
+	 * 鏌ヨ鎬诲垎鍒楄〃
 	 *
-	 * @param totalScore 总分
-	 * @return 总分集合
+	 * @param totalScore 鎬诲垎
+	 * @return 鎬诲垎闆嗗悎
 	 */
 	public List<TotalScore> selectTotalScoreList(TotalScore totalScore);
 
 	/**
-	 * 新增总分
+	 * 鏂板鎬诲垎
 	 *
-	 * @param totalScore 总分
-	 * @return 结果
+	 * @param totalScore 鎬诲垎
+	 * @return 缁撴灉
 	 */
 	public int insertTotalScore(TotalScore totalScore);
 
 	/**
-	 * 修改总分
+	 * 淇敼鎬诲垎
 	 *
-	 * @param totalScore 总分
-	 * @return 结果
+	 * @param totalScore 鎬诲垎
+	 * @return 缁撴灉
 	 */
 	public int updateTotalScore(TotalScore totalScore);
 
 	/**
-	 * 批量删除总分
+	 * 鎵归噺鍒犻櫎鎬诲垎
 	 *
-	 * @param tsIds 需要删除的总分主键集合
-	 * @return 结果
+	 * @param tsIds 闇�瑕佸垹闄ょ殑鎬诲垎涓婚敭闆嗗悎
+	 * @return 缁撴灉
 	 */
 	public int deleteTotalScoreByTsIds(Long[] tsIds);
 
 	/**
-	 * 删除总分信息
+	 * 鍒犻櫎鎬诲垎淇℃伅
 	 *
-	 * @param tsId 总分主键
-	 * @return 结果
+	 * @param tsId 鎬诲垎涓婚敭
+	 * @return 缁撴灉
 	 */
 	public int deleteTotalScoreByTsId(Long tsId);
 
 	/**
-	 * 总分相加
+	 * 鎬诲垎鐩稿姞
 	 */
 	public int addingTotalScore(TotalScore totalScore);
 }

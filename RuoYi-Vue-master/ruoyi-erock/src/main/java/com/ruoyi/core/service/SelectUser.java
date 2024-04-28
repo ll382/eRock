@@ -41,6 +41,11 @@ public interface SelectUser<T extends BaseEntity>  {
 
     public ModuleScore judgeModuleScore(ModuleScore moduleScore);
 
+//    TODO: 用于增加或修改学生的A模块成绩
+
+//    线上学习      本接口用于修改A模块学生线上学习成绩
+    public int updateStudentAScoreByTeachingTable(BigDecimal number,Long stuId);
+
     //    必须得要在学生类被赋予之前使用本接口，否则会有索引异常
 
 
