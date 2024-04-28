@@ -174,7 +174,6 @@
             <if test="viewedAt != null">#{viewedAt},</if>
             <if test="viewDuration != null">#{viewDuration},</if>
         </trim>
-            where view_id = #{viewId}
     </insert>
 
     <update id="updateTeachingViewedTable" parameterType="a1Viewed">
@@ -185,7 +184,7 @@
             <if test="viewedAt != null">viewed_at = #{viewedAt},</if>
             <if test="viewDuration != null">view_duration = #{viewDuration},</if>
         </trim>
-        where view_id = #{viewId}
+            where view_id = #{viewId}
     </update>
 
     <delete id="deleteViewedTeachingId" parameterType="Long">

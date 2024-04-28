@@ -1,10 +1,13 @@
 package com.ruoyi.teachingExchange.service.impl;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.mapper.AModuleScoreMapper;
 import com.ruoyi.core.mapper.StudentMapper;
+import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.service.impl.SelectUserImpl;
 import com.ruoyi.system.domain.SysUserRole;
 import com.ruoyi.system.mapper.SysUserMapper;
@@ -47,6 +50,9 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
+
+    @Autowired
+    private SelectUser selectUser;
 
     /**
      * 查询A1 线上学习学生线上观看记录表
@@ -152,6 +158,9 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int insertTeachingViewTable(A1Viewed a1Viewed)
     {
+//        A模块学生学习任务成绩录入
+        int i = updateLearningTaskByStuId(a1Viewed.getStuId());
+        System.out.println(i);
         a1Viewed.setViewedAt(new Date());
         return teachingTableMapper.insertTeachingViewedTable(a1Viewed);
     }
@@ -159,6 +168,9 @@ public class TeachingTableServiceImpl implements ITeachingTableService
     @Override
     public int updateTeachingViewedTable(A1Viewed a1Viewed)
     {
+//        A模块学生学习任务成绩录入
+        int i = updateLearningTaskByStuId(a1Viewed.getStuId());
+        System.out.println(i);
         a1Viewed.setViewedAt(new Date());
         return teachingTableMapper.updateTeachingViewedTable(a1Viewed);
     }
@@ -242,6 +254,11 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         return rows;
     }
 
+    public int insertTeachingTable2(TeachingTable teachingTable)
+    {
+        return teachingTableMapper.insertTeachingTable(teachingTable);
+    }
+
     /**
      * 修改A1 线上学习学生线上观看记录表
      *
@@ -256,6 +273,8 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 //        teachingTableMapper.deleteA1CommunicationByTeachingId(teachingTable.getTeachingId());
 //        insertA1Communication(teachingTable);
 //        返回更新内容
+        int i = updateLearningTaskByStuId(teachingTable.getStuId());
+        System.out.println(i);
         return teachingTableMapper.updateTeachingTable(teachingTable);
     }
 
@@ -286,6 +305,24 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         teachingTableMapper.deleteViewedTeachingId(teachingId);
         teachingTableMapper.deleteA1CommunicationByTeachingId(teachingId);
         return teachingTableMapper.deleteTeachingTableByTeachingId(teachingId);
+    }
+
+
+    private int updateLearningTaskByStuId(Long stuId) {
+        if (StringUtils.isNull(stuId)) {
+            return 0;
+        }
+        int taskNum = teachingTableMapper.selectLearningTask();
+        int stuNum = teachingTableMapper.selectLearningTaskByStuId(stuId);
+        int taskStudentNumber = 16 + (stuNum - taskNum);
+        if(taskStudentNumber < 0) {
+            taskStudentNumber = 0;
+        }else if (taskStudentNumber < 16) {
+            taskStudentNumber = 1;
+        }else {
+            taskStudentNumber = 2;
+        }
+        return selectUser.updateStudentAScoreByTeachingTable(BigDecimal.valueOf(taskStudentNumber),stuId);
     }
 
     /**

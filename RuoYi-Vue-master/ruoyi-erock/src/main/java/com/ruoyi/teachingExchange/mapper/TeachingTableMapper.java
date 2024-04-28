@@ -9,6 +9,7 @@ import com.ruoyi.teachingExchange.domain.A1Communication;
 import com.ruoyi.teachingExchange.domain.TeachingUnit;
 import io.lettuce.core.dynamic.annotation.Value;
 import org.apache.ibatis.annotations.CacheNamespace;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.data.annotation.Version;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -128,4 +129,21 @@ public interface TeachingTableMapper
      * @return 结果
      */
     public int deleteA1CommunicationByTeachingId(Long teachingId);
+
+    /**
+     * 通过A1 查找全部线上学习任务
+     *
+     * @return 结果
+     */
+    @Select("SELECT COUNT(*) FROM teaching_table")
+    public int selectLearningTask();
+
+    /**
+     * 通过A1 查找学生线上学习任务完成情况
+     *
+     * @param stuId 需要删除的数据ID
+     * @return 结果
+     */
+    @Select("select count(*) from a1_viewed where teaching_id = #{stuId}")
+    public int selectLearningTaskByStuId(Long stuId);
 }

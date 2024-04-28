@@ -5,9 +5,11 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SelectUserVo;
 import com.ruoyi.common.core.domain.entity.Group;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.core.domain.AModuleScore;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.core.domain.StuGroup;
 import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.mapper.AModuleScoreMapper;
 import com.ruoyi.core.service.IStuGroupService;
 import com.ruoyi.core.service.IStudentService;
 import com.ruoyi.core.service.SelectUser;
@@ -60,6 +62,9 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Autowired
     SelectUser selectUser;
+
+    @Autowired
+    private AModuleScoreMapper aModuleScoreMapper;
 
 //    随机数组
     public static LinkedHashSet<Integer> generateRandomNumbers(int n, int max) {
@@ -389,8 +394,49 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         }
     }
 
-//            TODO：标准差的计算
+//    TODO: 用于增加或修改学生的A模块成绩
+
+//        TODO: 通用方法 根据当前时间以及学生id查询学生的总分ID
+    private Long selectModuleScoreList(Long stuId){
+        TotalScore totalScore = new TotalScore();
+        //        查找学期
+        Semester semester = selectUser.selectDate(new Date());
+        totalScore.setSemesterId(semester.getSemesterId());
+//        给出总分表的id
+        Long tsId = this.judgeInformation(totalScore);
+        return tsId;
+
+    }
+
+//    线上学习      本接口用于修改A模块学生线上学习成绩
+    @Override
+    public int updateStudentAScoreByTeachingTable(BigDecimal number , Long stuId) {
+//        查询A模块的成绩
+        AModuleScore aModuleScore = new AModuleScore();
+//        插入总分ID
+        Long tsId = this.selectModuleScoreList(stuId);
+        aModuleScore.setTsId(tsId);
+        List<AModuleScore> aModuleScores = aModuleScoreMapper.selectAModuleScoreList(aModuleScore);
+//        如果没有数据则插入数据
+        if (StringUtils.isEmpty(aModuleScores)) {
+            aModuleScore.IAModuleScore();
+            aModuleScore.setOnlineCourse(number);
+            return aModuleScoreMapper.insertAModuleScore(aModuleScore);
+        }else {
+//            如果有数据则修改数据
+            aModuleScore = aModuleScores.get(0);
+            aModuleScore.setOnlineCourse(number);
+            return aModuleScoreMapper.updateAModuleScore(aModuleScore);
+        }
+    }
+
+
+
+//    TODO：标准差的计算
+
     public static Double standardDeviation(List<BigDecimal> msScore,int scale){
+//            标准差的计算的是msScore的标准差，scale是精确位数；注意：标准差的计算公式是
+
 //            开根号下的(Σ(Xi - Xba)²)/n-1
 
 //            精确位数,所有除数都得弄好小数处理,否则遇到无限循环小数会抛ArithmeticException错误
