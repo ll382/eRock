@@ -16,12 +16,14 @@ import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
 import com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper;
+import com.ruoyi.knowledgeQuiz.mapper.AnswerMapper;
 import com.ruoyi.score.domain.DModelScore;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
 import com.ruoyi.score.mapper.DModelScoreMapper;
 import com.ruoyi.score.mapper.ModuleScoreMapper;
 import com.ruoyi.score.mapper.TotalScoreMapper;
+import com.ruoyi.teachingExchange.domain.Answer;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -43,7 +45,7 @@ import java.util.*;
 @Service
 public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Autowired
-    SelectUserMapper    selectUserMapper;
+    SelectUserMapper selectUserMapper;
 
     @Autowired
     IStudentService studentService;
@@ -51,17 +53,25 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Autowired
     IStuGroupService stuGroupService;
 
+//    总分表
+
     @Autowired
     private TotalScoreMapper totalScoreMapper;
 
+//    模块表
+
     @Autowired
     private ModuleScoreMapper moduleScoreMapper;
+
+//    D模块成绩
 
     @Autowired
     private DModelScoreMapper dModelScoreMapper;
 
     @Autowired
     SelectUser selectUser;
+
+//    A模块成绩
 
     @Autowired
     private AModuleScoreMapper aModuleScoreMapper;
@@ -408,9 +418,9 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     }
 
-//    线上学习      本接口用于修改A模块学生线上学习成绩
+//    线上学习      本接口用于修改A模块学生学习成绩表
     @Override
-    public int updateStudentAScoreByTeachingTable(BigDecimal number , Long stuId) {
+    public int updateStudentAScore(AModuleScore number , Long stuId) {
 //        查询A模块的成绩
         AModuleScore aModuleScore = new AModuleScore();
 //        插入总分ID
@@ -419,17 +429,13 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         List<AModuleScore> aModuleScores = aModuleScoreMapper.selectAModuleScoreList(aModuleScore);
 //        如果没有数据则插入数据
         if (StringUtils.isEmpty(aModuleScores)) {
-            aModuleScore.IAModuleScore();
-            aModuleScore.setOnlineCourse(number);
-            return aModuleScoreMapper.insertAModuleScore(aModuleScore);
+            return aModuleScoreMapper.insertAModuleScore(number);
         }else {
 //            如果有数据则修改数据
-            aModuleScore = aModuleScores.get(0);
-            aModuleScore.setOnlineCourse(number);
-            return aModuleScoreMapper.updateAModuleScore(aModuleScore);
+            number.setModscoId(aModuleScores.get(0).getModscoId());
+            return aModuleScoreMapper.updateAModuleScore(number);
         }
     }
-
 
 
 //    TODO：标准差的计算

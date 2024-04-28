@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.core.domain.AModuleScore;
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.mapper.AModuleScoreMapper;
 import com.ruoyi.core.mapper.StudentMapper;
@@ -273,8 +274,6 @@ public class TeachingTableServiceImpl implements ITeachingTableService
 //        teachingTableMapper.deleteA1CommunicationByTeachingId(teachingTable.getTeachingId());
 //        insertA1Communication(teachingTable);
 //        返回更新内容
-        int i = updateLearningTaskByStuId(teachingTable.getStuId());
-        System.out.println(i);
         return teachingTableMapper.updateTeachingTable(teachingTable);
     }
 
@@ -307,8 +306,9 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         return teachingTableMapper.deleteTeachingTableByTeachingId(teachingId);
     }
 
-
+//     业务代码  A模块学生学习任务成绩录入
     private int updateLearningTaskByStuId(Long stuId) {
+//        通过学生ID查询学生学习任务
         if (StringUtils.isNull(stuId)) {
             return 0;
         }
@@ -322,7 +322,10 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         }else {
             taskStudentNumber = 2;
         }
-        return selectUser.updateStudentAScoreByTeachingTable(BigDecimal.valueOf(taskStudentNumber),stuId);
+//       A模块学生学习任务成绩录入
+        AModuleScore aModuleScore = new AModuleScore();
+        aModuleScore.setOnlineCourse(BigDecimal.valueOf(taskStudentNumber));
+        return selectUser.updateStudentAScore( aModuleScore,stuId );
     }
 
     /**
