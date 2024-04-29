@@ -100,7 +100,7 @@ public class TotalScoreServiceImpl implements ITotalScoreService {
 	 */
 	@Override
 	public int addingTotalScore(TotalScore totalScore) {
-		// 如果模块成绩少于5条就不终止
+		// 如果模块成绩少于4条就终止
 		List<ModuleScore> moduleScoreList = moduleScoreMapper.selectModuleScoreList(new ModuleScore(totalScore.getTsId()));
 		if (moduleScoreList.size() < 4) {
 			return -1;
