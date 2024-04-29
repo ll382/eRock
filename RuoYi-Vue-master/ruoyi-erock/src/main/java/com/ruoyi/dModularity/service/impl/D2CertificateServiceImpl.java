@@ -1,32 +1,25 @@
 package com.ruoyi.dModularity.service.impl;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.util.DateUtil;
+import com.ruoyi.dModularity.domain.D2Certificate;
 import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
-import com.ruoyi.score.domain.ModuleAndTotal;
-import com.ruoyi.score.domain.ModuleScore;
-import com.ruoyi.score.domain.TotalScore;
-import com.ruoyi.score.mapper.ModuleScoreMapper;
-import com.ruoyi.score.mapper.TotalScoreMapper;
-import com.ruoyi.score.service.ITotalScoreService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
-
-import com.ruoyi.common.utils.StringUtils;
-import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.dModularity.domain.D2Resource;
 import com.ruoyi.dModularity.mapper.D2CertificateMapper;
-import com.ruoyi.dModularity.domain.D2Certificate;
 import com.ruoyi.dModularity.service.ID2CertificateService;
+import com.ruoyi.score.domain.DModelScore;
+import com.ruoyi.score.domain.ModuleAndTotal;
+import com.ruoyi.score.domain.TotalScore;
+import com.ruoyi.score.mapper.DModelScoreMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.*;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * D2 证书表Service业务层处理
@@ -43,13 +36,7 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	private SelectUser selectUser;
 
 	@Autowired
-	private ModuleScoreMapper moduleScoreMapper;
-
-	@Autowired
-	private TotalScoreMapper totalScoreMapper;
-
-	@Autowired
-	private ITotalScoreService totalScoreService;
+	private DModelScoreMapper dModelScoreMapper;
 
 	/**
 	 * 查询D2 证书表
@@ -206,49 +193,32 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	public void updateModuleScore(ModuleAndTotal moduleAndTotal) {
 		// 声明总分对象
 		TotalScore totalScore = new TotalScore();
-		totalScore.setStuId(moduleAndTotal.getStuId());
-		totalScore.setSemesterId(moduleAndTotal.getSemesterId());
+		totalScore.setStuId(moduleAndTotal.getStuId()); // 学号
+		totalScore.setSemesterId(moduleAndTotal.getSemesterId()); // 学期Id
 
-		// 尝试获取或创建总分对象
-		TotalScore existingTotalScore = getOrCreateTotalScore(totalScore, moduleAndTotal.getAvsScore());
-
-		// 声明模块分对象
-		ModuleScore moduleScore = new ModuleScore();
-		moduleScore.setEnumId(moduleAndTotal.getEnumId());
-		moduleScore.setTsId(existingTotalScore.getTsId());
-
-		// 尝试获取或创建模块分对象
-		getOrCreateModuleScore(moduleScore, moduleAndTotal.getAvsScore());
+		DModelScore dModelScore = new DModelScore();
+		dModelScore.setTsId(selectUser.judgeInformation(totalScore));
+		dModelScore.setModscAdditional(moduleAndTotal.getAvsScore());
+		judgeDModelScore(dModelScore);
 	}
 
 	/**
-	 * 新增和修改总分记录
+	 * D模块成绩
 	 */
-	private TotalScore getOrCreateTotalScore(TotalScore totalScore, BigDecimal avsScore) {
-		List<TotalScore> totalScoreList = totalScoreMapper.selectTotalScoreList(totalScore);
-		if (totalScoreList.isEmpty()) {
-			totalScore.setEpScore(avsScore);
-			totalScoreMapper.insertTotalScore(totalScore);
-			return totalScore;
-		} else {
-			TotalScore existingTotalScore = totalScoreList.get(0);
-			totalScoreService.addingTotalScore(existingTotalScore.getTsId(), avsScore);
-			return existingTotalScore;
-		}
-	}
+	public DModelScore judgeDModelScore(DModelScore dModelScore) {
+		BigDecimal modscAdditional = dModelScore.getModscAdditional();
+		dModelScore.setModscAdditional(null);
+		List<DModelScore> dModelScores = dModelScoreMapper.selectDModelScoreList(dModelScore);
+		dModelScore.setModscAdditional(modscAdditional);
 
-	/**
-	 * 新增和修改模块分数记录
-	 */
-	private void getOrCreateModuleScore(ModuleScore moduleScore, BigDecimal avsScore) {
-		List<ModuleScore> moduleScoreList = moduleScoreMapper.selectModuleScoreList(moduleScore);
-		if (moduleScoreList.isEmpty()) {
-			moduleScore.setAvsScore(avsScore);
-			moduleScoreMapper.insertModuleScore(moduleScore);
+		if (StringUtils.isNotEmpty(dModelScores)) {
+			dModelScore.setModscId(dModelScores.get(0).getModscId());
+			dModelScore.setModscAdditional(dModelScores.get(0).getModscAdditional().add(dModelScore.getModscAdditional()));
+			dModelScoreMapper.updateDModelScore(dModelScore);
+			return dModelScore;
 		} else {
-			ModuleScore existingModuleScore = moduleScoreList.get(0);
-			existingModuleScore.setAvsScore(existingModuleScore.getAvsScore().add(avsScore));
-			moduleScoreMapper.updateModuleScore(existingModuleScore);
+			dModelScoreMapper.insertDModelScore(dModelScore);
+			return dModelScore;
 		}
 	}
 }

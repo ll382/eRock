@@ -1,13 +1,12 @@
 package com.ruoyi;
 
-import com.ruoyi.core.domain.vo.StudentModuleScore;
+
 import com.ruoyi.core.mapper.StudentMapper;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.annotation.Resource;
-import java.util.*;
 
 
 
@@ -21,7 +20,6 @@ class RuoYiApplicationTests {
     @Test
     public void s1() {
         System.out.println(123);
-
     }
 
     @Test

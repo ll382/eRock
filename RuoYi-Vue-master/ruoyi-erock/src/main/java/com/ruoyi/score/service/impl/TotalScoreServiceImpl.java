@@ -2,7 +2,13 @@ package com.ruoyi.score.service.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
+import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.score.domain.ModuleScore;
+import com.ruoyi.score.mapper.ModuleScoreMapper;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.score.mapper.TotalScoreMapper;
@@ -19,6 +25,9 @@ import com.ruoyi.score.service.ITotalScoreService;
 public class TotalScoreServiceImpl implements ITotalScoreService {
 	@Autowired
 	private TotalScoreMapper totalScoreMapper;
+
+	@Autowired
+	private ModuleScoreMapper moduleScoreMapper;
 
 	/**
 	 * 查询总分
@@ -90,11 +99,19 @@ public class TotalScoreServiceImpl implements ITotalScoreService {
 	 * 总分相加
 	 */
 	@Override
-	public int addingTotalScore(Long tsId, BigDecimal score) {
-		BigDecimal epScore = selectTotalScoreByTsId(tsId).getEpScore().add(score);
-		TotalScore totalScore = new TotalScore();
-		totalScore.setTsId(tsId);
-		totalScore.setEpScore(epScore);
+	public int addingTotalScore(TotalScore totalScore) {
+		// 如果模块成绩少于4条就终止
+		List<ModuleScore> moduleScoreList = moduleScoreMapper.selectModuleScoreList(new ModuleScore(totalScore.getTsId()));
+		if (moduleScoreList.size() < 4) {
+			return -1;
+		}
+
+		BigDecimal score = moduleScoreList.stream()
+				.map(ModuleScore::getAvsScore)
+				.filter(Objects::nonNull)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		totalScore.setEpScore(score);
 		return updateTotalScore(totalScore);
 	}
 }

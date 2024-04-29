@@ -31,7 +31,14 @@ public class ModuleScore extends BaseEntity
     @Excel(name = "成绩")
     private BigDecimal avsScore;
 
-    public void setModId(Long modId) 
+    public ModuleScore() {
+    }
+
+    public ModuleScore(Long tsId) {
+        this.tsId = tsId;
+    }
+
+    public void setModId(Long modId)
     {
         this.modId = modId;
     }
