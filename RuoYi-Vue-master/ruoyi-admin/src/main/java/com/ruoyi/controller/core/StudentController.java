@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import com.ruoyi.core.domain.vo.StudentModuleScore;
 import com.ruoyi.teachingExchange.domain.TeachingTable;
 import com.ruoyi.teachingExchange.service.ITeachingTableService;
 import io.swagger.annotations.Api;
@@ -69,6 +70,17 @@ public class StudentController extends BaseController
     {
         startPage();
         List<Student> list = studentService.selectStudentList(student);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询classId班所有学生进步分
+     * @param classId 班级ID
+     * @return
+     */
+    @GetMapping("/getStudentProgressScoreList/{classId}")
+    public TableDataInfo getStudentProgressScoreList(@PathVariable("classId") Integer classId){
+        List<StudentModuleScore> list = studentService.selectStudentProgressScoreList(classId);
         return getDataTable(list);
     }
 

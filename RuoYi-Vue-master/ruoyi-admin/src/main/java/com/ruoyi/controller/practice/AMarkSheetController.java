@@ -1,5 +1,6 @@
 package com.ruoyi.controller.practice;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +72,20 @@ public class AMarkSheetController extends BaseController
         List<AMarkSheet> list = aMarkSheetService.selectAMarkSheetList(aMarkSheet);
         ExcelUtil<AMarkSheet> util = new ExcelUtil<AMarkSheet>(AMarkSheet.class);
         util.exportExcel(response, list, "练习、测试评分表数据");
+    }
+
+    /**
+     * 查询Echarts折线图erock评分
+     * @param stuId
+     * @param semesterId
+     * @param enumId
+     * @return
+     */
+    @GetMapping("/selectEchartsLineChartMsScoreList/{stuId}/{semesterId}/{enumId}")
+    public TableDataInfo selectEchartsLineChartMsScoreList(@PathVariable("stuId") Long stuId,@PathVariable("semesterId") Integer semesterId,@PathVariable("enumId") Integer enumId){
+        startPage();
+        List<BigDecimal> list = aMarkSheetService.selectEchartsLineChartMsScoreList(stuId, semesterId, enumId);
+        return getDataTable(list);
     }
 
     /**

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import com.ruoyi.core.domain.vo.StudentModuleScore;
 
 
 /**
@@ -45,6 +46,13 @@ public interface IStudentService
      * @return 学生的所有成绩
      */
     public List<List> selectStudentAchievementByStuId(Long stuId, String crDate,String score);
+
+    /**
+     * 查询classId班所有学生进步分
+     * @param classId 班级ID
+     * @return
+     */
+    public List<StudentModuleScore> selectStudentProgressScoreList(Integer classId);
 
     /**
      * 查询学生列表

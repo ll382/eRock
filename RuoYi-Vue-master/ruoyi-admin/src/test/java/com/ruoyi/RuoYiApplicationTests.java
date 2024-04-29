@@ -1,27 +1,14 @@
 package com.ruoyi;
 
-
-import com.alibaba.fastjson2.JSONObject;
-import com.ruoyi.core.domain.Grade;
-import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import com.ruoyi.core.domain.vo.StudentModuleScore;
 import com.ruoyi.core.mapper.StudentMapper;
-import com.ruoyi.core.util.DateUtil;
-import com.ruoyi.practice.domain.ABallExam;
-import com.ruoyi.practice.mapper.ABallExamMapper;
-import com.ruoyi.practice.mapper.AMarkSheetMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
+import javax.annotation.Resource;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+
 
 
 @SpringBootTest
@@ -33,7 +20,7 @@ class RuoYiApplicationTests {
 
     @Test
     public void s1() {
-
+        System.out.println(123);
 
     }
 

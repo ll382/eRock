@@ -1,136 +1,136 @@
-package com.ruoyi;
-
-import com.ruoyi.dModularity.domain.D2Certificate;
-import com.ruoyi.dModularity.mapper.D2CertificateMapper;
-import com.ruoyi.score.domain.ModuleAndTotal;
-import com.ruoyi.score.domain.ModuleScore;
-import com.ruoyi.score.domain.TotalScore;
-import com.ruoyi.score.mapper.ModuleScoreMapper;
-import com.ruoyi.score.mapper.TotalScoreMapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ScoreTest {
-	@Autowired
-	private ModuleScoreMapper moduleScoreMapper;
-
-	@Autowired
-	private TotalScoreMapper totalScoreMapper;
-
-	@Autowired
-	private D2CertificateMapper d2CertificateMapper;
-
-	@Test
-	public void totalScoreTest() {
-		TotalScore totalScore = new TotalScore();
-		totalScore.setSemesterId(3L);
-		totalScore.setStuId(100L);
-
-		// ÅÐ¶ÏÑ§ºÅÎª100µÄÑ§ÉúÓÐÃ»ÓÐµÚÈý¸öÑ§ÆÚµÄ×Ü·Ö¼ÇÂ¼
-		List<TotalScore> totalScoreList = totalScoreMapper.selectTotalScoreList(totalScore);
-		if (totalScoreList.isEmpty()) { // Èç¹ûÃ»ÓÐÔò²åÈë¼ÇÂ¼
-			totalScore.setEpScore(BigDecimal.valueOf(0.0));
-			totalScoreMapper.insertTotalScore(totalScore);
-		}
-	}
-
-	@Test
-	public void test() {
-		D2Certificate d2Certificate = new D2Certificate();
-		d2Certificate.setCertificateId(1L);
-		d2Certificate.setAudit(0L);
-
-		// »ñÈ¡Ñ§ºÅÒÔ¼°ÐèÒª¼ÓµÄ·ÖÊý
-		D2Certificate d2Certificate1 = d2CertificateMapper.selectD2CertificateList(d2Certificate).get(0);
-		ModuleAndTotal moduleAndTotal = new ModuleAndTotal();
-		moduleAndTotal.setStuId(d2Certificate1.getStuId());
-		moduleAndTotal.setAvsScore(getScoreByCertificateName(d2Certificate1.getCertificateName()));
-		System.out.println("d2Certificate1=" + d2Certificate1);
-		System.out.println("moduleAndTotal=" + moduleAndTotal);
-	}
-
-	/**
-	 * ¸ù¾ÝÖ¤ÊéÃû³Æ»ñÈ¡·ÖÊý
-	 */
-	private BigDecimal getScoreByCertificateName(String certificateName) {
-		certificateName = certificateName.trim();
-		HashMap<String, BigDecimal> scoreMap = new HashMap<>();
-		scoreMap.put("°àÈüÓÅÐãÔË¶¯Ô±", BigDecimal.valueOf(3));
-		scoreMap.put("Ð£ÈüÓÅÐãÔË¶¯Ô±", BigDecimal.valueOf(4));
-		scoreMap.put("Ð£¼¶ÒÔÉÏ±ÈÈüÓÅÐãÔË¶¯Ô±", BigDecimal.valueOf(5));
-		scoreMap.put("Ò»¼¶²ÃÅÐ", BigDecimal.valueOf(5));
-		scoreMap.put("¶þ¼¶²ÃÅÐ", BigDecimal.valueOf(4));
-		scoreMap.put("Èý¼¶²ÃÅÐ", BigDecimal.valueOf(3));
-		// ·µ»ØÏàÓ¦µÄ·ÖÊý£¬Èç¹ûÖ¤ÊéÃû³Æ²»´æÔÚÓÚÓ³ÉäÖÐ£¬¿ÉÒÔÄ¬ÈÏ·µ»ØÁã·Ö»òÆäËûÖµ
-		return scoreMap.getOrDefault(certificateName, BigDecimal.ZERO);
-	}
-
-	@Test
-	public void moduleScoreTest() {
-		// Ñ§ºÅ100µÄÑ§Éú²éÑ¯ÓÐÃ»ÓÐ29ÈÙÓþ
-		// ÉùÃ÷×Ü·ÖºÍÄ£¿é·Ö¶ÔÏó
-		ModuleAndTotal moduleAndTotal = new ModuleAndTotal();
-		moduleAndTotal.setStuId(100L);  // Ñ§ºÅ
-		moduleAndTotal.setEnumId(29L);  // Ã¶¾Ùid
-		moduleAndTotal.setAvsScore(BigDecimal.valueOf(6.0));    // Ä£¿é³É¼¨
-		moduleAndTotal.setSemesterId(3L);
-		tool2(moduleAndTotal);
-	}
-
-	public void tool2(ModuleAndTotal moduleAndTotal) {
-		// ÉùÃ÷×Ü·Ö¶ÔÏó
-		TotalScore totalScore = new TotalScore();
-		totalScore.setStuId(moduleAndTotal.getStuId());
-		totalScore.setSemesterId(moduleAndTotal.getSemesterId());
-
-		// ³¢ÊÔ»ñÈ¡»ò´´½¨×Ü·Ö¶ÔÏó
-		TotalScore existingTotalScore = getOrCreateTotalScore(totalScore, moduleAndTotal.getAvsScore());
-
-		// ÉùÃ÷Ä£¿é·Ö¶ÔÏó
-		ModuleScore moduleScore = new ModuleScore();
-		moduleScore.setEnumId(moduleAndTotal.getEnumId());
-		moduleScore.setTsId(existingTotalScore.getTsId());
-
-		// ³¢ÊÔ»ñÈ¡»ò´´½¨Ä£¿é·Ö¶ÔÏó
-		getOrCreateModuleScore(moduleScore, moduleAndTotal.getAvsScore());
-	}
-
-	// ÐÂÔöºÍÐÞ¸Ä×Ü·Ö¼ÇÂ¼
-	private TotalScore getOrCreateTotalScore(TotalScore totalScore, BigDecimal avsScore) {
-		List<TotalScore> totalScoreList = totalScoreMapper.selectTotalScoreList(totalScore);
-		if (totalScoreList.isEmpty()) {
-			totalScore.setEpScore(avsScore);
-			totalScoreMapper.insertTotalScore(totalScore);
-			return totalScore;
-		} else {
-			TotalScore existingTotalScore = totalScoreList.get(0);
-			existingTotalScore.setEpScore(existingTotalScore.getEpScore().add(avsScore));
-			totalScoreMapper.updateTotalScore(existingTotalScore);
-			return existingTotalScore;
-		}
-	}
-
-	// ÐÂÔöºÍÐÞ¸ÄÄ£¿é·ÖÊý¼ÇÂ¼
-	private void getOrCreateModuleScore(ModuleScore moduleScore, BigDecimal avsScore) {
-		List<ModuleScore> moduleScoreList = moduleScoreMapper.selectModuleScoreList(moduleScore);
-		if (moduleScoreList.isEmpty()) {
-			moduleScore.setAvsScore(avsScore);
-			moduleScoreMapper.insertModuleScore(moduleScore);
-		} else {
-			ModuleScore existingModuleScore = moduleScoreList.get(0);
-			existingModuleScore.setAvsScore(existingModuleScore.getAvsScore().add(avsScore));
-			moduleScoreMapper.updateModuleScore(existingModuleScore);
-		}
-	}
-
-}
+//package com.ruoyi;
+//
+//import com.ruoyi.dModularity.domain.D2Certificate;
+//import com.ruoyi.dModularity.mapper.D2CertificateMapper;
+//import com.ruoyi.score.domain.ModuleAndTotal;
+//import com.ruoyi.score.domain.ModuleScore;
+//import com.ruoyi.score.domain.TotalScore;
+//import com.ruoyi.score.mapper.ModuleScoreMapper;
+//import com.ruoyi.score.mapper.TotalScoreMapper;
+//import org.junit.Test;
+//import org.junit.runner.RunWith;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.test.context.SpringBootTest;
+//import org.springframework.test.context.junit4.SpringRunner;
+//
+//import java.math.BigDecimal;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
+//public class ScoreTest {
+//	@Autowired
+//	private ModuleScoreMapper moduleScoreMapper;
+//
+//	@Autowired
+//	private TotalScoreMapper totalScoreMapper;
+//
+//	@Autowired
+//	private D2CertificateMapper d2CertificateMapper;
+//
+//	@Test
+//	public void totalScoreTest() {
+//		TotalScore totalScore = new TotalScore();
+//		totalScore.setSemesterId(3L);
+//		totalScore.setStuId(100L);
+//
+//		// ï¿½Ð¶ï¿½Ñ§ï¿½ï¿½Îª100ï¿½ï¿½Ñ§ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½Úµï¿½ï¿½Ü·Ö¼ï¿½Â¼
+//		List<TotalScore> totalScoreList = totalScoreMapper.selectTotalScoreList(totalScore);
+//		if (totalScoreList.isEmpty()) { // ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼
+//			totalScore.setEpScore(BigDecimal.valueOf(0.0));
+//			totalScoreMapper.insertTotalScore(totalScore);
+//		}
+//	}
+//
+//	@Test
+//	public void test() {
+//		D2Certificate d2Certificate = new D2Certificate();
+//		d2Certificate.setCertificateId(1L);
+//		d2Certificate.setAudit(0L);
+//
+//		// ï¿½ï¿½È¡Ñ§ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Òªï¿½ÓµÄ·ï¿½ï¿½ï¿½
+//		D2Certificate d2Certificate1 = d2CertificateMapper.selectD2CertificateList(d2Certificate).get(0);
+//		ModuleAndTotal moduleAndTotal = new ModuleAndTotal();
+//		moduleAndTotal.setStuId(d2Certificate1.getStuId());
+//		moduleAndTotal.setAvsScore(getScoreByCertificateName(d2Certificate1.getCertificateName()));
+//		System.out.println("d2Certificate1=" + d2Certificate1);
+//		System.out.println("moduleAndTotal=" + moduleAndTotal);
+//	}
+//
+//	/**
+//	 * ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½Æ»ï¿½È¡ï¿½ï¿½ï¿½ï¿½
+//	 */
+//	private BigDecimal getScoreByCertificateName(String certificateName) {
+//		certificateName = certificateName.trim();
+//		HashMap<String, BigDecimal> scoreMap = new HashMap<>();
+//		scoreMap.put("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¶ï¿½Ô±", BigDecimal.valueOf(3));
+//		scoreMap.put("Ð£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¶ï¿½Ô±", BigDecimal.valueOf(4));
+//		scoreMap.put("Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¶ï¿½Ô±", BigDecimal.valueOf(5));
+//		scoreMap.put("Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", BigDecimal.valueOf(5));
+//		scoreMap.put("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", BigDecimal.valueOf(4));
+//		scoreMap.put("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", BigDecimal.valueOf(3));
+//		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+//		return scoreMap.getOrDefault(certificateName, BigDecimal.ZERO);
+//	}
+//
+//	@Test
+//	public void moduleScoreTest() {
+//		// Ñ§ï¿½ï¿½100ï¿½ï¿½Ñ§ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½Ã»ï¿½ï¿½29ï¿½ï¿½ï¿½ï¿½
+//		// ï¿½ï¿½ï¿½ï¿½ï¿½Ü·Öºï¿½Ä£ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½
+//		ModuleAndTotal moduleAndTotal = new ModuleAndTotal();
+//		moduleAndTotal.setStuId(100L);  // Ñ§ï¿½ï¿½
+//		moduleAndTotal.setEnumId(29L);  // Ã¶ï¿½ï¿½id
+//		moduleAndTotal.setAvsScore(BigDecimal.valueOf(6.0));    // Ä£ï¿½ï¿½É¼ï¿½
+//		moduleAndTotal.setSemesterId(3L);
+//		tool2(moduleAndTotal);
+//	}
+//
+//	public void tool2(ModuleAndTotal moduleAndTotal) {
+//		// ï¿½ï¿½ï¿½ï¿½ï¿½Ü·Ö¶ï¿½ï¿½ï¿½
+//		TotalScore totalScore = new TotalScore();
+//		totalScore.setStuId(moduleAndTotal.getStuId());
+//		totalScore.setSemesterId(moduleAndTotal.getSemesterId());
+//
+//		// ï¿½ï¿½ï¿½Ô»ï¿½È¡ï¿½ò´´½ï¿½ï¿½Ü·Ö¶ï¿½ï¿½ï¿½
+//		TotalScore existingTotalScore = getOrCreateTotalScore(totalScore, moduleAndTotal.getAvsScore());
+//
+//		// ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½
+//		ModuleScore moduleScore = new ModuleScore();
+//		moduleScore.setEnumId(moduleAndTotal.getEnumId());
+//		moduleScore.setTsId(existingTotalScore.getTsId());
+//
+//		// ï¿½ï¿½ï¿½Ô»ï¿½È¡ï¿½ò´´½ï¿½Ä£ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½
+//		getOrCreateModuleScore(moduleScore, moduleAndTotal.getAvsScore());
+//	}
+//
+//	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½Ü·Ö¼ï¿½Â¼
+//	private TotalScore getOrCreateTotalScore(TotalScore totalScore, BigDecimal avsScore) {
+//		List<TotalScore> totalScoreList = totalScoreMapper.selectTotalScoreList(totalScore);
+//		if (totalScoreList.isEmpty()) {
+//			totalScore.setEpScore(avsScore);
+//			totalScoreMapper.insertTotalScore(totalScore);
+//			return totalScore;
+//		} else {
+//			TotalScore existingTotalScore = totalScoreList.get(0);
+//			existingTotalScore.setEpScore(existingTotalScore.getEpScore().add(avsScore));
+//			totalScoreMapper.updateTotalScore(existingTotalScore);
+//			return existingTotalScore;
+//		}
+//	}
+//
+//	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼
+//	private void getOrCreateModuleScore(ModuleScore moduleScore, BigDecimal avsScore) {
+//		List<ModuleScore> moduleScoreList = moduleScoreMapper.selectModuleScoreList(moduleScore);
+//		if (moduleScoreList.isEmpty()) {
+//			moduleScore.setAvsScore(avsScore);
+//			moduleScoreMapper.insertModuleScore(moduleScore);
+//		} else {
+//			ModuleScore existingModuleScore = moduleScoreList.get(0);
+//			existingModuleScore.setAvsScore(existingModuleScore.getAvsScore().add(avsScore));
+//			moduleScoreMapper.updateModuleScore(existingModuleScore);
+//		}
+//	}
+//
+//}

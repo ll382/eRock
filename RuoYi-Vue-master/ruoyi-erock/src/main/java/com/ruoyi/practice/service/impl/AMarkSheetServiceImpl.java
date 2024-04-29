@@ -14,6 +14,7 @@ import com.ruoyi.practice.mapper.AMarkSheetMapper;
 import com.ruoyi.practice.service.IAMarkSheetService;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -285,6 +286,23 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
         insertAExerciseResource(aMarkSheet);
         return Math.toIntExact(aMarkSheet.getMsId());
+    }
+
+
+    /**
+     * 查询Echarts折线图erock评分
+     * @param stuId
+     * @param semesterId
+     * @param enumId
+     * @return
+     */
+    public List<BigDecimal> selectEchartsLineChartMsScoreList(Long stuId,Integer semesterId,Integer enumId){
+        ArrayList<BigDecimal> msScore = new ArrayList<>();
+        List<AMarkSheet> aMarkSheets = aMarkSheetMapper.selectEchartsLineChartMsScoreList(stuId, semesterId, enumId);
+        for (AMarkSheet aMarkSheet:aMarkSheets){
+            msScore.add(aMarkSheet.getMsScore());
+        }
+        return msScore;
     }
 
     /**

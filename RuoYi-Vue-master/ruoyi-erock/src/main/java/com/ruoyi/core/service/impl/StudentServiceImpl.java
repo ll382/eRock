@@ -7,6 +7,7 @@ import java.util.*;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import com.ruoyi.core.domain.vo.StudentModuleScore;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.util.DateUtil;
 import org.apache.ibatis.annotations.Param;
@@ -163,6 +164,16 @@ public class StudentServiceImpl implements IStudentService
             list.add(hashMapArrayList);
         }
         return list;
+    }
+
+    /**
+     * 查询classId班所有学生进步分
+     * @param classId 班级ID
+     * @return
+     */
+    public List<StudentModuleScore> selectStudentProgressScoreList(Integer classId){
+        List<StudentModuleScore> studentModuleScores = studentMapper.selectStudentProgressScoreList(classId);
+        return studentModuleScores;
     }
 
     /**

@@ -9,6 +9,7 @@ import java.util.Map;
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.domain.StuToTea;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import com.ruoyi.core.domain.vo.StudentModuleScore;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -78,6 +79,14 @@ public interface StudentMapper
      * @return 学生的所有成绩
      */
     public List<Map<String,Object>> selectStudentAchievementByStuId(@Param("stuId") Long stuId, @Param("crDate") String crDate,@Param("score") String score);
+
+    /**
+     * 查询classId班所有学生进步分
+     * @param classId 班级ID
+     * @return
+     */
+    public List<StudentModuleScore> selectStudentProgressScoreList(@Param("classId") Integer classId);
+
     /**
      * 新增学生
      * 
