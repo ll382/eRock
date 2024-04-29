@@ -88,7 +88,11 @@ public class AnswerController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Answer answer)
     {
-        return success(answerService.insertAnswer(answer));
+        int i = answerService.insertAnswer(answer);
+        if (i < 0) {
+            return warn("已经提交过了");
+        }
+        return success(i);
     }
 
     /**

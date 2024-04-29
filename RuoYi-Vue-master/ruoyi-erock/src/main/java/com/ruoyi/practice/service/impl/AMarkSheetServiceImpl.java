@@ -1,11 +1,13 @@
 package com.ruoyi.practice.service.impl;
 
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.core.domain.AModuleScore;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.mapper.StudentMapper;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.service.impl.SelectUserImpl;
+import com.ruoyi.knowledgeQuiz.domain.A1Task;
 import com.ruoyi.match.domain.ClassRegister;
 import com.ruoyi.match.mapper.ClassRegisterMapper;
 import com.ruoyi.practice.domain.ABallExam;
@@ -19,6 +21,7 @@ import com.ruoyi.practice.service.IAMarkSheetService;
 import com.ruoyi.score.domain.DModelScore;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
+import com.ruoyi.teachingExchange.domain.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -206,7 +209,63 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
         return data;
     }
 
-//      TODO：进步分计算插入 以及 技能测试插入
+//    TODO：课前技能测试成绩核算
+    public int A1MarkSocre(AMarkSheet aMarkSheet,Long markEnumId){
+//        查看学生提交次数（id查）
+        AMarkSheet markSheet = new AMarkSheet();
+        markSheet.setStuId(aMarkSheet.getStuId());
+        int ams = aMarkSheetMapper.selectAMarkSheetList(markSheet).size();
+        System.out.println(ams);
+//        查看任务表总提交次数（全查）
+        AExerciseTask task = new AExerciseTask();
+        task.setEnumId(markEnumId);
+        int amsStudent = aExerciseTaskMapper.selectAExerciseTaskList(task).size();
+        System.out.println(amsStudent);
+//      计算学生提交次数
+        Double i = selectUser.A1calculationTimes(amsStudent , ams);
+
+//       A模块学生学习任务成绩录入
+        AModuleScore aModuleScore = new AModuleScore();
+        aModuleScore.setSkillTests1(BigDecimal.valueOf(i));
+        return selectUser.updateStudentAScore( aModuleScore,aMarkSheet.getStuId() );
+    }
+//    TODO：课中技能测试成绩核算
+    public int A2MarkSocre(AMarkSheet aMarkSheet){
+//        查询学生提交所有内容
+        AMarkSheet markSheet = new AMarkSheet();
+        markSheet.setStuId(aMarkSheet.getStuId());
+        List<AMarkSheet> list = aMarkSheetMapper.selectAMarkSheetList(markSheet);
+        BigDecimal markBD = BigDecimal.ZERO;
+        for (AMarkSheet sheet : list) {
+            markBD = markBD.add(sheet.getMsScore());
+        }
+//        计算学生平均分
+        BigDecimal divide = markBD.divide(BigDecimal.valueOf(list.size()), 2, RoundingMode.DOWN);
+        AModuleScore aModuleScore = new AModuleScore();
+//        设置平均分加分上线为10
+        aModuleScore.setSkillTests2(divide.divide(BigDecimal.valueOf(10), 2, RoundingMode.DOWN));
+        return selectUser.updateStudentAScore( aModuleScore,aMarkSheet.getStuId() );
+    }
+//    TODO：课后技能测试成绩核算
+    public int A3MarkSocre(AMarkSheet aMarkSheet,Long markEnumId){
+//        查看学生提交次数（id查）
+        AMarkSheet markSheet = new AMarkSheet();
+        markSheet.setStuId(aMarkSheet.getStuId());
+        int ams = aMarkSheetMapper.selectAMarkSheetList(markSheet).size();
+//        查看任务表总提交次数（全查）
+        AExerciseTask task = new AExerciseTask();
+        task.setEnumId(markEnumId);
+        int amsStudent = aExerciseTaskMapper.selectAExerciseTaskList(task).size();
+//      计算学生提交次数
+        Double i = selectUser.A1calculationTimes(amsStudent , ams);
+
+//       A模块学生学习任务成绩录入
+        AModuleScore aModuleScore = new AModuleScore();
+        aModuleScore.setSkillTests1(BigDecimal.valueOf(i));
+        return selectUser.updateStudentAScore( aModuleScore,aMarkSheet.getStuId() );
+    }
+
+//      TODO：A模块分数插入、进步分计算插入 以及 技能测试插入
     /**
      * 新增练习、测试评分表
      * 如果上传技能测试则触发一次D1模块总分计算；通过一系列公式进行计算
@@ -217,6 +276,34 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
+//            TODO：A1模块开始
+//            以任务为单位来查询
+        Long etId = aMarkSheet.getEtId();
+        AExerciseTask task = aExerciseTaskMapper.selectAExerciseTaskByEtId(etId);
+        if (task == null){
+            return 0;
+        }
+        Long markEnumId = task.getEnumId();
+        switch(Math.toIntExact(markEnumId)) {
+//            判断如果是哪个阶段的，就进行哪个阶段的成绩核算
+            case 1:
+                System.out.println("A1模块开始");
+                int i = this.A1MarkSocre(aMarkSheet,markEnumId);
+                System.out.println(i);
+                break;
+            case 2:
+                System.out.println("A2模块开始");
+                int ii = this.A2MarkSocre(aMarkSheet);
+                System.out.println(ii);
+                break;
+            case 3:
+                System.out.println("A3模块开始");
+                int iii = this.A3MarkSocre(aMarkSheet,markEnumId);
+                System.out.println(iii);
+                break;
+        }
+        System.out.println("A1模块结束");
+//            TODO：D1模块开始
 //        TODO：学生数据处理
 //        查找学期
         Semester semester = selectUser.selectDate(new Date());
