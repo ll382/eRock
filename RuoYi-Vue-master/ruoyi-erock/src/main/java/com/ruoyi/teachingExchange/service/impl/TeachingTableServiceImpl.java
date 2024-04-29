@@ -314,17 +314,11 @@ public class TeachingTableServiceImpl implements ITeachingTableService
         }
         int taskNum = teachingTableMapper.selectLearningTask();
         int stuNum = teachingTableMapper.selectLearningTaskByStuId(stuId);
-        int taskStudentNumber = 16 + (stuNum - taskNum);
-        if(taskStudentNumber < 0) {
-            taskStudentNumber = 0;
-        }else if (taskStudentNumber < 16) {
-            taskStudentNumber = 1;
-        }else {
-            taskStudentNumber = 2;
-        }
+//        查询学生学习任务次数
+        Double i = selectUser.A1calculationTimes(taskNum, stuNum);
 //       A模块学生学习任务成绩录入
         AModuleScore aModuleScore = new AModuleScore();
-        aModuleScore.setOnlineCourse(BigDecimal.valueOf(taskStudentNumber));
+        aModuleScore.setOnlineCourse(BigDecimal.valueOf(i));
         return selectUser.updateStudentAScore( aModuleScore,stuId );
     }
 

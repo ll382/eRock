@@ -7,23 +7,18 @@ import com.ruoyi.common.core.domain.entity.Group;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.core.domain.AModuleScore;
 import com.ruoyi.core.domain.Semester;
-import com.ruoyi.core.domain.StuGroup;
-import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.mapper.AModuleScoreMapper;
 import com.ruoyi.core.service.IStuGroupService;
 import com.ruoyi.core.service.IStudentService;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
-import com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper;
-import com.ruoyi.knowledgeQuiz.mapper.AnswerMapper;
 import com.ruoyi.score.domain.DModelScore;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
 import com.ruoyi.score.mapper.DModelScoreMapper;
 import com.ruoyi.score.mapper.ModuleScoreMapper;
 import com.ruoyi.score.mapper.TotalScoreMapper;
-import com.ruoyi.teachingExchange.domain.Answer;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -404,6 +399,7 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         }
     }
 
+
 //    TODO: 用于增加或修改学生的A模块成绩
 
 //        TODO: 通用方法 根据当前时间以及学生id查询学生的总分ID
@@ -416,6 +412,36 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         Long tsId = this.judgeInformation(totalScore);
         return tsId;
 
+    }
+
+//    A1模块通用处理方法      本接口用于计算学生A1成绩
+//    number 为任务总提交次数，stuNumber为学生提交次数
+    @Override
+    public Double A1calculationTimes(int number, int stuNumber) {
+//        计算封顶为2分的学生得分
+        Double maxNumber = 2.0;
+        Double maxScore = maxNumber / number;
+        Double stuScore = maxScore * stuNumber;
+        BigDecimal b  =  new BigDecimal(stuScore);
+        double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return f1;
+//        Integer supAns = 16 + (stuNumber - number);
+//        if (supAns < 0) {
+//            supAns = 0;
+//        } else if (supAns < 16) {
+//            supAns = 1;
+//        } else {
+//            supAns = 2;
+//        }
+//        return supAns;
+    }
+
+//    A2模块通用处理方法      本接口用于计算学生A2成绩
+//    excellent 为优秀次数，ordinary为普通次数
+    @Override
+    public int A2calculationTimes(int excellent, int ordinary) {
+        int i = (excellent * 1) + (ordinary * -1);
+        return i;
     }
 
 //    线上学习      本接口用于修改A模块学生学习成绩表
