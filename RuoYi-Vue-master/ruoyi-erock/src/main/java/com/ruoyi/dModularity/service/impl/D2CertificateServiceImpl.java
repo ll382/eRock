@@ -215,9 +215,10 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 			dModelScore.setModscId(dModelScores.get(0).getModscId());
 			dModelScore.setModscAdditional(dModelScores.get(0).getModscAdditional().add(dModelScore.getModscAdditional()));
 			dModelScoreMapper.updateDModelScore(dModelScore);
+			return dModelScore;
 		} else {
 			dModelScoreMapper.insertDModelScore(dModelScore);
+			return dModelScore;
 		}
-		return dModelScore;
 	}
 }
