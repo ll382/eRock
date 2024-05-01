@@ -19,6 +19,7 @@ import com.ruoyi.score.domain.TotalScore;
 import com.ruoyi.score.mapper.DModelScoreMapper;
 import com.ruoyi.score.mapper.ModuleScoreMapper;
 import com.ruoyi.score.mapper.TotalScoreMapper;
+import com.ruoyi.score.service.ITotalScoreService;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -65,6 +66,11 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Autowired
     SelectUser selectUser;
+
+//    总分模块的使用
+
+    @Autowired
+    private ITotalScoreService totalScoreService;
 
 //    A模块成绩
 
@@ -504,11 +510,22 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 //            如果有数据则修改数据
             number.setModscoId(aModuleScores.get(0).getModscoId());
             int i = aModuleScoreMapper.updateAModuleScore(number);
-//            计算模块分数
+// 计算模块分数
             ModuleScore moduleScore = aModuleTotalScore(number.getModscoId());
+// 打印模块分数
+            System.out.println(moduleScore);
+// 创建一个新的总分对象
             TotalScore totalScore = new TotalScore();
+// 设置总分对象的 tsId 为模块分数的 tsId
             totalScore.setTsId(moduleScore.getTsId());
-            judgeInformation(totalScore);
+// 判断总分信息是否存在，如果不存在则创建，返回总分的 tsId
+            Long judged = judgeInformation(totalScore);
+// 设置总分对象的 tsId 为判断后的 tsId
+            totalScore.setTsId(judged);
+// 设置总分对象的 EpScore 为模块分数的 avsScore
+            totalScore.setEpScore(moduleScore.getAvsScore());
+// 调用总分服务的 addingTotalScore 方法，增加总分
+            totalScoreService.addingTotalScore(totalScore);
 
             return i;
         }
