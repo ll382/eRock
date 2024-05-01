@@ -46,7 +46,7 @@ public interface SelectUser<T extends BaseEntity>  {
 //    A1学习次数业务接口
     public Double A1calculationTimes(int number, int stuNumber);
 //    A2学习评价业务接口
-    public int A2calculationTimes(int excellent, int ordinary);
+    public Double A2calculationTimes(int excellent, int ordinary);
 
 
 

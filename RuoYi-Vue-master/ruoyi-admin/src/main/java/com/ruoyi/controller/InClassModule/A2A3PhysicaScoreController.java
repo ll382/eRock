@@ -89,7 +89,12 @@ public class A2A3PhysicaScoreController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody A2A3PhysicaScore a2A3PhysicaScore)
     {
-        return toAjax(a2A3PhysicaScoreService.insertA2A3PhysicaScore(a2A3PhysicaScore));
+        int score = a2A3PhysicaScoreService.insertA2A3PhysicaScore(a2A3PhysicaScore);
+//        0 means the student already has a score
+        if (score == 0) {
+            return AjaxResult.warn("该学生已存在成绩");
+        }
+        return toAjax(score);
     }
 
     /**

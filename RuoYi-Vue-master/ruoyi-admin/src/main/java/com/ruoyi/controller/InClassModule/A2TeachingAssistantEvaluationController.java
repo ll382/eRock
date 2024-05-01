@@ -90,7 +90,11 @@ public class A2TeachingAssistantEvaluationController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody A2TeachingAssistantEvaluation a2TeachingAssistantEvaluation)
     {
-        return toAjax(a2TeachingAssistantEvaluationService.insertA2TeachingAssistantEvaluation(a2TeachingAssistantEvaluation));
+        int i = a2TeachingAssistantEvaluationService.insertA2TeachingAssistantEvaluation(a2TeachingAssistantEvaluation);
+        if (i == 0) {
+            return warn("已经存在");
+        }
+        return toAjax(i);
     }
 
     /**
@@ -102,6 +106,7 @@ public class A2TeachingAssistantEvaluationController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody A2TeachingAssistantEvaluation a2TeachingAssistantEvaluation)
     {
+        System.out.println(a2TeachingAssistantEvaluation);
         return toAjax(a2TeachingAssistantEvaluationService.updateA2TeachingAssistantEvaluation(a2TeachingAssistantEvaluation));
     }
 
@@ -111,7 +116,7 @@ public class A2TeachingAssistantEvaluationController extends BaseController
     @ApiOperation("删除A2 合作学习 教师评价")
     @PreAuthorize("@ss.hasPermi('evaluate:evaluation:remove')")
     @Log(title = "A2 合作学习 教师评价", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{taeIds}")
+    @DeleteMapping("/{taeIds}")
     public AjaxResult remove(@PathVariable Long[] taeIds)
     {
         return toAjax(a2TeachingAssistantEvaluationService.deleteA2TeachingAssistantEvaluationByTaeIds(taeIds));

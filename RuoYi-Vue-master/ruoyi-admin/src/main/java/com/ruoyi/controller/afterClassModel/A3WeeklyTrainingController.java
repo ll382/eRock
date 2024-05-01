@@ -89,10 +89,14 @@ public class A3WeeklyTrainingController extends BaseController
     public AjaxResult add(@RequestBody A3WeeklyTraining a3WeeklyTraining)
     {
         int i = a3WeeklyTrainingService.insertA3WeeklyTraining(a3WeeklyTraining);
-        if (i < 0) {
+        if (i == -10) {
             return warn("本周打卡成功，请下周再试");
         } else if (i == 0) {
             return warn("打卡间隔不足一天，请明天再试");
+        } else if (i == -1) {
+            return  warn("打卡时间不在训练时间内，请在训练时间内打卡");
+        } else if (i == -2) {
+            return warn("任务不存在，请联系管理员");
         }
         return toAjax(i);
     }

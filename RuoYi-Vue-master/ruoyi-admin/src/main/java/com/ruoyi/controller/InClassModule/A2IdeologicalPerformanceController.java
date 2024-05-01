@@ -89,7 +89,12 @@ public class A2IdeologicalPerformanceController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody A2IdeologicalPerformance a2IdeologicalPerformance)
     {
-        return toAjax(a2IdeologicalPerformanceService.insertA2IdeologicalPerformance(a2IdeologicalPerformance));
+        int i = a2IdeologicalPerformanceService.insertA2IdeologicalPerformance(a2IdeologicalPerformance);
+        if (i < 0) {
+            return warn("该学生已经存在该类型的表现记录");
+        }
+
+        return toAjax(i);
     }
 
     /**
@@ -101,7 +106,8 @@ public class A2IdeologicalPerformanceController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody A2IdeologicalPerformance a2IdeologicalPerformance)
     {
-        return toAjax(a2IdeologicalPerformanceService.updateA2IdeologicalPerformance(a2IdeologicalPerformance));
+        int i = a2IdeologicalPerformanceService.updateA2IdeologicalPerformance(a2IdeologicalPerformance);
+        return toAjax(i);
     }
 
     /**

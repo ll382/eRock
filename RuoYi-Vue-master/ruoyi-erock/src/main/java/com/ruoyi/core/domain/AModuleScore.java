@@ -51,6 +51,10 @@ public class AModuleScore extends BaseEntity
     @Excel(name = "助教评价")
     private BigDecimal teachingAssistant;
 
+    /** 教师评价 */
+    @Excel(name = "教师评价")
+    private BigDecimal teacherEvaluation;
+
     /** 技能测试2 */
     @Excel(name = "技能测试2")
     private BigDecimal skillTests2;
@@ -140,6 +144,14 @@ public class AModuleScore extends BaseEntity
         this.ideologicalPolitical = ideologicalPolitical;
     }
 
+    public BigDecimal getTeacherEvaluation() {
+        return teacherEvaluation;
+    }
+
+    public void setTeacherEvaluation(BigDecimal teacherEvaluation) {
+        this.teacherEvaluation = teacherEvaluation;
+    }
+
     public BigDecimal getIdeologicalPolitical()
     {
         return ideologicalPolitical;
@@ -213,6 +225,7 @@ public class AModuleScore extends BaseEntity
             .append("teachingAssistant", getTeachingAssistant())
             .append("skillTests2", getSkillTests2())
             .append("fitnessTests2", getFitnessTests2())
+            .append("teacherEvaluation", getTeacherEvaluation())
             .append("skillTests3", getSkillTests3())
             .append("fitnessTests3", getFitnessTests3())
             .toString();

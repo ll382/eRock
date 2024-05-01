@@ -420,11 +420,14 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     public Double A1calculationTimes(int number, int stuNumber) {
 //        计算封顶为2分的学生得分
         Double maxNumber = 2.0;
+//        计算学生得分
         Double maxScore = maxNumber / number;
         Double stuScore = maxScore * stuNumber;
+//        保留两位小数
         BigDecimal b  =  new BigDecimal(stuScore);
         double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         return f1;
+//        正常需求
 //        Integer supAns = 16 + (stuNumber - number);
 //        if (supAns < 0) {
 //            supAns = 0;
@@ -439,9 +442,23 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 //    A2模块通用处理方法      本接口用于计算学生A2成绩
 //    excellent 为优秀次数，ordinary为普通次数
     @Override
-    public int A2calculationTimes(int excellent, int ordinary) {
-        int i = (excellent * 1) + (ordinary * -1);
-        return i;
+    public Double A2calculationTimes(int excellent, int ordinary) {
+//        计算封顶为2分的学生得分
+        Double maxNumber = 2.0;
+        Double maxScore = maxNumber / (excellent + ordinary);
+//        计算优秀分数
+        Double stuEScore = maxScore * excellent;
+//        计算普通分数
+        Double stuOScore = maxScore * ordinary;
+//        计算学生得分初始得分1.4
+        Double i = 1.4 + stuEScore - stuOScore;
+//        最大值为2
+        i = i > 2.0 ?  2.0 : i;
+//        保留两位小数
+        BigDecimal b  =  new BigDecimal(i);
+        double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        System.out.println(f1);
+        return f1;
     }
 
 //    线上学习      本接口用于修改A模块学生学习成绩表

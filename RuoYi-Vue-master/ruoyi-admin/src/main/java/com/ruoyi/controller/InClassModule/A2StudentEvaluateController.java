@@ -137,17 +137,12 @@ public class A2StudentEvaluateController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody A2StudentEvaluate a2StudentEvaluate)
     {
-        A2StudentEvaluate as = new A2StudentEvaluate();
-//        判断评价学生以及评价学生者和评价课程是否相同
-        as.setStuId(a2StudentEvaluate.getStuId());
-        as.setEsId(a2StudentEvaluate.getEsId());
-        as.setCrId(a2StudentEvaluate.getCrId());
-//        相同直接返回警告
-        if (StringUtils.isNotEmpty(a2StudentEvaluateService.selectA2StudentEvaluateList(as))){
+        int evaluate = a2StudentEvaluateService.insertA2StudentEvaluate(a2StudentEvaluate);
+        if(evaluate == 0){
             return AjaxResult.warn("你已经提交过了，请勿重复提交");
         }
 //        不相同直接插入
-        return toAjax(a2StudentEvaluateService.insertA2StudentEvaluate(a2StudentEvaluate));
+        return toAjax(evaluate);
     }
 
     /**
@@ -159,7 +154,11 @@ public class A2StudentEvaluateController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody A2StudentEvaluate a2StudentEvaluate)
     {
-        return toAjax(a2StudentEvaluateService.updateA2StudentEvaluate(a2StudentEvaluate));
+        int u = a2StudentEvaluateService.updateA2StudentEvaluate(a2StudentEvaluate);
+        if(u == 0){
+            return AjaxResult.warn("你已经提交过了，请勿重复提交");
+        }
+        return toAjax(u);
     }
 
     /**

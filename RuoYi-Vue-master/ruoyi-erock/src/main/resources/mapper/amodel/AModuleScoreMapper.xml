@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.core.mapper.AModuleScoreMapper">
-    
+
     <resultMap type="AModuleScore" id="AModuleScoreResult">
         <result property="modscoId"    column="modsco_id"    />
         <result property="tsId"    column="ts_id"    />
@@ -21,12 +21,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAModuleScoreVo">
-        select modsco_id, ts_id, online_course, knowledge_tests, skill_tests1, classroom_performance, ideological_political, peer_assessment, teaching_assistant, skill_tests2, fitness_tests2, skill_tests3, fitness_tests3 from a_module_score
+        select modsco_id, ts_id, online_course, knowledge_tests, skill_tests1, classroom_performance, ideological_political, peer_assessment, teaching_assistant,teacher_evaluation, skill_tests2, fitness_tests2, skill_tests3, fitness_tests3 from a_module_score
     </sql>
 
     <select id="selectAModuleScoreList" parameterType="AModuleScore" resultMap="AModuleScoreResult">
         <include refid="selectAModuleScoreVo"/>
-        <where>  
+        <where>
             <if test="tsId != null "> and ts_id = #{tsId}</if>
             <if test="onlineCourse != null "> and online_course = #{onlineCourse}</if>
             <if test="knowledgeTests != null "> and knowledge_tests = #{knowledgeTests}</if>
@@ -39,14 +39,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fitnessTests2 != null "> and fitness_tests2 = #{fitnessTests2}</if>
             <if test="skillTests3 != null "> and skill_tests3 = #{skillTests3}</if>
             <if test="fitnessTests3 != null "> and fitness_tests3 = #{fitnessTests3}</if>
+            <if test="teacherEvaluation != null "> and teacher_evaluation = #{teacherEvaluation}</if>
         </where>
     </select>
-    
+
     <select id="selectAModuleScoreByModscoId" parameterType="Long" resultMap="AModuleScoreResult">
         <include refid="selectAModuleScoreVo"/>
         where modsco_id = #{modscoId}
     </select>
-        
+
     <insert id="insertAModuleScore" parameterType="AModuleScore" useGeneratedKeys="true" keyProperty="modscoId">
         insert into a_module_score
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -62,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fitnessTests2 != null">fitness_tests2,</if>
             <if test="skillTests3 != null">skill_tests3,</if>
             <if test="fitnessTests3 != null">fitness_tests3,</if>
+            <if test="teacherEvaluation != null">teacher_evaluation,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="tsId != null">#{tsId},</if>
@@ -76,6 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fitnessTests2 != null">#{fitnessTests2},</if>
             <if test="skillTests3 != null">#{skillTests3},</if>
             <if test="fitnessTests3 != null">#{fitnessTests3},</if>
+            <if test="teacherEvaluation != null">#{teacherEvaluation},</if>
          </trim>
     </insert>
 
@@ -94,6 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fitnessTests2 != null">fitness_tests2 = #{fitnessTests2},</if>
             <if test="skillTests3 != null">skill_tests3 = #{skillTests3},</if>
             <if test="fitnessTests3 != null">fitness_tests3 = #{fitnessTests3},</if>
+            <if test="teacherEvaluation != null">teacher_evaluation = #{teacherEvaluation},</if>
         </trim>
         where modsco_id = #{modscoId}
     </update>
@@ -103,7 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAModuleScoreByModscoIds" parameterType="String">
-        delete from a_module_score where modsco_id in 
+        delete from a_module_score where modsco_id in
         <foreach item="modscoId" collection="array" open="(" separator="," close=")">
             #{modscoId}
         </foreach>

@@ -141,16 +141,12 @@ public class A2TeachingAssistantController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody A2TeachingAssistant a2TeachingAssistant)
     {
-        A2TeachingAssistant as = new A2TeachingAssistant();
-//        判断评价学生以及评价学生者和评价课程是否相同
-        as.setStuId(a2TeachingAssistant.getStuId());
-        as.setTaStu(a2TeachingAssistant.getTaStu());
-        as.setCrId(a2TeachingAssistant.getCrId());
+        int i = a2TeachingAssistantService.insertA2TeachingAssistant(a2TeachingAssistant);
 //        相同直接返回警告
-        if (StringUtils.isNotEmpty(a2TeachingAssistantService.selectA2TeachingAssistantList(as))){
+        if (i == 0){
             return AjaxResult.warn("你已经提交过了，请勿重复提交");
         }
-        return toAjax(a2TeachingAssistantService.insertA2TeachingAssistant(a2TeachingAssistant));
+        return toAjax(i);
     }
 
     /**
