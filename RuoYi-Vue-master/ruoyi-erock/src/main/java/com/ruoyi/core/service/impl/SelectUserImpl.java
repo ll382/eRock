@@ -125,14 +125,38 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Override
     public A1Task calculateScore(A1Task a1Task){
-//        计算每道题平均百分制占分
+////        计算每道题平均百分制占分
+//        NumberFormat nf = NumberFormat.getNumberInstance();
+//        nf.setMaximumFractionDigits(2);
+//        Double tNum = Double.parseDouble(nf.format(100.0 / a1Task.getTaskNum()));
+////        为每位同学计算对应的分数
+//        a1Task.getAnswerList().forEach(obj -> {
+//            obj.setAnsScore(tNum * obj.getAnsApos());
+//        });
+//        return a1Task;
+        // 确保 a1Task 不为 null
+        if (a1Task == null) {
+            throw new IllegalArgumentException("a1Task cannot be null");
+        }
+
+        // 确保任务数量不为 null 且不为 0，避免除以零的错误
+        if (a1Task.getTaskNum() == null || a1Task.getTaskNum() == 0) {
+            throw new IllegalArgumentException("Task number cannot be null or zero");
+        }
+
+        // 计算每道题平均百分制占分
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(2);
         Double tNum = Double.parseDouble(nf.format(100.0 / a1Task.getTaskNum()));
-//        为每位同学计算对应的分数
-        a1Task.getAnswerList().forEach(obj -> {
-            obj.setAnsScore(tNum * obj.getAnsApos());
-        });
+
+        // 为每位同学计算对应的分数，确保答案列表不为 null
+        if (a1Task.getAnswerList() != null) {
+            a1Task.getAnswerList().forEach(obj -> {
+                if (obj != null) { // 确保答案对象不为 null
+                    obj.setAnsScore(tNum * (obj.getAnsApos() != null ? obj.getAnsApos() : 0)); // 确保答案位置不为 null
+                }
+            });
+        }
         return a1Task;
     }
 
