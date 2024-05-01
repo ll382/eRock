@@ -3,17 +3,19 @@ package com.ruoyi.match.service.impl;
 import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.core.domain.StuGroup;
-import com.ruoyi.core.domain.Student;
 import com.ruoyi.match.domain.CBallteam;
 import com.ruoyi.match.domain.CPersonnelSheet;
-import com.ruoyi.match.domain.CompetitionRecord;
 import com.ruoyi.match.mapper.CBallteamMapper;
 import com.ruoyi.match.service.ICBallteamService;
+import com.ruoyi.match.service.MatchScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 球队参赛Service业务层处理
@@ -25,6 +27,9 @@ import java.util.*;
 public class CBallteamServiceImpl implements ICBallteamService {
 	@Autowired
 	private CBallteamMapper cBallteamMapper;
+
+	@Autowired
+	private MatchScoreService matchScoreService;
 
 	/**
 	 * 查询球队参赛
@@ -109,7 +114,7 @@ public class CBallteamServiceImpl implements ICBallteamService {
 	 * @param cBallteam 球队参赛对象
 	 */
 	public void insertCPersonnelSheet(CBallteam cBallteam) {
-		List<CPersonnelSheet> cPersonnelSheetList = cBallteam.getCPersonnelSheetList();
+		List<CPersonnelSheet> cPersonnelSheetList = getCPersonnelSheets(cBallteam);
 		Long balId = cBallteam.getBalId();
 		if (StringUtils.isNotNull(cPersonnelSheetList)) {
 			List<CPersonnelSheet> list = new ArrayList<CPersonnelSheet>();
@@ -123,6 +128,26 @@ public class CBallteamServiceImpl implements ICBallteamService {
 		}
 	}
 
+	/**
+	 * 设置成员分数
+	 * 1-2名为1等计3分，3-4名为2等计2分，5-6名为3等计1分
+	 */
+	private static List<CPersonnelSheet> getCPersonnelSheets(CBallteam cBallteam) {
+		List<CPersonnelSheet> cPersonnelSheetList = cBallteam.getCPersonnelSheetList();
+		int score = 3; // 初始分数
+		for (int i = 0; i < cPersonnelSheetList.size(); i++) {
+			CPersonnelSheet cPersonnelSheet = cPersonnelSheetList.get(i);
+
+			// 每两个元素减少分数
+			if (i % 2 == 0 && i > 0) {
+				score--;
+			}
+
+			// 设置分数，不低于1
+			cPersonnelSheet.setPsNum(BigDecimal.valueOf(Math.max(score, 1)));
+		}
+		return cPersonnelSheetList;
+	}
 
 	/**
 	 * 获取比赛小组信息
@@ -147,10 +172,18 @@ public class CBallteamServiceImpl implements ICBallteamService {
 		StuGroup stuGroup = new StuGroup();
 		stuGroup.setGgName(String.valueOf(map.get("ggName")));
 		CBallteam cBallteam = JSON.parseObject(JSON.toJSONString(map), CBallteam.class);
+		// 新增小组
+		stuGroup.setStuGroupLeader(cBallteam.getCPersonnelSheetList().get(0).getStuId());   // 设置组长
 		cBallteamMapper.insertStuGroup(stuGroup);
+		// 获取最新插入的小组id
 		cBallteam.setGgId(cBallteamMapper.getNewSTuGroup());
+		// 新增球队参赛
 		int rows = cBallteamMapper.insertCBallteam(cBallteam);
+		// 新增球队内人员
 		insertCPersonnelSheet(cBallteam);
+
+		// C1模块分数新增或修改
+		matchScoreService.modifiedModuleScoreMain(cBallteam.getcPersonnelSheetList());
 		return rows;
 	}
 

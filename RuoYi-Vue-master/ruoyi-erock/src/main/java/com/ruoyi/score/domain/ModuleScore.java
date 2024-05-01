@@ -1,10 +1,11 @@
 package com.ruoyi.score.domain;
 
-import java.math.BigDecimal;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
 
 /**
  * 模块分数对象 module_score
@@ -32,6 +33,13 @@ public class ModuleScore extends BaseEntity
     private BigDecimal avsScore;
 
     public ModuleScore() {
+    }
+
+    public ModuleScore(Long modId, Long tsId, Long enumId, BigDecimal avsScore) {
+        this.modId = modId;
+        this.tsId = tsId;
+        this.enumId = enumId;
+        this.avsScore = avsScore;
     }
 
     public ModuleScore(Long tsId) {

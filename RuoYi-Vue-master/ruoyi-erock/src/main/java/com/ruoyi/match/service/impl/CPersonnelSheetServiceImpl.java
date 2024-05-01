@@ -1,7 +1,6 @@
 package com.ruoyi.match.service.impl;
 
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.match.domain.CBallteam;
 import com.ruoyi.match.domain.CPersonnelSheet;
 import com.ruoyi.match.domain.CProof;
 import com.ruoyi.match.mapper.CPersonnelSheetMapper;
@@ -130,9 +129,5 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 	@Override
 	public List<CPersonnelSheet> findPersonnelShellByBalId(Long balId) {
 		return cPersonnelSheetMapper.findPersonnelShellByBalId(balId);
-	}
-
-	public void calculateScores(){
-
 	}
 }
