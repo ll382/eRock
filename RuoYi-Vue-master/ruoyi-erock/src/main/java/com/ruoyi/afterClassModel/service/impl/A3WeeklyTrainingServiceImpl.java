@@ -126,7 +126,19 @@ public class A3WeeklyTrainingServiceImpl implements IA3WeeklyTrainingService
     @Override
     public int updateA3WeeklyTraining(A3WeeklyTraining a3WeeklyTraining)
     {
-        return a3WeeklyTrainingMapper.updateA3WeeklyTraining(a3WeeklyTraining);
+        int i = a3WeeklyTrainingMapper.updateA3WeeklyTraining(a3WeeklyTraining);
+        if (i == 0) {
+            return 0;
+        }
+//            计算学生分数
+        BigDecimal score = calculateScore(a3WeeklyTraining);
+//            设置学生分数
+        AModuleScore aModuleScore = new AModuleScore();
+        aModuleScore.setFitnessTests3(score);
+//            更新学生分数
+        int updateStudentAScore = selectUser.updateStudentAScore(aModuleScore, a3WeeklyTraining.getStuId());
+        System.out.println(updateStudentAScore);
+        return i;
     }
 
     /**

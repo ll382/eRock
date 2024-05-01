@@ -405,13 +405,34 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 //        TODO: 通用方法 根据当前时间以及学生id查询学生的总分ID
     private Long selectModuleScoreList(Long stuId){
         TotalScore totalScore = new TotalScore();
-        //        查找学期
+    //        查找学期
         Semester semester = selectUser.selectDate(new Date());
         totalScore.setSemesterId(semester.getSemesterId());
 //        给出总分表的id
         Long tsId = this.judgeInformation(totalScore);
         return tsId;
 
+    }
+
+//    todo: 通用方法 根据当前A模块id获总分并插入总分表
+    private ModuleScore aModuleTotalScore(Long modscoId) {
+// 通过 modscoId 查询 AModuleScore
+        AModuleScore aModuleScore = aModuleScoreMapper.selectAModuleScoreByModscoId(modscoId);
+        System.out.println(aModuleScore);
+// 调用 addAll 方法，计算所有分数的总和
+        BigDecimal all = aModuleScore.addAll();
+// 创建一个新的 ModuleScore 对象
+        ModuleScore moduleScore = new ModuleScore();
+// 设置 ModuleScore 的 avsScore 为所有分数的总和
+        moduleScore.setAvsScore(all);
+// 设置 ModuleScore 的 tsId 为 aModuleScore 的 tsId
+        moduleScore.setTsId(aModuleScore.getTsId());
+// 调用 judgeModuleScore 方法，进行模块分数的处理
+        ModuleScore judgeModuleScore = judgeModuleScore(moduleScore);
+// 打印处理后的模块分数对象
+        System.out.println(judgeModuleScore.toString());
+
+        return judgeModuleScore;
     }
 
 //    A1模块通用处理方法      本接口用于计算学生A1成绩
@@ -472,13 +493,28 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         List<AModuleScore> aModuleScores = aModuleScoreMapper.selectAModuleScoreList(aModuleScore);
 //        如果没有数据则插入数据
         if (StringUtils.isEmpty(aModuleScores)) {
-            return aModuleScoreMapper.insertAModuleScore(number);
+            int i = aModuleScoreMapper.insertAModuleScore(number);
+//            计算模块分数
+            ModuleScore moduleScore = aModuleTotalScore(number.getModscoId());
+            TotalScore totalScore = new TotalScore();
+            totalScore.setTsId(moduleScore.getTsId());
+            judgeInformation(totalScore);
+            return i;
         }else {
 //            如果有数据则修改数据
             number.setModscoId(aModuleScores.get(0).getModscoId());
-            return aModuleScoreMapper.updateAModuleScore(number);
+            int i = aModuleScoreMapper.updateAModuleScore(number);
+//            计算模块分数
+            ModuleScore moduleScore = aModuleTotalScore(number.getModscoId());
+            TotalScore totalScore = new TotalScore();
+            totalScore.setTsId(moduleScore.getTsId());
+            judgeInformation(totalScore);
+
+            return i;
         }
     }
+
+
 
 
 //    TODO：标准差的计算

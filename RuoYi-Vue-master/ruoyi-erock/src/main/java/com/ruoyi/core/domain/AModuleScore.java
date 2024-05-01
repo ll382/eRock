@@ -83,6 +83,28 @@ public class AModuleScore extends BaseEntity
         this.fitnessTests2 = BigDecimal.ZERO;
         this.skillTests3 = BigDecimal.ZERO;
         this.fitnessTests3 = BigDecimal.ZERO;
+        this.teacherEvaluation = BigDecimal.ZERO;
+    }
+
+    public BigDecimal addAll() {
+        BigDecimal stuScore = BigDecimal.ZERO; // 初始化总分为0
+
+        // 对每个字段进行非空检查，如果为null则视为BigDecimal.ZERO
+        stuScore = stuScore.add(this.skillTests1 != null ? this.skillTests1 : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.knowledgeTests != null ? this.knowledgeTests : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.classroomPerformance != null ? this.classroomPerformance : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.ideologicalPolitical != null ? this.ideologicalPolitical : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.peerAssessment != null ? this.peerAssessment : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.onlineCourse != null ? this.onlineCourse : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.teacherEvaluation != null ? this.teacherEvaluation : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.teachingAssistant != null ? this.teachingAssistant : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.skillTests2 != null ? this.skillTests2 : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.fitnessTests2 != null ? this.fitnessTests2 : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.fitnessTests3 != null ? this.fitnessTests3 : BigDecimal.ZERO);
+        stuScore = stuScore.add(this.skillTests3 != null ? this.skillTests3 : BigDecimal.ZERO);
+
+        return stuScore; // 返回计算后的总分
+
     }
 
     public void setModscoId(Long modscoId)
