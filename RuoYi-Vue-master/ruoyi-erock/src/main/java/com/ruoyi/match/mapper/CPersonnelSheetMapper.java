@@ -2,8 +2,10 @@ package com.ruoyi.match.mapper;
 
 import com.ruoyi.match.domain.CPersonnelSheet;
 import com.ruoyi.match.domain.CProof;
+import com.ruoyi.score.domain.ModuleScore;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,7 +22,7 @@ public interface CPersonnelSheetMapper {
 	 * @return C 球队内人员
 	 */
 	public CPersonnelSheet selectCPersonnelSheetByPsId(Long psId);
-	
+
 	/**
 	 * 查询C 球队内人员列表
 	 *
@@ -28,7 +30,7 @@ public interface CPersonnelSheetMapper {
 	 * @return C 球队内人员集合
 	 */
 	public List<CPersonnelSheet> selectCPersonnelSheetList(CPersonnelSheet cPersonnelSheet);
-	
+
 	/**
 	 * 新增C 球队内人员
 	 *
@@ -36,7 +38,7 @@ public interface CPersonnelSheetMapper {
 	 * @return 结果
 	 */
 	public int insertCPersonnelSheet(CPersonnelSheet cPersonnelSheet);
-	
+
 	/**
 	 * 修改C 球队内人员
 	 *
@@ -44,7 +46,7 @@ public interface CPersonnelSheetMapper {
 	 * @return 结果
 	 */
 	public int updateCPersonnelSheet(CPersonnelSheet cPersonnelSheet);
-	
+
 	/**
 	 * 删除C 球队内人员
 	 *
@@ -52,7 +54,7 @@ public interface CPersonnelSheetMapper {
 	 * @return 结果
 	 */
 	public int deleteCPersonnelSheetByPsId(Long psId);
-	
+
 	/**
 	 * 批量删除C 球队内人员
 	 *
@@ -60,7 +62,7 @@ public interface CPersonnelSheetMapper {
 	 * @return 结果
 	 */
 	public int deleteCPersonnelSheetByPsIds(Long[] psIds);
-	
+
 	/**
 	 * 批量删除C 佐证
 	 *
@@ -68,7 +70,7 @@ public interface CPersonnelSheetMapper {
 	 * @return 结果
 	 */
 	public int deleteCProofByPsIds(Long[] psIds);
-	
+
 	/**
 	 * 批量新增C 佐证
 	 *
@@ -76,8 +78,8 @@ public interface CPersonnelSheetMapper {
 	 * @return 结果
 	 */
 	public int batchCProof(List<CProof> cProofList);
-	
-	
+
+
 	/**
 	 * 通过C 球队内人员主键删除C 佐证信息
 	 *
@@ -85,9 +87,10 @@ public interface CPersonnelSheetMapper {
 	 * @return 结果
 	 */
 	public int deleteCProofByPsId(Long psId);
-	
+
 	/**
 	 * 根据球队id查询C 球队内人员列表
+	 *
 	 * @param balId
 	 * @return
 	 */
@@ -96,4 +99,14 @@ public interface CPersonnelSheetMapper {
 
 	@Select("SELECT stu_id AS stuId, SUM(ps_num) AS psNum FROM c_personnel_sheet GROUP BY stu_id ORDER BY psNum DESC")
 	public List<CPersonnelSheet> selectList();
+
+	/**
+	 * 根据枚举id累计评分
+	 */
+	public List<CPersonnelSheet> cumulativeScoreByEnumId(Long enumId);
+
+	/**
+	 * 判断有没有模块成绩
+	 */
+	public List<ModuleScore> selectMsIsExits(HashMap<String,String> map);
 }

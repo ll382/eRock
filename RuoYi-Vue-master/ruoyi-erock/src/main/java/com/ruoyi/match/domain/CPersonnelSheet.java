@@ -42,7 +42,7 @@ public class CPersonnelSheet extends BaseEntity
 
 
     @Excel(name = "模块成绩")
-    private BigDecimal ModuleScore;
+    private BigDecimal moduleScore;
 
     public CPersonnelSheet(Long stuId) {
         this.stuId = stuId;
@@ -125,11 +125,11 @@ public class CPersonnelSheet extends BaseEntity
     }
 
     public BigDecimal getModuleScore() {
-        return ModuleScore;
+        return moduleScore;
     }
 
     public void setModuleScore(BigDecimal moduleScore) {
-        ModuleScore = moduleScore;
+        this.moduleScore = moduleScore;
     }
 
     @Override

@@ -1,18 +1,25 @@
 package com.ruoyi.match.service.impl;
 
-import java.util.*;
-
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.core.util.DateUtil;
+import com.ruoyi.dModularity.mapper.D2CertificateMapper;
+import com.ruoyi.match.domain.CBallteam;
+import com.ruoyi.match.domain.CPersonnelSheet;
+import com.ruoyi.match.domain.CompetitionRecord;
+import com.ruoyi.match.mapper.CPersonnelSheetMapper;
+import com.ruoyi.match.mapper.CompetitionRecordMapper;
+import com.ruoyi.match.service.ICompetitionRecordService;
+import com.ruoyi.match.service.MatchScoreService;
+import com.ruoyi.score.domain.ModuleScore;
+import com.ruoyi.score.domain.TotalScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
-
-import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
-import com.ruoyi.match.domain.CBallteam;
-import com.ruoyi.match.mapper.CompetitionRecordMapper;
-import com.ruoyi.match.domain.CompetitionRecord;
-import com.ruoyi.match.service.ICompetitionRecordService;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * C 比赛记录Service业务层处理
@@ -24,6 +31,18 @@ import com.ruoyi.match.service.ICompetitionRecordService;
 public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 	@Autowired
 	private CompetitionRecordMapper competitionRecordMapper;
+
+	@Autowired
+	private CPersonnelSheetMapper cPersonnelSheetMapper;
+
+	@Autowired
+	private D2CertificateMapper d2CertificateMapper;
+
+	@Autowired
+	private SelectUser selectUser;
+
+	@Autowired
+	private MatchScoreService matchScoreService;
 
 	/**
 	 * 查询C 比赛记录
@@ -199,6 +218,33 @@ public class CompetitionRecordServiceImpl implements ICompetitionRecordService {
 	 */
 	@Override
 	public Integer updateAudit(HashMap<String, String> map) {
+		// 修改人员表psNum分数(单人)
+		if ("2".equals(map.get("psAudti"))) {
+			List<CPersonnelSheet> cPersonnelSheetList = competitionRecordMapper.selectScoreByCcrId(map);
+			cPersonnelSheetList.forEach(cPersonnelSheet -> {
+				cPersonnelSheetMapper.updateCPersonnelSheet(cPersonnelSheet);
+			});
+		}
+		// 学期id
+		Long semesterId = d2CertificateMapper.selectDate(DateUtil.StringConvertDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))).getSemesterId();
+		// map.put("semesterId", String.valueOf(semesterId));
+		// map.put("enumId", "7");
+		// if (cPersonnelSheetMapper.selectMsIsExits(map).isEmpty()) {
+		List<CPersonnelSheet> cPersonnelSheetList = cPersonnelSheetMapper.cumulativeScoreByEnumId(7L);
+		// 修改或创建指定stuId的期末和模块成绩
+		cPersonnelSheetList.stream()
+				.filter(cPersonnelSheet -> cPersonnelSheet.getStuId().equals(Long.valueOf(map.get("stuId")))) // 过滤出stuId为13的学生
+				.forEach(cPersonnelSheet -> {
+					Long tsId = selectUser.judgeInformation(new TotalScore(cPersonnelSheet.getStuId(), semesterId));
+					selectUser.judgeModuleScore(new ModuleScore(null, tsId, 7L, cPersonnelSheet.getModuleScore()));
+				});
 		return competitionRecordMapper.updateAudit(map);
+		// }
+		// List<CPersonnelSheet> cPersonnelSheetList = cPersonnelSheetMapper.cumulativeScoreByEnumId(7L);
+		// cPersonnelSheetList.forEach(cPersonnelSheet -> {
+		// 	Long tsId = selectUser.judgeInformation(new TotalScore(cPersonnelSheet.getStuId(), semesterId));
+		// 	selectUser.judgeModuleScore(new ModuleScore(null, tsId, 7L, cPersonnelSheet.getModuleScore()));
+		// });
+		// return competitionRecordMapper.updateAudit(map);
 	}
 }

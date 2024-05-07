@@ -22,7 +22,7 @@ import java.util.List;
 public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 	@Autowired
 	private CPersonnelSheetMapper cPersonnelSheetMapper;
-	
+
 	/**
 	 * 查询C 球队内人员
 	 *
@@ -33,7 +33,7 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 	public CPersonnelSheet selectCPersonnelSheetByPsId(Long psId) {
 		return cPersonnelSheetMapper.selectCPersonnelSheetByPsId(psId);
 	}
-	
+
 	/**
 	 * 查询C 球队内人员列表
 	 *
@@ -44,7 +44,7 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 	public List<CPersonnelSheet> selectCPersonnelSheetList(CPersonnelSheet cPersonnelSheet) {
 		return cPersonnelSheetMapper.selectCPersonnelSheetList(cPersonnelSheet);
 	}
-	
+
 	/**
 	 * 新增C 球队内人员
 	 *
@@ -58,7 +58,7 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 		insertCProof(cPersonnelSheet);
 		return rows;
 	}
-	
+
 	/**
 	 * 修改C 球队内人员
 	 *
@@ -72,7 +72,7 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 		insertCProof(cPersonnelSheet);
 		return cPersonnelSheetMapper.updateCPersonnelSheet(cPersonnelSheet);
 	}
-	
+
 	/**
 	 * 批量删除C 球队内人员
 	 *
@@ -85,7 +85,7 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 		cPersonnelSheetMapper.deleteCProofByPsIds(psIds);
 		return cPersonnelSheetMapper.deleteCPersonnelSheetByPsIds(psIds);
 	}
-	
+
 	/**
 	 * 删除C 球队内人员信息
 	 *
@@ -98,7 +98,7 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 		cPersonnelSheetMapper.deleteCProofByPsId(psId);
 		return cPersonnelSheetMapper.deleteCPersonnelSheetByPsId(psId);
 	}
-	
+
 	/**
 	 * 新增C 佐证信息
 	 *
@@ -118,8 +118,8 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * 根据球队id查询C 球队内人员列表
 	 *

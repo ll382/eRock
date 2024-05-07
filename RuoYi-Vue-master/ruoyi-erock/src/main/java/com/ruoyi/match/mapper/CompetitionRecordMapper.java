@@ -1,11 +1,12 @@
 package com.ruoyi.match.mapper;
 
+import com.ruoyi.match.domain.CBallteam;
+import com.ruoyi.match.domain.CPersonnelSheet;
+import com.ruoyi.match.domain.CompetitionRecord;
+import org.apache.ibatis.annotations.Select;
+
 import java.util.HashMap;
 import java.util.List;
-
-import com.ruoyi.match.domain.CompetitionRecord;
-import com.ruoyi.match.domain.CBallteam;
-import org.apache.ibatis.annotations.Select;
 
 /**
  * C 比赛记录Mapper接口
@@ -122,4 +123,12 @@ public interface CompetitionRecordMapper {
 	 * @return
 	 */
 	public Integer updateAudit(HashMap<String, String> map);
+
+	@Select("SELECT ccr.cc_r_speci AS speci, cps.job_id AS jobId FROM c_competition_record AS ccr INNER JOIN c_ballteam AS cb ON cb.cc_r_id = ccr.cc_r_id INNER JOIN c_personnel_sheet AS cps ON cps.bal_id = cb.bal_id WHERE ccr.cc_r_id = #{ccrId} AND cps.stu_id = #{stuId}")
+	public HashMap<String, Object> selectSpeci(HashMap<String, String> map);
+
+	/**
+	 * 获取学生课外赛加分
+	 */
+	public List<CPersonnelSheet> selectScoreByCcrId(HashMap<String, String> map);
 }

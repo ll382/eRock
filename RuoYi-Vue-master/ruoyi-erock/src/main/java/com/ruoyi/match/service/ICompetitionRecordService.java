@@ -1,10 +1,10 @@
 package com.ruoyi.match.service;
 
+import com.ruoyi.match.domain.CompetitionRecord;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.ruoyi.match.domain.CompetitionRecord;
 
 /**
  * C 比赛记录Service接口
@@ -96,5 +96,4 @@ public interface ICompetitionRecordService {
 	 * @return
 	 */
 	public Integer updateAudit(HashMap<String, String> map);
-
 }

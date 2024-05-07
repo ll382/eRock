@@ -202,8 +202,63 @@
 	<update id="updateAudit" parameterType="HashMap">
 		UPDATE c_personnel_sheet cps
 			INNER JOIN c_ballteam cb ON cps.bal_id = cb.bal_id
-		SET ps_audit = #{psAudti}
+		SET cps.ps_audit = #{psAudti},
+		    cps.ps_num   = #{psNum}
 		WHERE cps.stu_id = #{stuId}
 		  AND cb.cc_r_id = #{ccrId}
 	</update>
+
+	<!-- 获取学生课外赛加分 -->
+	<select id="selectScoreByCcrId" resultType="CPersonnelSheet" parameterType="HashMap">
+		WITH selected_ballteam AS (SELECT cb.bal_id
+		                           FROM c_ballteam cb
+			                                INNER JOIN c_personnel_sheet cps ON cps.bal_id = cb.bal_id
+		                           WHERE cb.cc_r_id = #{ccrId}
+		                           GROUP BY cb.bal_id)
+		SELECT cps.stu_id     AS stuId,
+		       cps.bal_id     AS balId,
+		       ccr.cc_r_speci AS ccrSpeci,
+		       cps.job_id     AS jobId,
+		       CASE
+			       WHEN ccr.cc_r_speci = '友谊赛' THEN 1
+			       WHEN ccr.cc_r_speci = '班赛' AND cps.job_id = 1 THEN
+				       CASE
+					       WHEN ROW_NUMBER() OVER (PARTITION BY cps.job_id ORDER BY cps.ps_num DESC) &lt;= 3 THEN 4
+					       WHEN ROW_NUMBER() OVER (PARTITION BY cps.job_id ORDER BY cps.ps_num DESC) &lt;= 6 THEN 3
+					       ELSE 2
+					       END
+			       WHEN ccr.cc_r_speci = '班赛' AND cps.job_id = 2 THEN 2
+			       WHEN ccr.cc_r_speci = '班赛' AND cps.job_id = 3 THEN 1
+			       WHEN ccr.cc_r_speci = '校赛' AND cps.job_id = 1 THEN
+				       CASE
+					       WHEN ROW_NUMBER() OVER (PARTITION BY cps.job_id ORDER BY cps.ps_num DESC) &lt;= 3 THEN 5
+					       WHEN ROW_NUMBER() OVER (PARTITION BY cps.job_id ORDER BY cps.ps_num DESC) &lt;= 6 THEN 4
+					       ELSE 3
+					       END
+			       WHEN ccr.cc_r_speci = '校赛' AND cps.job_id = 2 THEN 3
+			       WHEN ccr.cc_r_speci = '校赛' AND cps.job_id = 3 THEN 2
+			       WHEN ccr.cc_r_speci = '校际赛' AND cps.job_id = 1 THEN
+				       CASE
+					       WHEN ROW_NUMBER() OVER (PARTITION BY cps.job_id ORDER BY cps.ps_num DESC) &lt;= 3 THEN 6
+					       WHEN ROW_NUMBER() OVER (PARTITION BY cps.job_id ORDER BY cps.ps_num DESC) &lt;= 6 THEN 4
+					       ELSE 5
+					       END
+			       WHEN ccr.cc_r_speci = '校际赛' AND cps.job_id = 2 THEN 4
+			       WHEN ccr.cc_r_speci = '校际赛' AND cps.job_id = 3 THEN 3
+			       ELSE 0
+			       END        AS psNum
+		FROM c_competition_record AS ccr
+			     INNER JOIN c_ballteam AS cb ON cb.cc_r_id = ccr.cc_r_id
+			     INNER JOIN c_personnel_sheet AS cps ON cps.bal_id = cb.bal_id
+			     INNER JOIN selected_ballteam AS sb ON sb.bal_id = cb.bal_id
+		WHERE cps.stu_id = #{stuId}
+		ORDER BY CASE
+			         WHEN ccr.cc_r_speci = '友谊赛' THEN 1
+			         WHEN ccr.cc_r_speci = '班赛' AND cps.job_id = 1 THEN 1
+			         WHEN ccr.cc_r_speci = '校赛' AND cps.job_id = 1 THEN 1
+			         WHEN ccr.cc_r_speci = '校际赛' AND cps.job_id = 1 THEN 1
+			         ELSE 0
+			         END DESC,
+		         psNum DESC
+	</select>
 </mapper>
