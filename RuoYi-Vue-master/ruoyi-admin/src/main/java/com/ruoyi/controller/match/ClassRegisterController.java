@@ -83,6 +83,15 @@ public class ClassRegisterController extends BaseController {
 	}
 
 	/**
+	 * 查询课堂记录列表
+	 */
+	@GetMapping("/getDateList")
+	public TableDataInfo getDateList(ClassRegister classRegister) {
+		List<ClassRegister> list = classRegisterService.selectClassRegisterList(classRegister);
+		return getDataTable(list);
+	}
+
+	/**
 	 * 导出课堂记录列表
 	 */
 	@ApiOperation("导出课堂记录列表")

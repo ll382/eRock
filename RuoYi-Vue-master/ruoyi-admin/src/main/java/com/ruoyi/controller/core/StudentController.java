@@ -5,8 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.core.domain.bo.StudentModuleTotalBo;
+import com.ruoyi.core.domain.dto.StudentDTO;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
 import com.ruoyi.core.domain.vo.StudentModuleScore;
+import com.ruoyi.core.domain.vo.StudentModuleTotalScoreAndRankingVo;
+import com.ruoyi.core.domain.vo.StudentModuleTotalScoreVo;
 import com.ruoyi.teachingExchange.domain.TeachingTable;
 import com.ruoyi.teachingExchange.service.ITeachingTableService;
 import io.swagger.annotations.Api;
@@ -82,6 +86,18 @@ public class StudentController extends BaseController
     public TableDataInfo getStudentProgressScoreList(@PathVariable("classId") Integer classId){
         List<StudentModuleScore> list = studentService.selectStudentProgressScoreList(classId);
         return getDataTable(list);
+    }
+
+    /**
+     * 查询所有学生各模块期末成绩
+     * @param studentDTO
+     * @return
+     */
+    @GetMapping("/getStudentFinalGrade")
+    public TableDataInfo getStudentFinalGrade(StudentDTO studentDTO){
+        List<StudentModuleTotalScoreAndRankingVo> list =studentService.selectStudentFinalGrade(studentDTO);
+        return getDataTable(list);
+
     }
 
     /**

@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.domain.StuToTea;
+import com.ruoyi.core.domain.bo.StudentModuleTotalBo;
+import com.ruoyi.core.domain.dto.StudentDTO;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
 import com.ruoyi.core.domain.vo.StudentModuleScore;
 import org.apache.ibatis.annotations.MapKey;
@@ -86,6 +88,13 @@ public interface StudentMapper
      * @return
      */
     public List<StudentModuleScore> selectStudentProgressScoreList(@Param("classId") Integer classId);
+
+    /**
+     * 查询所有学生各模块期末成绩
+     * @param studentDTO
+     * @return
+     */
+    public List<StudentModuleTotalBo> selectStudentFinalGrade(StudentDTO studentDTO);
 
     /**
      * 新增学生

@@ -6,8 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.domain.bo.StudentModuleTotalBo;
+import com.ruoyi.core.domain.dto.StudentDTO;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
 import com.ruoyi.core.domain.vo.StudentModuleScore;
+import com.ruoyi.core.domain.vo.StudentModuleTotalScoreAndRankingVo;
+import com.ruoyi.core.domain.vo.StudentModuleTotalScoreVo;
 
 
 /**
@@ -46,6 +50,13 @@ public interface IStudentService
      * @return 学生的所有成绩
      */
     public List<List> selectStudentAchievementByStuId(Long stuId, String crDate,String score);
+
+    /**
+     * 查询所有学生各模块期末成绩
+     * @param studentDTO
+     * @return
+     */
+    public List<StudentModuleTotalScoreAndRankingVo> selectStudentFinalGrade(StudentDTO studentDTO);
 
     /**
      * 查询classId班所有学生进步分
