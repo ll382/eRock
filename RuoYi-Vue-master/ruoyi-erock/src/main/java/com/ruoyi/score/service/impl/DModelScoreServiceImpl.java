@@ -1,6 +1,8 @@
 package com.ruoyi.score.service.impl;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.score.mapper.DModelScoreMapper;
@@ -41,6 +43,15 @@ public class DModelScoreServiceImpl implements IDModelScoreService
     public List<DModelScore> selectDModelScoreList(DModelScore dModelScore)
     {
         return dModelScoreMapper.selectDModelScoreList(dModelScore);
+    }
+
+    /**
+     * 根据学生ID查询D 模块成绩
+     * @param stuId 学生ID
+     * @return
+     */
+    public DModelScore selectDModelScoreByStuId(Long stuId){
+        return dModelScoreMapper.selectDModelScoreByStuId(stuId);
     }
 
     /**

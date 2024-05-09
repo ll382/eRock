@@ -68,6 +68,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </select>
 
+    <select id="selectEchartsLineChartMsScoreList" resultMap="AMarkSheetResult">
+        SELECT a_mark_sheet.ms_score FROM a_mark_sheet
+        LEFT JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+        LEFT JOIN class_register on a_exercise_task.cr_id = class_register.cr_id
+        WHERE a_mark_sheet.stu_id = #{stuId} AND  class_register.enum_id = #{enumId} AND class_register.semester_id = #{semesterId}
+    </select>
+
     <select id="selectAMarkSheetByMsIdAndEnumId">
         SELECT
             t.ms_id,

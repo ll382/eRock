@@ -76,6 +76,16 @@ public class DModelScoreController extends BaseController
     }
 
     /**
+     * 根据学生ID查询D 模块成绩
+     * @param stuId 学生ID
+     * @return
+     */
+    @GetMapping("/getStuIdDModelScore/{stuId}")
+    public AjaxResult getStuIdDModelScore(@PathVariable("stuId")Long stuId){
+        return success(dModelScoreService.selectDModelScoreByStuId(stuId));
+    }
+
+    /**
      * 新增D 模块成绩
      */
     @ApiOperation("新增D 模块成绩")

@@ -28,6 +28,13 @@ public interface IDModelScoreService
     public List<DModelScore> selectDModelScoreList(DModelScore dModelScore);
 
     /**
+     * 根据学生ID查询D 模块成绩
+     * @param stuId 学生ID
+     * @return
+     */
+    public DModelScore selectDModelScoreByStuId(Long stuId);
+
+    /**
      * 新增D 模块成绩
      * 
      * @param dModelScore D 模块成绩

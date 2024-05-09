@@ -25,6 +25,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="modscAdditional != null "> and modsc_additional = #{modscAdditional}</if>
         </where>
     </select>
+
+    <select id="selectDModelScoreByStuId" resultMap="DModelScoreResult">
+        select modsc_id, d_model_score.ts_id, modsc_dribble, modsc_shoot, modsc_additional from d_model_score
+        LEFT JOIN total_score on d_model_score.ts_id = total_score.ts_id
+        WHERE total_score.stu_id = #{stuId}
+    </select>
     
     <select id="selectDModelScoreByModscId" parameterType="Long" resultMap="DModelScoreResult">
         <include refid="selectDModelScoreVo"/>

@@ -1,5 +1,29 @@
 package com.ruoyi.controller.practice;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.service.IStuGroupService;
+import com.ruoyi.core.service.IStudentService;
+import com.ruoyi.framework.web.domain.server.Sys;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -56,6 +80,20 @@ public class AMarkSheetController extends BaseController
         List<AMarkSheet> list = aMarkSheetService.selectAMarkSheetList(aMarkSheet);
         ExcelUtil<AMarkSheet> util = new ExcelUtil<AMarkSheet>(AMarkSheet.class);
         util.exportExcel(response, list, "练习、测试评分表数据");
+    }
+
+    /**
+     * 查询Echarts折线图erock评分
+     * @param stuId
+     * @param semesterId
+     * @param enumId
+     * @return
+     */
+    @GetMapping("/selectEchartsLineChartMsScoreList/{stuId}/{semesterId}/{enumId}")
+    public TableDataInfo selectEchartsLineChartMsScoreList(@PathVariable("stuId") Long stuId,@PathVariable("semesterId") Integer semesterId,@PathVariable("enumId") Integer enumId){
+        startPage();
+        List<BigDecimal> list = aMarkSheetService.selectEchartsLineChartMsScoreList(stuId, semesterId, enumId);
+        return getDataTable(list);
     }
 
     /**

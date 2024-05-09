@@ -4,12 +4,20 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.ruoyi.core.domain.bo.StudentModuleTotalBo;
+import com.ruoyi.core.domain.dto.StudentDTO;
 import com.ruoyi.core.domain.vo.StudentCourseGrades;
+import com.ruoyi.core.domain.vo.StudentModuleScore;
+import com.ruoyi.core.domain.vo.StudentModuleTotalScoreAndRankingVo;
+import com.ruoyi.core.domain.vo.StudentModuleTotalScoreVo;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.util.DateUtil;
+import com.ruoyi.score.domain.ModuleScore;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.utils.StringUtils;
@@ -147,6 +155,65 @@ public class StudentServiceImpl implements IStudentService
     }
 
     /**
+     * 查询所有学生各模块期末成绩
+     * @param studentDTO
+     * @return
+     */
+    public List<StudentModuleTotalScoreAndRankingVo> selectStudentFinalGrade(StudentDTO studentDTO){
+        List<StudentModuleTotalBo> studentModuleTotalBos = studentMapper.selectStudentFinalGrade(studentDTO);
+
+        List<StudentModuleTotalScoreAndRankingVo> collect = new ArrayList<>();
+        Integer index = 0;
+        for (StudentModuleTotalBo studentModuleTotalBo:studentModuleTotalBos){
+            index++;
+            StudentModuleTotalScoreAndRankingVo studentModuleTotalScoreAndRankingVo = new StudentModuleTotalScoreAndRankingVo();
+            BeanUtils.copyProperties(studentModuleTotalBo, studentModuleTotalScoreAndRankingVo);
+            if (studentModuleTotalBo.getTotalScore() != null){
+                studentModuleTotalScoreAndRankingVo.setEpScore(studentModuleTotalBo.getTotalScore().getEpScore());
+            }
+            List<ModuleScore> moduleScoreList = studentModuleTotalBo.getModuleScoreList();
+            ArrayList<BigDecimal> avsScoreList = new ArrayList<>();
+            for (ModuleScore moduleScore: moduleScoreList){
+                avsScoreList.add(moduleScore.getAvsScore());
+            }
+            studentModuleTotalScoreAndRankingVo.setAvsScore(avsScoreList);
+            studentModuleTotalScoreAndRankingVo.setRanking(index);
+            collect.add(studentModuleTotalScoreAndRankingVo);
+        }
+
+        if (studentDTO.getStuId() != null){
+            for (StudentModuleTotalScoreAndRankingVo studentModuleTotalScoreAndRankingVo :collect){
+                if (studentDTO.getStuId() == studentModuleTotalScoreAndRankingVo.getStuId()){
+                    collect.clear();
+                    collect.add(studentModuleTotalScoreAndRankingVo);
+                    return collect;
+                }
+            }
+        }
+
+
+
+
+
+//        List<StudentModuleTotalScoreAndRankingVo> collect =  studentModuleTotalBos.stream().map((item) -> {
+//            StudentModuleTotalScoreAndRankingVo studentModuleTotalScoreAndRankingVo = new StudentModuleTotalScoreAndRankingVo();
+//            BeanUtils.copyProperties(item, studentModuleTotalScoreAndRankingVo);
+//            if (item.getTotalScore() != null){
+//                studentModuleTotalScoreAndRankingVo.setEpScore(item.getTotalScore().getEpScore());
+//            }
+//            List<ModuleScore> moduleScoreList = item.getModuleScoreList();
+//            ArrayList<BigDecimal> avsScoreList = new ArrayList<>();
+//            for (ModuleScore moduleScore: moduleScoreList){
+//                avsScoreList.add(moduleScore.getAvsScore());
+//            }
+//            studentModuleTotalScoreAndRankingVo.setAvsScore(avsScoreList);
+//            return studentModuleTotalScoreAndRankingVo;
+//        }).collect(Collectors.toList());
+
+        return collect;
+    }
+
+    /**
      * 根据学生ID查询成绩
      * @param stuId 学生ID
      * @return 学生的所有成绩
@@ -163,6 +230,16 @@ public class StudentServiceImpl implements IStudentService
             list.add(hashMapArrayList);
         }
         return list;
+    }
+
+    /**
+     * 查询classId班所有学生进步分
+     * @param classId 班级ID
+     * @return
+     */
+    public List<StudentModuleScore> selectStudentProgressScoreList(Integer classId){
+        List<StudentModuleScore> studentModuleScores = studentMapper.selectStudentProgressScoreList(classId);
+        return studentModuleScores;
     }
 
     /**

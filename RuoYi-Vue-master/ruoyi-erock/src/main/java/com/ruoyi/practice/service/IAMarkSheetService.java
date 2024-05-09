@@ -1,5 +1,6 @@
 package com.ruoyi.practice.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,14 @@ public interface IAMarkSheetService
      */
     public int insertAMarkSheet(AMarkSheet aMarkSheet);
 
+    /**
+     * 查询Echarts折线图erock评分
+     * @param stuId
+     * @param semesterId
+     * @param enumId
+     * @return
+     */
+    public List<BigDecimal> selectEchartsLineChartMsScoreList(Long stuId, Integer semesterId, Integer enumId);
 
 
     /**

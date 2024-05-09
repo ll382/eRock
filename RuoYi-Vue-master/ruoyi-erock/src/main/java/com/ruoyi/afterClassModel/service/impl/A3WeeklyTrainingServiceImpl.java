@@ -117,6 +117,14 @@ public class A3WeeklyTrainingServiceImpl implements IA3WeeklyTrainingService
 
     }
 
+//    @Test
+//    public void i () {
+//        SimpleDateFormat date = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
+//        Long date1 = (new Date()).getTime();
+//        String timeStamp = date.format(new Date());
+//        System.out.println("Current Time Stamp: " + date1);
+//    }
+
     /**
      * 修改A3 学生周训资源
      *

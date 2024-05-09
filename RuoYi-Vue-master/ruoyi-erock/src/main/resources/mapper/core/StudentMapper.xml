@@ -12,6 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="stuPassword"    column="stu_password"    />
     </resultMap>
 
+    <resultMap id="StudentModuleScore" type="StudentModuleScore">
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="avsScore"    column="avs_score"    />
+    </resultMap>
+
     <resultMap id="StudentStuToTeaResult" type="Student" extends="StudentResult">
         <collection property="stuToTeaList" notNullColumn="sub_stu_id" javaType="java.util.List" resultMap="StuToTeaResult" />
     </resultMap>
@@ -32,6 +38,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="crMain"    column="cr_main"    />
     </resultMap>
 
+    <resultMap type="StudentModuleTotalBo" id="StudentAndModuleAndTotalMap">
+        <result property="stuId"    column="stu_id"    />
+        <result property="ggId"    column="gg_id"    />
+        <result property="classId"    column="class_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="stuPassword"    column="stu_password"    />
+        <association  property="totalScore" javaType="TotalScore">
+            <result property="tsId"    column="ts_id"    />
+            <result property="semesterId"    column="semester_id"    />
+            <result property="epScore"    column="ep_score"    />
+        </association >
+        <collection property="moduleScoreList" ofType="ModuleScore">
+            <result property="modId" column="mod_id"/>
+            <result property="enumId" column="enum_id"/>
+            <result property="avsScore" column="avs_score"/>
+        </collection>
+    </resultMap>
+
     <sql id="selectStudentVo">
         select stu_id, gg_id, class_id, stu_name, stu_password from student
     </sql>
@@ -44,6 +68,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
             <if test="stuPassword != null  and stuPassword != ''"> and stu_password = #{stuPassword}</if>
         </where>
+    </select>
+
+    <select id="selectStudentFinalGrade" resultMap="StudentAndModuleAndTotalMap">
+        SELECT student.stu_id,student.class_id,student.gg_id,student.stu_name,student.stu_password,student.user_id,
+        total_score.ep_score,total_score.semester_id,total_score.ts_id,module_score.avs_score,
+        module_score.enum_id,module_score.mod_id FROM student
+        LEFT JOIN total_score ON student.stu_id = total_score.stu_id
+        LEFT JOIN module_score on total_score.ts_id = module_score.ts_id
+        <where>
+            <if test="classId != null"> and student.class_id = #{classId}</if>
+        </where>
+        ORDER BY total_score.ep_score DESC
     </select>
     
     <select id="selectStudentByStuId" parameterType="Long" resultMap="StudentStuToTeaResult">
@@ -155,6 +191,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           and class_register.cr_date = #{crDate}
           ORDER BY a_mark_sheet.${score}
           limit 10
+    </select>
+
+    <select id="selectStudentProgressScoreList" resultMap="StudentModuleScore">
+        SELECT student.stu_id,student.stu_name,module_score.avs_score FROM student
+        LEFT JOIN total_score ON student.stu_id = total_score.stu_id
+        LEFT JOIN module_score on total_score.ts_id = module_score.ts_id
+        WHERE student.class_id = #{classId} AND module_score.enum_id = 11
     </select>
 
 

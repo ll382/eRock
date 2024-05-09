@@ -61,6 +61,16 @@ public interface AMarkSheetMapper
      * @return
      */
     public Map<String,Object> selectAPageThreeByPcId(Integer pcId);
+
+    /**
+     * 查询Echarts折线图erock评分
+     * @param stuId
+     * @param semesterId
+     * @param enumId
+     * @return
+     */
+    public List<AMarkSheet> selectEchartsLineChartMsScoreList(@Param("stuId") Long stuId,@Param("semesterId") Integer semesterId,@Param("enumId") Integer enumId);
+
     /**
      * 新增 A1 A2 A3 技能练习、技能测试评分D模块进步分从这个中获取期初和期末的技能测试数据进行计算
      *
