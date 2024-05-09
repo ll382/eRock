@@ -163,4 +163,21 @@
 		  AND WEEK(CURDATE()) = WEEK(tc_time)
 		  AND YEAR(CURDATE()) = YEAR(tc_time)
 	</select>
+
+	<!-- 上传文件并且获取 -->
+	<resultMap id="B1FranchiseClubB1MassSourceResult2" type="B1FranchiseClub" extends="B1FranchiseClubResult">
+		<collection property="b1MassSourceList" ofType="B1MassSource" column="tc_id" select="getUrlByTcId"/>
+	</resultMap>
+	<select id="getAfterUpload" parameterType="B1FranchiseClub" resultMap="B1FranchiseClubB1MassSourceResult2">
+		SELECT tc_id, enum_id, stu_id, tc_url, tc_time, tc_title, tc_place
+		FROM b1_franchise_club
+		WHERE stu_id = #{stuId}
+		ORDER BY tc_id DESC
+		LIMIT 1
+	</select>
+	<select id="getUrlByTcId" resultType="B1MassSource" parameterType="Long">
+		SELECT mas_id AS masId, tc_id AS tcId, teas_url AS teasUrl
+		FROM b1_mass_source
+		WHERE tc_id = #{tcId}
+	</select>
 </mapper>

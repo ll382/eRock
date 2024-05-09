@@ -2,6 +2,7 @@ package com.ruoyi.match.mapper;
 
 import com.ruoyi.match.domain.CPersonnelSheet;
 import com.ruoyi.match.domain.CProof;
+import com.ruoyi.match.domain.KwUploadResource;
 import com.ruoyi.score.domain.ModuleScore;
 import org.apache.ibatis.annotations.Select;
 
@@ -109,4 +110,6 @@ public interface CPersonnelSheetMapper {
 	 * 判断有没有模块成绩
 	 */
 	public List<ModuleScore> selectMsIsExits(HashMap<String,String> map);
+
+	public CPersonnelSheet judgeNull(KwUploadResource kwUploadResource);
 }

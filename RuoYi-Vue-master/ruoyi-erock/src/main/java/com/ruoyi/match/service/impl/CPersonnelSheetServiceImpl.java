@@ -1,18 +1,18 @@
 package com.ruoyi.match.service.impl;
 
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.match.domain.CBallteam;
-import com.ruoyi.match.domain.CPersonnelSheet;
-import com.ruoyi.match.domain.CProof;
+import com.ruoyi.core.domain.StuGroup;
+import com.ruoyi.match.domain.*;
 import com.ruoyi.match.mapper.CBallteamMapper;
 import com.ruoyi.match.mapper.CPersonnelSheetMapper;
+import com.ruoyi.match.mapper.CompetitionRecordMapper;
+import com.ruoyi.match.service.ICBallteamService;
 import com.ruoyi.match.service.ICPersonnelSheetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * C 球队内人员Service业务层处理
@@ -24,6 +24,12 @@ import java.util.List;
 public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 	@Autowired
 	private CPersonnelSheetMapper cPersonnelSheetMapper;
+
+	@Autowired
+	private CompetitionRecordMapper competitionRecordMapper;
+
+	@Autowired
+	private ICBallteamService cBallteamService;
 
 	@Autowired
 	private CBallteamMapper cBallteamMapper;
@@ -155,5 +161,55 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 				cBallteamMapper.batchCPersonnelSheet(list);
 			}
 		}
+	}
+
+	@Override
+	public CPersonnelSheet cpsUploadResource(KwUploadResource kwUploadResource) {
+		String[] speci = {"友谊赛", "班赛", "校赛", "校际赛"};
+		kwUploadResource.setCcRSpeci(speci[kwUploadResource.getCcRSpeciId()]);
+		CPersonnelSheet result;
+		CPersonnelSheet cPersonnelSheet = cPersonnelSheetMapper.judgeNull(kwUploadResource);
+		if (cPersonnelSheet == null || !cPersonnelSheet.getStuId().equals(kwUploadResource.getStuId())) {
+			result = insertCbUrl(kwUploadResource);
+		} else {
+			cPersonnelSheet.setPsUrl(kwUploadResource.getPsUrl());
+			cPersonnelSheetMapper.updateCPersonnelSheet(cPersonnelSheet);
+			result = cPersonnelSheet;
+		}
+		return result;
+	}
+
+	public CPersonnelSheet insertCbUrl(KwUploadResource kwUploadResource) {
+		// 小组成员信息
+		StuGroup stuGroup = cBallteamMapper.getStuGroupByStuId(kwUploadResource.getStuId());
+
+		// 新增课外赛比赛记录
+		CompetitionRecord competitionRecord = new CompetitionRecord();
+		competitionRecord.setEnumId(7L);
+		competitionRecord.setCcRTime(new Date());
+		competitionRecord.setCcRSpeci(kwUploadResource.getCcRSpeci());
+		competitionRecord.setCcRAudit(0L);
+		competitionRecordMapper.insertCompetitionRecord(competitionRecord);
+
+		// 新增参赛小组和成员
+		CBallteam cBallteam = new CBallteam();
+		cBallteam.setCcRId(competitionRecord.getCcRId());
+		cBallteam.setGgId(stuGroup.getGgId());
+
+		List<CPersonnelSheet> cPersonnelSheetList = new ArrayList<>();
+		stuGroup.getStudentList().forEach(student -> {
+			if (Objects.equals(student.getStuId(), kwUploadResource.getStuId())) {
+				cPersonnelSheetList.add(new CPersonnelSheet(1L, null, student.getStuId(), student.getStuName(), kwUploadResource.getPsUrl(), 0));
+			} else {
+				cPersonnelSheetList.add(new CPersonnelSheet(1L, null, student.getStuId(), student.getStuName(), null, 0));
+			}
+		});
+		cBallteam.setcPersonnelSheetList(cPersonnelSheetList);
+		cBallteamService.insertCBallteam(cBallteam);
+
+		Optional<CPersonnelSheet> firstMatch = cPersonnelSheetList.stream()
+				.filter(sheet -> Objects.equals(sheet.getStuId(), kwUploadResource.getStuId()))
+				.findFirst();
+		return firstMatch.orElse(null);
 	}
 }

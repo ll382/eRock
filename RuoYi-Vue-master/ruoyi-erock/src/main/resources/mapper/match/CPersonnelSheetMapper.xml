@@ -10,7 +10,8 @@
 		<result property="balId" column="bal_id"/>
 		<result property="stuId" column="stu_id"/>
 		<result property="psNum" column="ps_num"/>
-		<result property="stuName" column="stu_name"/>
+		<result property="psAudit" column="ps_audit"/>
+		<result property="psUrl" column="ps_url"/>
 	</resultMap>
 
 	<resultMap id="CPersonnelSheetCProofResult" type="CPersonnelSheet" extends="CPersonnelSheetResult">
@@ -60,12 +61,14 @@
 			<if test="balId != null">bal_id,</if>
 			<if test="stuId != null">stu_id,</if>
 			<if test="psNum != null">ps_num,</if>
+			<if test="psUrl != null">ps_url,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="jobId != null">#{jobId},</if>
 			<if test="balId != null">#{balId},</if>
 			<if test="stuId != null">#{stuId},</if>
 			<if test="psNum != null">#{psNum},</if>
+			<if test="psUrl != null">#{psUrl},</if>
 		</trim>
 	</insert>
 
@@ -76,6 +79,8 @@
 			<if test="balId != null">bal_id = #{balId},</if>
 			<if test="stuId != null">stu_id = #{stuId},</if>
 			<if test="psNum != null">ps_num = #{psNum},</if>
+			<if test="psAudit != null">ps_audit = #{psAudit},</if>
+			<if test="psUrl != null">ps_url = #{psUrl},</if>
 		</trim>
 		where ps_id = #{psId}
 	</update>
@@ -149,5 +154,16 @@
 		WHERE ts.stu_id = #{stuId}
 		  AND ts.semester_id = #{semesterId}
 		  AND ms.enum_id = #{enumId}
+	</select>
+
+	<select id="judgeNull" parameterType="KwUploadResource" resultMap="CPersonnelSheetResult">
+		SELECT cps.*
+		FROM c_competition_record AS ccr
+			     INNER JOIN c_ballteam AS cb ON cb.cc_r_id = ccr.cc_r_id
+			     INNER JOIN c_personnel_sheet AS cps ON cps.bal_id = cb.bal_id
+		WHERE ccr.cc_r_speci = #{ccRSpeci}
+		  AND cps.job_id = #{jobId}
+		  AND cps.stu_id = #{stuId}
+		LIMIT 1
 	</select>
 </mapper>

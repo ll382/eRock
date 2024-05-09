@@ -112,9 +112,20 @@ public interface B1FranchiseClubMapper {
 	 */
 	public Integer getThisWeekFranchiseNum(Long id);
 
+	/**
+	 * 获取学期id
+	 */
 	@Select("SELECT semester_id AS semesterId, start_date AS startDate, finish_date AS finishDate FROM semester WHERE CURDATE() BETWEEN start_date AND finish_date")
 	public Semester selectSemester();
 
+	/**
+	 * 获取学期内训练次数
+	 */
 	@Select("SELECT COUNT(*) AS num FROM b1_franchise_club WHERE (tc_time BETWEEN #{startDate} AND #{finishDate}) AND stu_id = #{stuId} GROUP BY stu_id")
 	public int countTrainScore(@Param("startDate") String startDate, @Param("finishDate") String finishDate, @Param("stuId") Long stuId);
+
+	/**
+	 * 上传后获取
+	 */
+	public List<B1FranchiseClub> getAfterUpload(B1FranchiseClub b1FranchiseClub);
 }

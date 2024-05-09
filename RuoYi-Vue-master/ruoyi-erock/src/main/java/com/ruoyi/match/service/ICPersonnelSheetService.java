@@ -2,6 +2,7 @@ package com.ruoyi.match.service;
 
 import com.ruoyi.match.domain.CBallteam;
 import com.ruoyi.match.domain.CPersonnelSheet;
+import com.ruoyi.match.domain.KwUploadResource;
 
 import java.util.List;
 
@@ -68,4 +69,6 @@ public interface ICPersonnelSheetService {
 	 */
 	public List<CPersonnelSheet> findPersonnelShellByBalId(Long balId);
 	public void insertCPersonnelSheet(CBallteam cBallteam);
+
+	public CPersonnelSheet cpsUploadResource(KwUploadResource kwUploadResource);
 }

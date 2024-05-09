@@ -38,7 +38,7 @@ public class B1FranchiseClubController extends BaseController {
 	@PreAuthorize("@ss.hasPermi('bModularity:club:list')")
 	@GetMapping("/list")
 	public TableDataInfo list(B1FranchiseClub b1FranchiseClub) {
-		startPage();
+		// startPage();
 		List<B1FranchiseClub> list = b1FranchiseClubService.selectB1FranchiseClubList(b1FranchiseClub);
 		return getDataTable(list);
 	}

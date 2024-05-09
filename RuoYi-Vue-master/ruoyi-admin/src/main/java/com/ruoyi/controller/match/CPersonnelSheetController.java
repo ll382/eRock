@@ -7,6 +7,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.match.domain.CPersonnelSheet;
+import com.ruoyi.match.domain.KwUploadResource;
 import com.ruoyi.match.service.ICPersonnelSheetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +31,7 @@ import java.util.List;
 public class CPersonnelSheetController extends BaseController {
 	@Autowired
 	private ICPersonnelSheetService cPersonnelSheetService;
-	
+
 	/**
 	 * 查询C 球队内人员列表
 	 */
@@ -42,7 +43,7 @@ public class CPersonnelSheetController extends BaseController {
 		List<CPersonnelSheet> list = cPersonnelSheetService.selectCPersonnelSheetList(cPersonnelSheet);
 		return getDataTable(list);
 	}
-	
+
 	/**
 	 * 导出C 球队内人员列表
 	 */
@@ -55,54 +56,54 @@ public class CPersonnelSheetController extends BaseController {
 		ExcelUtil<CPersonnelSheet> util = new ExcelUtil<CPersonnelSheet>(CPersonnelSheet.class);
 		util.exportExcel(response, list, "C 球队内人员数据");
 	}
-	
+
 	/**
 	 * 获取C 球队内人员详细信息
 	 */
 	@ApiOperation("获取C 球队内人员详细信息")
-	
+
 	@PreAuthorize("@ss.hasPermi('match:sheet:query')")
 	@GetMapping(value = "/{psId}")
 	public AjaxResult getInfo(@PathVariable("psId") Long psId) {
 		return success(cPersonnelSheetService.selectCPersonnelSheetByPsId(psId));
 	}
-	
+
 	/**
 	 * 新增C 球队内人员
 	 */
 	@ApiOperation("新增C 球队内人员")
-	
+
 	@PreAuthorize("@ss.hasPermi('match:sheet:add')")
 	@Log(title = "C 球队内人员", businessType = BusinessType.INSERT)
 	@PostMapping
 	public AjaxResult add(@RequestBody CPersonnelSheet cPersonnelSheet) {
 		return toAjax(cPersonnelSheetService.insertCPersonnelSheet(cPersonnelSheet));
 	}
-	
+
 	/**
 	 * 修改C 球队内人员
 	 */
 	@ApiOperation("修改C 球队内人员")
-	
+
 	@PreAuthorize("@ss.hasPermi('match:sheet:edit')")
 	@Log(title = "C 球队内人员", businessType = BusinessType.UPDATE)
 	@PutMapping
 	public AjaxResult edit(@RequestBody CPersonnelSheet cPersonnelSheet) {
 		return toAjax(cPersonnelSheetService.updateCPersonnelSheet(cPersonnelSheet));
 	}
-	
+
 	/**
 	 * 删除C 球队内人员
 	 */
 	@ApiOperation("删除C 球队内人员")
-	
+
 	@PreAuthorize("@ss.hasPermi('match:sheet:remove')")
 	@Log(title = "C 球队内人员", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{psIds}")
 	public AjaxResult remove(@PathVariable Long[] psIds) {
 		return toAjax(cPersonnelSheetService.deleteCPersonnelSheetByPsIds(psIds));
 	}
-	
+
 	/**
 	 * 根据球队id查询C 球队内人员列表
 	 */
@@ -113,5 +114,12 @@ public class CPersonnelSheetController extends BaseController {
 		// startPage();
 		List<CPersonnelSheet> list = cPersonnelSheetService.findPersonnelShellByBalId(balId);
 		return getDataTable(list);
+	}
+
+	@ApiOperation("上传课外赛资源url")
+	@PreAuthorize("@ss.hasPermi('match:sheet:uploadResource')")
+	@PostMapping("/uploadResource")
+	public AjaxResult uploadResource(@RequestBody KwUploadResource kwUploadResource) {
+		return success(cPersonnelSheetService.cpsUploadResource(kwUploadResource));
 	}
 }

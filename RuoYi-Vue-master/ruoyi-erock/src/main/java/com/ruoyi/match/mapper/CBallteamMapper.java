@@ -120,4 +120,10 @@ public interface CBallteamMapper {
 	 */
 	@Select("SELECT gg_id FROM stu_group ORDER BY gg_id DESC LIMIT 1;")
 	public Long getNewSTuGroup();
+
+	/**
+	 * 根据学生学号获取小组内成员信息
+	 */
+	public StuGroup getStuGroupByStuId(Long stuId);
+
 }

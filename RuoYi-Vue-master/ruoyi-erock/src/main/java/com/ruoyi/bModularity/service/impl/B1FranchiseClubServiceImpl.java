@@ -58,6 +58,9 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 	 */
 	@Override
 	public List<B1FranchiseClub> selectB1FranchiseClubList(B1FranchiseClub b1FranchiseClub) {
+		if (b1FranchiseClub.getStuId() != null) {
+			return b1FranchiseClubMapper.getAfterUpload(b1FranchiseClub);
+		}
 		return b1FranchiseClubMapper.selectB1FranchiseClubList(b1FranchiseClub);
 	}
 
