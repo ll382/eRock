@@ -1,10 +1,14 @@
 package com.ruoyi.knowledgeQuiz.service.impl;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.core.domain.AModuleScore;
 import com.ruoyi.core.service.SelectUser;
+import com.ruoyi.knowledgeQuiz.domain.A1Task;
+import com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper;
 import com.ruoyi.teachingExchange.domain.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,9 @@ public class AnswerServiceImpl implements IAnswerService
 {
     @Autowired
     private AnswerMapper answerMapper;
+
+    @Autowired
+    private A1TaskMapper a1TaskMapper;
 
     @Autowired
     private SelectUser selectUser;
@@ -66,9 +73,19 @@ public class AnswerServiceImpl implements IAnswerService
     @Override
     public int insertAnswer(Answer answer)
     {
+//        成绩录入
+        int i = this.updateAScoreAnswered(answer);
+        System.out.println(i);
+//        判断是否重复提交
+        if (answerMapper.selectAnswerList(answer).size() > 0) {
+            return -1;
+        }
         answer.setAnsTime(new Date());
         int rows = answerMapper.insertAnswer(answer);
         insertA1Answered(answer);
+        if (rows == 0) {
+            return 0;
+        }
         return Math.toIntExact(answer.getAnsId());
     }
 
@@ -82,7 +99,11 @@ public class AnswerServiceImpl implements IAnswerService
     @Override
     public int updateAnswer(Answer answer)
     {
+//        成绩录入
+        int i = this.updateAScoreAnswered(answer);
+        System.out.println(i);
         answerMapper.deleteA1AnsweredByAnsId(answer.getAnsId());
+//        默认赋值
         insertA1Answered(answer);
         answer.setAnsResponse(0L);
         answer.setAnsApos(0L);
@@ -117,6 +138,28 @@ public class AnswerServiceImpl implements IAnswerService
     {
         answerMapper.deleteA1AnsweredByAnsId(ansId);
         return answerMapper.deleteAnswerByAnsId(ansId);
+    }
+
+    private int updateAScoreAnswered(Answer answer)
+    {
+//      查看学生提交次数（id查）
+
+        Answer ans = new Answer();
+        ans.setStuId(answer.getStuId());
+        int answers = answerMapper.selectAnswerList(ans).size();
+//      查看任务表总提交次数（全查）
+
+        A1Task a1Task1 = new A1Task();
+        int a1Tasks = a1TaskMapper.selectA1TaskList(a1Task1).size();
+//      计算学生提交次数
+
+        Double i = selectUser.A1calculationTimes(a1Tasks , answers);
+
+//       A模块学生学习任务成绩录入
+
+        AModuleScore aModuleScore = new AModuleScore();
+        aModuleScore.setKnowledgeTests(BigDecimal.valueOf(i));
+        return selectUser.updateStudentAScore( aModuleScore,answer.getStuId() );
     }
 
     /**

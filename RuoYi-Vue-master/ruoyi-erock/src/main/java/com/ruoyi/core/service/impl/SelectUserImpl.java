@@ -5,21 +5,21 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SelectUserVo;
 import com.ruoyi.common.core.domain.entity.Group;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.core.domain.AModuleScore;
 import com.ruoyi.core.domain.Semester;
-import com.ruoyi.core.domain.StuGroup;
-import com.ruoyi.core.domain.Student;
+import com.ruoyi.core.mapper.AModuleScoreMapper;
 import com.ruoyi.core.service.IStuGroupService;
 import com.ruoyi.core.service.IStudentService;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.mapper.SelectUserMapper;
 import com.ruoyi.knowledgeQuiz.domain.A1Task;
-import com.ruoyi.knowledgeQuiz.mapper.A1TaskMapper;
 import com.ruoyi.score.domain.DModelScore;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
 import com.ruoyi.score.mapper.DModelScoreMapper;
 import com.ruoyi.score.mapper.ModuleScoreMapper;
 import com.ruoyi.score.mapper.TotalScoreMapper;
+import com.ruoyi.score.service.ITotalScoreService;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -41,7 +41,7 @@ import java.util.*;
 @Service
 public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Autowired
-    SelectUserMapper    selectUserMapper;
+    SelectUserMapper selectUserMapper;
 
     @Autowired
     IStudentService studentService;
@@ -49,17 +49,33 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
     @Autowired
     IStuGroupService stuGroupService;
 
+//    总分表
+
     @Autowired
     private TotalScoreMapper totalScoreMapper;
 
+//    模块表
+
     @Autowired
     private ModuleScoreMapper moduleScoreMapper;
+
+//    D模块成绩
 
     @Autowired
     private DModelScoreMapper dModelScoreMapper;
 
     @Autowired
     SelectUser selectUser;
+
+//    总分模块的使用
+
+    @Autowired
+    private ITotalScoreService totalScoreService;
+
+//    A模块成绩
+
+    @Autowired
+    private AModuleScoreMapper aModuleScoreMapper;
 
 //    随机数组
     public static LinkedHashSet<Integer> generateRandomNumbers(int n, int max) {
@@ -109,14 +125,38 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
 
     @Override
     public A1Task calculateScore(A1Task a1Task){
-//        计算每道题平均百分制占分
+////        计算每道题平均百分制占分
+//        NumberFormat nf = NumberFormat.getNumberInstance();
+//        nf.setMaximumFractionDigits(2);
+//        Double tNum = Double.parseDouble(nf.format(100.0 / a1Task.getTaskNum()));
+////        为每位同学计算对应的分数
+//        a1Task.getAnswerList().forEach(obj -> {
+//            obj.setAnsScore(tNum * obj.getAnsApos());
+//        });
+//        return a1Task;
+        // 确保 a1Task 不为 null
+        if (a1Task == null) {
+            throw new IllegalArgumentException("a1Task cannot be null");
+        }
+
+        // 确保任务数量不为 null 且不为 0，避免除以零的错误
+        if (a1Task.getTaskNum() == null || a1Task.getTaskNum() == 0) {
+            throw new IllegalArgumentException("Task number cannot be null or zero");
+        }
+
+        // 计算每道题平均百分制占分
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(2);
         Double tNum = Double.parseDouble(nf.format(100.0 / a1Task.getTaskNum()));
-//        为每位同学计算对应的分数
-        a1Task.getAnswerList().forEach(obj -> {
-            obj.setAnsScore(tNum * obj.getAnsApos());
-        });
+
+        // 为每位同学计算对应的分数，确保答案列表不为 null
+        if (a1Task.getAnswerList() != null) {
+            a1Task.getAnswerList().forEach(obj -> {
+                if (obj != null) { // 确保答案对象不为 null
+                    obj.setAnsScore(tNum * (obj.getAnsApos() != null ? obj.getAnsApos() : 0)); // 确保答案位置不为 null
+                }
+            });
+        }
         return a1Task;
     }
 
@@ -389,8 +429,140 @@ public class SelectUserImpl<T extends BaseEntity> implements SelectUser<T> {
         }
     }
 
-//            TODO：标准差的计算
+
+//    TODO: 用于增加或修改学生的A模块成绩
+
+//        TODO: 通用方法 根据当前时间以及学生id查询学生的总分ID
+    private Long selectModuleScoreList(Long stuId){
+        TotalScore totalScore = new TotalScore();
+    //        查找学期
+        Semester semester = selectUser.selectDate(new Date());
+        totalScore.setSemesterId(semester.getSemesterId());
+//        给出总分表的id
+        Long tsId = this.judgeInformation(totalScore);
+        return tsId;
+
+    }
+
+//    todo: 通用方法 根据当前A模块id获总分并插入总分表
+    private ModuleScore aModuleTotalScore(Long modscoId) {
+// 通过 modscoId 查询 AModuleScore
+        AModuleScore aModuleScore = aModuleScoreMapper.selectAModuleScoreByModscoId(modscoId);
+        System.out.println(aModuleScore);
+// 调用 addAll 方法，计算所有分数的总和
+        BigDecimal all = aModuleScore.addAll();
+// 创建一个新的 ModuleScore 对象
+        ModuleScore moduleScore = new ModuleScore();
+// 设置 ModuleScore 的 avsScore 为所有分数的总和
+        moduleScore.setAvsScore(all);
+// 设置 ModuleScore 的 tsId 为 aModuleScore 的 tsId
+        moduleScore.setTsId(aModuleScore.getTsId());
+// 调用 judgeModuleScore 方法，进行模块分数的处理
+        ModuleScore judgeModuleScore = judgeModuleScore(moduleScore);
+// 打印处理后的模块分数对象
+        System.out.println(judgeModuleScore.toString());
+
+        return judgeModuleScore;
+    }
+
+//    A1模块通用处理方法      本接口用于计算学生A1成绩
+//    number 为任务总提交次数，stuNumber为学生提交次数
+    @Override
+    public Double A1calculationTimes(int number, int stuNumber) {
+//        计算封顶为2分的学生得分
+        Double maxNumber = 2.0;
+//        计算学生得分
+        Double maxScore = maxNumber / number;
+        Double stuScore = maxScore * stuNumber;
+//        保留两位小数
+        BigDecimal b  =  new BigDecimal(stuScore);
+        double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return f1;
+//        正常需求
+//        Integer supAns = 16 + (stuNumber - number);
+//        if (supAns < 0) {
+//            supAns = 0;
+//        } else if (supAns < 16) {
+//            supAns = 1;
+//        } else {
+//            supAns = 2;
+//        }
+//        return supAns;
+    }
+
+//    A2模块通用处理方法      本接口用于计算学生A2成绩
+//    excellent 为优秀次数，ordinary为普通次数
+    @Override
+    public Double A2calculationTimes(int excellent, int ordinary) {
+//        计算封顶为2分的学生得分
+        Double maxNumber = 2.0;
+        Double maxScore = maxNumber / (excellent + ordinary);
+//        计算优秀分数
+        Double stuEScore = maxScore * excellent;
+//        计算普通分数
+        Double stuOScore = maxScore * ordinary;
+//        计算学生得分初始得分1.4
+        Double i = 1.4 + stuEScore - stuOScore;
+//        最大值为2
+        i = i > 2.0 ?  2.0 : i;
+//        保留两位小数
+        BigDecimal b  =  new BigDecimal(i);
+        double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        System.out.println(f1);
+        return f1;
+    }
+
+//    线上学习      本接口用于修改A模块学生学习成绩表
+    @Override
+    public int updateStudentAScore(AModuleScore number , Long stuId) {
+//        查询A模块的成绩
+        AModuleScore aModuleScore = new AModuleScore();
+//        插入总分ID
+        Long tsId = this.selectModuleScoreList(stuId);
+        aModuleScore.setTsId(tsId);
+        List<AModuleScore> aModuleScores = aModuleScoreMapper.selectAModuleScoreList(aModuleScore);
+//        如果没有数据则插入数据
+        if (StringUtils.isEmpty(aModuleScores)) {
+            int i = aModuleScoreMapper.insertAModuleScore(number);
+//            计算模块分数
+            ModuleScore moduleScore = aModuleTotalScore(number.getModscoId());
+            TotalScore totalScore = new TotalScore();
+            totalScore.setTsId(moduleScore.getTsId());
+            judgeInformation(totalScore);
+            return i;
+        }else {
+//            如果有数据则修改数据
+            number.setModscoId(aModuleScores.get(0).getModscoId());
+            int i = aModuleScoreMapper.updateAModuleScore(number);
+// 计算模块分数
+            ModuleScore moduleScore = aModuleTotalScore(number.getModscoId());
+// 打印模块分数
+            System.out.println(moduleScore);
+// 创建一个新的总分对象
+            TotalScore totalScore = new TotalScore();
+// 设置总分对象的 tsId 为模块分数的 tsId
+            totalScore.setTsId(moduleScore.getTsId());
+// 判断总分信息是否存在，如果不存在则创建，返回总分的 tsId
+            Long judged = judgeInformation(totalScore);
+// 设置总分对象的 tsId 为判断后的 tsId
+            totalScore.setTsId(judged);
+// 设置总分对象的 EpScore 为模块分数的 avsScore
+            totalScore.setEpScore(moduleScore.getAvsScore());
+// 调用总分服务的 addingTotalScore 方法，增加总分
+            totalScoreService.addingTotalScore(totalScore);
+
+            return i;
+        }
+    }
+
+
+
+
+//    TODO：标准差的计算
+
     public static Double standardDeviation(List<BigDecimal> msScore,int scale){
+//            标准差的计算的是msScore的标准差，scale是精确位数；注意：标准差的计算公式是
+
 //            开根号下的(Σ(Xi - Xba)²)/n-1
 
 //            精确位数,所有除数都得弄好小数处理,否则遇到无限循环小数会抛ArithmeticException错误

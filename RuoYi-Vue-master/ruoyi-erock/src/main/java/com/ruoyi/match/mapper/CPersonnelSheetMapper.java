@@ -2,6 +2,7 @@ package com.ruoyi.match.mapper;
 
 import com.ruoyi.match.domain.CPersonnelSheet;
 import com.ruoyi.match.domain.CProof;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -91,4 +92,8 @@ public interface CPersonnelSheetMapper {
 	 * @return
 	 */
 	public List<CPersonnelSheet> findPersonnelShellByBalId(Long balId);
+
+
+	@Select("SELECT stu_id AS stuId, SUM(ps_num) AS psNum FROM c_personnel_sheet GROUP BY stu_id ORDER BY psNum DESC")
+	public List<CPersonnelSheet> selectList();
 }

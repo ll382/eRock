@@ -1,7 +1,6 @@
 package com.ruoyi.match.mapper;
 
 import com.ruoyi.core.domain.StuGroup;
-import com.ruoyi.core.domain.Student;
 import com.ruoyi.match.domain.CBallteam;
 import com.ruoyi.match.domain.CPersonnelSheet;
 import org.apache.ibatis.annotations.Select;

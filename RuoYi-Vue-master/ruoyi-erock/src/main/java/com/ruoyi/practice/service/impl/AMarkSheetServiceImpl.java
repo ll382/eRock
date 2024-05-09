@@ -1,21 +1,28 @@
 package com.ruoyi.practice.service.impl;
 
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.core.domain.AModuleScore;
 import com.ruoyi.core.domain.Semester;
 import com.ruoyi.core.domain.Student;
 import com.ruoyi.core.mapper.StudentMapper;
 import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.core.service.impl.SelectUserImpl;
+import com.ruoyi.knowledgeQuiz.domain.A1Task;
+import com.ruoyi.match.domain.ClassRegister;
+import com.ruoyi.match.mapper.ClassRegisterMapper;
 import com.ruoyi.practice.domain.ABallExam;
 import com.ruoyi.practice.domain.AExerciseResource;
+import com.ruoyi.practice.domain.AExerciseTask;
 import com.ruoyi.practice.domain.AMarkSheet;
 import com.ruoyi.practice.mapper.ABallExamMapper;
+import com.ruoyi.practice.mapper.AExerciseTaskMapper;
 import com.ruoyi.practice.mapper.AMarkSheetMapper;
 import com.ruoyi.practice.service.IAMarkSheetService;
 import com.ruoyi.score.domain.DModelScore;
 import com.ruoyi.score.domain.ModuleScore;
 import com.ruoyi.score.domain.TotalScore;
 import org.apache.ibatis.annotations.Param;
+import com.ruoyi.teachingExchange.domain.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,13 +45,20 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     private AMarkSheetMapper aMarkSheetMapper;
 
     @Autowired
+    private ClassRegisterMapper classRegisterMapper;
+
+    @Autowired
     private SelectUser selectUser;
 
     @Autowired
     private StudentMapper studentMapper;
 
     @Autowired
+    private AExerciseTaskMapper aExerciseTaskMapper;
+
+    @Autowired
     private ABallExamMapper aBallExamMapper;
+
 
     static List enumList = new ArrayList<>();
     static List main = new ArrayList();
@@ -196,7 +210,63 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
         return data;
     }
 
-//      TODO：进步分计算插入 以及 技能测试插入
+//    TODO：课前技能测试成绩核算
+    public int A1MarkSocre(AMarkSheet aMarkSheet,Long markEnumId){
+//        查看学生提交次数（id查）
+        AMarkSheet markSheet = new AMarkSheet();
+        markSheet.setStuId(aMarkSheet.getStuId());
+        int ams = aMarkSheetMapper.selectAMarkSheetList(markSheet).size();
+        System.out.println(ams);
+//        查看任务表总提交次数（全查）
+        AExerciseTask task = new AExerciseTask();
+        task.setEnumId(markEnumId);
+        int amsStudent = aExerciseTaskMapper.selectAExerciseTaskList(task).size();
+        System.out.println(amsStudent);
+//      计算学生提交次数
+        Double i = selectUser.A1calculationTimes(amsStudent , ams);
+
+//       A模块学生学习任务成绩录入
+        AModuleScore aModuleScore = new AModuleScore();
+        aModuleScore.setSkillTests1(BigDecimal.valueOf(i));
+        return selectUser.updateStudentAScore( aModuleScore,aMarkSheet.getStuId() );
+    }
+//    TODO：课中技能测试成绩核算
+    public int A2MarkSocre(AMarkSheet aMarkSheet){
+//        查询学生提交所有内容
+        AMarkSheet markSheet = new AMarkSheet();
+        markSheet.setStuId(aMarkSheet.getStuId());
+        List<AMarkSheet> list = aMarkSheetMapper.selectAMarkSheetList(markSheet);
+        BigDecimal markBD = BigDecimal.ZERO;
+        for (AMarkSheet sheet : list) {
+            markBD = markBD.add(sheet.getMsScore());
+        }
+//        计算学生平均分
+        BigDecimal divide = markBD.divide(BigDecimal.valueOf(list.size()), 2, RoundingMode.DOWN);
+        AModuleScore aModuleScore = new AModuleScore();
+//        设置平均分加分上线为10
+        aModuleScore.setSkillTests2(divide.divide(BigDecimal.valueOf(10), 2, RoundingMode.DOWN));
+        return selectUser.updateStudentAScore( aModuleScore,aMarkSheet.getStuId() );
+    }
+//    TODO：课后技能测试成绩核算
+    public int A3MarkSocre(AMarkSheet aMarkSheet,Long markEnumId){
+//        查看学生提交次数（id查）
+        AMarkSheet markSheet = new AMarkSheet();
+        markSheet.setStuId(aMarkSheet.getStuId());
+        int ams = aMarkSheetMapper.selectAMarkSheetList(markSheet).size();
+//        查看任务表总提交次数（全查）
+        AExerciseTask task = new AExerciseTask();
+        task.setEnumId(markEnumId);
+        int amsStudent = aExerciseTaskMapper.selectAExerciseTaskList(task).size();
+//      计算学生提交次数
+        Double i = selectUser.A1calculationTimes(amsStudent , ams);
+
+//       A模块学生学习任务成绩录入
+        AModuleScore aModuleScore = new AModuleScore();
+        aModuleScore.setSkillTests1(BigDecimal.valueOf(i));
+        return selectUser.updateStudentAScore( aModuleScore,aMarkSheet.getStuId() );
+    }
+
+//      TODO：A模块分数插入、进步分计算插入 以及 技能测试插入
     /**
      * 新增练习、测试评分表
      * 如果上传技能测试则触发一次D1模块总分计算；通过一系列公式进行计算
@@ -207,6 +277,34 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public int insertAMarkSheet(AMarkSheet aMarkSheet)
     {
+//            TODO：A1模块开始
+//            以任务为单位来查询
+        Long etId = aMarkSheet.getEtId();
+        AExerciseTask task = aExerciseTaskMapper.selectAExerciseTaskByEtId(etId);
+        if (task == null){
+            return 0;
+        }
+        Long markEnumId = task.getEnumId();
+        switch(Math.toIntExact(markEnumId)) {
+//            判断如果是哪个阶段的，就进行哪个阶段的成绩核算
+            case 1:
+                System.out.println("A1模块开始");
+                int i = this.A1MarkSocre(aMarkSheet,markEnumId);
+                System.out.println(i);
+                break;
+            case 2:
+                System.out.println("A2模块开始");
+                int ii = this.A2MarkSocre(aMarkSheet);
+                System.out.println(ii);
+                break;
+            case 3:
+                System.out.println("A3模块开始");
+                int iii = this.A3MarkSocre(aMarkSheet,markEnumId);
+                System.out.println(iii);
+                break;
+        }
+        System.out.println("A1模块结束");
+//            TODO：D1模块开始
 //        TODO：学生数据处理
 //        查找学期
         Semester semester = selectUser.selectDate(new Date());
@@ -412,7 +510,9 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
             if (StringUtils.isNull(semester)){
                 return null;
             }
-//             查到本学期所有的内容
+//            TODO：查找标准差的数据集
+
+//             查到本学期所有的数据（本数据将影响整个方法）
             List<AMarkSheet> taskSheet = aMarkSheetMapper.selectClassRegisters(i, aMarkSheet.getStuId(),semester.getSemesterId());
 
             System.out.println("----------查到本学期所有的内容-----------");
@@ -425,8 +525,24 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
             Student student = students.get(0);
 //            本学期第一组成绩
             AMarkSheet markShe = taskSheet.get(0);
+//            以课程为单位来查询
+            Long etId = markShe.getEtId();
+            AExerciseTask task = aExerciseTaskMapper.selectAExerciseTaskByEtId(etId);
+            ClassRegister classRegister = classRegisterMapper.selectClassRegisterByCrId(task.getCrId());
+//            找到当前课的上课时间
+            Date crDate = classRegister.getCrDate();
+//            找到当前上课时常
+            BigDecimal crDuration = classRegister.getCrDuration();
+//            通过上课时常和开课时间获取下课时间数据
+            Calendar thisTime = Calendar.getInstance();
+            thisTime.setTime(crDate);
+            thisTime.add(Calendar.MINUTE,crDuration.intValue());
+
+            System.out.println("下课时间：");
+            System.out.println(thisTime.getTime());
+
 //            查找期初全部人的成绩取其平均值
-            Double beginSocre = aMarkSheetMapper.selectEveroneMsScore(i, semester.getSemesterId(), student.getClassId(), markShe.getMsTime());
+            Double beginSocre = aMarkSheetMapper.selectEveroneMsScore(i, semester.getSemesterId(), student.getClassId(), thisTime.getTime());
 //            查找期末全部人的成绩取其平均值
             Double endSocre = aMarkSheetMapper.selectEveroneMsScore(i, semester.getSemesterId(), student.getClassId(), null);
 
@@ -444,7 +560,10 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
             System.out.println("成绩数组");
             msScore.forEach(System.out::println);
 
-//          小数后15位
+//        ————————————————————————END————————————————————————
+
+
+//          小数后16位
             int scale = 16;
 
 //            本学期第一个成绩
@@ -452,7 +571,7 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 //            本学期最后一个成绩
             BigDecimal maxMsScore = msScore.get(msScore.size() - 1);
 //            TODO：标准差的计算
-//            开根号下的(Σ(Xi - Xba)?)/n-1
+//            开根号下的(Σ(Xi - Xba)²)/n-1
             Double std = SelectUserImpl.standardDeviation(msScore,scale);
 
             System.out.println("标准差的计算");

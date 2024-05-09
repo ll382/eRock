@@ -16,7 +16,7 @@ import com.ruoyi.teachingExchange.domain.LessonUnits;
 import com.ruoyi.teachingExchange.service.ILessonUnitsService;
 
 /**
- * è¯¾æ—¶å•å…ƒServiceä¸šåŠ¡å±‚å¤„ç†
+ * ¿ÎÊ±µ¥ÔªServiceÒµÎñ²ã´¦Àí
  *
  * @author heye
  * @date 2024-04-01
@@ -31,10 +31,10 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     private TeachingTableMapper teachingTableMapper;
 
     /**
-     * æŸ¥è¯¢è¯¾æ—¶å•å…ƒ
+     * ²éÑ¯¿ÎÊ±µ¥Ôª
      *
-     * @param lesId è¯¾æ—¶å•å…ƒä¸»é”®
-     * @return è¯¾æ—¶å•å…ƒ
+     * @param lesId ¿ÎÊ±µ¥ÔªÖ÷¼ü
+     * @return ¿ÎÊ±µ¥Ôª
      */
     @Override
     public LessonUnits selectLessonUnitsByLesId(Long lesId)
@@ -43,10 +43,10 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     }
 
     /**
-     * æŸ¥è¯¢è¯¾æ—¶å•å…ƒåˆ—è¡¨
+     * ²éÑ¯¿ÎÊ±µ¥ÔªÁĞ±í
      *
-     * @param lessonUnits è¯¾æ—¶å•å…ƒ
-     * @return è¯¾æ—¶å•å…ƒ
+     * @param lessonUnits ¿ÎÊ±µ¥Ôª
+     * @return ¿ÎÊ±µ¥Ôª
      */
     @Override
     public List<LessonUnits> selectLessonUnitsList(LessonUnits lessonUnits)
@@ -55,16 +55,16 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     }
 
     /**
-     * æ–°å¢è¯¾æ—¶å•å…ƒ
+     * ĞÂÔö¿ÎÊ±µ¥Ôª
      *
-     * @param lessonUnits è¯¾æ—¶å•å…ƒ
-     * @return ç»“æœ
+     * @param lessonUnits ¿ÎÊ±µ¥Ôª
+     * @return ½á¹û
      */
     @Transactional
     @Override
     public int insertLessonUnits(LessonUnits lessonUnits)
     {
-//        ç»™å‡ºæ’åº
+//        ¸ø³öÅÅĞò
         List<Long> bd = new ArrayList<>();
         if (lessonUnits.getLesId() == 0) {
             bd.add(lessonUnitsMapper.batchLessonUnitsLesList());
@@ -73,11 +73,11 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
         }
         Long bd1 = bd.get(0);
         Long bd2 = 0L;
-//        åˆ¤æ–­æ˜¯å¦æ˜¯æœ€åä¸€ä¸ªæ’åºï¼Œå¦‚æœæ˜¯ï¼ŒåŠ 100
+//        ÅĞ¶ÏÊÇ·ñÊÇ×îºóÒ»¸öÅÅĞò£¬Èç¹ûÊÇ£¬¼Ó100
         if (bd.size() == 1) {
             lessonUnits.setLesOrderId(bd1 + 100L);
         }else {
-//            ä¸æ˜¯åˆ™è®²å…¶å’Œåé¢é¡ºåºçš„å€¼ä¹‹å·®çš„ä¸€åŠä¸è‡ªç”Ÿç›¸åŠ 
+//            ²»ÊÇÔò½²ÆäºÍºóÃæË³ĞòµÄÖµÖ®²îµÄÒ»°ëÓë×ÔÉúÏà¼Ó
             bd2 = bd.get(1);
             lessonUnits.setLesOrderId(bd1 + ((bd2 - bd1)/2));
         }
@@ -85,10 +85,10 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     }
 
     /**
-     * ä¿®æ”¹è¯¾æ—¶å•å…ƒ
+     * ĞŞ¸Ä¿ÎÊ±µ¥Ôª
      *
-     * @param lessonUnits è¯¾æ—¶å•å…ƒ
-     * @return ç»“æœ
+     * @param lessonUnits ¿ÎÊ±µ¥Ôª
+     * @return ½á¹û
      */
     @Transactional
     @Override
@@ -100,10 +100,10 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     }
 
     /**
-     * æ‰¹é‡åˆ é™¤è¯¾æ—¶å•å…ƒ
+     * ÅúÁ¿É¾³ı¿ÎÊ±µ¥Ôª
      *
-     * @param lesIds éœ€è¦åˆ é™¤çš„è¯¾æ—¶å•å…ƒä¸»é”®
-     * @return ç»“æœ
+     * @param lesIds ĞèÒªÉ¾³ıµÄ¿ÎÊ±µ¥ÔªÖ÷¼ü
+     * @return ½á¹û
      */
     @Transactional
     @Override
@@ -114,31 +114,31 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     }
 
     /**
-     * åˆ é™¤è¯¾æ—¶å•å…ƒä¿¡æ¯
+     * É¾³ı¿ÎÊ±µ¥ÔªĞÅÏ¢
      *
-     * @param lesId è¯¾æ—¶å•å…ƒä¸»é”®
-     * @return ç»“æœ
+     * @param lesId ¿ÎÊ±µ¥ÔªÖ÷¼ü
+     * @return ½á¹û
      */
     @Transactional
     @Override
     public int deleteLessonUnitsByLesId(Long lesId)
     {
         lessonUnitsMapper.selectByLesId(lesId).forEach(teachingId -> {
-//            åˆ é™¤è§‚çœ‹æ—¶å¸¸
+//            É¾³ı¹Û¿´Ê±³£
             teachingTableMapper.deleteViewedTeachingId(teachingId);
-//            åˆ é™¤è¯„è®º
+//            É¾³ıÆÀÂÛ
             teachingTableMapper.deleteA1CommunicationByTeachingId(teachingId);
         });
-//        åˆ é™¤è¯¾æ—¶
+//        É¾³ı¿ÎÊ±
         lessonUnitsMapper.deleteTeachingTableByLesId(lesId);
-//        åˆ é™¤å•å…ƒ
+//        É¾³ıµ¥Ôª
         return lessonUnitsMapper.deleteLessonUnitsByLesId(lesId);
     }
 
     /**
-     * æ–°å¢A1 çº¿ä¸Šå­¦ä¹ å­¦ç”Ÿçº¿ä¸Šè§‚çœ‹è®°å½•è¡¨ä¿¡æ¯
+     * ĞÂÔöA1 ÏßÉÏÑ§Ï°Ñ§ÉúÏßÉÏ¹Û¿´¼ÇÂ¼±íĞÅÏ¢
      *
-     * @param lessonUnits è¯¾æ—¶å•å…ƒå¯¹è±¡
+     * @param lessonUnits ¿ÎÊ±µ¥Ôª¶ÔÏó
      */
     public void insertTeachingTable(LessonUnits lessonUnits)
     {
@@ -160,15 +160,15 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
     }
 
     /**
-     * æ–°å¢A1 çº¿ä¸Šå­¦ä¹ å­¦ç”Ÿçº¿ä¸Šè§‚çœ‹è®°å½•è¡¨ä¿¡æ¯
+     * ĞÂÔöA1 ÏßÉÏÑ§Ï°Ñ§ÉúÏßÉÏ¹Û¿´¼ÇÂ¼±íĞÅÏ¢
      *
-     * @param teachingTableList è¯¾æ—¶å•å…ƒå¯¹è±¡
+     * @param teachingTableList ¿ÎÊ±µ¥Ôª¶ÔÏó
      */
     public int insertUnitsTable(TeachingTable teachingTableList)
     {
-//        å¢åŠ æ—¶é—´
+//        Ôö¼ÓÊ±¼ä
         teachingTableList.setCreatedAt(new Date());
-//        ç»™å‡ºæ’åº
+//        ¸ø³öÅÅĞò
         List<BigDecimal> bd = new ArrayList<BigDecimal>();
         if (teachingTableList.getTeachingId().equals(0L)) {
             bd.add(lessonUnitsMapper.batchTeachingTableLesList());
@@ -177,7 +177,7 @@ public class LessonUnitsServiceImpl implements ILessonUnitsService
         }
         BigDecimal bd1 = bd.get(0);
         BigDecimal bd2 = BigDecimal.ZERO;
-//        åˆ¤æ–­æ˜¯å¦æ˜¯æœ€åä¸€ä¸ªæ’åºï¼Œå¦‚æœæ˜¯ï¼ŒåŠ 100
+//        ÅĞ¶ÏÊÇ·ñÊÇ×îºóÒ»¸öÅÅĞò£¬Èç¹ûÊÇ£¬¼Ó100
         if (bd.size() == 1) {
             teachingTableList.setTeachingOrder(bd1.add(BigDecimal.valueOf(100)));
         } else {

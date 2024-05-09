@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -153,6 +152,8 @@ public class B1FranchiseClubServiceImpl implements IB1FranchiseClubService {
 	 */
 	@Override
 	public Integer getThisWeekFranchiseNum(Long id) {
-		return b1FranchiseClubMapper.getThisWeekFranchiseNum(id);
+		Integer score = b1FranchiseClubMapper.getThisWeekFranchiseNum(id);
+
+		return null;
 	}
 }

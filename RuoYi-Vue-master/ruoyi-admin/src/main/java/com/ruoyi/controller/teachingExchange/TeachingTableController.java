@@ -162,7 +162,6 @@ public class TeachingTableController extends BaseController
     {
         return toAjax(teachingTableService.insertTeachingTable(teachingTable));
     }
-
     /**
      * 修改A1 线上学习学生线上观看记录表
      */
@@ -186,4 +185,6 @@ public class TeachingTableController extends BaseController
     {
         return toAjax(teachingTableService.deleteTeachingTableByTeachingIds(teachingIds));
     }
+
+
 }

@@ -1,10 +1,11 @@
 package com.ruoyi.score.domain;
 
-import java.math.BigDecimal;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
 
 /**
  * 总分对象 total_score
@@ -31,7 +32,17 @@ public class TotalScore extends BaseEntity
     @Excel(name = "学生ID")
     private Long stuId;
 
-    public void setTsId(Long tsId) 
+    public TotalScore() {
+    }
+
+    public TotalScore(Long tsId, Long semesterId, BigDecimal epScore, Long stuId) {
+        this.tsId = tsId;
+        this.semesterId = semesterId;
+        this.epScore = epScore;
+        this.stuId = stuId;
+    }
+
+    public void setTsId(Long tsId)
     {
         this.tsId = tsId;
     }

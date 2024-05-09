@@ -94,7 +94,11 @@ public class A2AttendanceController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody A2Attendance a2Attendance)
     {
-        return toAjax(a2AttendanceService.insertA2Attendance(a2Attendance));
+        int i = a2AttendanceService.insertA2Attendance(a2Attendance);
+        if (i == 0){
+            return error("已经存在该学生的考勤记录");
+        }
+        return toAjax(i);
     }
 
     /**

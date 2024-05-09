@@ -1,11 +1,12 @@
 package com.ruoyi.match.domain;
 
-import java.math.BigDecimal;
-import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * C 球队内人员对象 c_personnel_sheet
@@ -39,6 +40,13 @@ public class CPersonnelSheet extends BaseEntity
     @Excel(name = "学生名称")
     private String stuName;
 
+
+    @Excel(name = "模块成绩")
+    private BigDecimal ModuleScore;
+
+    public CPersonnelSheet(Long stuId) {
+        this.stuId = stuId;
+    }
 
     /** C 佐证信息 */
     private List<CProof> cProofList;
@@ -114,6 +122,14 @@ public class CPersonnelSheet extends BaseEntity
     public void setCProofList(List<CProof> cProofList)
     {
         this.cProofList = cProofList;
+    }
+
+    public BigDecimal getModuleScore() {
+        return ModuleScore;
+    }
+
+    public void setModuleScore(BigDecimal moduleScore) {
+        ModuleScore = moduleScore;
     }
 
     @Override
