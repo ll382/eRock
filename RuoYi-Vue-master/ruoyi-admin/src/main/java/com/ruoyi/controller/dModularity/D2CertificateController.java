@@ -1,27 +1,22 @@
 package com.ruoyi.controller.dModularity;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
-
-import com.ruoyi.core.service.SelectUser;
-import com.ruoyi.dModularity.domain.D2CertificateAuditByStuId;
-import com.ruoyi.score.domain.TotalScore;
-import com.ruoyi.score.service.ITotalScoreService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.core.service.SelectUser;
 import com.ruoyi.dModularity.domain.D2Certificate;
 import com.ruoyi.dModularity.service.ID2CertificateService;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * D2 证书表Controller
@@ -46,7 +41,7 @@ public class D2CertificateController extends BaseController {
 	@PreAuthorize("@ss.hasPermi('dModularity:certificate:list')")
 	@GetMapping("/list")
 	public AjaxResult list(D2Certificate d2Certificate) {
-		startPage();
+		// startPage();
 		return success(selectUser.selectUndoneStudent(d2CertificateService.selectD2CertificateList(d2Certificate)));
 	}
 

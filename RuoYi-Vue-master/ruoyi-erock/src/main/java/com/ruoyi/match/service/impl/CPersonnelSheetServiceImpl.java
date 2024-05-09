@@ -1,8 +1,10 @@
 package com.ruoyi.match.service.impl;
 
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.match.domain.CBallteam;
 import com.ruoyi.match.domain.CPersonnelSheet;
 import com.ruoyi.match.domain.CProof;
+import com.ruoyi.match.mapper.CBallteamMapper;
 import com.ruoyi.match.mapper.CPersonnelSheetMapper;
 import com.ruoyi.match.service.ICPersonnelSheetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ import java.util.List;
 public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 	@Autowired
 	private CPersonnelSheetMapper cPersonnelSheetMapper;
+
+	@Autowired
+	private CBallteamMapper cBallteamMapper;
 
 	/**
 	 * 查询C 球队内人员
@@ -129,5 +134,26 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 	@Override
 	public List<CPersonnelSheet> findPersonnelShellByBalId(Long balId) {
 		return cPersonnelSheetMapper.findPersonnelShellByBalId(balId);
+	}
+
+	/**
+	 * 新增C 球队内人员信息
+	 *
+	 * @param cBallteam 球队参赛对象
+	 */
+	@Override
+	public void insertCPersonnelSheet(CBallteam cBallteam) {
+		List<CPersonnelSheet> cPersonnelSheetList = cBallteam.getCPersonnelSheetList();
+		Long balId = cBallteam.getBalId();
+		if (StringUtils.isNotNull(cPersonnelSheetList)) {
+			List<CPersonnelSheet> list = new ArrayList<CPersonnelSheet>();
+			for (CPersonnelSheet cPersonnelSheet : cPersonnelSheetList) {
+				cPersonnelSheet.setBalId(balId);
+				list.add(cPersonnelSheet);
+			}
+			if (!list.isEmpty()) {
+				cBallteamMapper.batchCPersonnelSheet(list);
+			}
+		}
 	}
 }

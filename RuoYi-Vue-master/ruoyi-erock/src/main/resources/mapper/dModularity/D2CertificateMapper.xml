@@ -15,7 +15,7 @@
 	</resultMap>
 
 	<resultMap id="D2CertificateD2ResourceResult" type="D2Certificate" extends="D2CertificateResult">
-		<collection property="d2ResourceList" notNullColumn="sub_resource_id" javaType="java.util.List"
+		<collection property="d2ResourceList" notNullColumn="certificate_id" javaType="java.util.List"
 		            resultMap="D2ResourceResult"/>
 	</resultMap>
 
@@ -67,6 +67,7 @@
 			<if test="certificateName != null">certificate_name,</if>
 			<if test="audit != null">audit,</if>
 			<if test="uploadTime != null">upload_time,</if>
+			<if test="enumId != null">enum_id,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="stuId != null">#{stuId},</if>
@@ -74,6 +75,7 @@
 			<if test="certificateName != null">#{certificateName},</if>
 			<if test="audit != null">#{audit},</if>
 			<if test="uploadTime != null">#{uploadTime},</if>
+			<if test="enumId != null">#{enumId},</if>
 		</trim>
 	</insert>
 
@@ -154,5 +156,18 @@
 			     JOIN teacher t ON dc.tea_id = t.tea_id
 		WHERE dc.stu_id = #{stuId}
 		  AND dc.audit = #{audit}
+	</select>
+	<!-- 上传后返回 -->
+	<select id="selectByStuIdAndCertificateName" resultMap="D2CertificateD2ResourceResult"
+	        parameterType="D2Certificate">
+		SELECT a.*,
+		       b.resource_id    AS sub_resource_id,
+		       b.certificate_id AS sub_certificate_id,
+		       b.resource_url   AS sub_resource_url
+		FROM d2_certificate a
+			     LEFT JOIN d2_resource b ON b.certificate_id = a.certificate_id
+		WHERE a.stu_id = #{stuId} and a.certificate_name = #{certificateName}
+		ORDER BY upload_time DESC
+		LIMIT 3
 	</select>
 </mapper>

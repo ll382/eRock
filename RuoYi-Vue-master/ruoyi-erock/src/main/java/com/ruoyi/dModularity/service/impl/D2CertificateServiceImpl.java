@@ -57,6 +57,9 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	 */
 	@Override
 	public List<D2Certificate> selectD2CertificateList(D2Certificate d2Certificate) {
+		if (d2Certificate.getStuId() != null && d2Certificate.getCertificateName() != null) {
+			return d2CertificateMapper.selectByStuIdAndCertificateName(d2Certificate);
+		}
 		return selectUser.selectStudent(d2CertificateMapper.selectD2CertificateList(d2Certificate));
 	}
 
@@ -69,6 +72,7 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	@Transactional
 	@Override
 	public int insertD2Certificate(D2Certificate d2Certificate) {
+		d2Certificate.setUploadTime(new Date());
 		int rows = d2CertificateMapper.insertD2Certificate(d2Certificate);
 		insertD2Resource(d2Certificate);
 		return rows;

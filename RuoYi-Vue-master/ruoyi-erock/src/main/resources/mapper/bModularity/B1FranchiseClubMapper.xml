@@ -163,5 +163,4 @@
 		  AND WEEK(CURDATE()) = WEEK(tc_time)
 		  AND YEAR(CURDATE()) = YEAR(tc_time)
 	</select>
-
 </mapper>

@@ -15,127 +15,160 @@ import java.util.List;
  * @author houq
  * @date 2024-03-27
  */
-public class B1FranchiseClub extends BaseEntity
-{
-    private static final long serialVersionUID = 1L;
+public class B1FranchiseClub extends BaseEntity {
+	private static final long serialVersionUID = 1L;
 
-    /** 训练ID */
-    private Long tcId;
+	/**
+	 * 训练ID
+	 */
+	private Long tcId;
 
-    /** 枚举ID */
-    @Excel(name = "枚举ID")
-    private Long enumId;
+	/**
+	 * 枚举ID
+	 */
+	@Excel(name = "枚举ID")
+	private Long enumId;
 
-    /** 学生学号 */
-    @Excel(name = "学生学号")
-    private Long stuId;
+	/**
+	 * 学生学号
+	 */
+	@Excel(name = "学生学号")
+	private Long stuId;
 
-    /** 训练URL */
-    @Excel(name = "训练URL")
-    private String tcUrl;
+	/**
+	 * 训练URL
+	 */
+	@Excel(name = "训练URL")
+	private String tcUrl;
 
-    /** 创建时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date tcTime;
+	/**
+	 * 创建时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
+	private Date tcTime;
 
-    /** 训练标题 */
-    @Excel(name = "训练标题")
-    private String tcTitle;
+	/**
+	 * 训练标题
+	 */
+	@Excel(name = "训练标题")
+	private String tcTitle;
 
-    /** 训练地点 */
-    @Excel(name = "训练地点")
-    private String tcPlace;
+	/**
+	 * 训练地点
+	 */
+	@Excel(name = "训练地点")
+	private String tcPlace;
 
-    /** B1 资源信息 */
-    private List<B1MassSource> b1MassSourceList;
+	/**
+	 * 周数
+	 */
+	@Excel(name = "周数")
+	private String weekNumber;
 
-    public void setTcId(Long tcId)
-    {
-        this.tcId = tcId;
-    }
+	/**
+	 * 每周训练次数
+	 */
+	@Excel(name = "每周训练次数")
+	private String num;
 
-    public Long getTcId()
-    {
-        return tcId;
-    }
-    public void setEnumId(Long enumId)
-    {
-        this.enumId = enumId;
-    }
+	public String getWeekNumber() {
+		return weekNumber;
+	}
 
-    public Long getEnumId()
-    {
-        return enumId;
-    }
-    public void setStuId(Long stuId)
-    {
-        this.stuId = stuId;
-        super.setStuId(stuId);
-    }
+	public void setWeekNumber(String weekNumber) {
+		this.weekNumber = weekNumber;
+	}
 
-    public Long getStuId()
-    {
-        return stuId;
-    }
-    public void setTcUrl(String tcUrl)
-    {
-        this.tcUrl = tcUrl;
-    }
+	public String getNum() {
+		return num;
+	}
 
-    public String getTcUrl()
-    {
-        return tcUrl;
-    }
-    public void setTcTime(Date tcTime)
-    {
-        this.tcTime = tcTime;
-    }
+	public void setNum(String num) {
+		this.num = num;
+	}
 
-    public Date getTcTime()
-    {
-        return tcTime;
-    }
-    public void setTcTitle(String tcTitle)
-    {
-        this.tcTitle = tcTitle;
-    }
+	/**
+	 * B1 资源信息
+	 */
+	private List<B1MassSource> b1MassSourceList;
 
-    public String getTcTitle()
-    {
-        return tcTitle;
-    }
-    public void setTcPlace(String tcPlace)
-    {
-        this.tcPlace = tcPlace;
-    }
+	public void setTcId(Long tcId) {
+		this.tcId = tcId;
+	}
 
-    public String getTcPlace()
-    {
-        return tcPlace;
-    }
+	public Long getTcId() {
+		return tcId;
+	}
 
-    public List<B1MassSource> getB1MassSourceList()
-    {
-        return b1MassSourceList;
-    }
+	public void setEnumId(Long enumId) {
+		this.enumId = enumId;
+	}
 
-    public void setB1MassSourceList(List<B1MassSource> b1MassSourceList)
-    {
-        this.b1MassSourceList = b1MassSourceList;
-    }
+	public Long getEnumId() {
+		return enumId;
+	}
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("tcId", getTcId())
-            .append("enumId", getEnumId())
-            .append("stuId", getStuId())
-            .append("tcUrl", getTcUrl())
-            .append("tcTime", getTcTime())
-            .append("tcTitle", getTcTitle())
-            .append("tcPlace", getTcPlace())
-            .append("b1MassSourceList", getB1MassSourceList())
-            .toString();
-    }
+	public void setStuId(Long stuId) {
+		this.stuId = stuId;
+		super.setStuId(stuId);
+	}
+
+	public Long getStuId() {
+		return stuId;
+	}
+
+	public void setTcUrl(String tcUrl) {
+		this.tcUrl = tcUrl;
+	}
+
+	public String getTcUrl() {
+		return tcUrl;
+	}
+
+	public void setTcTime(Date tcTime) {
+		this.tcTime = tcTime;
+	}
+
+	public Date getTcTime() {
+		return tcTime;
+	}
+
+	public void setTcTitle(String tcTitle) {
+		this.tcTitle = tcTitle;
+	}
+
+	public String getTcTitle() {
+		return tcTitle;
+	}
+
+	public void setTcPlace(String tcPlace) {
+		this.tcPlace = tcPlace;
+	}
+
+	public String getTcPlace() {
+		return tcPlace;
+	}
+
+	public List<B1MassSource> getB1MassSourceList() {
+		return b1MassSourceList;
+	}
+
+	public void setB1MassSourceList(List<B1MassSource> b1MassSourceList) {
+		this.b1MassSourceList = b1MassSourceList;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+				.append("tcId", getTcId())
+				.append("enumId", getEnumId())
+				.append("stuId", getStuId())
+				.append("tcUrl", getTcUrl())
+				.append("tcTime", getTcTime())
+				.append("tcTitle", getTcTitle())
+				.append("tcPlace", getTcPlace())
+				.append("b1MassSourceList", getB1MassSourceList())
+				.toString();
+	}
 }

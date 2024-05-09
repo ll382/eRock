@@ -106,4 +106,7 @@ public interface D2CertificateMapper {
 	// 获取学期id
 	@Select("SELECT semester_id AS semesterId, start_date AS startDate , finish_date AS finishDate FROM semester WHERE #{date} BETWEEN start_date AND finish_date")
 	public Semester selectDate(Date date);
+
+	// 上传后返回
+	public List<D2Certificate> selectByStuIdAndCertificateName(D2Certificate d2Certificate);
 }
