@@ -122,4 +122,11 @@ public class CPersonnelSheetController extends BaseController {
 	public AjaxResult uploadResource(@RequestBody KwUploadResource kwUploadResource) {
 		return success(cPersonnelSheetService.cpsUploadResource(kwUploadResource));
 	}
+
+	@ApiOperation("根据学号获取课外赛记录")
+	@PreAuthorize("@ss.hasPermi('match:sheet:getKwByStuId')")
+	@GetMapping("/getKwByStuId")
+	public AjaxResult getKwByStuId(@RequestParam(required = false) Long stuId) {
+		return success(cPersonnelSheetService.getKwByStuId(stuId));
+	}
 }

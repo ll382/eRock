@@ -172,6 +172,7 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 		if (cPersonnelSheet == null || !cPersonnelSheet.getStuId().equals(kwUploadResource.getStuId())) {
 			result = insertCbUrl(kwUploadResource);
 		} else {
+			cPersonnelSheet.setJobId(kwUploadResource.getJobId());
 			cPersonnelSheet.setPsUrl(kwUploadResource.getPsUrl());
 			cPersonnelSheetMapper.updateCPersonnelSheet(cPersonnelSheet);
 			result = cPersonnelSheet;
@@ -199,9 +200,9 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 		List<CPersonnelSheet> cPersonnelSheetList = new ArrayList<>();
 		stuGroup.getStudentList().forEach(student -> {
 			if (Objects.equals(student.getStuId(), kwUploadResource.getStuId())) {
-				cPersonnelSheetList.add(new CPersonnelSheet(1L, null, student.getStuId(), student.getStuName(), kwUploadResource.getPsUrl(), 0));
+				cPersonnelSheetList.add(new CPersonnelSheet(kwUploadResource.getJobId(), null, student.getStuId(), student.getStuName(), kwUploadResource.getPsUrl(), 0));
 			} else {
-				cPersonnelSheetList.add(new CPersonnelSheet(1L, null, student.getStuId(), student.getStuName(), null, 0));
+				cPersonnelSheetList.add(new CPersonnelSheet(kwUploadResource.getJobId(), null, student.getStuId(), student.getStuName(), null, 0));
 			}
 		});
 		cBallteam.setcPersonnelSheetList(cPersonnelSheetList);
@@ -211,5 +212,10 @@ public class CPersonnelSheetServiceImpl implements ICPersonnelSheetService {
 				.filter(sheet -> Objects.equals(sheet.getStuId(), kwUploadResource.getStuId()))
 				.findFirst();
 		return firstMatch.orElse(null);
+	}
+
+	@Override
+	public List<CPersonnelSheet> getKwByStuId(Long stuId) {
+		return cPersonnelSheetMapper.getKwByStuId(stuId);
 	}
 }

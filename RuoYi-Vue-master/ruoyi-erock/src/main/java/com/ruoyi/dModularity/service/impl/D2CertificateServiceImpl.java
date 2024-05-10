@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -57,7 +58,7 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	 */
 	@Override
 	public List<D2Certificate> selectD2CertificateList(D2Certificate d2Certificate) {
-		if (d2Certificate.getStuId() != null && d2Certificate.getCertificateName() != null) {
+		if (d2Certificate.getStuId() != null && d2Certificate.getEnumId() != null) {
 			return d2CertificateMapper.selectByStuIdAndCertificateName(d2Certificate);
 		}
 		return selectUser.selectStudent(d2CertificateMapper.selectD2CertificateList(d2Certificate));
@@ -72,10 +73,16 @@ public class D2CertificateServiceImpl implements ID2CertificateService {
 	@Transactional
 	@Override
 	public int insertD2Certificate(D2Certificate d2Certificate) {
+		String[] certificateNameList = {"班赛优秀运动员", "校赛优秀运动员", "校级以上比赛优秀运动员", "一级裁判", "二级裁判", "三级裁判"};
 		d2Certificate.setUploadTime(new Date());
-		int rows = d2CertificateMapper.insertD2Certificate(d2Certificate);
-		insertD2Resource(d2Certificate);
-		return rows;
+		AtomicInteger rows = new AtomicInteger();
+		d2Certificate.getCertificateNameId().forEach(id -> {
+			d2Certificate.setCertificateName(certificateNameList[id]);
+			rows.addAndGet(d2CertificateMapper.insertD2Certificate(d2Certificate));
+			insertD2Resource(d2Certificate);
+		});
+
+		return rows.get();
 	}
 
 	/**

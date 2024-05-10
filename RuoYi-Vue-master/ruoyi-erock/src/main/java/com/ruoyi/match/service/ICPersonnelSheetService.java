@@ -71,4 +71,6 @@ public interface ICPersonnelSheetService {
 	public void insertCPersonnelSheet(CBallteam cBallteam);
 
 	public CPersonnelSheet cpsUploadResource(KwUploadResource kwUploadResource);
+
+	public List<CPersonnelSheet> getKwByStuId(Long stuId);
 }

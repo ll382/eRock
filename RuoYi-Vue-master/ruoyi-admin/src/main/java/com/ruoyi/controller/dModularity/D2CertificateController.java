@@ -42,7 +42,7 @@ public class D2CertificateController extends BaseController {
 	@GetMapping("/list")
 	public AjaxResult list(D2Certificate d2Certificate) {
 		// startPage();
-		return success(selectUser.selectUndoneStudent(d2CertificateService.selectD2CertificateList(d2Certificate)));
+		return success((d2CertificateService.selectD2CertificateList(d2Certificate)));
 	}
 
 	/**

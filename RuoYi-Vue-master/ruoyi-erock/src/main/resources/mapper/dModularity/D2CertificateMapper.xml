@@ -161,13 +161,17 @@
 	<select id="selectByStuIdAndCertificateName" resultMap="D2CertificateD2ResourceResult"
 	        parameterType="D2Certificate">
 		SELECT a.*,
-		       b.resource_id    AS sub_resource_id,
-		       b.certificate_id AS sub_certificate_id,
-		       b.resource_url   AS sub_resource_url
+		b.resource_id AS sub_resource_id,
+		b.certificate_id AS sub_certificate_id,
+		b.resource_url AS sub_resource_url
 		FROM d2_certificate a
-			     LEFT JOIN d2_resource b ON b.certificate_id = a.certificate_id
-		WHERE a.stu_id = #{stuId} and a.certificate_name = #{certificateName}
+		LEFT JOIN d2_resource b ON b.certificate_id = a.certificate_id
+		<where>
+			<if test="stuId != null">AND a.stu_id = #{stuId}</if>
+			<if test="enumId != null">AND a.enum_id = #{enumId}</if>
+			<if test="certificateName != null">AND a.certificate_name = #{certificateName}</if>
+		</where>
 		ORDER BY upload_time DESC
-		LIMIT 3
+# 		LIMIT 3
 	</select>
 </mapper>

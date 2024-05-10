@@ -109,7 +109,9 @@ public interface CPersonnelSheetMapper {
 	/**
 	 * 判断有没有模块成绩
 	 */
-	public List<ModuleScore> selectMsIsExits(HashMap<String,String> map);
+	public List<ModuleScore> selectMsIsExits(HashMap<String, String> map);
 
 	public CPersonnelSheet judgeNull(KwUploadResource kwUploadResource);
+
+	public List<CPersonnelSheet> getKwByStuId(Long stuId);
 }

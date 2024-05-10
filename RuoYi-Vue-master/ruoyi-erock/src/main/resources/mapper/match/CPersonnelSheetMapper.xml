@@ -162,8 +162,16 @@
 			     INNER JOIN c_ballteam AS cb ON cb.cc_r_id = ccr.cc_r_id
 			     INNER JOIN c_personnel_sheet AS cps ON cps.bal_id = cb.bal_id
 		WHERE ccr.cc_r_speci = #{ccRSpeci}
-		  AND cps.job_id = #{jobId}
 		  AND cps.stu_id = #{stuId}
 		LIMIT 1
+	</select>
+
+	<select id="getKwByStuId" resultMap="CPersonnelSheetResult" parameterType="Long">
+		SELECT cps.*
+		FROM c_competition_record AS ccr
+			     INNER JOIN c_ballteam AS cb ON cb.cc_r_id = ccr.cc_r_id
+			     INNER JOIN c_personnel_sheet AS cps ON cps.bal_id = cb.bal_id
+		WHERE cps.stu_id = #{stuId}
+		  AND ccr.enum_id = 7
 	</select>
 </mapper>

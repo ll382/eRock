@@ -1,13 +1,13 @@
 package com.ruoyi.dModularity.domain;
 
-import java.util.List;
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * D2 证书表对象 d2_certificate
@@ -60,6 +60,16 @@ public class D2Certificate extends BaseEntity {
 	 * D2 资源信息
 	 */
 	private List<D2Resource> d2ResourceList;
+
+	private List<Integer> certificateNameId;
+
+	public List<Integer> getCertificateNameId() {
+		return certificateNameId;
+	}
+
+	public void setCertificateNameId(List<Integer> certificateNameId) {
+		this.certificateNameId = certificateNameId;
+	}
 
 	public void setCertificateId(Long certificateId) {
 		this.certificateId = certificateId;
