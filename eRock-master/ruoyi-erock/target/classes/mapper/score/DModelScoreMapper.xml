@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.score.mapper.DModelScoreMapper">
+    
+    <resultMap type="DModelScore" id="DModelScoreResult">
+        <result property="modscId"    column="modsc_id"    />
+        <result property="tsId"    column="ts_id"    />
+        <result property="modscDribble"    column="modsc_dribble"    />
+        <result property="modscShoot"    column="modsc_shoot"    />
+        <result property="modscAdditional"    column="modsc_additional"    />
+    </resultMap>
+
+    <sql id="selectDModelScoreVo">
+        select modsc_id, ts_id, modsc_dribble, modsc_shoot, modsc_additional from d_model_score
+    </sql>
+
+    <select id="selectDModelScoreList" parameterType="DModelScore" resultMap="DModelScoreResult">
+        <include refid="selectDModelScoreVo"/>
+        <where>  
+            <if test="tsId != null "> and ts_id = #{tsId}</if>
+            <if test="modscDribble != null "> and modsc_dribble = #{modscDribble}</if>
+            <if test="modscShoot != null "> and modsc_shoot = #{modscShoot}</if>
+            <if test="modscAdditional != null "> and modsc_additional = #{modscAdditional}</if>
+        </where>
+    </select>
+
+    <select id="selectDModelScoreByStuId" resultMap="DModelScoreResult">
+        select modsc_id, d_model_score.ts_id, modsc_dribble, modsc_shoot, modsc_additional from d_model_score
+        LEFT JOIN total_score on d_model_score.ts_id = total_score.ts_id
+        WHERE total_score.stu_id = #{stuId}
+    </select>
+    
+    <select id="selectDModelScoreByModscId" parameterType="Long" resultMap="DModelScoreResult">
+        <include refid="selectDModelScoreVo"/>
+        where modsc_id = #{modscId}
+    </select>
+        
+    <insert id="insertDModelScore" parameterType="DModelScore" useGeneratedKeys="true" keyProperty="modscId">
+        insert into d_model_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tsId != null">ts_id,</if>
+            <if test="modscDribble != null">modsc_dribble,</if>
+            <if test="modscShoot != null">modsc_shoot,</if>
+            <if test="modscAdditional != null">modsc_additional,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tsId != null">#{tsId},</if>
+            <if test="modscDribble != null">#{modscDribble},</if>
+            <if test="modscShoot != null">#{modscShoot},</if>
+            <if test="modscAdditional != null">#{modscAdditional},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDModelScore" parameterType="DModelScore">
+        update d_model_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tsId != null">ts_id = #{tsId},</if>
+            <if test="modscDribble != null">modsc_dribble = #{modscDribble},</if>
+            <if test="modscShoot != null">modsc_shoot = #{modscShoot},</if>
+            <if test="modscAdditional != null">modsc_additional = #{modscAdditional},</if>
+        </trim>
+        where modsc_id = #{modscId}
+    </update>
+
+    <delete id="deleteDModelScoreByModscId" parameterType="Long">
+        delete from d_model_score where modsc_id = #{modscId}
+    </delete>
+
+    <delete id="deleteDModelScoreByModscIds" parameterType="String">
+        delete from d_model_score where modsc_id in 
+        <foreach item="modscId" collection="array" open="(" separator="," close=")">
+            #{modscId}
+        </foreach>
+    </delete>
+</mapper>

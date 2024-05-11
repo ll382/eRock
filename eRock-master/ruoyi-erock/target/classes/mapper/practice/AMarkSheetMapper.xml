@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.practice.mapper.AMarkSheetMapper">
+    
+    <resultMap type="AMarkSheet" id="AMarkSheetResult">
+        <result property="msId"    column="ms_id"    />
+        <result property="etId"    column="et_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="msTime"    column="ms_time"    />
+        <result property="msDribble"    column="ms_dribble"    />
+        <result property="msShooting"    column="ms_shooting"    />
+        <result property="msScore"    column="ms_score"    />
+        <result property="ms1"    column="ms_1"    />
+        <result property="ms2"    column="ms_2"    />
+        <result property="ms3"    column="ms_3"    />
+        <result property="msClass"    column="ms_class"    />
+        <result property="msImg"    column="ms_img"    />
+    </resultMap>
+
+    <sql id="selectAMarkSheetVo">
+        select ms_id, et_id, stu_id, tea_id, ms_time, ms_dribble, ms_shooting, ms_score, ms_1, ms_2, ms_3, ms_class, ms_img from a_mark_sheet
+    </sql>
+
+    <select id="selectAMarkSheetList" parameterType="AMarkSheet" resultMap="AMarkSheetResult">
+        <include refid="selectAMarkSheetVo"/>
+        <where>  
+            <if test="etId != null "> and et_id = #{etId}</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="teaId != null "> and tea_id = #{teaId}</if>
+            <if test="msTime != null "> and ms_time = #{msTime}</if>
+            <if test="msDribble != null "> and ms_dribble = #{msDribble}</if>
+            <if test="msShooting != null "> and ms_shooting = #{msShooting}</if>
+            <if test="msScore != null "> and ms_score = #{msScore}</if>
+            <if test="ms1 != null "> and ms_1 = #{ms1}</if>
+            <if test="ms2 != null "> and ms_2 = #{ms2}</if>
+            <if test="ms3 != null "> and ms_3 = #{ms3}</if>
+            <if test="msClass != null  and msClass != ''"> and ms_class = #{msClass}</if>
+            <if test="msImg != null  and msImg != ''"> and ms_img = #{msImg}</if>
+        </where>
+        order by ms_time asc
+    </select>
+    
+    <select id="selectAMarkSheetByMsId" parameterType="Long" resultMap="AMarkSheetResult">
+        <include refid="selectAMarkSheetVo"/>
+        where ms_id = #{msId}
+    </select>
+    <select id="selectEveroneMsScore" resultType="double">
+        SELECT
+        SUM(ms.ms_score)/COUNT(*)
+        FROM class_register as cr
+        JOIN a_exercise_task as et on cr.cr_id=et.cr_id
+        JOIN a_mark_sheet as ms on et.et_id=ms.et_id
+        WHERE et.enum_id=2
+        <if test="enumId != null">
+            AND cr.enum_id=#{enumId}
+        </if>
+        <if test="semesterId != null">
+            AND cr.semester_id=#{semesterId}
+        </if>
+        <if test="classId != null">
+            AND cr.class_id = #{classId}
+        </if>
+        <if test="msTime != null">
+            AND ms.ms_time &lt; #{msTime}
+        </if>
+    </select>
+
+    <select id="selectEchartsLineChartMsScoreList" resultMap="AMarkSheetResult">
+        SELECT a_mark_sheet.ms_score FROM a_mark_sheet
+        LEFT JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+        LEFT JOIN class_register on a_exercise_task.cr_id = class_register.cr_id
+        WHERE a_mark_sheet.stu_id = #{stuId} AND  class_register.enum_id = #{enumId} AND class_register.semester_id = #{semesterId}
+    </select>
+
+    <select id="selectAMarkSheetByMsIdAndEnumId">
+        SELECT
+            t.ms_id,
+            t.enum_id,
+            t.ms_class,
+            t.er_source,
+            CASE
+                WHEN t.enum_id = 16 AND t.min_val = t.ms_1 THEN '1'
+                WHEN t.enum_id = 16 AND t.min_val = t.ms_2 THEN '2'
+                WHEN t.enum_id = 16 AND t.min_val = t.ms_3 THEN '3'
+                WHEN t.enum_id = 15 AND t.min_val = t.ms_1 THEN '4'
+                WHEN t.enum_id = 15 AND t.min_val = t.ms_2 THEN '5'
+                WHEN t.enum_id = 15 AND t.min_val = t.ms_3 THEN '6'
+                END pc_id
+        FROM (
+                 SELECT
+                     a_mark_sheet.ms_id,
+                     class_register.enum_id,
+                     ms_1,
+                     ms_2,
+                     ms_3,
+                     ms_class,
+                     er_source,
+                     LEAST(ms_1, ms_2, ms_3) AS min_val
+                 FROM
+                     a_mark_sheet
+                         LEFT JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+                         LEFT JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+                         LEFT JOIN a_exercise_resource ON a_mark_sheet.ms_id = a_exercise_resource.ms_id
+                 WHERE
+                     a_mark_sheet.ms_id = #{msId}
+                   AND a_exercise_task.enum_id = #{enumId}
+             ) t;
+    </select>
+
+    <select id="selectAPageThreeByPcId">
+        SELECT content_video,content_video2,cv1,cv2 from a_page_three WHERE pc_id = #{pcId}
+    </select>
+        
+    <insert id="insertAMarkSheet" parameterType="AMarkSheet" useGeneratedKeys="true" keyProperty="msId">
+        insert into a_mark_sheet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="etId != null">et_id,</if>
+            <if test="stuId != null">stu_id,</if>
+            <if test="teaId != null">tea_id,</if>
+            <if test="msTime != null">ms_time,</if>
+            <if test="msDribble != null">ms_dribble,</if>
+            <if test="msShooting != null">ms_shooting,</if>
+            <if test="msScore != null">ms_score,</if>
+            <if test="ms1 != null">ms_1,</if>
+            <if test="ms2 != null">ms_2,</if>
+            <if test="ms3 != null">ms_3,</if>
+            <if test="msClass != null">ms_class,</if>
+            <if test="msImg != null">ms_img,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="etId != null">#{etId},</if>
+            <if test="stuId != null">#{stuId},</if>
+            <if test="teaId != null">#{teaId},</if>
+            <if test="msTime != null">#{msTime},</if>
+            <if test="msDribble != null">#{msDribble},</if>
+            <if test="msShooting != null">#{msShooting},</if>
+            <if test="msScore != null">#{msScore},</if>
+            <if test="ms1 != null">#{ms1},</if>
+            <if test="ms2 != null">#{ms2},</if>
+            <if test="ms3 != null">#{ms3},</if>
+            <if test="msClass != null">#{msClass},</if>
+            <if test="msImg != null">#{msImg},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAMarkSheet" parameterType="AMarkSheet">
+        update a_mark_sheet
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="etId != null">et_id = #{etId},</if>
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="teaId != null">tea_id = #{teaId},</if>
+            <if test="msTime != null">ms_time = #{msTime},</if>
+            <if test="msDribble != null">ms_dribble = #{msDribble},</if>
+            <if test="msShooting != null">ms_shooting = #{msShooting},</if>
+            <if test="msScore != null">ms_score = #{msScore},</if>
+            <if test="ms1 != null">ms_1 = #{ms1},</if>
+            <if test="ms2 != null">ms_2 = #{ms2},</if>
+            <if test="ms3 != null">ms_3 = #{ms3},</if>
+            <if test="msClass != null">ms_class = #{msClass},</if>
+            <if test="msImg != null">ms_img = #{msImg},</if>
+        </trim>
+        where ms_id = #{msId}
+    </update>
+
+    <delete id="deleteAMarkSheetByMsId" parameterType="Long">
+        delete from a_mark_sheet where ms_id = #{msId}
+    </delete>
+
+    <delete id="deleteAMarkSheetByMsIds" parameterType="String">
+        delete from a_mark_sheet where ms_id in 
+        <foreach item="msId" collection="array" open="(" separator="," close=")">
+            #{msId}
+        </foreach>
+    </delete>
+</mapper>

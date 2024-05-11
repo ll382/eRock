@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.core.mapper.AModuleScoreMapper">
+
+    <resultMap type="AModuleScore" id="AModuleScoreResult">
+        <result property="modscoId"    column="modsco_id"    />
+        <result property="tsId"    column="ts_id"    />
+        <result property="onlineCourse"    column="online_course"    />
+        <result property="knowledgeTests"    column="knowledge_tests"    />
+        <result property="skillTests1"    column="skill_tests1"    />
+        <result property="classroomPerformance"    column="classroom_performance"    />
+        <result property="ideologicalPolitical"    column="ideological_political"    />
+        <result property="peerAssessment"    column="peer_assessment"    />
+        <result property="teachingAssistant"    column="teaching_assistant"    />
+        <result property="skillTests2"    column="skill_tests2"    />
+        <result property="fitnessTests2"    column="fitness_tests2"    />
+        <result property="skillTests3"    column="skill_tests3"    />
+        <result property="fitnessTests3"    column="fitness_tests3"    />
+    </resultMap>
+
+    <sql id="selectAModuleScoreVo">
+        select modsco_id, ts_id, online_course, knowledge_tests, skill_tests1, classroom_performance, ideological_political, peer_assessment, teaching_assistant,teacher_evaluation, skill_tests2, fitness_tests2, skill_tests3, fitness_tests3 from a_module_score
+    </sql>
+
+    <select id="selectAModuleScoreList" parameterType="AModuleScore" resultMap="AModuleScoreResult">
+        <include refid="selectAModuleScoreVo"/>
+        <where>
+            <if test="tsId != null "> and ts_id = #{tsId}</if>
+            <if test="onlineCourse != null "> and online_course = #{onlineCourse}</if>
+            <if test="knowledgeTests != null "> and knowledge_tests = #{knowledgeTests}</if>
+            <if test="skillTests1 != null "> and skill_tests1 = #{skillTests1}</if>
+            <if test="classroomPerformance != null "> and classroom_performance = #{classroomPerformance}</if>
+            <if test="ideologicalPolitical != null "> and ideological_political = #{ideologicalPolitical}</if>
+            <if test="peerAssessment != null "> and peer_assessment = #{peerAssessment}</if>
+            <if test="teachingAssistant != null "> and teaching_assistant = #{teachingAssistant}</if>
+            <if test="skillTests2 != null "> and skill_tests2 = #{skillTests2}</if>
+            <if test="fitnessTests2 != null "> and fitness_tests2 = #{fitnessTests2}</if>
+            <if test="skillTests3 != null "> and skill_tests3 = #{skillTests3}</if>
+            <if test="fitnessTests3 != null "> and fitness_tests3 = #{fitnessTests3}</if>
+            <if test="teacherEvaluation != null "> and teacher_evaluation = #{teacherEvaluation}</if>
+        </where>
+    </select>
+
+    <select id="selectAModuleScoreByModscoId" parameterType="Long" resultMap="AModuleScoreResult">
+        <include refid="selectAModuleScoreVo"/>
+        where modsco_id = #{modscoId}
+    </select>
+
+    <insert id="insertAModuleScore" parameterType="AModuleScore" useGeneratedKeys="true" keyProperty="modscoId">
+        insert into a_module_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tsId != null">ts_id,</if>
+            <if test="onlineCourse != null">online_course,</if>
+            <if test="knowledgeTests != null">knowledge_tests,</if>
+            <if test="skillTests1 != null">skill_tests1,</if>
+            <if test="classroomPerformance != null">classroom_performance,</if>
+            <if test="ideologicalPolitical != null">ideological_political,</if>
+            <if test="peerAssessment != null">peer_assessment,</if>
+            <if test="teachingAssistant != null">teaching_assistant,</if>
+            <if test="skillTests2 != null">skill_tests2,</if>
+            <if test="fitnessTests2 != null">fitness_tests2,</if>
+            <if test="skillTests3 != null">skill_tests3,</if>
+            <if test="fitnessTests3 != null">fitness_tests3,</if>
+            <if test="teacherEvaluation != null">teacher_evaluation,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tsId != null">#{tsId},</if>
+            <if test="onlineCourse != null">#{onlineCourse},</if>
+            <if test="knowledgeTests != null">#{knowledgeTests},</if>
+            <if test="skillTests1 != null">#{skillTests1},</if>
+            <if test="classroomPerformance != null">#{classroomPerformance},</if>
+            <if test="ideologicalPolitical != null">#{ideologicalPolitical},</if>
+            <if test="peerAssessment != null">#{peerAssessment},</if>
+            <if test="teachingAssistant != null">#{teachingAssistant},</if>
+            <if test="skillTests2 != null">#{skillTests2},</if>
+            <if test="fitnessTests2 != null">#{fitnessTests2},</if>
+            <if test="skillTests3 != null">#{skillTests3},</if>
+            <if test="fitnessTests3 != null">#{fitnessTests3},</if>
+            <if test="teacherEvaluation != null">#{teacherEvaluation},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAModuleScore" parameterType="AModuleScore">
+        update a_module_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tsId != null">ts_id = #{tsId},</if>
+            <if test="onlineCourse != null">online_course = #{onlineCourse},</if>
+            <if test="knowledgeTests != null">knowledge_tests = #{knowledgeTests},</if>
+            <if test="skillTests1 != null">skill_tests1 = #{skillTests1},</if>
+            <if test="classroomPerformance != null">classroom_performance = #{classroomPerformance},</if>
+            <if test="ideologicalPolitical != null">ideological_political = #{ideologicalPolitical},</if>
+            <if test="peerAssessment != null">peer_assessment = #{peerAssessment},</if>
+            <if test="teachingAssistant != null">teaching_assistant = #{teachingAssistant},</if>
+            <if test="skillTests2 != null">skill_tests2 = #{skillTests2},</if>
+            <if test="fitnessTests2 != null">fitness_tests2 = #{fitnessTests2},</if>
+            <if test="skillTests3 != null">skill_tests3 = #{skillTests3},</if>
+            <if test="fitnessTests3 != null">fitness_tests3 = #{fitnessTests3},</if>
+            <if test="teacherEvaluation != null">teacher_evaluation = #{teacherEvaluation},</if>
+        </trim>
+        where modsco_id = #{modscoId}
+    </update>
+
+    <delete id="deleteAModuleScoreByModscoId" parameterType="Long">
+        delete from a_module_score where modsco_id = #{modscoId}
+    </delete>
+
+    <delete id="deleteAModuleScoreByModscoIds" parameterType="String">
+        delete from a_module_score where modsco_id in
+        <foreach item="modscoId" collection="array" open="(" separator="," close=")">
+            #{modscoId}
+        </foreach>
+    </delete>
+</mapper>

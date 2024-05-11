@@ -1,0 +1,26 @@
+# 柱状图
+# GET http://101.43.33.73:9090/core/student/getDeduplicationCrDateList/110/1/08 HTTP/1.1  
+
+#折线图
+GET http://101.43.33.73:9090/core/student/getStudentAchievementByStuId/110/2024-3-15 08:00:00/ms_shooting HTTP/1.1   #
+
+#首页
+# GET http://8.136.124.88:8088/core/student/getStudentCourseGradeslist/ms_shooting HTTP/1.1   
+
+#雷达的折线图
+# GET http://101.43.33.73:9090/practice/ABallExam/list?ms_id:16208 HTTP/1.1  
+
+#雷达的柱状图
+# GET http://101.43.33.73:9090/practice/ABallExam/1/110/ms_dribble/2024-03-15 08:00:00 HTTP/1.1
+
+#视频资源
+# GET http://192.168.58.248:8088/practice/sheet/12529/2 HTTP/1.1
+
+#移动端全班表格
+GET http://192.168.58.197:9090/core/student/getStudentProgressScoreList/1 HTTP/1.1
+
+#移动端投篮折线图
+GET http://101.43.33.73:9090/practice/sheet/selectEchartsLineChartMsScoreList/110/3/15 HTTP/1.1
+
+#E模块全班表格
+GET http://101.43.33.73:9090/core/student/getStudentFinalGrade?classId=1&stuId=1 HTTP/1.1

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.core.mapper.StudentMapper">
+    
+    <resultMap type="Student" id="StudentResult">
+        <result property="stuId"    column="stu_id"    />
+        <result property="ggId"    column="gg_id"    />
+        <result property="classId"    column="class_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="stuPassword"    column="stu_password"    />
+    </resultMap>
+
+    <resultMap id="StudentModuleScore" type="StudentModuleScore">
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="avsScore"    column="avs_score"    />
+    </resultMap>
+
+    <resultMap id="StudentStuToTeaResult" type="Student" extends="StudentResult">
+        <collection property="stuToTeaList" notNullColumn="sub_stu_id" javaType="java.util.List" resultMap="StuToTeaResult" />
+    </resultMap>
+
+    <resultMap type="StuToTea" id="StuToTeaResult">
+        <result property="stuId"    column="sub_stu_id"    />
+        <result property="teaId"    column="sub_tea_id"    />
+    </resultMap>
+
+    <resultMap type="StudentCourseGrades" id="StudentCourseGradesResult">
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="className"    column="class_name"    />
+        <result property="teaName"    column="tea_name"    />
+        <result property="msDribble"    column="ms_dribble"    />
+        <result property="msShooting"    column="ms_shooting"    />
+        <result property="crDate"    column="cr_date"    />
+        <result property="crMain"    column="cr_main"    />
+    </resultMap>
+
+    <resultMap type="StudentModuleTotalBo" id="StudentAndModuleAndTotalMap">
+        <result property="stuId"    column="stu_id"    />
+        <result property="ggId"    column="gg_id"    />
+        <result property="classId"    column="class_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="stuPassword"    column="stu_password"    />
+        <association  property="totalScore" javaType="TotalScore">
+            <result property="tsId"    column="ts_id"    />
+            <result property="semesterId"    column="semester_id"    />
+            <result property="epScore"    column="ep_score"    />
+        </association >
+        <collection property="moduleScoreList" ofType="ModuleScore">
+            <result property="modId" column="mod_id"/>
+            <result property="enumId" column="enum_id"/>
+            <result property="avsScore" column="avs_score"/>
+        </collection>
+    </resultMap>
+
+    <sql id="selectStudentVo">
+        select stu_id, gg_id, class_id, stu_name, stu_password from student
+    </sql>
+
+    <select id="selectStudentList" parameterType="Student" resultMap="StudentResult">
+        <include refid="selectStudentVo"/>
+        <where>  
+            <if test="ggId != null "> and gg_id = #{ggId}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="stuPassword != null  and stuPassword != ''"> and stu_password = #{stuPassword}</if>
+        </where>
+    </select>
+
+    <select id="selectStudentFinalGrade" resultMap="StudentAndModuleAndTotalMap">
+        SELECT student.stu_id,student.class_id,student.gg_id,student.stu_name,student.stu_password,student.user_id,
+        total_score.ep_score,total_score.semester_id,total_score.ts_id,module_score.avs_score,
+        module_score.enum_id,module_score.mod_id FROM student
+        LEFT JOIN total_score ON student.stu_id = total_score.stu_id
+        LEFT JOIN module_score on total_score.ts_id = module_score.ts_id
+        <where>
+            <if test="classId != null"> and student.class_id = #{classId}</if>
+        </where>
+        ORDER BY total_score.ep_score DESC
+    </select>
+    
+    <select id="selectStudentByStuId" parameterType="Long" resultMap="StudentStuToTeaResult">
+        select a.stu_id, a.gg_id, a.class_id, a.stu_name, a.stu_password,b.stu_id as sub_stu_id, b.tea_id as sub_tea_id
+        from student a
+        left join stu_to_tea b on b.stu_id = a.stu_id
+        where a.stu_id = #{stuId}
+    </select>
+
+    <select id="selectDeduplicationCrDateByStuIdAndEnumIdList" resultType="map">
+        SELECT
+            stu_name, cr_date, enum_id, case
+                WHEN td ="08" THEN "一二节课"
+                WHEN td = "10" THEN "三四节课"
+                WHEN td ="14" THEN "五六节课"
+                WHEN td = "16" THEN "七八节课"
+            END type
+        FROM (
+                 SELECT
+                     student.stu_name,
+                     class_register.cr_date,
+                     a_exercise_task.enum_id,
+                     SUBSTR(cr_date, 12, 2) as td
+                 FROM student
+                          JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+                          JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+                          JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+                 WHERE a_exercise_task.enum_id = #{enumId} and student.stu_id = #{stuId} and class_register.cr_date BETWEEN '2024-01-01 08:00:00' AND '2024-12-31 10:00:00'
+                 GROUP BY
+                     student.stu_name,
+                     class_register.cr_date,
+                     a_exercise_task.enum_id
+             ) f WHERE td = #{hour}
+    </select>
+
+    <select id="selectCrDateByStuIdAndEnumIdAndCrDateList" resultType="map">
+        SELECT
+            student.stu_name,
+            class_register.cr_date,
+            a_exercise_task.enum_id,
+            ms_id
+        FROM student
+                 JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+                 JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+                 JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+        WHERE a_exercise_task.enum_id = #{enumId} and student.stu_id = #{stuId} and class_register.cr_date = #{crDate}
+    </select>
+
+    <select id="selectDeduplicationStudentAchievementList" parameterType="String" resultMap="StudentCourseGradesResult">
+        SELECT
+            student.stu_id,
+            student.stu_name,
+            teacher.tea_name,
+            grade.class_name,
+            class_register.cr_date,
+            class_register.cr_main
+        FROM student
+            JOIN grade ON student.class_id = grade.class_id
+            JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+            JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+            JOIN teacher ON teacher.tea_id = a_exercise_task.tea_id
+            JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+        WHERE student.class_id = (SELECT class_id FROM grade WHERE class_name = #{className})
+          AND class_register.cr_date = #{crDate}
+        GROUP BY
+            student.stu_id,
+            student.stu_name,
+            teacher.tea_name,
+            grade.class_name,
+            class_register.cr_date,
+            class_register.cr_main
+
+    </select>
+
+    <select id="selectStudentAchievementList" parameterType="map" resultType="map">
+        select
+            student.stu_id,
+            student.stu_name,
+            teacher.tea_name,
+            grade.class_name ,
+            a_mark_sheet.${score},
+            class_register.cr_date,
+            class_register.enum_id
+        from student
+                 JOIN grade on student.class_id = grade.class_id
+                 JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+                 JOIN a_exercise_task ON a_mark_sheet.et_id = a_exercise_task.et_id
+                 JOIN teacher on teacher.tea_id = a_exercise_task.tea_id
+                 JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+        WHERE student.stu_id = #{stuId}
+          and class_register.cr_date = #{crDate}
+          and a_exercise_task.enum_id = 2
+        ORDER BY a_mark_sheet.${score}
+          LIMIT 10
+    </select>
+
+    <select id="selectStudentAchievementByStuId" resultType="map">
+        SELECT
+            student.stu_name,
+            class_register.cr_date,
+            a_mark_sheet.${score},
+            a_mark_sheet.ms_id
+        FROM student
+                 JOIN a_mark_sheet ON student.stu_id = a_mark_sheet.stu_id
+                 JOIN a_exercise_task on a_mark_sheet.et_id = a_exercise_task.et_id
+                 JOIN class_register ON a_exercise_task.cr_id = class_register.cr_id
+        WHERE a_exercise_task.enum_id = 2
+          and student.stu_id = #{stuId}
+          and class_register.cr_date = #{crDate}
+          ORDER BY a_mark_sheet.${score}
+          limit 10
+    </select>
+
+    <select id="selectStudentProgressScoreList" resultMap="StudentModuleScore">
+        SELECT student.stu_id,student.stu_name,module_score.avs_score FROM student
+        LEFT JOIN total_score ON student.stu_id = total_score.stu_id
+        LEFT JOIN module_score on total_score.ts_id = module_score.ts_id
+        WHERE student.class_id = #{classId} AND module_score.enum_id = 11
+    </select>
+
+
+    <insert id="insertStudent" parameterType="Student" useGeneratedKeys="true" keyProperty="stuId">
+        insert into student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ggId != null">gg_id,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="stuName != null">stu_name,</if>
+            <if test="stuPassword != null">stu_password,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ggId != null">#{ggId},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="stuName != null">#{stuName},</if>
+            <if test="stuPassword != null">#{stuPassword},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStudent" parameterType="Student">
+        update student
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ggId != null">gg_id = #{ggId},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="stuName != null">stu_name = #{stuName},</if>
+            <if test="stuPassword != null">stu_password = #{stuPassword},</if>
+        </trim>
+        where stu_id = #{stuId}
+    </update>
+
+    <delete id="deleteStudentByStuId" parameterType="Long">
+        delete from student where stu_id = #{stuId}
+    </delete>
+
+    <delete id="deleteStudentByStuIds" parameterType="String">
+        delete from student where stu_id in 
+        <foreach item="stuId" collection="array" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteStuToTeaByStuIds" parameterType="String">
+        delete from stu_to_tea where stu_id in 
+        <foreach item="stuId" collection="array" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteStuToTeaByStuId" parameterType="Long">
+        delete from stu_to_tea where stu_id = #{stuId}
+    </delete>
+
+    <insert id="batchStuToTea">
+        insert into stu_to_tea( stu_id, tea_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.stuId}, #{item.teaId})
+        </foreach>
+    </insert>
+</mapper>

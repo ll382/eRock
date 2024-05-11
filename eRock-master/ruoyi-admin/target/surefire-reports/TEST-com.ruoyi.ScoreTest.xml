@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="0" failures="0" name="com.ruoyi.ScoreTest" time="0" errors="0" skipped="0">
+  <properties>
+    <property name="idea.version" value="2023.1"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="java.vm.version" value="19+36-2238"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-19\bin"/>
+    <property name="maven.multiModuleProjectDirectory" value="E:\Object\erock\RuoYi-Vue-master"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="path.separator" value=";"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="user.script" value=""/>
+    <property name="user.country" value="CN"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="E:\Object\erock\RuoYi-Vue-master"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="java.runtime.version" value="19+36-2238"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="C:\Users\DELL\AppData\Local\Temp\"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.variant" value=""/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="maven.ext.class.path" value="E:\code\back-end\cook\idea\IntelliJ IDEA 2023.1\plugins\maven\lib\maven-event-listener.jar"/>
+    <property name="classworlds.conf" value="E:\code\back-end\Java\apache-maven-3.8.8\bin\m2.conf"/>
+    <property name="sun.jnu.encoding" value="GBK"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk-19\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32;C:\Program Files\Java\jdk-19\bin;C:\Users\DELL\AppData\Roaming\npm\node_modules\yarn\bin;E:\Linux\VMware\bin\;E:\code\back-end\Java\apache-maven-3.8.8\bin;E:\notia\importImg\out\artifacts\importImg_jar\jdk-17.0.8\jre\jdk-17.0.8\jre\bin;E:\AI_Painting\cuda\bin;E:\AI_Painting\cuda\libnvvp;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files (x86)\Common Files\Oracle\Java\javapath_target_279441500;C:\Program Files\Java\jdk-19\bin;C:\Program Files\Java\jdk-19\jre\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;D:\MySQL\MySQL Server 8.0\bin;C:\ProgramData\chocolatey\bin;E:\Linux\VMware\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet\;E:\git\Git\cmd;C:\Program Files\NVIDIA Corporation\Nsight Compute 2022.4.0\;E:\nvm\nvm;C:\Program Files\nodejs;E:\nvm\nvm;C:\Program Files\nodejs;C:\Windows\System32\OpenSSH;C:\Program Files (x86)\Common Files\Oracle\Java\javapath_target_279441500;E:\nvm\nvm\v12.16.0\node_modules\npm;E:\code\front-end\cook\wx\微信web开发者工具\dll;E:\Tomcat\apache-tomcat-8.5.87\lib;E:\Tomcat\apache-tomcat-8.5.87\bin;C:\tools\plantuml;E:\SQL\bin;E:\code\back-end\Java\gradle-7.6\bin;E:\code\back-end\Java\gradleRepo;C:\Users\DELL\.jabba\bin\jabba.exe;C:\Program Files\Java\jdk-19\bin;D:\MySQL\MySQL Shell 8.0\bin\;C:\Users\DELL\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\DELL\AppData\Local\Programs\Python\Python310\;C:\Users\DELL\AppData\Local\Microsoft\WindowsApps;E:\编程\后端\vscode\Microsoft VS Code\bin;C:\Program Files\Java\jdk-19\bin;E:\code\front-end\cook\webstorm\WebStorm 2022.3\bin;;E:\code\back-end\cook\pycharm\Pycharm2023.3\PyCharm 2023.3.4\bin;;E:\code\back-end\Java\apache-maven-3.8.8\bin;E:\nvm\nvm;E:\nvm\nodejs;;."/>
+    <property name="jansi.passthrough" value="true"/>
+    <property name="maven.conf" value="E:\code\back-end\Java\apache-maven-3.8.8/conf"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="java.class.version" value="63.0"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="10.0"/>
+    <property name="user.home" value="C:\Users\DELL"/>
+    <property name="user.timezone" value="Asia/Shanghai"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="19"/>
+    <property name="user.name" value="DELL"/>
+    <property name="java.class.path" value="E:\code\back-end\Java\apache-maven-3.8.8\boot\plexus-classworlds-2.6.0.jar;E:\code\back-end\Java\apache-maven-3.8.8\boot\plexus-classworlds.license"/>
+    <property name="java.vm.specification.version" value="19"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="sun.java.command" value="org.codehaus.classworlds.Launcher -Didea.version=2023.1 package"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk-19"/>
+    <property name="user.language" value="zh"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.version" value="19"/>
+    <property name="native.encoding" value="GBK"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="sun.stderr.encoding" value="UTF-8"/>
+    <property name="maven.home" value="E:\code\back-end\Java\apache-maven-3.8.8"/>
+    <property name="file.separator" value="\"/>
+    <property name="java.version.date" value="2022-09-20"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.stdout.encoding" value="UTF-8"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+  </properties>
+</testsuite>

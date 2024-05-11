@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.match.mapper.CBallteamMapper">
+
+	<resultMap type="CBallteam" id="CBallteamResult">
+		<result property="balId" column="bal_id"/>
+		<result property="ccRId" column="cc_r_id"/>
+		<result property="ggId" column="gg_id"/>
+		<result property="balNum" column="bal_num"/>
+		<result property="ggName" column="gg_name"/>
+	</resultMap>
+
+	<resultMap id="CBallteamCPersonnelSheetResult" type="CBallteam" extends="CBallteamResult">
+		<collection property="cPersonnelSheetList" notNullColumn="sub_ps_id" javaType="java.util.List"
+		            resultMap="CPersonnelSheetResult"/>
+	</resultMap>
+
+	<resultMap type="CPersonnelSheet" id="CPersonnelSheetResult">
+		<result property="psId" column="sub_ps_id"/>
+		<result property="jobId" column="sub_job_id"/>
+		<result property="balId" column="sub_bal_id"/>
+		<result property="stuId" column="sub_stu_id"/>
+		<result property="psNum" column="sub_ps_num"/>
+		<result property="stuName" column="sub_stu_name"/>
+	</resultMap>
+
+	<sql id="selectCBallteamVo">
+		SELECT a.bal_id, a.cc_r_id, a.gg_id, a.bal_num, c.gg_name
+		FROM c_ballteam a
+			     LEFT JOIN stu_group c ON c.gg_id = a.gg_id
+	</sql>
+
+	<select id="selectCBallteamList" parameterType="CBallteam" resultMap="CBallteamResult">
+		<include refid="selectCBallteamVo"/>
+		<where>
+			<if test="ccRId != null ">and cc_r_id = #{ccRId}</if>
+			<if test="ggId != null ">and gg_id = #{ggId}</if>
+			<if test="balNum != null  and balNum != ''">and bal_num = #{balNum}</if>
+		</where>
+	</select>
+
+	<select id="selectCBallteamByBalId" parameterType="Long" resultMap="CBallteamCPersonnelSheetResult">
+		SELECT a.bal_id,
+		       a.cc_r_id,
+		       a.gg_id,
+		       a.bal_num,
+		       b.ps_id    AS sub_ps_id,
+		       b.job_id   AS sub_job_id,
+		       b.bal_id   AS sub_bal_id,
+		       b.stu_id   AS sub_stu_id,
+		       b.ps_num   AS sub_ps_num,
+		       c.gg_name,
+		       d.stu_name AS sub_stu_name
+		FROM c_ballteam a
+			     LEFT JOIN c_personnel_sheet b ON b.bal_id = a.bal_id
+			     LEFT JOIN stu_group c ON c.gg_id = a.gg_id
+			     LEFT JOIN student d ON d.stu_id = b.stu_id
+		WHERE a.bal_id = #{balId}
+	</select>
+
+	<insert id="insertCBallteam" parameterType="CBallteam" useGeneratedKeys="true" keyProperty="balId">
+		insert into c_ballteam
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ccRId != null">cc_r_id,</if>
+			<if test="ggId != null">gg_id,</if>
+			<if test="balNum != null">bal_num,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ccRId != null">#{ccRId},</if>
+			<if test="ggId != null">#{ggId},</if>
+			<if test="balNum != null">#{balNum},</if>
+		</trim>
+	</insert>
+
+	<update id="updateCBallteam" parameterType="CBallteam">
+		update c_ballteam
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="ccRId != null">cc_r_id = #{ccRId},</if>
+			<if test="ggId != null">gg_id = #{ggId},</if>
+			<if test="balNum != null">bal_num = #{balNum},</if>
+		</trim>
+		where bal_id = #{balId}
+	</update>
+
+	<delete id="deleteCBallteamByBalId" parameterType="Long">
+		DELETE
+		FROM c_ballteam
+		WHERE bal_id = #{balId}
+	</delete>
+
+	<delete id="deleteCBallteamByBalIds" parameterType="String">
+		delete from c_ballteam where bal_id in
+		<foreach item="balId" collection="array" open="(" separator="," close=")">
+			#{balId}
+		</foreach>
+	</delete>
+
+	<delete id="deleteCPersonnelSheetByBalIds" parameterType="String">
+		delete from c_personnel_sheet where bal_id in
+		<foreach item="balId" collection="array" open="(" separator="," close=")">
+			#{balId}
+		</foreach>
+	</delete>
+
+	<delete id="deleteCPersonnelSheetByBalId" parameterType="Long">
+		DELETE
+		FROM c_personnel_sheet
+		WHERE bal_id = #{balId}
+	</delete>
+
+	<insert id="batchCPersonnelSheet">
+		insert into c_personnel_sheet( ps_id, job_id, bal_id, stu_id, ps_num, ps_audit, ps_url) values
+		<foreach item="item" index="index" collection="list" separator=",">
+			( #{item.psId}, #{item.jobId}, #{item.balId}, #{item.stuId}, #{item.psNum}, #{item.psAudit}, #{item.psUrl})
+		</foreach>
+	</insert>
+
+
+	<!-- 获取比赛小组信息 -->
+	<select id="selectCompetitionRecordByCcRName" parameterType="Long" resultMap="CBallteamResult">
+		<include refid="selectCBallteamVo"/>
+		WHERE cc_r_id = #{ccRId}
+	</select>
+
+	<!-- 新建小组 -->
+	<insert id="insertStuGroup" parameterType="Group" useGeneratedKeys="true" keyProperty="ggId">
+		insert into stu_group
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ggName != null">gg_name,</if>
+			<if test="stuGroupLeader != null">stu_group_leader,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ggName != null">#{ggName},</if>
+			<if test="stuGroupLeader != null">#{stuGroupLeader},</if>
+		</trim>
+	</insert>
+
+	<!-- 删除小组 -->
+	<delete id="deleteStuGroupByGgId" parameterType="Long">
+		DELETE
+		FROM stu_group
+		WHERE gg_id = (SELECT DISTINCT cb.gg_id
+		               FROM c_personnel_sheet cps
+			                    JOIN c_ballteam cb ON cps.bal_id = cb.bal_id
+		               WHERE cps.bal_id = #{balId})
+	</delete>
+
+
+	<resultMap type="stuGroup" id="StuGroupResult">
+		<result property="ggId" column="gg_id"/>
+		<result property="ggName" column="gg_name"/>
+		<result property="stuGroupLeader" column="stu_group_leader"/>
+	</resultMap>
+
+	<resultMap id="StuGroupStudentResult" type="stuGroup" extends="StuGroupResult">
+		<collection property="studentList" notNullColumn="sub_stu_id" javaType="java.util.List"
+		            resultMap="StudentResult"/>
+	</resultMap>
+
+	<resultMap type="Student" id="StudentResult">
+		<result property="stuId" column="sub_stu_id"/>
+		<result property="ggId" column="sub_gg_id"/>
+		<result property="classId" column="sub_class_id"/>
+		<result property="stuName" column="sub_stu_name"/>
+		<result property="stuPassword" column="sub_stu_password"/>
+	</resultMap>
+
+	<!-- 根据学生学号获取小组内成员信息 -->
+	<select id="getStuGroupByStuId" parameterType="Long" resultMap="StuGroupStudentResult">
+		SELECT a.gg_id,
+		       a.gg_name,
+		       a.stu_group_leader,
+		       b.stu_id       AS sub_stu_id,
+		       b.gg_id        AS sub_gg_id,
+		       b.class_id     AS sub_class_id,
+		       b.stu_name     AS sub_stu_name,
+		       b.stu_password AS sub_stu_password
+		FROM stu_group a
+			     LEFT JOIN student b ON b.gg_id = a.gg_id
+		WHERE a.gg_id = (SELECT gg_id FROM student WHERE stu_id = #{stuId})
+	</select>
+</mapper>

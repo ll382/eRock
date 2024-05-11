@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.InClassModule.mapper.A2AttendanceMapper">
+
+    <resultMap type="A2Attendance" id="A2AttendanceResult">
+        <result property="aaId"    column="aa_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="crId"    column="cr_id"    />
+        <result property="aaType"    column="aa_type"    />
+        <result property="evaluationType2"    column="evaluation_type2"    />
+    </resultMap>
+
+    <sql id="selectA2AttendanceVo">
+        select aa_id, stu_id, cr_id, aa_type, evaluation_type2 from a2_attendance
+    </sql>
+
+    <select id="selectA2AttendanceList" parameterType="A2Attendance" resultMap="A2AttendanceResult">
+        <include refid="selectA2AttendanceVo"/>
+        <where>
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="crId != null "> and cr_id = #{crId}</if>
+            <if test="aaType != null  and aaType != ''"> and aa_type = #{aaType}</if>
+            <if test="evaluationType2 != null  and evaluationType2 != ''"> and evaluation_type2 = #{evaluationType2}</if>
+        </where>
+    </select>
+
+    <select id="selectA2AttendanceByAaId" parameterType="Long" resultMap="A2AttendanceResult">
+        <include refid="selectA2AttendanceVo"/>
+        where cr_id = #{crId} AND aa_type = #{enumId}
+    </select>
+
+    <insert id="insertA2Attendance" parameterType="A2Attendance" useGeneratedKeys="true" keyProperty="aaId">
+        insert into a2_attendance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">stu_id,</if>
+            <if test="crId != null">cr_id,</if>
+            <if test="aaType != null">aa_type,</if>
+            <if test="evaluationType2 != null">evaluation_type2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">#{stuId},</if>
+            <if test="crId != null">#{crId},</if>
+            <if test="aaType != null">#{aaType},</if>
+            <if test="evaluationType2 != null">#{evaluationType2},</if>
+         </trim>
+    </insert>
+
+    <update id="updateA2Attendance" parameterType="A2Attendance">
+        update a2_attendance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="crId != null">cr_id = #{crId},</if>
+            <if test="aaType != null">aa_type = #{aaType},</if>
+            <if test="evaluationType2 != null">evaluation_type2 = #{evaluationType2},</if>
+        </trim>
+        where aa_id = #{aaId}
+    </update>
+
+    <delete id="deleteA2AttendanceByAaId" parameterType="Long">
+        delete from a2_attendance where aa_id = #{aaId}
+    </delete>
+
+    <delete id="deleteA2AttendanceByAaIds" parameterType="String">
+        delete from a2_attendance where aa_id in
+        <foreach item="aaId" collection="array" open="(" separator="," close=")">
+            #{aaId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.practice.mapper.AExerciseTaskMapper">
+
+    <resultMap type="AExerciseTask" id="AExerciseTaskResult">
+        <result property="etId"    column="et_id"    />
+        <result property="crId"    column="cr_id"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="enumId"    column="enum_id"    />
+        <result property="etName"    column="et_name"    />
+        <result property="etDescription"    column="et_description"    />
+        <result property="etCreateTime"    column="et_create_time"    />
+        <result property="etEndTime"    column="et_end_time"    />
+    </resultMap>
+
+    <resultMap id="AExerciseTaskAMarkSheetResult" type="AExerciseTask" extends="AExerciseTaskResult">
+        <collection property="aMarkSheetList" notNullColumn="sub_ms_id" javaType="java.util.List" resultMap="AMarkSheetResult" />
+    </resultMap>
+
+    <resultMap type="AMarkSheet" id="AMarkSheetResult">
+        <result property="msId"    column="sub_ms_id"    />
+        <result property="etId"    column="sub_et_id"    />
+        <result property="stuId"    column="sub_stu_id"    />
+        <result property="teaId"    column="sub_tea_id"    />
+        <result property="msTime"    column="sub_ms_time"    />
+        <result property="msDribble"    column="sub_ms_dribble"    />
+        <result property="msShooting"    column="sub_ms_shooting"    />
+        <result property="msScore"    column="sub_ms_score"    />
+        <result property="ms1"    column="sub_ms_1"    />
+        <result property="ms2"    column="sub_ms_2"    />
+        <result property="ms3"    column="sub_ms_3"    />
+        <result property="msClass"    column="sub_ms_class"    />
+        <result property="msImg"    column="sub_ms_img"    />
+    </resultMap>
+
+    <sql id="selectAExerciseTaskVo">
+        select et_id, cr_id, tea_id, enum_id, et_name, et_description, et_create_time, et_end_time from a_exercise_task
+    </sql>
+
+    <select id="selectAExerciseTaskList" parameterType="AExerciseTask" resultMap="AExerciseTaskResult">
+        <include refid="selectAExerciseTaskVo"/>
+        <where>
+            <if test="crId != null "> and cr_id = #{crId}</if>
+            <if test="teaId != null  and teaId != ''"> and tea_id = #{teaId}</if>
+            <if test="enumId != null "> and enum_id = #{enumId}</if>
+            <if test="etName != null  and etName != ''"> and et_name like concat('%', #{etName}, '%')</if>
+            <if test="etDescription != null  and etDescription != ''"> and et_description = #{etDescription}</if>
+            <if test="etCreateTime != null "> and et_create_time = #{etCreateTime}</if>
+            <if test="etEndTime != null "> and et_end_time = #{etEndTime}</if>
+        </where>
+        order by et_create_time asc
+    </select>
+
+    <select id="selectAExerciseTaskByEtId" parameterType="Long" resultMap="AExerciseTaskAMarkSheetResult">
+        select a.et_id, a.cr_id, a.tea_id, a.enum_id, a.et_name, a.et_description, a.et_create_time, a.et_end_time,
+ b.ms_id as sub_ms_id, b.et_id as sub_et_id, b.stu_id as sub_stu_id, b.tea_id as sub_tea_id, b.ms_time as sub_ms_time, b.ms_dribble as sub_ms_dribble, b.ms_shooting as sub_ms_shooting, b.ms_score as sub_ms_score, b.ms_1 as sub_ms_1, b.ms_2 as sub_ms_2, b.ms_3 as sub_ms_3, b.ms_class as sub_ms_class, b.ms_img as sub_ms_img
+        from a_exercise_task a
+        left join a_mark_sheet b on b.et_id = a.et_id
+        where a.et_id = #{etId}
+    </select>
+
+    <insert id="insertAExerciseTask" parameterType="AExerciseTask" useGeneratedKeys="true" keyProperty="etId">
+        insert into a_exercise_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="crId != null">cr_id,</if>
+            <if test="teaId != null">tea_id,</if>
+            <if test="enumId != null">enum_id,</if>
+            <if test="etName != null">et_name,</if>
+            <if test="etDescription != null">et_description,</if>
+            <if test="etCreateTime != null">et_create_time,</if>
+            <if test="etEndTime != null">et_end_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="crId != null">#{crId},</if>
+            <if test="teaId != null">#{teaId},</if>
+            <if test="enumId != null">#{enumId},</if>
+            <if test="etName != null">#{etName},</if>
+            <if test="etDescription != null">#{etDescription},</if>
+            <if test="etCreateTime != null">#{etCreateTime},</if>
+            <if test="etEndTime != null">#{etEndTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAExerciseTask" parameterType="AExerciseTask">
+        update a_exercise_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="crId != null">cr_id = #{crId},</if>
+            <if test="teaId != null">tea_id = #{teaId},</if>
+            <if test="enumId != null">enum_id = #{enumId},</if>
+            <if test="etName != null">et_name = #{etName},</if>
+            <if test="etDescription != null">et_description = #{etDescription},</if>
+            <if test="etCreateTime != null">et_create_time = #{etCreateTime},</if>
+            <if test="etEndTime != null">et_end_time = #{etEndTime},</if>
+        </trim>
+        where et_id = #{etId}
+    </update>
+
+    <delete id="deleteAExerciseTaskByEtId" parameterType="Long">
+        delete from a_exercise_task where et_id = #{etId}
+    </delete>
+
+    <delete id="deleteAExerciseTaskByEtIds" parameterType="String">
+        delete from a_exercise_task where et_id in
+        <foreach item="etId" collection="array" open="(" separator="," close=")">
+            #{etId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAMarkSheetByEtIds" parameterType="String">
+        delete from a_mark_sheet where et_id in
+        <foreach item="etId" collection="array" open="(" separator="," close=")">
+            #{etId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAMarkSheetByEtId" parameterType="Long">
+        delete from a_mark_sheet where et_id = #{etId}
+    </delete>
+
+    <insert id="batchAMarkSheet">
+        insert into a_mark_sheet( ms_id, et_id, stu_id, tea_id, ms_time, ms_dribble, ms_shooting, ms_score, ms_1, ms_2, ms_3, ms_class, ms_img) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.msId}, #{item.etId}, #{item.stuId}, #{item.teaId}, #{item.msTime}, #{item.msDribble}, #{item.msShooting}, #{item.msScore}, #{item.ms1}, #{item.ms2}, #{item.ms3}, #{item.msClass}, #{item.msImg})
+        </foreach>
+    </insert>
+</mapper>
