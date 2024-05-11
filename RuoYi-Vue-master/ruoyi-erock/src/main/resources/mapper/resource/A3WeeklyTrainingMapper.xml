@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="wetrTime != null "> and wetr_time = #{wetrTime}</if>
             <if test="wetrUrl != null  and wetrUrl != ''"> and wetr_url = #{wetrUrl}</if>
         </where>
+        order by wetr_time desc
     </select>
 
     <select id="selectA3WeeklyTrainingByWetrId" parameterType="Long" resultMap="A3WeeklyTrainingResult">

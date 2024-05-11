@@ -22,12 +22,12 @@ public class A2StudentEvaluate extends BaseEntity
     @Excel(name = "课堂ID")
     private Long crId;
 
-    /** 学生学号 */
-    @Excel(name = "学生学号")
-    private Long stuId;
-
     /** 被评学生学号 */
     @Excel(name = "被评学生学号")
+    private Long stuId;
+
+    /** 学生学号 */
+    @Excel(name = "学生学号")
     private Long esId;
 
     /** 评价类型 */

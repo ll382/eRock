@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.InClassModule.mapper.A2A3PhysicaScoreMapper;
 import com.ruoyi.InClassModule.domain.A2A3PhysicaScore;
 import com.ruoyi.InClassModule.service.IA2A3PhysicaScoreService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * A2 A3 体能成绩Service业务层处理
@@ -59,6 +60,7 @@ public class A2A3PhysicaScoreServiceImpl implements IA2A3PhysicaScoreService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertA2A3PhysicaScore(A2A3PhysicaScore a2A3PhysicaScore)
     {
         A2A3PhysicaScore physicaScore = new A2A3PhysicaScore();
@@ -88,6 +90,7 @@ public class A2A3PhysicaScoreServiceImpl implements IA2A3PhysicaScoreService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateA2A3PhysicaScore(A2A3PhysicaScore a2A3PhysicaScore)
     {
         int u = a2A3PhysicaScoreMapper.updateA2A3PhysicaScore(a2A3PhysicaScore);

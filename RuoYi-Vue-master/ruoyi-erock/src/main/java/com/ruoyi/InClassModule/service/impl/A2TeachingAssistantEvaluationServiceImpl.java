@@ -41,7 +41,9 @@ public class A2TeachingAssistantEvaluationServiceImpl implements IA2TeachingAssi
     @Override
     public List<A2TeachingAssistantEvaluation> selectA2TeachingAssistantEvaluationByTaeId(Long crId)
     {
-        return selectUser.selectInGroupStudent(selectUser.selectTeacher(a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationByTaeId(crId)));
+        List<A2TeachingAssistantEvaluation> a2TeachingAssistantEvaluations = a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationByTaeId(crId);
+        a2TeachingAssistantEvaluations.forEach(System.out::println);
+        return selectUser.selectInGroupStudent(selectUser.selectTeacher(a2TeachingAssistantEvaluations));
     }
 
     /**
@@ -71,6 +73,7 @@ public class A2TeachingAssistantEvaluationServiceImpl implements IA2TeachingAssi
         List<A2TeachingAssistantEvaluation> a2TeachingAssistantEvaluations = a2TeachingAssistantEvaluationMapper.selectA2TeachingAssistantEvaluationList(evaluation);
 //        判断是否已经存在
         if (StringUtils.isNotEmpty(a2TeachingAssistantEvaluations)) {
+            a2TeachingAssistantEvaluations.forEach(System.out::println);
             return 0;
         }else {
 //            通过小组id给所有小组成员评分

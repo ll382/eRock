@@ -15,6 +15,7 @@ import com.ruoyi.practice.domain.AExerciseResource;
 import com.ruoyi.practice.domain.AExerciseTask;
 import com.ruoyi.practice.domain.AMarkSheet;
 import com.ruoyi.practice.mapper.ABallExamMapper;
+import com.ruoyi.practice.mapper.AExerciseResourceMapper;
 import com.ruoyi.practice.mapper.AExerciseTaskMapper;
 import com.ruoyi.practice.mapper.AMarkSheetMapper;
 import com.ruoyi.practice.service.IAMarkSheetService;
@@ -58,6 +59,9 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
 
     @Autowired
     private ABallExamMapper aBallExamMapper;
+
+    @Autowired
+    private AExerciseResourceMapper aExerciseResourceMapper;
 
 
     static List enumList = new ArrayList<>();
@@ -137,7 +141,13 @@ public class AMarkSheetServiceImpl implements IAMarkSheetService
     @Override
     public AMarkSheet selectAMarkSheetByMsId(Long msId)
     {
-        return (AMarkSheet) selectUser.selectStudent(aMarkSheetMapper.selectAMarkSheetByMsId(msId));
+        AExerciseResource resource = new AExerciseResource();
+        resource.setMsId(msId);
+        List<AExerciseResource> aExerciseResources = aExerciseResourceMapper.selectAExerciseResourceList(resource);
+        AMarkSheet markSheet = (AMarkSheet) selectUser.selectStudent(aMarkSheetMapper.selectAMarkSheetByMsId(msId));
+        markSheet.setaExerciseResourceList(aExerciseResources);
+
+        return markSheet;
     }
 
     /**
